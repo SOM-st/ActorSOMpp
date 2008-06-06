@@ -27,7 +27,8 @@ THE SOFTWARE.
   */
 
 #include <stdio.h>
-
+#include <fstream>
+#include <string>
 //#include <vmobjects/VMMethod.h>
 //#include <vmobjects/VMSymbol.h>
 //#include <vmobjects/VMPrimitive.h>
@@ -55,7 +56,7 @@ static char* symnames[] = {
 class Parser
 {
 public:
-	Parser(const FILE* fp);
+	Parser(ifstream& file);
 	~Parser();
 	//void init(const FILE* fp);
 	//void init_string(pString str);
@@ -123,7 +124,8 @@ private:
 	void gen_pop_variable(method_generation_context* mgenc, pString var);
 	
 //private fields
-	FILE* infile;
+
+	ifstream& infile;
 
 	Symbol sym;
 	char symc;
@@ -138,8 +140,9 @@ private:
 	 * input buffer
 	 */
 
-	char buf[BUFSIZ];
-	int bufp;
+	//char buf[BUFSIZ];
+	std::string buf;
+	unsigned int bufp;
 
 	/*static Symbol singleOpSyms[];
 	static Symbol binaryOpSyms[];

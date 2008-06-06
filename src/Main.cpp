@@ -29,6 +29,7 @@ THE SOFTWARE.
 //#include <vm/Universe.h>
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include "compiler/Parser.h"
 int main(int argc, char** argv) {
 
@@ -38,9 +39,11 @@ int main(int argc, char** argv) {
 		cout << "Usage: cppsom [files]" << endl;
 		return -1;
 	}
+	
 	for (int i = 1; i < argc; i++) { 
-		FILE* fp = fopen(argv[i], "r");
-		if (fp == NULL) {
+		ifstream fp;
+		fp.open(argv[i], std::ios_base::in);
+		if (!fp.is_open()) {
 			cout << "error opening " << argv[i] <<endl;
 			continue;
 		}
@@ -48,9 +51,13 @@ int main(int argc, char** argv) {
 		cout << "starting " << argv[i] << endl;
 		Parser* p = new Parser(fp);
 		p->Classdef(&cdc);
+
+		//clean up
+		fp.close();
+		delete(p);
+		
 		cout << "finished " << argv[i] << endl;
-		char c;
-		cin >> c;
+
 	}
 }
 

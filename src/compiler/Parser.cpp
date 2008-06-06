@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include <iostream>
 #include <cctype>
-
+//#include <string>
 //#include <memory/gc.h>
 //#include <vmobjects/VMString.h>
 
@@ -39,12 +39,10 @@ THE SOFTWARE.
 #pragma mark Stream handling
 
 
-Parser::Parser(const FILE* fp) {
-    infile = (FILE*)fp;
+Parser::Parser(ifstream& file) : infile(file) {
     sym = NONE;
     peekDone = false;
     nextSym = NONE;
-    *buf = 0;
     bufp = 0;
     getsym();
 }
@@ -53,20 +51,13 @@ Parser::~Parser() {
 }
 
 #define _BC (buf[bufp])
-#define EOB (buf[bufp]==0)
+#define EOB (bufp >= buf.length())
 
 void Parser::fillbuffer(void) {
-	//cout << "fillbuffer" << endl;
-    if(!infile) // string stream
+	if(!infile.good()) // string stream
         return;
-    int p = 0;
-    do {
-        if(!feof(infile))
-            buf[p] = fgetc(infile);
-        else
-            buf[p] = '\n';
-    } while(buf[p++] != '\n');
-    buf[p - 1] = 0;
+
+	std::getline(infile, buf);
     bufp = 0;
 }
 
@@ -106,8 +97,8 @@ void Parser::skipComment(void) {
      (C) == ',' || (C) == '@' || (C) == '%')
 #define _MATCH(C, S) \
     if(_BC == (C)) { sym = (S); symc = _BC; sprintf(text, "%c", _BC); bufp++;}
-#define SEPARATOR "----"
-#define PRIMITIVE "primitive"
+#define SEPARATOR std::string("----")
+#define PRIMITIVE std::string("primitive")
 
 void Parser::getsym(void) {
 	//cout << "getsym ";
@@ -125,7 +116,7 @@ void Parser::getsym(void) {
         skipWhiteSpace();
         skipComment();
 		//cout << "ws ";
-    } while((EOB || isspace(_BC) || _BC == '"') && infile);
+    } while((EOB || isspace(_BC) || _BC == '"') && infile.good());
     //cout << endl << _BC << endl;
     if(_BC == '\'') {
         sym = STString;
@@ -160,7 +151,7 @@ void Parser::getsym(void) {
     else _MATCH('^', Exit)
     else _MATCH('.', Period)
     else if(_BC == '-') {
-        if(!strncmp(buf + bufp, SEPARATOR, strlen(SEPARATOR))) {
+		if(!buf.substr(bufp, SEPARATOR.length()).compare(SEPARATOR)) {// !strncmp(buf + bufp, SEPARATOR, strlen(SEPARATOR))) {
             char* t = text;
             while(_BC == '-')
                 *t++ = buf[bufp++];
@@ -196,11 +187,11 @@ void Parser::getsym(void) {
         else _MATCH('@', At)
         else _MATCH('%', Per)
     }
-    else if(!strncmp(buf + bufp, PRIMITIVE, strlen(PRIMITIVE))) {
-        bufp += strlen(PRIMITIVE);
+    else if (!buf.substr(bufp, PRIMITIVE.length()).compare(PRIMITIVE)) {
+        bufp += PRIMITIVE.length();
         sym = Primitive;
         symc = 0;
-        sprintf(text, PRIMITIVE);
+        sprintf(text, "primitive");
     }
     else if(isalpha(_BC)) {
         char* t = text;

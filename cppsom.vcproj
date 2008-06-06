@@ -190,10 +190,6 @@
 			RelativePath=".\src\compiler\Parser.h"
 			>
 		</File>
-		<File
-			RelativePath=".\src\test.som"
-			>
-		</File>
 	</Files>
 	<Globals>
 		<Global
