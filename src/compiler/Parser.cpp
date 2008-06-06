@@ -452,7 +452,7 @@ void Parser::Classdef(class_generation_context* cgenc) {
 void Parser::instanceFields(class_generation_context* cgenc) {
     if(accept(Or)) {
         while(sym == Identifier) {
-            //pString var = variable();
+            pString var = variable();
             //SEND(cgenc->instance_fields, add, Universe_symbol_for(var));
             //SEND(var, free);
         }
@@ -464,7 +464,7 @@ void Parser::instanceFields(class_generation_context* cgenc) {
 void Parser::classFields(class_generation_context* cgenc) {
     if(accept(Or)) {
         while(sym == Identifier) {
-            //pString var = variable();
+            pString var = variable();
             //SEND(cgenc->class_fields, add, Universe_symbol_for(var));
             //SEND(var, free);
         }
@@ -1009,6 +1009,7 @@ void Parser::blockArguments(method_generation_context* mgenc) {
     do {
         expect(Colon);
         //SEND(mgenc->arguments, addStringIfAbsent, argument());
+		argument();
     } while(sym == Colon);
 }
 

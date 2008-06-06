@@ -31,28 +31,27 @@ THE SOFTWARE.
 #include <iostream>
 #include "compiler/Parser.h"
 int main(int argc, char** argv) {
-    
+
     cout << "This will be CppSOM.\n" << endl;
-    FILE* fp = fopen("test.som", "r");
-	if (fp == NULL) {
-		cout << "error opening test.som" <<endl;
+	if (argc < 2) {
+		cout << "Please specify the file(s) you'd like to parse" << endl;
+		cout << "Usage: cppsom [files]" << endl;
 		return -1;
 	}
-	int cdc = 1;
-	cout << "starting" << endl;
-	Parser* p = new Parser(fp);
-	p->Classdef(&cdc);
-	cout << "finished" << endl;
-	
-    /*pString* vm_argv = NULL;
-    int vm_argc = 0;
-    
-    vm_argv = Universe_handle_arguments(&vm_argc, argc, argv);
-    Universe_initialize(vm_argc, vm_argv);
-    
-    FREE_ARRAY(vm_argv, vm_argc);
-    
-    Universe_exit(ERR_SUCCESS);*/
+	for (int i = 1; i < argc; i++) { 
+		FILE* fp = fopen(argv[i], "r");
+		if (fp == NULL) {
+			cout << "error opening " << argv[i] <<endl;
+			continue;
+		}
+		int cdc = 1;
+		cout << "starting " << argv[i] << endl;
+		Parser* p = new Parser(fp);
+		p->Classdef(&cdc);
+		cout << "finished " << argv[i] << endl;
+		char c;
+		cin >> c;
+	}
 }
 
 
