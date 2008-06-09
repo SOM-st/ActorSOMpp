@@ -27,7 +27,7 @@ THE SOFTWARE.
 //#include <memory/gc.h>
 
 //#include <vm/Universe.h>
-#include <stdio.h>
+//#include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include "compiler/Parser.h"

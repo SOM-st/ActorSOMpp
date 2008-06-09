@@ -26,32 +26,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <fstream>
 #include <string>
 //#include <vmobjects/VMMethod.h>
 //#include <vmobjects/VMSymbol.h>
 //#include <vmobjects/VMPrimitive.h>
 #include "../misc/defs.h"
+#include "Lexer.h"
 //#include <vm/Universe.h>
 //using namespace std;
 //#include "GenerationContexts.h"
 
 
-typedef enum {
-    NONE, Integer, Not, And, Or, Star, Div, Mod, Plus,
-    Minus, Equal, More, Less, Comma, At, Per, NewBlock,
-    EndBlock, Colon, Period, Exit, Assign, NewTerm, EndTerm, Pound,
-    Primitive, Separator, STString, Identifier, Keyword, KeywordSequence,
-    OperatorSequence
-} Symbol;
-static char* symnames[] = {
-    "NONE", "Integer", "Not", "And", "Or", "Star", "Div", "Mod", "Plus",
-    "Minus", "Equal", "More", "Less", "Comma", "At", "Per", "NewBlock",
-    "EndBlock", "Colon", "Period", "Exit", "Assign", "NewTerm", "EndTerm",
-    "Pound", "Primitive", "Separator", "STString", "Identifier", "Keyword",
-    "KeywordSequence", "OperatorSequence"
-};
+
 
 class Parser
 {
@@ -63,12 +51,9 @@ public:
 
 	void Classdef(class_generation_context* cgenc);
 private:
-	void fillbuffer(void);
+	
 	bool eob(void);
-	void skipWhiteSpace(void);
-	void skipComment(void);
-	void getsym(void);
-	void peek(void);
+	
 	bool symIn(Symbol* ss);
 	bool accept(Symbol s);
 	bool acceptOneOf(Symbol* ss);
@@ -124,25 +109,26 @@ private:
 	void gen_pop_variable(method_generation_context* mgenc, pString var);
 	
 //private fields
-
-	ifstream& infile;
+	Lexer* lexer;
+	//ifstream& infile;
 
 	Symbol sym;
-	char symc;
-	char text[BUFSIZ];
+	//char symc;
+	//char text[BUFSIZ];
+	pString text;
 
-	bool peekDone;
+	//bool peekDone;
 	Symbol nextSym;
-	char nextSymc;
-	char nextText[BUFSIZ];
-
+	//char nextSymc;
+	//char nextText[BUFSIZ];
+	pString nextText;
 	/**
 	 * input buffer
 	 */
 
 	//char buf[BUFSIZ];
-	std::string buf;
-	unsigned int bufp;
+	/*std::string buf;
+	unsigned int bufp;*/
 
 	/*static Symbol singleOpSyms[];
 	static Symbol binaryOpSyms[];

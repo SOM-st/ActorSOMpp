@@ -171,6 +171,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\compiler\Lexer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\compiler\Lexer.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\Main.cpp"
 			>
 		</File>
