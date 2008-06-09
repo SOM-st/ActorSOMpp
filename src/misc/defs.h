@@ -50,8 +50,8 @@ THE SOFTWARE.
 //
 using namespace std;
 
-typedef int method_generation_context;
-typedef int class_generation_context;
+//typedef int method_generation_context;
+//typedef int class_generation_context;
 typedef string pVMSymbol;
 typedef string pString;
 typedef unsigned long long uint64_t;

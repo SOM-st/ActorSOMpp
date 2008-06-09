@@ -34,6 +34,8 @@ THE SOFTWARE.
 //#include <vmobjects/VMPrimitive.h>
 #include "../misc/defs.h"
 #include "Lexer.h"
+#include "ClassGenerationContext.h"
+#include "MethodGenerationContext.h"
 //#include <vm/Universe.h>
 //using namespace std;
 //#include "GenerationContexts.h"

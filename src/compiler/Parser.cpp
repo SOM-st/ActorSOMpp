@@ -190,14 +190,16 @@ Symbol keywordSelectorSyms[] = { Keyword, KeywordSequence };
 
 void Parser::Classdef(class_generation_context* cgenc) {
 //    cgenc->name = Universe_symbol_for_chars(text);
+	cgenc->set_name(text);
     expect(Identifier);
     
     expect(Equal);
     
     if(sym == Identifier) {
        // cgenc->super_name = Universe_symbol_for_chars(text);
+		cgenc->set_super_name(text);
         accept(Identifier);
-    } else ;
+    } else cgenc->set_super_name("Object");
        // cgenc->super_name = Universe_symbol_for_chars("Object");
     
     expect(NewTerm);
@@ -254,6 +256,7 @@ void Parser::instanceFields(class_generation_context* cgenc) {
     if(accept(Or)) {
         while(sym == Identifier) {
             pString var = variable();
+			cgenc->add_instance_field(var);
             //SEND(cgenc->instance_fields, add, Universe_symbol_for(var));
             //SEND(var, free);
         }
@@ -266,6 +269,7 @@ void Parser::classFields(class_generation_context* cgenc) {
     if(accept(Or)) {
         while(sym == Identifier) {
             pString var = variable();
+			cgenc->add_class_field(var);
             //SEND(cgenc->class_fields, add, Universe_symbol_for(var));
             //SEND(var, free);
         }

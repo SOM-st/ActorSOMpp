@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 //#include <vm/Universe.h>
 //#include <stdio.h>
+#include "compiler/ClassGenerationContext.h"
 #include <iostream>
 #include <fstream>
 #include "compiler/Parser.h"
@@ -47,7 +48,8 @@ int main(int argc, char** argv) {
 			cout << "error opening " << argv[i] <<endl;
 			continue;
 		}
-		int cdc = 1;
+		//int cdc = 1;
+		class_generation_context cdc;
 		cout << "starting " << argv[i] << endl;
 		Parser* p = new Parser(fp);
 		p->Classdef(&cdc);
