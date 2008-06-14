@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef LEXER_H_
+#define LEXER_H_
 /*
  * $Id: Parser.h 143 2007-11-19 21:00:42Z michael.haupt $
  *
@@ -76,3 +77,5 @@ private:
 	std::string buf;
 	unsigned int bufp;
 };
+
+#endif

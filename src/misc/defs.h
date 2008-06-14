@@ -1,3 +1,4 @@
+#pragma once
 #ifndef DEFS_H_
 #define DEFS_H_
 
@@ -30,7 +31,8 @@ THE SOFTWARE.
 //#include <stdint.h>
 #include <string>
 #include <list>
-
+#include <vector>
+//#include "ExtendedList.h"
 //
 // error codes
 //
@@ -62,7 +64,7 @@ typedef unsigned int uint16_t;
 typedef int int16_t;
 typedef unsigned short uint8_t;
 typedef short int8_t;
-typedef list<string> pList;
+typedef vector<string> pList;
 
 
 #endif DEFS_H_

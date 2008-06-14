@@ -1,4 +1,6 @@
 #pragma once
+#ifndef PARSER_H_
+#define PARSER_H_
 
 /*
  * $Id: Parser.h 143 2007-11-19 21:00:42Z michael.haupt $
@@ -136,3 +138,5 @@ private:
 	static Symbol binaryOpSyms[];
 	static Symbol keywordSelectorSyms[];*/
 };
+
+#endif

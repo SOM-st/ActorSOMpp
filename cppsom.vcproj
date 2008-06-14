@@ -159,6 +159,14 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\src\compiler\BytecodeGenerator.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\interpreter\bytecodes.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\compiler\ClassGenerationContext.cpp"
 			>
 		</File>
@@ -168,6 +176,26 @@
 		</File>
 		<File
 			RelativePath=".\src\misc\defs.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\misc\ExtendedList.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\misc\ExtendedList.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\misc\ExtendedVector.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\misc\ExtendedVector.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\compiler\GenerationContextCore.h"
 			>
 		</File>
 		<File
