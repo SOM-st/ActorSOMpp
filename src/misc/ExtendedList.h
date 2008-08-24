@@ -1,15 +1,26 @@
 #pragma once
 #ifndef EXTENDEDLIST_H_
 #define EXTENDEDLIST_H_
-/* Not used because it's not working. Some people say stl containers are not supposed to be
-   derived from. So maybe that's why it's not working....*/
+
 #include <list>
 #include <memory>
-template <class T>
-class extended_list : public std::list<T> {
+#include "../vmobjects/OOObject.h"
+
+class ExtendedList{
 public:
-	extended_list() : list<T>() {};
-	int index_of(T needle);
+	ExtendedList();
+	~ExtendedList();
+	
+	void Add(OOObject* ptr);
+	void AddIfAbsent(OOObject* ptr);
+	void AddAll(ExtendedList* list);
+	void Clear();
+	int Size();
+	OOObject* get(int index);
+	int IndexOf(OOObject* needle);
+
+private:
+	std::list<OOObject*> theList;
 };
 
 #endif

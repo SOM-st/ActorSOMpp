@@ -31,36 +31,50 @@ THE SOFTWARE.
 #include "compiler/ClassGenerationContext.h"
 #include <iostream>
 #include <fstream>
-#include "compiler/Parser.h"
+//#include "compiler/Parser.h"
+#include "memory/Heap.h"
+#include "vmobjects/VMObject.h"
+#include "misc/ExtendedList.h"
+
 int main(int argc, char** argv) {
 
     cout << "This will be CppSOM.\n" << endl;
-	if (argc < 2) {
-		cout << "Please specify the file(s) you'd like to parse" << endl;
-		cout << "Usage: cppsom [files]" << endl;
-		return -1;
-	}
+	Heap *heap = new Heap();
+	VMObject *vmo = new (heap) VMObject;
+	//vmo->test();
+	VMObject *vmo2 = new (heap) VMObject;
+	//vmo2->test();
+	ExtendedList *list = new (heap) ExtendedList;
+	list->Add(vmo);
+	list->Add(vmo2);
+	cout << "List-size:" << list->Size() << endl;
 	
-	for (int i = 1; i < argc; i++) { 
-		ifstream fp;
-		fp.open(argv[i], std::ios_base::in);
-		if (!fp.is_open()) {
-			cout << "error opening " << argv[i] <<endl;
-			continue;
-		}
-		//int cdc = 1;
-		class_generation_context cdc;
-		cout << "starting " << argv[i] << endl;
-		Parser* p = new Parser(fp);
-		p->Classdef(&cdc);
+	//if (argc < 2) {
+	//	cout << "Please specify the file(s) you'd like to parse" << endl;
+	//	cout << "Usage: cppsom [files]" << endl;
+	//	return -1;
+	//}
+	//
+	//for (int i = 1; i < argc; i++) { 
+	//	ifstream fp;
+	//	fp.open(argv[i], std::ios_base::in);
+	//	if (!fp.is_open()) {
+	//		cout << "error opening " << argv[i] <<endl;
+	//		continue;
+	//	}
+	//	//int cdc = 1;
+	//	class_generation_context cdc;
+	//	cout << "starting " << argv[i] << endl;
+	//	Parser* p = new Parser(fp);
+	//	p->Classdef(&cdc);
 
-		//clean up
-		fp.close();
-		delete(p);
-		
-		cout << "finished " << argv[i] << endl;
+	//	//clean up
+	//	fp.close();
+	//	delete(p);
+	//	
+	//	cout << "finished " << argv[i] << endl;
 
-	}
+	//}
 }
 
 
