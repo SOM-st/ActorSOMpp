@@ -34,20 +34,26 @@ THE SOFTWARE.
 //#include "compiler/Parser.h"
 #include "memory/Heap.h"
 #include "vmobjects/VMObject.h"
+#include "vmobjects/VMMethod.h"
 #include "misc/ExtendedList.h"
+#include "vm/Universe.h"
 
 int main(int argc, char** argv) {
 
     cout << "This will be CppSOM.\n" << endl;
-	Heap *heap = new Heap();
+	Universe* uni = Universe::GetUniverse();
+	Heap *heap = uni->GetHeap();
 	VMObject *vmo = new (heap) VMObject;
-	//vmo->test();
-	VMObject *vmo2 = new (heap) VMObject;
-	//vmo2->test();
-	ExtendedList *list = new (heap) ExtendedList;
+	VMObject *vmo2 = new (heap) VMMethod;
+	//cout << vmo->getObjectSize() << endl;
+	//cout << vmo2->getObjectSize() << endl;
+	
+	uni->RunGC();
+
+	/*ExtendedList *list = new ExtendedList();
 	list->Add(vmo);
 	list->Add(vmo2);
-	cout << "List-size:" << list->Size() << endl;
+	cout << "List-size:" << list->Size() << endl;*/
 	
 	//if (argc < 2) {
 	//	cout << "Please specify the file(s) you'd like to parse" << endl;

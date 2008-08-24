@@ -15,11 +15,11 @@ Heap::Heap(int object_space_size)// : globals(INT32_MAX)
 	this->object_space_size = object_space_size;
 	this->buffersize_for_uninterruptable = (int) (object_space_size * 0.1);
 	uninterruptable_counter = 0;
-
+	
 	free_list_start = (free_list_entry*) object_space;
 	free_list_start->size = object_space_size;
 	free_list_start->next = NULL;
-	
+	gc = new GarbageCollector(this);
 }
 
 Heap::~Heap()

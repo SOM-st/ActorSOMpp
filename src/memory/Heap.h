@@ -16,12 +16,15 @@ struct _free_list_entry {
 
 class Heap
 {
+	friend class GarbageCollector;
+
 public:
 	Heap(int object_space_size = 1000000);
 	~Heap();
 	void* Allocate(size_t size);
 	void Free(void* ptr);
-
+	
+	void GCCollect() {gc->Collect();}
 	//void SetGlobal(pString name, void* val);
 
 private:

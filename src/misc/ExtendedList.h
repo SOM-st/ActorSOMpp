@@ -4,23 +4,23 @@
 
 #include <list>
 #include <memory>
-#include "../vmobjects/OOObject.h"
+#include "../vmobjects/VMObject.h"
 
 class ExtendedList{
 public:
 	ExtendedList();
 	~ExtendedList();
 	
-	void Add(OOObject* ptr);
-	void AddIfAbsent(OOObject* ptr);
+	void Add(VMObject* ptr);
+	void AddIfAbsent(VMObject* ptr);
 	void AddAll(ExtendedList* list);
 	void Clear();
 	int Size();
-	OOObject* get(int index);
-	int IndexOf(OOObject* needle);
+	VMObject* get(int index);
+	int IndexOf(VMObject* needle);
 
 private:
-	std::list<OOObject*> theList;
+	std::list<VMObject*> theList;
 };
 
 #endif

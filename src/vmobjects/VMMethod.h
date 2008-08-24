@@ -1,18 +1,18 @@
 #pragma once
-#ifndef VMOBJECT_H_
-#define VMOBJECT_H_
+#ifndef VMMETHOD_H_
+#define VMMETHOD_H_
 //#include "OOObject.h"
-#include "../misc/defs.h"
+#include "VMObject.h"
 
 #include <iostream>
-#include "../memory/Heap.h"
+//#include "../memory/Heap.h"
 
-class VMObject{
+class VMMethod : public VMObject{
 
 public:
-	VMObject();
-	virtual ~VMObject();
-	virtual pString GetClass(); //TODO: change string to VMClass
+	VMMethod();
+	virtual ~VMMethod();
+	/*virtual pString GetClass(); //TODO: change string to VMClass
 	virtual void SetClass(pString className);
 	virtual pString GetFieldName(int index); //TODO: change string to VMSymbol
 	virtual int GetFieldIndex(pString fieldName);
@@ -24,8 +24,6 @@ public:
 	virtual void SetField(int index, VMObject* value);
 	virtual void MarkReferences();
 	
-	//sizeof doesn't work polymorphic :(
-	int getObjectSize() {return objectSize;}
 	int32_t getGCField() {return gcfield;} ;
 	void setGCField(int32_t value) { gcfield = value; } ;
 
@@ -46,12 +44,10 @@ public:
 			sum=(sum+str[i])%100;
 		return sum;
 
-	}
-protected:
-	int numberOfFields;
-	uint32_t gcfield;
-	uint16_t hash;
-	int objectSize;
+	}*/
+private:
+	//for testing mem alloc
+	int32_t a[10];
 	
 };
 

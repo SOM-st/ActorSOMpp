@@ -1,7 +1,10 @@
 #include "VMObject.h"
 
-VMObject::VMObject() : OOObject()
+VMObject::VMObject()
 {
+	gcfield = 0; 
+	hash = (uint16_t)this;
+	objectSize = 20;
 }
 
 VMObject::~VMObject() {}

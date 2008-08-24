@@ -11,7 +11,7 @@ ExtendedList::~ExtendedList()
 {
 }
 
-void ExtendedList::Add(OOObject *ptr)
+void ExtendedList::Add(VMObject *ptr)
 {
 	theList.push_back(ptr);
 }
@@ -21,7 +21,7 @@ void ExtendedList::AddAll(ExtendedList *list)
 	theList.merge(list->theList);
 }
 
-void ExtendedList::AddIfAbsent(OOObject *ptr)
+void ExtendedList::AddIfAbsent(VMObject *ptr)
 {
 	if (IndexOf(ptr) == -1) Add(ptr);
 }
@@ -31,9 +31,9 @@ void ExtendedList::Clear()
 	theList.clear();
 }
 
-OOObject* ExtendedList::get(int index)
+VMObject* ExtendedList::get(int index)
 {
-	for (list<OOObject*>::iterator it = theList.begin(); it!=theList.end(); ++it){
+	for (list<VMObject*>::iterator it = theList.begin(); it!=theList.end(); ++it){
 		if (index == 0) return *it;
 		--index;
 	}
@@ -45,8 +45,8 @@ int ExtendedList::Size()
 	return theList.size();
 }
 
-int ExtendedList::IndexOf(OOObject* needle) {
-	for (list<OOObject*>::iterator it = theList.begin(); it!=theList.end(); ++it) {
+int ExtendedList::IndexOf(VMObject* needle) {
+	for (list<VMObject*>::iterator it = theList.begin(); it!=theList.end(); ++it) {
 		if (*it == needle) return distance(theList.begin(), it);
 		//cout << *it << endl;
 	}

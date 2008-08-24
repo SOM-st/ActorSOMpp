@@ -3,24 +3,34 @@
 #ifndef UNIVERSE_H_
 #define UNIVERSE_H_
 
-#include "../misc/HashMap.h"
+#include <vector>
 #include "../misc/defs.h"
-#include "../vmobjects/OOObject.h"
+#include "../vmobjects/VMObject.h"
+#include "../memory/Heap.h"
 
+typedef struct _globals_entry globals_entry;
+struct _globals_entry {
+    pString name;
+    VMObject *value;
+} ;
+using namespace std;
 class Universe
 {
 public:
-	//static Universe* GetUniverse();
+	static Universe* GetUniverse();
+	static void InitializeUniverse();
 
-	HashMap<pString, OOObject*, OOObject>  GetGlobals();
-	void SetGlobal(pString name, OOObject* val);
+	vector<globals_entry>  GetGlobals() {return globals;}
+	Heap* GetHeap() {return heap;}
+	void RunGC();
+	void SetGlobal(pString name, VMObject* val);
 private:
-	//static Universe *theUniverse;
+	static Universe *theUniverse;
 
 	Universe();
 	~Universe();
-	
-	//HashMap<pString, OOObject*, OOObject> globals;
+	Heap *heap;
+	vector<globals_entry> globals;
 };
 
 #endif

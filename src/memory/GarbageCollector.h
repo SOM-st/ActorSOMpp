@@ -3,10 +3,14 @@
 #ifndef GARBAGECOLLECTOR_H_
 #define GARBAGECOLLECTOR_H_
 
+class Heap;
+
+class VMObject;
+
 class GarbageCollector
 {
 public:
-	GarbageCollector();
+	GarbageCollector(Heap* h);
 	~GarbageCollector();
 	void Collect();
 
@@ -14,9 +18,9 @@ public:
 
 private:
 	void markReachableObjects();
-	void markObject();
+	void markObject(VMObject* obj);
 	void mergeFreeSpaces();
-
+	Heap* heap;
 	
 
 };

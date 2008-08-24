@@ -7,14 +7,14 @@
 class ExtendedVector{
 public:
 	ExtendedVector();
-	void Add(OOObject *ptr);
-	void AddIfAbsent(OOObject *ptr);
+	void Add(VMObject *ptr);
+	void AddIfAbsent(VMObject *ptr);
 	void Clear();
 	int Size();
-	int IndexOf(OOObject *needle);
-	OOObject* Get(int index);
+	int IndexOf(VMObject *needle);
+	VMObject* Get(int index);
 private:
-	vector<OOObject*> theVector;
+	vector<VMObject*> theVector;
 	
 };
 
