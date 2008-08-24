@@ -195,7 +195,27 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\memory\GarbageCollector.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\memory\GarbageCollector.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\compiler\GenerationContextCore.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\misc\HashMap.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\memory\Heap.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\memory\Heap.h"
 			>
 		</File>
 		<File
@@ -224,6 +244,30 @@
 		</File>
 		<File
 			RelativePath=".\src\compiler\Parser.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vm\Universe.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vm\Universe.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMMethod.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMMethod.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMObject.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMObject.h"
 			>
 		</File>
 	</Files>
