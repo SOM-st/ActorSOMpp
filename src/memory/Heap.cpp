@@ -34,7 +34,7 @@ void* Heap::Allocate(size_t size)
 	if (size_of_free_heap <= buffersize_for_uninterruptable &&
 		uninterruptable_counter <= 0) 
 	{
-		//gc->Collect();
+		gc->Collect();
 	}
 	
 	void* result = NULL;
@@ -44,7 +44,7 @@ void* Heap::Allocate(size_t size)
 	//find first fit
 	while (! ((current_entry->size == size) 
                || (current_entry->next == NULL) 
-               || (current_entry->size >= (size + sizeof(struct _free_list_entry))))) { 
+               || (current_entry->size >= (size + sizeof(free_list_entry))))) { 
         before_entry = current_entry;
         current_entry = current_entry->next;
     }
@@ -54,7 +54,8 @@ void* Heap::Allocate(size_t size)
     if (current_entry->size == size) {
         if (current_entry == free_list_start) { 
 			// first one fitted - adjust the 'first-entry' pointer
-            free_list_start = current_entry->next; //what if first allocate allocates the whole heap? ... yes it would be stupid, but still
+            free_list_start = current_entry->next; 
+			//PROBLEM (also in CSOM?): what if last possible allocate is a perfect fit?
         } else {
 			// simply remove the reference to the found entry
             before_entry->next = current_entry->next;
@@ -64,7 +65,7 @@ void* Heap::Allocate(size_t size)
     } else {
 		// did we find an entry big enough for the request and a new
 		// free_entry?
-        if (current_entry->size >= (size + sizeof(struct _free_list_entry))) {
+        if (current_entry->size >= (size + sizeof(free_list_entry))) {
             // save data from found entry
             int old_entry_size = current_entry->size;
             free_list_entry* old_next = current_entry->next;
@@ -86,7 +87,7 @@ void* Heap::Allocate(size_t size)
 			std::cout << "Not enough heap! Data loss is possible" << std::endl;
 			std::cout << "FREE-Size: " << size_of_free_heap << ", uninterruptable_counter: " << uninterruptable_counter;
             
-			//gc->Collect();
+			gc->Collect();
             //fulfill initial request
             result = Allocate(size);
         }

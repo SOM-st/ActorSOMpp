@@ -7,8 +7,7 @@
 #include "../misc/defs.h"
 #include "../misc/HashMap.h"
 
-typedef struct _free_list_entry free_list_entry;
-struct _free_list_entry {
+struct free_list_entry {
     free_list_entry* next;
     size_t size;
 } ;

@@ -37,18 +37,29 @@ THE SOFTWARE.
 #include "vmobjects/VMMethod.h"
 #include "misc/ExtendedList.h"
 #include "vm/Universe.h"
+#include "misc/HeapAllocator.h"
+#include "vmobjects/VMString.h"
 
 int main(int argc, char** argv) {
 
     cout << "This will be CppSOM.\n" << endl;
 	Universe* uni = Universe::GetUniverse();
 	Heap *heap = uni->GetHeap();
-	VMObject *vmo = new (heap) VMObject;
-	VMObject *vmo2 = new (heap) VMMethod;
+	//while (1) {
+		VMObject *vmo = new (heap) VMObject;
+		VMObject *vmo2 = new (heap) VMMethod;
+	//}
+	vector<VMObject*, HeapAllocator<VMObject*> > v;
+	v.push_back(vmo);
+	v.push_back(vmo2);
+
+	VMString *vmstr = new (heap) VMString;
+	vmstr->FromCString("VMString Test");
+	cout << vmstr->ToCString() << endl;
 	//cout << vmo->getObjectSize() << endl;
 	//cout << vmo2->getObjectSize() << endl;
 	
-	uni->RunGC();
+	//uni->RunGC();
 
 	/*ExtendedList *list = new ExtendedList();
 	list->Add(vmo);

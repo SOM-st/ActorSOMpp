@@ -25,7 +25,7 @@ public:
 	virtual void MarkReferences();
 	
 	//sizeof doesn't work polymorphic :(
-	int getObjectSize() {return objectSize;}
+	virtual int getObjectSize() {return objectSize;}
 	int32_t getGCField() {return gcfield;} ;
 	void setGCField(int32_t value) { gcfield = value; } ;
 
@@ -42,7 +42,7 @@ public:
 	 uint16_t operator()(const std::string &str) const
 	{
 		uint16_t sum=0;
-		for (int i=0; i<str.size(); ++i)
+		for (unsigned int i=0; i<str.size(); ++i)
 			sum=(sum+str[i])%100;
 		return sum;
 

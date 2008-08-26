@@ -26,7 +26,7 @@ bool class_generation_context::find_field(pString field) {
 	pList fields = is_class_side() ?
         class_fields :
         instance_fields;
-    return index_of(fields, field);//fields.index_of(field);//SEND(fields, indexOf, Universe_symbol_for(field)) != -1;
+    return index_of(fields, field) != -1;//fields.index_of(field);//SEND(fields, indexOf, Universe_symbol_for(field)) != -1;
 
 }
 

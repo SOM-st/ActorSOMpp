@@ -2,7 +2,7 @@
 #ifndef EXTENDEDVECTOR_H_
 
 #include <vector>
-#include "../vmobjects/OOObject.h"
+#include "../vmobjects/VMObject.h"
 
 class ExtendedVector{
 public:
