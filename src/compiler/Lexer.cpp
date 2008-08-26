@@ -38,7 +38,6 @@ void Lexer::fillbuffer(void) {
 //
 // basic lexing
 //
-#pragma mark Lexer functions
 
 void Lexer::skipWhiteSpace(void) {
     while(isspace(_BC)) {

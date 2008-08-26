@@ -47,15 +47,23 @@ int main(int argc, char** argv) {
 	Heap *heap = uni->GetHeap();
 	//while (1) {
 		VMObject *vmo = new (heap) VMObject;
+		cout << "vmo Obj size:" << vmo->getObjectSize() << endl;
+		//cout << sizeof(*vmo) << endl;
 		VMObject *vmo2 = new (heap) VMMethod;
+		cout << "vmo2 Obj size:" << vmo2->getObjectSize() << endl;
+		//cout << sizeof(*vmo2) << endl;
 	//}
-	vector<VMObject*, HeapAllocator<VMObject*> > v;
-	v.push_back(vmo);
-	v.push_back(vmo2);
+	//vector<VMObject*, HeapAllocator<VMObject*> > v = vector<VMObject*, HeapAllocator<VMObject*> >(HeapAllocator<VMObject*>(heap));
+	//v.push_back(vmo);
+	//v.push_back(vmo2);
 
 	VMString *vmstr = new (heap) VMString;
-	vmstr->FromCString("VMString Test");
-	cout << vmstr->ToCString() << endl;
+	cout << "vmstr Obj size:" << vmstr->getObjectSize() << endl;
+	vmstr = new (heap, strlen("Stringtest")+1 ) VMString("Stringtest");
+	cout << "vmstr Obj size:" << vmstr->getObjectSize() << endl;
+	cout << vmstr->GetChars() << endl;
+	//vmstr->FromCString("VMString Test");
+	//cout << vmstr->ToCString() << endl;
 	//cout << vmo->getObjectSize() << endl;
 	//cout << vmo2->getObjectSize() << endl;
 	

@@ -21,10 +21,19 @@ public:
   struct rebind { typedef HeapAllocator<U> other; };
 
   HeapAllocator() {}
-  HeapAllocator(Heap* heap) {}
-  HeapAllocator(const HeapAllocator&) {}
+  HeapAllocator(Heap* heap) 
+  { 
+	  this->heap = heap;
+  }
+  HeapAllocator(const HeapAllocator& org) 
+  {
+		this->heap = org.heap;
+  }
   template <class U> 
-  HeapAllocator(const HeapAllocator<U>&) {}
+  HeapAllocator(const HeapAllocator<U>& org) 
+  {
+	  this->heap = org.heap;
+  }
   ~HeapAllocator() {}
 
   pointer address(reference x) const { return &x; }
@@ -33,14 +42,14 @@ public:
   }
 
   pointer allocate(size_type n, const_pointer = 0) {
-	void* p = Universe::GetUniverse()->GetHeap()->Allocate(n * sizeof(value_type));
+	void* p = heap->Allocate(n * sizeof(value_type));
     if (!p)
       throw std::bad_alloc();
     return static_cast<pointer>(p);
   }
 
   void deallocate(pointer p, size_type) { 
-	  Universe::GetUniverse()->GetHeap()->Free(p);
+	  heap->Free(p);
   }
 
   size_type max_size() const { 
@@ -54,6 +63,7 @@ public:
 
 private:
   void operator=(const HeapAllocator&);
+  Heap* heap;
 };
 
 template<> class HeapAllocator<void>
@@ -64,6 +74,7 @@ template<> class HeapAllocator<void>
 
   template <class U> 
   struct rebind { typedef HeapAllocator<U> other; };
+  Heap* heap;
 };
 
 

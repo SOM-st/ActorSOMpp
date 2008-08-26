@@ -57,11 +57,15 @@ public:
 	pString getnexttext(void);
 	pString getrawbuffer(void);
 
+
 private:
 	void fillbuffer(void);
 	void skipWhiteSpace(void);
 	void skipComment(void);	
 	
+	Lexer &operator=(const Lexer& src)
+	{
+	}
 
 	ifstream& infile;
 

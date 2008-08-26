@@ -103,8 +103,8 @@ void* Heap::Allocate(size_t size)
 	// update the available size
     size_of_free_heap -= size;
 	std::cout << "available heap size after alloc: " << size_of_free_heap << std::endl;
-	std::cout << "heap-start: " << (long) object_space << std::endl;
-	std::cout << "allocated at address: " << (long) result << std::endl;
+	std::cout << "heap-start: " << object_space << std::endl;
+	std::cout << "allocated at address: " << result << std::endl;
     return result;
 }
 

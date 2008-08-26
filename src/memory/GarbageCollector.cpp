@@ -15,6 +15,10 @@ GarbageCollector::~GarbageCollector()
 
 void GarbageCollector::Collect()
 {
+	num_live = 0;
+	spc_live = 0;
+	num_freed = 0;
+	spc_freed = 0;
 	markReachableObjects();
 	void* pointer = heap->object_space;
 	free_list_entry* currentEntry = heap->free_list_start;
@@ -53,6 +57,8 @@ void GarbageCollector::Collect()
 				//add freed space as a new entry of the free list
 				memset(object, 0, bytesToSkip);
 				free_list_entry* newEntry = (free_list_entry*)pointer;
+				++num_freed;
+				spc_freed += bytesToSkip;
 				newEntry->size = bytesToSkip;
 				if (newEntry < heap->free_list_start) {
 					newEntry->next = heap->free_list_start;
@@ -93,8 +99,16 @@ void GarbageCollector::markObject(VMObject* obj)
 	{
 		if (obj->getGCField() != 1)
 		{
-			obj->setGCField(1);
+			/*num_live++;
+			spc_live += obj->getObjectSize();
+
+			obj->setGCField(1);*/
+			//for now the Objects have to mark the referenced objects themselves.
+			//C++ does not allow 0-sized arrays in classes that are derived from.
 			obj->MarkReferences();
+			
+
+
 		}
 	}
 }

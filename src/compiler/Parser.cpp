@@ -38,8 +38,6 @@ THE SOFTWARE.
 //#include <vmobjects/VMString.h>
 
 
-#pragma mark Stream handling
-
 #define GETSYM sym = lexer->getsym(); \
 			   text = lexer->gettext()
 
@@ -63,7 +61,6 @@ Parser::~Parser() {
 // parsing
 //
 
-#pragma mark Parser helpers
 
 bool Parser::symIn(Symbol* ss) {
     while(*ss)
@@ -120,7 +117,6 @@ bool Parser::expectOneOf(Symbol* ss) {
 }
 
 
-#pragma mark helper functions for pushing / popping variables
 
 
 void Parser::gen_push_variable(method_generation_context* mgenc, pString var) {
@@ -189,7 +185,6 @@ Symbol binaryOpSyms[] = {
 Symbol keywordSelectorSyms[] = { Keyword, KeywordSequence };
 
 
-#pragma mark Parser grammar
 
 
 void Parser::Classdef(class_generation_context* cgenc) {

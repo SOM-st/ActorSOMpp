@@ -13,6 +13,12 @@ public:
 	int Size();
 	int IndexOf(VMObject *needle);
 	VMObject* Get(int index);
+
+	VMObject* operator[](int key) 
+	{
+		return theVector[key];
+	}
+
 private:
 	vector<VMObject*> theVector;
 	

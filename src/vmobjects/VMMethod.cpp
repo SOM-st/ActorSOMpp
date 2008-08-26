@@ -2,7 +2,7 @@
 
 VMMethod::VMMethod() : VMObject()
 {
-	objectSize += 40;
+	objectSize = sizeof(VMMethod);
 }
 
 VMMethod::~VMMethod() {}

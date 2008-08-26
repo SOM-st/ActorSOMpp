@@ -6,6 +6,7 @@
 class Heap;
 
 class VMObject;
+#include "../misc/defs.h"
 
 class GarbageCollector
 {
@@ -21,6 +22,10 @@ private:
 	void markObject(VMObject* obj);
 	void mergeFreeSpaces();
 	Heap* heap;
+	uint32_t num_live;
+	uint32_t spc_live;
+	uint32_t num_freed;
+	uint32_t spc_freed;
 	
 
 };

@@ -1,29 +1,31 @@
 #include "VMObject.h"
+#include "VMClass.h"
 
 VMObject::VMObject()
 {
 	gcfield = 0; 
 	hash = (uint16_t)this;
-	objectSize = 20;
+	objectSize = sizeof(VMObject);
 }
 
 VMObject::~VMObject() {}
 
-pString VMObject::GetClass()
+VMClass* VMObject::GetClass()
 {
-	return "";
+	return clazz;
 }
 
-void VMObject::SetClass(pString className)
+void VMObject::SetClass(VMClass* cl)
 {
+	clazz = cl;
 }
 
-pString VMObject::GetFieldName(int index)
+VMSymbol* VMObject::GetFieldName(int index)
 {
-	return "";
+	return NULL;
 }
 
-int VMObject::GetFieldIndex(pString fieldName)
+int VMObject::GetFieldIndex(VMSymbol* fieldName)
 {
 	return 0;
 }
@@ -57,4 +59,6 @@ void VMObject::SetField(int index, VMObject* value)
 
 void VMObject::MarkReferences()
 {
+	this->setGCField(1);
+	clazz->MarkReferences();
 }
