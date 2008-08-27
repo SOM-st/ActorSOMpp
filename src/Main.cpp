@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "vm/Universe.h"
 #include "misc/HeapAllocator.h"
 #include "vmobjects/VMString.h"
+#include "vmobjects/VMArray.h"
 
 int main(int argc, char** argv) {
 
@@ -49,7 +50,7 @@ int main(int argc, char** argv) {
 		VMObject *vmo = new (heap) VMObject;
 		cout << "vmo Obj size:" << vmo->getObjectSize() << endl;
 		//cout << sizeof(*vmo) << endl;
-		VMObject *vmo2 = new (heap) VMMethod;
+		VMObject *vmo2 = new (heap, 0) VMMethod(0);
 		cout << "vmo2 Obj size:" << vmo2->getObjectSize() << endl;
 		//cout << sizeof(*vmo2) << endl;
 	//}
@@ -59,9 +60,18 @@ int main(int argc, char** argv) {
 
 	VMString *vmstr = new (heap) VMString;
 	cout << "vmstr Obj size:" << vmstr->getObjectSize() << endl;
-	vmstr = new (heap, strlen("Stringtest")+1 ) VMString("Stringtest");
-	cout << "vmstr Obj size:" << vmstr->getObjectSize() << endl;
-	cout << vmstr->GetChars() << endl;
+	VMString *vmstr2 = new (heap, strlen("Stringtest")+1 ) VMString("Stringtest");
+	cout << "vmstr2 Obj size:" << vmstr2->getObjectSize() << endl;
+	cout << vmstr2->GetChars() << endl;
+
+	VMArray* vma = new (heap, 4) VMArray(4);
+	vma->AddItem(0, vmo);
+	vma->AddItem(1, vmo2);
+	vma->AddItem(2, vmstr);
+	vma->AddItem(3, vmstr2);
+	cout << "sizeof(VMArray)" << sizeof(VMArray) << endl;
+	cout << "vma Obj size:" << vma->getObjectSize() << endl;
+	cout << "vma array size:" << vma->GetArraySize() << endl;
 	//vmstr->FromCString("VMString Test");
 	//cout << vmstr->ToCString() << endl;
 	//cout << vmo->getObjectSize() << endl;

@@ -41,9 +41,9 @@ public:
 	
 private:
 	//vector<char, HeapAllocator<char> > chars;
-	//char* chars;
+	int string_length;
+	//std::string chars;
 	//char chars[0];
-	//int string_length;
 	char* chars;
 };
 

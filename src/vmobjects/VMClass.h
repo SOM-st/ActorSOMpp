@@ -34,16 +34,12 @@ public:
     virtual bool      has_primitives(); 
     virtual void      load_primitives(const pString*,int);
 
-	virtual void MarkReferences()
-	{
-		VMObject::MarkReferences();
-		super_class->MarkReferences();
-		//name->MarkReferences();
-		//instance_fields->MarkReferences();
-		//instance_invokables->MarkReferences();
-	}
+	virtual void MarkReferences();
+	
 
 private:
+	int numberOfSuperInstanceFields();
+
 	VMClass*  super_class; 
     VMSymbol* name; 
     VMArray*  instance_fields; 

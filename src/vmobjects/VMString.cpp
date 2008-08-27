@@ -11,7 +11,7 @@ VMString::VMString(const char* str) : VMObject()//, std::string()
 {
 	chars = (char*)&chars+sizeof(char*);
 	objectSize = sizeof(VMString) + strlen(str) + 1;
-	int string_length = strlen(str);
+	string_length = strlen(str);
 	for (int i = 0; i < string_length; i++) {
 		chars[i] = str[i];
 	}
@@ -22,7 +22,7 @@ VMString::VMString( const string& s ): VMObject()
 {
 	chars = (char*)&chars+sizeof(char*);
 	objectSize = sizeof(VMString) + s.length() + 1;
-	int string_length = s.length();
+	string_length = s.length();
 	for (int i = 0; i < string_length; i++) {
 		chars[i] = s[i];
 	}

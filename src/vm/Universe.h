@@ -8,6 +8,8 @@
 #include "../vmobjects/VMObject.h"
 #include "../memory/Heap.h"
 
+#define _HEAP Universe::GetUniverse()->GetHeap()
+
 typedef struct _globals_entry globals_entry;
 struct _globals_entry {
     pString name;

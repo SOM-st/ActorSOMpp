@@ -3,52 +3,42 @@
 #define VMMETHOD_H_
 //#include "OOObject.h"
 #include "VMObject.h"
-
+#include "VMInvokable.h"
 #include <iostream>
 //#include "../memory/Heap.h"
 
-class VMMethod : public VMObject{
+class VMFrame;
+
+class VMMethod : public VMObject, public VMInvokable{
 
 public:
-	VMMethod();
+	VMMethod(int bc_count);
 	virtual ~VMMethod();
-	/*virtual pString GetClass(); //TODO: change string to VMClass
-	virtual void SetClass(pString className);
-	virtual pString GetFieldName(int index); //TODO: change string to VMSymbol
-	virtual int GetFieldIndex(pString fieldName);
-	virtual int GetNumberOfFields();
-	virtual void SetNumberOfFields(int nof);
-	virtual int GetDefaultNumberOfFields();
-	virtual void Send(pString, VMObject*, int);
-	virtual VMObject* GetField(int index);
-	virtual void SetField(int index, VMObject* value);
-	virtual void MarkReferences();
-	
-	int32_t getGCField() {return gcfield;} ;
-	void setGCField(int32_t value) { gcfield = value; } ;
+    virtual int       get_number_of_locals() {return number_of_locals; }; 
+    virtual void      set_number_of_locals(int nol) {number_of_locals = nol; }; 
+    virtual int       get_maximum_number_of_stack_elements(){return maximum_number_of_stack_elements; }; 
+    virtual void      set_maximum_number_of_stack_elements(int stel) {maximum_number_of_stack_elements = stel; }; 
+    virtual int       get_number_of_arguments() {return number_of_arguments; }; 
+    virtual void      set_number_of_arguments(int noa) {number_of_arguments = noa; } ; 
+    virtual int       get_number_of_bytecodes() {return bc_length;} ; 
+    virtual void      set_holder_all(VMClass* hld); 
+    virtual VMObject *get_constant(int indx); 
+    virtual uint8_t   get_bytecode(int indx); 
+    virtual void      set_bytecode(int indx, uint8_t); 
+	virtual void	  invoke(VMFrame* frame);
 
-	void *operator new( unsigned int num_bytes, Heap *heap)
+	virtual void MarkReferences()
 	{
-		return heap->Allocate(num_bytes);
+		VMObject::MarkReferences();
+		VMInvokable::MarkReferences();
 	}
-
-	 void operator delete( void *self, Heap *heap ) 
-	 {
-		 heap->Free(self); 
-	 } 
-
-	 uint16_t operator()(const std::string &str) const
-	{
-		uint16_t sum=0;
-		for (int i=0; i<str.size(); ++i)
-			sum=(sum+str[i])%100;
-		return sum;
-
-	}*/
-private:
-	//for testing mem alloc
-	int32_t a[10];
 	
+private:
+    int number_of_locals;
+    int maximum_number_of_stack_elements;
+    int bc_length;
+    int number_of_arguments;
+	uint8_t* bc;	
 };
 
 
