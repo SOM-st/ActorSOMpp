@@ -219,6 +219,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\misc\HeapAllocator.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\compiler\Lexer.cpp"
 			>
 		</File>
@@ -255,6 +259,26 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\vmobjects\VMArray.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMArray.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMClass.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMClass.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMInvokable.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\vmobjects\VMMethod.cpp"
 			>
 		</File>
@@ -268,6 +292,22 @@
 		</File>
 		<File
 			RelativePath=".\src\vmobjects\VMObject.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMString.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMString.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMSymbol.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMSymbol.h"
 			>
 		</File>
 	</Files>
