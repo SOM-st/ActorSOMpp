@@ -251,6 +251,30 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\primitives\Primitive.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\Routine.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\Signature.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\Signature.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\Symboltable.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\Symboltable.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\vm\Universe.cpp"
 			>
 		</File>
@@ -267,11 +291,59 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\vmobjects\VMBigInteger.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMBigInteger.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMBlock.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMBlock.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\vmobjects\VMClass.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\src\vmobjects\VMClass.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMDouble.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMDouble.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMEvaluationPrimitive.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMEvaluationPrimitive.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMFrame.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMFrame.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMInteger.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMInteger.h"
 			>
 		</File>
 		<File
@@ -292,6 +364,14 @@
 		</File>
 		<File
 			RelativePath=".\src\vmobjects\VMObject.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMPrimitive.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMPrimitive.h"
 			>
 		</File>
 		<File
