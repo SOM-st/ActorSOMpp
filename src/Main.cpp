@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "compiler/ClassGenerationContext.h"
 #include <iostream>
 #include <fstream>
+
+#include <typeinfo>
 //#include "compiler/Parser.h"
 #include "memory/Heap.h"
 #include "vmobjects/VMObject.h"
@@ -48,10 +50,10 @@ int main(int argc, char** argv) {
 	Heap *heap = uni->GetHeap();
 	//while (1) {
 		VMObject *vmo = new (heap) VMObject;
-		cout << "vmo Obj size:" << vmo->getObjectSize() << endl;
+		cout << "vmo (VMObject) Obj size:" << vmo->getObjectSize() << endl;
 		//cout << sizeof(*vmo) << endl;
-		VMObject *vmo2 = new (heap, 0) VMMethod(0);
-		cout << "vmo2 Obj size:" << vmo2->getObjectSize() << endl;
+		VMObject *vmo2 = new (heap, 0) VMMethod(0,0);
+		cout << "vmo2 (VMMethod) Obj size:" << vmo2->getObjectSize() << endl;
 		//cout << sizeof(*vmo2) << endl;
 	//}
 	//vector<VMObject*, HeapAllocator<VMObject*> > v = vector<VMObject*, HeapAllocator<VMObject*> >(HeapAllocator<VMObject*>(heap));
@@ -72,6 +74,9 @@ int main(int argc, char** argv) {
 	cout << "sizeof(VMArray)" << sizeof(VMArray) << endl;
 	cout << "vma Obj size:" << vma->getObjectSize() << endl;
 	cout << "vma array size:" << vma->GetArraySize() << endl;
+    //if (typeid(vmo2).name() == VMObject) cout << "yeah" << endl;
+    //cout << typeid(vmo2).name() << endl;
+    //cout << typeid(vmo2) << endl;
 	//vmstr->FromCString("VMString Test");
 	//cout << vmstr->ToCString() << endl;
 	//cout << vmo->getObjectSize() << endl;

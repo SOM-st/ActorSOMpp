@@ -1,7 +1,7 @@
 #include "MethodGenerationContext.h"
 #include "../interpreter/bytecodes.h"
 
-method_generation_context::method_generation_context() {
+MethodGenerationContext::MethodGenerationContext() {
 	//signature = 0;
 	holder_genc = 0;
 	outer_genc = 0;
@@ -14,15 +14,15 @@ method_generation_context::method_generation_context() {
 	bp = 0;
 }
 
-method_generation_context::~method_generation_context() {
+MethodGenerationContext::~MethodGenerationContext() {
 }
 
-int8_t method_generation_context::find_literal_index(pVMSymbol lit) {//pVMObject lit) {
+int8_t MethodGenerationContext::find_literal_index(pVMSymbol lit) {//pVMObject lit) {
 	return (int8_t)index_of(literals, lit);//literals.index_of(lit);
 
 }
 
-bool method_generation_context::find_var(pString var, int* index, int* context, bool* is_argument) {
+bool MethodGenerationContext::find_var(pString var, int* index, int* context, bool* is_argument) {
 	if((*index = index_of(locals, var)) == -1) {//SEND(mgenc->locals, indexOfString, var)) == -1) {
         if((*index = index_of(arguments, var)) == -1) {
             if(!outer_genc)
@@ -39,11 +39,11 @@ bool method_generation_context::find_var(pString var, int* index, int* context, 
     return true;
 }
 
-bool method_generation_context::find_field(pString field) {
+bool MethodGenerationContext::find_field(pString field) {
 	return holder_genc->find_field(field);
 }
-int method_generation_context::get_number_of_arguments() { return arguments.size(); };
-uint8_t method_generation_context::compute_stack_depth() {
+int MethodGenerationContext::get_number_of_arguments() { return arguments.size(); };
+uint8_t MethodGenerationContext::compute_stack_depth() {
 	uint8_t depth = 0;
     uint8_t max_depth = 0;
     unsigned int i = 0;
@@ -90,83 +90,83 @@ uint8_t method_generation_context::compute_stack_depth() {
 }
 
 
-void method_generation_context::set_holder(class_generation_context* holder) {
+void MethodGenerationContext::set_holder(class_generation_context* holder) {
 	holder_genc = holder;
 }
 
-void method_generation_context::set_outer(method_generation_context* outer) {
+void MethodGenerationContext::set_outer(MethodGenerationContext* outer) {
 	outer_genc = outer;
 }
 
-void method_generation_context::set_is_block_method(bool is_block) {
+void MethodGenerationContext::set_is_block_method(bool is_block) {
 	block_method = is_block;
 }
 
-void method_generation_context::set_signature(pVMSymbol sig) {
+void MethodGenerationContext::set_signature(pVMSymbol sig) {
 	signature = sig;
 }
 
-void method_generation_context::set_primitive(bool prim) {
+void MethodGenerationContext::set_primitive(bool prim) {
 	primitive = prim;
 }
 
-void method_generation_context::add_argument(pString arg) {
+void MethodGenerationContext::add_argument(pString arg) {
 	arguments.push_back(arg);
 }
 
-void method_generation_context::add_local(pString local) {
+void MethodGenerationContext::add_local(pString local) {
 	locals.push_back(local);
 }
 
-void method_generation_context::add_literal(pString lit) {
+void MethodGenerationContext::add_literal(pString lit) {
 	literals.push_back(lit);
 }
 
-bool method_generation_context::add_argument_if_absent(pString arg) {
+bool MethodGenerationContext::add_argument_if_absent(pString arg) {
 	if (index_of(arguments, arg) != -1) return false;
 	arguments.push_back(arg);
 	return true;
 }
 
-bool method_generation_context::add_local_if_absent(pString local) {
+bool MethodGenerationContext::add_local_if_absent(pString local) {
 	if (index_of(locals, local) != -1) return false;
 	locals.push_back(local);
 	return true;
 }
 
-bool method_generation_context::add_literal_if_absent(pString lit) {
+bool MethodGenerationContext::add_literal_if_absent(pString lit) {
 	if (index_of(literals, lit) != -1) return false;
 	literals.push_back(lit);
 	return true;
 }
-void method_generation_context::set_finished(bool finished) {
+void MethodGenerationContext::set_finished(bool finished) {
 	this->finished = finished;
 }
 
-class_generation_context* method_generation_context::get_holder() {
+class_generation_context* MethodGenerationContext::get_holder() {
 	return holder_genc;
 }
 
-method_generation_context* method_generation_context::get_outer() {
+MethodGenerationContext* MethodGenerationContext::get_outer() {
 	return outer_genc;
 }
 
-pVMSymbol method_generation_context::get_signature() {
+pVMSymbol MethodGenerationContext::get_signature() {
 	return signature;
 }
 
-bool method_generation_context::is_primitive() {
+bool MethodGenerationContext::is_primitive() {
 	return primitive;
 }
 
-bool method_generation_context::is_block_method() {
+bool MethodGenerationContext::is_block_method() {
 	return block_method;
 }
 
-bool method_generation_context::is_finished() {
+bool MethodGenerationContext::is_finished() {
 	return finished;
 }
 
-void method_generation_context::add_bytecode(uint8_t bc) {
+void MethodGenerationContext::add_bytecode(uint8_t bc) {
 	bytecode[bp++] = bc;
 }

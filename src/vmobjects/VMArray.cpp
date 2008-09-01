@@ -6,11 +6,16 @@ VMArray::VMArray(int size)
 	this->size = size;
 	this->entries = 0;
 	objectSize = sizeof(VMArray) + size * sizeof(VMObject*);
-	theEntries = (VMObject**)&theEntries + sizeof(VMObject**);
+	theEntries = (VMObject**)&theEntries + this->GetOffset();
 }
 
 VMArray::~VMArray()
 {
+}
+
+size_t VMArray::GetOffset()
+{
+    return sizeof(VMObject**);
 }
 
 VMArray* VMArray::CopyAndExtendWith(VMObject* item)

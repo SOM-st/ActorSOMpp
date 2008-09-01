@@ -1,5 +1,5 @@
 #include "Universe.h"
-#include "../vmobjects/VMObject.h"
+#include "../vmobjects/VMSymbol.h"
 
 Universe* Universe::theUniverse;
 
@@ -7,7 +7,8 @@ Universe::Universe()
 {
 	heap = new Heap();
 	VMObject *vmo = new (heap) VMObject;
-	SetGlobal("nil", vmo);
+    VMSymbol *sym = new (heap) VMSymbol("nil");
+	SetGlobal(sym, vmo);
 }
 
 void Universe::RunGC()
@@ -15,12 +16,9 @@ void Universe::RunGC()
 	heap->GCCollect();
 }
 
-void Universe::SetGlobal(pString name, VMObject *val)
+void Universe::SetGlobal(VMSymbol* name, VMObject *val)
 {
-	globals_entry ge;
-	ge.name = name;
-	ge.value = val;
-	globals.push_back(ge);
+	globals[name] = val;
 }
 
 Universe* Universe::GetUniverse()

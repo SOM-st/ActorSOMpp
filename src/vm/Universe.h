@@ -3,18 +3,15 @@
 #ifndef UNIVERSE_H_
 #define UNIVERSE_H_
 
-#include <vector>
+//#include <map>
 #include "../misc/defs.h"
 #include "../vmobjects/VMObject.h"
+//#include "../vmobjects/VMSymbol.h"
+class VMSymbol;
 #include "../memory/Heap.h"
 
 #define _HEAP Universe::GetUniverse()->GetHeap()
 
-typedef struct _globals_entry globals_entry;
-struct _globals_entry {
-    pString name;
-    VMObject *value;
-} ;
 using namespace std;
 class Universe
 {
@@ -22,17 +19,17 @@ public:
 	static Universe* GetUniverse();
 	static void InitializeUniverse();
 
-	vector<globals_entry>  GetGlobals() {return globals;}
+	map<VMSymbol*, VMObject*>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
 	void RunGC();
-	void SetGlobal(pString name, VMObject* val);
+	void SetGlobal(VMSymbol* name, VMObject* val);
 private:
 	static Universe *theUniverse;
 
 	Universe();
 	~Universe();
 	Heap *heap;
-	vector<globals_entry> globals;
+	map<VMSymbol*, VMObject*> globals;
 };
 
 #endif

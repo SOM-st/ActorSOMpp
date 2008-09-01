@@ -1,6 +1,7 @@
 #include "GarbageCollector.h"
 #include "../vm/Universe.h"
 #include "../vmobjects/VMObject.h"
+#include "../vmobjects/VMSymbol.h"
 #include "Heap.h"
 #include <vector>
 
@@ -81,12 +82,12 @@ void GarbageCollector::Collect()
 
 void GarbageCollector::markReachableObjects()
 {
-	vector<globals_entry> globals = Universe::GetUniverse()->GetGlobals();
+	map<VMSymbol*, VMObject*> globals = Universe::GetUniverse()->GetGlobals();
 
 	
-	for (vector<globals_entry>::iterator it = globals.begin(); it!= globals.end(); ++it)
+	for (map<VMSymbol*, VMObject*>::iterator it = globals.begin(); it!= globals.end(); ++it)
 	{
-		markObject(&(*it->value));
+		markObject(&(*it->second));
 	}
 
 	//get frame from interpreter, recursively mark from there...

@@ -20,6 +20,7 @@ public:
 	int GetNumberOfIndexableFields();
 	VMArray* CopyAndExtendWith(VMObject*);
 	void CopyIndexableFieldsFrom(VMArray*);
+    virtual size_t GetOffset();
 
 	VMObject* operator[](int idx)
 	{

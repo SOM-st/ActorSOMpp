@@ -52,7 +52,7 @@ THE SOFTWARE.
 //
 using namespace std;
 
-//typedef int method_generation_context;
+//typedef int MethodGenerationContext;
 //typedef int class_generation_context;
 typedef string pVMSymbol;
 typedef string pString;

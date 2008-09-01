@@ -119,7 +119,7 @@ bool Parser::expectOneOf(Symbol* ss) {
 
 
 
-void Parser::gen_push_variable(method_generation_context* mgenc, pString var) {
+void Parser::gen_push_variable(MethodGenerationContext* mgenc, pString var) {
     // The purpose of this function is to find out whether the variable to be
     // pushed on the stack is a local variable, argument, or object field. This
     // is done by examining all available lexical contexts, starting with the
@@ -147,7 +147,7 @@ void Parser::gen_push_variable(method_generation_context* mgenc, pString var) {
 }
 
 
-void Parser::gen_pop_variable(method_generation_context* mgenc, pString var) {
+void Parser::gen_pop_variable(MethodGenerationContext* mgenc, pString var) {
     // The purpose of this function is to find out whether the variable to be
     // popped off the stack is a local variable, argument, or object field. This
     // is done by examining all available lexical contexts, starting with the
@@ -207,7 +207,7 @@ void Parser::Classdef(class_generation_context* cgenc) {
         symIn(binaryOpSyms)
     ) {
 		
-        method_generation_context* mgenc = new method_generation_context();
+        MethodGenerationContext* mgenc = new MethodGenerationContext();
 		mgenc->set_holder(cgenc);
 		mgenc->add_argument("self");
     
@@ -229,7 +229,7 @@ void Parser::Classdef(class_generation_context* cgenc) {
         while(sym == Identifier || sym == Keyword || sym == OperatorSequence ||
             symIn(binaryOpSyms)
         ) {
-            method_generation_context* mgenc = new method_generation_context();
+            MethodGenerationContext* mgenc = new MethodGenerationContext();
 			mgenc->set_holder(cgenc);
 			mgenc->add_argument("self");
             //method_genc_init(&mgenc);
@@ -280,7 +280,7 @@ void Parser::classFields(class_generation_context* cgenc) {
 }
 
 
-void Parser::method(method_generation_context* mgenc) {
+void Parser::method(MethodGenerationContext* mgenc) {
     pattern(mgenc);
     
     expect(Equal);
@@ -297,7 +297,7 @@ void Parser::primitiveBlock(void) {
 }
 
 
-void Parser::pattern(method_generation_context* mgenc) {
+void Parser::pattern(MethodGenerationContext* mgenc) {
     switch(sym) {
         case Identifier: 
             unaryPattern(mgenc);
@@ -312,12 +312,12 @@ void Parser::pattern(method_generation_context* mgenc) {
 }
 
 
-void Parser::unaryPattern(method_generation_context* mgenc) {
+void Parser::unaryPattern(MethodGenerationContext* mgenc) {
     mgenc->set_signature(unarySelector());
 }
 
 
-void Parser::binaryPattern(method_generation_context* mgenc) {
+void Parser::binaryPattern(MethodGenerationContext* mgenc) {
     mgenc->set_signature(binarySelector());
 	mgenc->add_argument_if_absent(argument());
     //SEND(mgenc->arguments, addStringIfAbsent, argument());
@@ -325,7 +325,7 @@ void Parser::binaryPattern(method_generation_context* mgenc) {
 }
 
 
-void Parser::keywordPattern(method_generation_context* mgenc) {
+void Parser::keywordPattern(MethodGenerationContext* mgenc) {
     pString kw;// = String_new("");
     do {
         kw.append(keyword());// kw = SEND(kw, concat, keyword());
@@ -339,7 +339,7 @@ void Parser::keywordPattern(method_generation_context* mgenc) {
 }
 
 
-void Parser::methodBlock(method_generation_context* mgenc) {
+void Parser::methodBlock(MethodGenerationContext* mgenc) {
     expect(NewTerm);
     blockContents(mgenc);
     // if no return has been generated so far, we can be sure there was no .
@@ -410,7 +410,7 @@ pString Parser::argument(void) {
 }
 
 
-void Parser::blockContents(method_generation_context* mgenc) {
+void Parser::blockContents(MethodGenerationContext* mgenc) {
     if(accept(Or)) {
         locals(mgenc);
         expect(Or);
@@ -419,14 +419,14 @@ void Parser::blockContents(method_generation_context* mgenc) {
 }
 
 
-void Parser::locals(method_generation_context* mgenc) {
+void Parser::locals(MethodGenerationContext* mgenc) {
     while(sym == Identifier) //variable();
 		mgenc->add_local_if_absent(variable());
         //SEND(mgenc->locals, addStringIfAbsent, variable());
 }
 
 
-void Parser::blockBody(method_generation_context* mgenc, bool seen_period) {
+void Parser::blockBody(MethodGenerationContext* mgenc, bool seen_period) {
     if(accept(Exit))
         result(mgenc);
     else if(sym == EndBlock) {
@@ -462,7 +462,7 @@ void Parser::blockBody(method_generation_context* mgenc, bool seen_period) {
 }
 
 
-void Parser::result(method_generation_context* mgenc) {
+void Parser::result(MethodGenerationContext* mgenc) {
     expression(mgenc);
 	cout << "emit return" << endl;
 	if(mgenc->is_block_method());
@@ -475,7 +475,7 @@ void Parser::result(method_generation_context* mgenc) {
 }
 
 
-void Parser::expression(method_generation_context* mgenc) {
+void Parser::expression(MethodGenerationContext* mgenc) {
     PEEK;//peek();
     if(nextSym == Assign)
         assignation(mgenc);
@@ -484,7 +484,7 @@ void Parser::expression(method_generation_context* mgenc) {
 }
 
 
-void Parser::assignation(method_generation_context* mgenc) {
+void Parser::assignation(MethodGenerationContext* mgenc) {
 	list<pString> l;
     
     assignments(mgenc, l);
@@ -499,7 +499,7 @@ void Parser::assignation(method_generation_context* mgenc) {
 }
 
 
-void Parser::assignments(method_generation_context* mgenc, list<pString> l) {
+void Parser::assignments(MethodGenerationContext* mgenc, list<pString> l) {
     if(sym == Identifier) {
         l.push_back(assignment(mgenc));//SEND(l, add, assignment(mgenc));
         PEEK;//peek();
@@ -509,7 +509,7 @@ void Parser::assignments(method_generation_context* mgenc, list<pString> l) {
 }
 
 
-pString Parser::assignment(method_generation_context* mgenc) {
+pString Parser::assignment(MethodGenerationContext* mgenc) {
     pString v = variable();
     pVMSymbol var = "symbol "+v;//Universe_symbol_for(v);
 	mgenc->add_literal_if_absent(var);
@@ -521,7 +521,7 @@ pString Parser::assignment(method_generation_context* mgenc) {
 }
 
 
-void Parser::evaluation(method_generation_context* mgenc) {
+void Parser::evaluation(MethodGenerationContext* mgenc) {
     bool super;
     primary(mgenc, &super);
     if(sym == Identifier || sym == Keyword || sym == OperatorSequence ||
@@ -532,7 +532,7 @@ void Parser::evaluation(method_generation_context* mgenc) {
 }
 
 
-void Parser::primary(method_generation_context* mgenc, bool* super) {
+void Parser::primary(MethodGenerationContext* mgenc, bool* super) {
     *super = false;
     switch(sym) {
         case Identifier: {
@@ -552,7 +552,7 @@ void Parser::primary(method_generation_context* mgenc, bool* super) {
             nestedTerm(mgenc);
             break;
         case NewBlock: {
-            method_generation_context* bgenc = new method_generation_context();
+            MethodGenerationContext* bgenc = new MethodGenerationContext();
 			bgenc->set_is_block_method(true);
 			bgenc->set_holder(mgenc->get_holder());
 			bgenc->set_outer(mgenc);
@@ -584,7 +584,7 @@ pString Parser::variable(void) {
 }
 
 
-void Parser::messages(method_generation_context* mgenc, bool super) {
+void Parser::messages(MethodGenerationContext* mgenc, bool super) {
     if(sym == Identifier) {
         do {
             // only the first message in a sequence can be a super send
@@ -614,7 +614,7 @@ void Parser::messages(method_generation_context* mgenc, bool super) {
 }
 
 
-void Parser::unaryMessage(method_generation_context* mgenc, bool super) {
+void Parser::unaryMessage(MethodGenerationContext* mgenc, bool super) {
     pVMSymbol msg = unarySelector();
 	mgenc->add_literal_if_absent(msg);
     //SEND(mgenc->literals, addIfAbsent, msg);
@@ -626,7 +626,7 @@ void Parser::unaryMessage(method_generation_context* mgenc, bool super) {
 }
 
 
-void Parser::binaryMessage(method_generation_context* mgenc, bool super) {
+void Parser::binaryMessage(MethodGenerationContext* mgenc, bool super) {
     pVMSymbol msg = binarySelector();
 	mgenc->add_literal_if_absent(msg);
     //SEND(mgenc->literals, addIfAbsent, msg);
@@ -642,7 +642,7 @@ void Parser::binaryMessage(method_generation_context* mgenc, bool super) {
 }
 
 
-void Parser::binaryOperand(method_generation_context* mgenc, bool* super) {
+void Parser::binaryOperand(MethodGenerationContext* mgenc, bool* super) {
     primary(mgenc, super);
     
     while(sym == Identifier)
@@ -650,7 +650,7 @@ void Parser::binaryOperand(method_generation_context* mgenc, bool* super) {
 }
 
 
-void Parser::keywordMessage(method_generation_context* mgenc, bool super) {
+void Parser::keywordMessage(MethodGenerationContext* mgenc, bool super) {
     pString kw;
     do {
         kw.append(keyword());// = SEND(kw, concat, keyword());
@@ -670,7 +670,7 @@ void Parser::keywordMessage(method_generation_context* mgenc, bool super) {
 }
 
 
-void Parser::formula(method_generation_context* mgenc) {
+void Parser::formula(MethodGenerationContext* mgenc) {
     bool super;
     binaryOperand(mgenc, &super);
     
@@ -682,14 +682,14 @@ void Parser::formula(method_generation_context* mgenc) {
 }
 
 
-void Parser::nestedTerm(method_generation_context* mgenc) {
+void Parser::nestedTerm(MethodGenerationContext* mgenc) {
     expect(NewTerm);
     expression(mgenc);
     expect(EndTerm);
 }
 
 
-void Parser::literal(method_generation_context* mgenc) {
+void Parser::literal(MethodGenerationContext* mgenc) {
     switch(sym) {
         case Pound: 
             literalSymbol(mgenc);
@@ -704,7 +704,7 @@ void Parser::literal(method_generation_context* mgenc) {
 }
 
 
-void Parser::literalNumber(method_generation_context* mgenc) {
+void Parser::literalNumber(MethodGenerationContext* mgenc) {
     int32_t val;
     if(sym == Minus)
         val = negativeDecimal();
@@ -741,7 +741,7 @@ uint32_t Parser::literalInteger(void) {
 }
 
 
-void Parser::literalSymbol(method_generation_context* mgenc) {
+void Parser::literalSymbol(MethodGenerationContext* mgenc) {
     pVMSymbol symb;
     expect(Pound);
     if(sym == STString) {
@@ -757,7 +757,7 @@ void Parser::literalSymbol(method_generation_context* mgenc) {
 }
 
 
-void Parser::literalString(method_generation_context* mgenc) {
+void Parser::literalString(MethodGenerationContext* mgenc) {
     pString s = string();
 	mgenc->add_literal_if_absent(s);
     //pVMString str = s;//Universe_new_string(s);
@@ -795,7 +795,7 @@ pString Parser::string(void) {
 }
 
 
-void Parser::nestedBlock(method_generation_context* mgenc) {
+void Parser::nestedBlock(MethodGenerationContext* mgenc) {
     #define BLOCK_METHOD_S "$block method"
     #define BLOCK_METHOD_LEN (13)
 	mgenc->add_argument_if_absent("$block self");
@@ -827,13 +827,13 @@ void Parser::nestedBlock(method_generation_context* mgenc) {
 }
 
 
-void Parser::blockPattern(method_generation_context* mgenc) {
+void Parser::blockPattern(MethodGenerationContext* mgenc) {
     blockArguments(mgenc);
     expect(Or);
 }
 
 
-void Parser::blockArguments(method_generation_context* mgenc) {
+void Parser::blockArguments(MethodGenerationContext* mgenc) {
     do {
         expect(Colon);
 		mgenc->add_argument_if_absent(argument());

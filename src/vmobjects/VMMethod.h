@@ -2,17 +2,20 @@
 #ifndef VMMETHOD_H_
 #define VMMETHOD_H_
 //#include "OOObject.h"
+#include "VMArray.h"
 #include "VMObject.h"
 #include "VMInvokable.h"
+#include "../compiler/MethodGenerationContext.h"
 #include <iostream>
 //#include "../memory/Heap.h"
 
 class VMFrame;
 
-class VMMethod : public VMObject, public VMInvokable{
+class VMMethod : public VMArray, public VMInvokable{
 
 public:
-	VMMethod(int bc_count);
+	VMMethod(int bc_count, int number_of_constants);
+    //VMMethod(MethodGenerationContext* mgenc);
 	virtual ~VMMethod();
     virtual int       get_number_of_locals() {return number_of_locals; }; 
     virtual void      set_number_of_locals(int nol) {number_of_locals = nol; }; 
@@ -26,12 +29,13 @@ public:
     virtual uint8_t   get_bytecode(int indx); 
     virtual void      set_bytecode(int indx, uint8_t); 
 	virtual void	  invoke(VMFrame* frame);
-
+    virtual size_t    GetOffset();
 	virtual void MarkReferences()
 	{
-		VMObject::MarkReferences();
+		VMArray::MarkReferences();
 		VMInvokable::MarkReferences();
 	}
+
 	
 private:
     int number_of_locals;

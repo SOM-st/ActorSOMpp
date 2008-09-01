@@ -7,10 +7,10 @@
 #include "../misc/ExtendedVector.h"
 #include "GenerationContextCore.h"
 
-class method_generation_context : public generation_context_core {
+class MethodGenerationContext : public generation_context_core {
 public:
-	method_generation_context();
-	~method_generation_context();
+	MethodGenerationContext();
+	~MethodGenerationContext();
 
 	int8_t find_literal_index(pVMSymbol lit);//pVMObject lit);
 	bool find_var(pString var, int* index, int* context, bool* is_argument);
@@ -18,7 +18,7 @@ public:
 	uint8_t compute_stack_depth();
 
 	void set_holder(class_generation_context* holder);
-	void set_outer(method_generation_context* outer);
+	void set_outer(MethodGenerationContext* outer);
 	void set_is_block_method(bool is_block = true);
 	void set_signature(pVMSymbol sig);
 	void add_argument(pString arg);
@@ -30,7 +30,7 @@ public:
 	bool add_literal_if_absent(pString lit);
 	void set_finished(bool finished = true);
 	class_generation_context* get_holder();
-	method_generation_context* get_outer();
+	MethodGenerationContext* get_outer();
 	pVMSymbol get_signature();
 	bool is_primitive();
 	bool is_block_method();
@@ -41,7 +41,7 @@ public:
 	void add_bytecode(uint8_t bc);
 private:
 	class_generation_context*  holder_genc;
-    method_generation_context* outer_genc;
+    MethodGenerationContext* outer_genc;
     bool                       block_method;
     pVMSymbol                  signature;
     pList            arguments;
