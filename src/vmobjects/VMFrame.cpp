@@ -6,6 +6,7 @@
 
 VMFrame::VMFrame(int size) : VMArray(size)
 {
+    this->objectSize = sizeof(VMFrame) + size*sizeof(VMObject*);
     this->local_offset = new (_HEAP) VMInteger(0);
     this->bytecode_index = new (_HEAP) VMInteger(0);
     this->stack_pointer = new (_HEAP) VMInteger(0);
@@ -97,7 +98,7 @@ void      VMFrame::Push(VMObject* obj)
 {
     int32_t sp = this->stack_pointer->GetEmbeddedInteger() + 1;
     this->stack_pointer->SetEmbeddedInteger(sp);
-    this->AddItem(sp, obj);
+    this->SetIndexableField(sp, obj);
 }
 
 void      VMFrame::ResetStackPointer()
@@ -131,7 +132,7 @@ VMObject* VMFrame::GetStackElement(int index)
 void      VMFrame::SetStackElement(int index, VMObject* obj)
 {
     int sp = this->stack_pointer->GetEmbeddedInteger();
-    this->AddItem(sp-index, obj);
+    this->SetIndexableField(sp-index, obj);
 }
 
 VMObject* VMFrame::GetLocal(int index, int contextLevel)
@@ -145,7 +146,7 @@ void      VMFrame::SetLocal(int index, int contextLevel, VMObject* value)
 {
     VMFrame* context = this->GetContextLevel(contextLevel);
     size_t lo = context->local_offset->GetEmbeddedInteger();
-    context->AddItem(lo+index, value);
+    context->SetIndexableField(lo+index, value);
 }
 
 VMObject* VMFrame::GetArgument(int index, int contextLevel)
@@ -158,7 +159,7 @@ VMObject* VMFrame::GetArgument(int index, int contextLevel)
 void      VMFrame::SetArgument(int index, int contextLevel, VMObject* value)
 {
     VMFrame* context = this->GetContextLevel(contextLevel);
-    context->AddItem(index, value);
+    context->SetIndexableField(index, value);
 }
 
 void      VMFrame::PrintStackTrace()
@@ -180,7 +181,7 @@ void      VMFrame::CopyArgumentsFrom(VMFrame* frame)
     int num_args = meth->get_number_of_arguments();
     for(int i=0; i < num_args; ++i) {
         VMObject* stackElem = frame->GetStackElement(num_args - 1 - i);
-        this->AddItem(i, stackElem);
+        this->SetIndexableField(i, stackElem);
     }
 }
 

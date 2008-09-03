@@ -12,9 +12,9 @@ public:
 	VMArray(int size);
 	virtual ~VMArray();
 	virtual void MarkReferences();
-	void AddItem(int idx, VMObject* item);
-	int AddItem(VMObject* item);
-	VMObject* GetItem(int idx);
+	void SetIndexableField(int idx, VMObject* item);
+	int SetIndexableField(VMObject* item);
+	//VMObject* GetItem(int idx);
 	VMObject* GetIndexableField(int idx);
 	int GetArraySize();
 	int GetNumberOfIndexableFields();
@@ -28,14 +28,6 @@ public:
 		return theEntries[idx];
 	}
 
-	void *operator new( size_t num_bytes, Heap *heap, int size)
-	{
-		return heap->Allocate(num_bytes + (size*sizeof(VMObject*)));
-	}
-	void operator delete( void *self, Heap *heap, int size) 
-	 {
-		 heap->Free(self); 
-	 } 
 
 private:
 	int size;

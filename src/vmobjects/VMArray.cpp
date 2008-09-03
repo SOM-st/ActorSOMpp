@@ -25,17 +25,17 @@ VMArray* VMArray::CopyAndExtendWith(VMObject* item)
 	for (int i = 0; i < this->size; ++i)
 	{
 		if (this->theEntries[i] != 0){
-			result->AddItem(j, theEntries[i]);
+			result->SetIndexableField(j, theEntries[i]);
 			++j;
 		}
 	}
-	result->AddItem(j, item);
+	result->SetIndexableField(j, item);
 	return result;
 }
 
 VMObject* VMArray::GetIndexableField(int idx)
 {
-	for (int i = 0; i < size; ++i)
+	/*for (int i = 0; i < size; ++i)
 	{
 		VMObject* item = theEntries[i];
 		if (item != 0){
@@ -43,18 +43,18 @@ VMObject* VMArray::GetIndexableField(int idx)
 			--idx;
 		}
 	}
-	return 0;
+	return 0;*/
+    if (idx >= size) throw std::bad_exception();
+    return theEntries[idx];
 }
 
 void VMArray::CopyIndexableFieldsFrom(VMArray* from)
 {
 	if (this->size < this->entries + from->GetNumberOfIndexableFields()) {
 	} else {
-		for (int i = 0; i < from->GetArraySize(); ++i)
+		for (int i = 0; i < from->GetNumberOfIndexableFields(); ++i)
 		{
-			if (from->GetItem(i) != 0){
-				AddItem(theEntries[i]);
-			}
+            SetIndexableField(i, from->GetIndexableField(i));
 		}
 	}
 }
@@ -64,7 +64,7 @@ int VMArray::GetNumberOfIndexableFields()
 	return entries;
 }
 
-int VMArray::AddItem(VMObject* item)
+int VMArray::SetIndexableField(VMObject* item)
 {
 	if (size <= entries) throw std::bad_exception();
 	for (int i = 0; i < size; ++i)
@@ -79,7 +79,7 @@ int VMArray::AddItem(VMObject* item)
 	return -1;
 }
 
-void VMArray::AddItem(int idx, VMObject* item)
+void VMArray::SetIndexableField(int idx, VMObject* item)
 {
 	if (idx >= size) throw std::bad_exception();
 	if (theEntries[idx] == 0 && item != 0) entries++;
@@ -92,11 +92,11 @@ int VMArray::GetArraySize()
 	return size;
 }
 
-VMObject* VMArray::GetItem(int idx)
-{
-	if (idx >= size) throw std::bad_exception();
-	return theEntries[idx];
-}
+//VMObject* VMArray::GetItem(int idx)
+//{
+//	if (idx >= size) throw std::bad_exception();
+//	return theEntries[idx];
+//}
 
 void VMArray::MarkReferences()
 {

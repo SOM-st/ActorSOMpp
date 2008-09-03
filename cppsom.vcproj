@@ -179,15 +179,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\misc\ExtendedList.cpp"
-			>
-		</File>
-		<File
 			RelativePath=".\src\misc\ExtendedList.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\misc\ExtendedVector.cpp"
 			>
 		</File>
 		<File
@@ -264,6 +256,14 @@
 		</File>
 		<File
 			RelativePath=".\src\vmobjects\Signature.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\compiler\SourcecodeCompiler.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\compiler\SourcecodeCompiler.h"
 			>
 		</File>
 		<File
@@ -394,7 +394,7 @@
 	<Globals>
 		<Global
 			Name="Notes"
-			Value="&lt;Notes Project=&quot;e4c195c8-982e-4690-8c7f-4e4c667542bd&quot; xmlns=&quot;clr-namespace:StickyNotes.Model;assembly=StickyNotes&quot;&gt;&lt;Notes.StickyNotes&gt;&lt;Note FilePath=&quot;&quot; Content=&quot;&quot; Date=&quot;2008-05-23T00:34:32.077+02:00&quot; /&gt;&lt;/Notes.StickyNotes&gt;&lt;/Notes&gt;"
+			Value="&lt;Notes Project=&quot;e4c195c8-982e-4690-8c7f-4e4c667542bd&quot; xmlns=&quot;clr-namespace:StickyNotes.Model;assembly=StickyNotes&quot;&gt;&lt;Notes.StickyNotes&gt;&lt;Note FilePath=&quot;&quot; Content=&quot;&quot; Date=&quot;2008-05-23T00:34:32.077+02:00&quot; /&gt;&lt;Note FilePath=&quot;c:\Users\abraxas\hpi\Masterarbeit\trunk\src\vmobjects\VMObject.h&quot; Content=&quot;&quot; Date=&quot;2008-09-03T13:40:19.1642068+02:00&quot; /&gt;&lt;/Notes.StickyNotes&gt;&lt;/Notes&gt;"
 		/>
 	</Globals>
 </VisualStudioProject>

@@ -73,8 +73,8 @@ private:
 	void binaryPattern(MethodGenerationContext* mgenc);
 	void keywordPattern(MethodGenerationContext* mgenc);
 	void methodBlock(MethodGenerationContext* mgenc);
-	pVMSymbol unarySelector(void);
-	pVMSymbol binarySelector(void);
+	VMSymbol* unarySelector(void);
+	VMSymbol* binarySelector(void);
 	pString identifier(void);
 	pString keyword(void);
 	pString argument(void);
@@ -103,8 +103,8 @@ private:
 	uint32_t literalInteger(void);
 	void literalSymbol(MethodGenerationContext* mgenc);
 	void literalString(MethodGenerationContext* mgenc);
-	pVMSymbol selector(void);
-	pVMSymbol keywordSelector(void);
+	VMSymbol* selector(void);
+	VMSymbol* keywordSelector(void);
 	pString string(void);
 	void nestedBlock(MethodGenerationContext* mgenc);
 	void blockPattern(MethodGenerationContext* mgenc);

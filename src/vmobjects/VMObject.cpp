@@ -3,10 +3,19 @@
 
 VMObject::VMObject()
 {
-	gcfield = 0; 
-	hash = (uint16_t)this;
-	objectSize = sizeof(VMObject);
+	VMObject(0);
 }
+
+VMObject::VMObject( int number_of_fields )
+{
+    gcfield = 0; 
+	hash = (uint16_t)this;
+	objectSize = sizeof(VMObject) + number_of_fields*sizeof(VMObject*);
+    numberOfFields = number_of_fields;
+    fields = (VMObject**)&this->clazz;
+}
+
+
 
 VMObject::~VMObject() {}
 

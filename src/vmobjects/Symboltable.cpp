@@ -2,10 +2,10 @@
 
 VMSymbol* Symboltable::lookup(const char* restrict)
 {
-    return symtab[std::string(restrict)];
+    return symtab[pString(restrict)];
 }
 
-VMSymbol* Symboltable::lookup(std::string restrict)
+VMSymbol* Symboltable::lookup(const pString& restrict)
 {
     return symtab[restrict];
 }

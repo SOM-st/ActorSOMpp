@@ -42,79 +42,20 @@ THE SOFTWARE.
 #include "misc/HeapAllocator.h"
 #include "vmobjects/VMString.h"
 #include "vmobjects/VMArray.h"
+#include "misc/defs.h"
 
 int main(int argc, char** argv) {
 
     cout << "This will be CppSOM.\n" << endl;
-	Universe* uni = Universe::GetUniverse();
-	Heap *heap = uni->GetHeap();
-	//while (1) {
-		VMObject *vmo = new (heap) VMObject;
-		cout << "vmo (VMObject) Obj size:" << vmo->getObjectSize() << endl;
-		//cout << sizeof(*vmo) << endl;
-		VMObject *vmo2 = new (heap, 0) VMMethod(0,0);
-		cout << "vmo2 (VMMethod) Obj size:" << vmo2->getObjectSize() << endl;
-		//cout << sizeof(*vmo2) << endl;
-	//}
-	//vector<VMObject*, HeapAllocator<VMObject*> > v = vector<VMObject*, HeapAllocator<VMObject*> >(HeapAllocator<VMObject*>(heap));
-	//v.push_back(vmo);
-	//v.push_back(vmo2);
+   // int vm_argc = 0;
+   // pString* vm_argv = NULL;
 
-	VMString *vmstr = new (heap) VMString;
-	cout << "vmstr Obj size:" << vmstr->getObjectSize() << endl;
-	VMString *vmstr2 = new (heap, strlen("Stringtest")+1 ) VMString("Stringtest");
-	cout << "vmstr2 Obj size:" << vmstr2->getObjectSize() << endl;
-	cout << vmstr2->GetChars() << endl;
+   // Universe::handle_arguments(&vm_argc, argc, argv);
+    Universe::start(argc, argv);
 
-	VMArray* vma = new (heap, 4) VMArray(4);
-	vma->AddItem(0, vmo);
-	vma->AddItem(1, vmo2);
-	vma->AddItem(2, vmstr);
-	vma->AddItem(3, vmstr2);
-	cout << "sizeof(VMArray)" << sizeof(VMArray) << endl;
-	cout << "vma Obj size:" << vma->getObjectSize() << endl;
-	cout << "vma array size:" << vma->GetArraySize() << endl;
-    //if (typeid(vmo2).name() == VMObject) cout << "yeah" << endl;
-    //cout << typeid(vmo2).name() << endl;
-    //cout << typeid(vmo2) << endl;
-	//vmstr->FromCString("VMString Test");
-	//cout << vmstr->ToCString() << endl;
-	//cout << vmo->getObjectSize() << endl;
-	//cout << vmo2->getObjectSize() << endl;
-	
-	//uni->RunGC();
+    
 
-	/*ExtendedList *list = new ExtendedList();
-	list->Add(vmo);
-	list->Add(vmo2);
-	cout << "List-size:" << list->Size() << endl;*/
-	
-	//if (argc < 2) {
-	//	cout << "Please specify the file(s) you'd like to parse" << endl;
-	//	cout << "Usage: cppsom [files]" << endl;
-	//	return -1;
-	//}
-	//
-	//for (int i = 1; i < argc; i++) { 
-	//	ifstream fp;
-	//	fp.open(argv[i], std::ios_base::in);
-	//	if (!fp.is_open()) {
-	//		cout << "error opening " << argv[i] <<endl;
-	//		continue;
-	//	}
-	//	//int cdc = 1;
-	//	class_generation_context cdc;
-	//	cout << "starting " << argv[i] << endl;
-	//	Parser* p = new Parser(fp);
-	//	p->Classdef(&cdc);
-
-	//	//clean up
-	//	fp.close();
-	//	delete(p);
-	//	
-	//	cout << "finished " << argv[i] << endl;
-
-	//}
+    Universe::quit(ERR_SUCCESS);
 }
 
 

@@ -15,6 +15,7 @@ class VMObject{
 
 public:
 	VMObject();
+    VMObject(int number_of_fields);
 	virtual ~VMObject();
 
 	virtual VMClass* GetClass();
@@ -35,11 +36,7 @@ public:
 	bool getGCField() {return gcfield;} ;
 	void setGCField(bool value) { gcfield = value; } ;
 
-	//num_bytes parameter is set by the compiler. This is a problem for VMString (and probably VMArray).
-	//The new operator is called before the Constructor. Therefore we don't know how many chars the VMString
-	//will have making it hard to allocate the memory for the chars. Options: 1. pass the number of chars to
-	//the new operator; 2. set string length to an upper bound and have all VMString-Objects with the same size;
-	//3. find something better...
+	//num_bytes parameter is set by the compiler.
 	void *operator new( size_t num_bytes, Heap *heap, unsigned int additional_bytes = 0)
 	{
 		return heap->Allocate(num_bytes + additional_bytes);
@@ -78,10 +75,9 @@ protected:
 	//bool		 : 0; //forces alignment
 	uint16_t hash;
 	int objectSize;
-	//VMObject** fields;
+	
+    VMObject** fields;
 	VMClass* clazz;
-	//VMObject* fields[0];
-	//vector<VMObject, HeapAllocator<VMObject> > fields;
 };
 
 

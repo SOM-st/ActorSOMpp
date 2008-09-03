@@ -3,21 +3,47 @@
 #include "VMSymbol.h"
 #include "VMInvokable.h"
 
+VMClass::VMClass() : VMObject()
+{
+    this->objectSize = sizeof(VMClass);
+}
+
+VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields)
+{
+    this->objectSize = sizeof(VMClass) + number_of_fields*sizeof(VMObject*);
+}
+
+
+bool VMClass::has_super_class()
+{
+    return super_class == NULL;
+}
+
+
 bool VMClass::add_instance_invokable(VMObject *ptr)
 {
+    VMInvokable* newInvokable = dynamic_cast<VMInvokable*>(ptr);
+    if (newInvokable == NULL) throw std::bad_typeid("Trying to add non-invokable to invokables array");
 	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i)
 	{
-		VMObject* cmp = instance_invokables->GetItem(i);
-		if (cmp != 0) {
+        VMInvokable* inv = dynamic_cast<VMInvokable*>( instance_invokables->GetIndexableField(i) );
+		if (inv != 0) {
+            if (newInvokable->get_signature() == inv->get_signature())
+            {
+                this->set_instance_invokable(i, ptr);
+                return false;
+            }
 			//if (ptr->GetSignature() == ((VMInvokable*)cmp)->GetSignature()) {
-			//	  instance_invokables->AddItem(i, ptr);
+			//	  instance_invokables->SetIndexableField(i, ptr);
 			//	  return false;
 			//}
-		}
+        } else {
+            throw std::bad_typeid("Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
+        }
 	}
 	if (instance_invokables->GetNumberOfIndexableFields() >= instance_invokables->GetArraySize())
 		instance_invokables = instance_invokables->CopyAndExtendWith(ptr);
-	else instance_invokables->AddItem(ptr);
+	else instance_invokables->SetIndexableField(ptr);
 
 	return true;
 }
@@ -94,7 +120,7 @@ VMObject *VMClass::get_instance_invokable(int index)
 
 void      VMClass::set_instance_invokable(int index, VMObject* invokable)
 {
-	instance_invokables->AddItem(index, invokable);
+	instance_invokables->SetIndexableField(index, invokable);
 	//instance_invokables[index] = invokable;
 }
 
@@ -139,8 +165,9 @@ bool      VMClass::has_primitives()
     return false;
 }
 
-void      VMClass::load_primitives(const pString* name,int cp_count)
-{
+
+void      VMClass::load_primitives(const vector<pString>& name,int cp_count)
+{//todo
     //// the library handle
     //void* dlhandle=NULL;
     //
@@ -228,8 +255,152 @@ void VMClass::MarkReferences()
 	instance_invokables->MarkReferences();
 }
 
+//private Methods
+
 int VMClass::numberOfSuperInstanceFields()
 {
 	if (this->has_super_class()) return this->super_class->get_number_of_instance_fields();
 	return 0;
 }
+
+//load_primitives helper
+
+pString VMClass::gen_loadstring(const pString& cp, 
+                       const pString& cname
+                       ) {/*
+//    #define S_DOTSOM ".som."
+//    #define S_DOTSOM_LEN 5
+    
+    pString loadstring = String_new_from(cp);
+    SEND(loadstring, concatChars, file_separator);
+    SEND(loadstring, concat, cname);
+//    SEND(loadstring, concatChars, S_DOTSOM);
+    SEND(loadstring, concatChars, shared_extension);
+    
+    return loadstring;*/
+    return pString("");
+}
+
+
+/**
+ *  generate the string containing the path to a SOMCore which may be located
+ *  at the classpath given.
+ *
+ */
+pString VMClass::gen_core_loadstring(const pString& cp) {/*
+    #define S_CORE "SOMCore"
+    pString corename = String_new(S_CORE);
+    pString result = gen_loadstring(cp, corename);
+    SEND(corename, free);
+    
+    return result;*/
+    return pString("");
+}
+
+
+/**
+ * load the given library, return the handle
+ *
+ */
+void* VMClass::load_lib(const pString& path) {
+/*
+    #if !defined(CSOM_WIN)
+        #ifdef DEBUG
+            #define    DL_LOADMODE RTLD_NOW
+        #else
+            #define    DL_LOADMODE RTLD_LAZY
+        #endif DEBUG
+    #endif
+    
+    // static handle. will be returned
+    static void* handle = NULL;
+    
+	// try load lib
+	if((handle=dlopen(SEND(path, chars), DL_LOADMODE)))
+		//found.
+		return handle;
+	else
+        return NULL;*/
+    return NULL;
+}
+
+
+/**
+ * check, whether the lib referenced by the handle supports the class given
+ *
+ */
+bool VMClass::is_responsible(void* handle, const pString& cl) {
+/*    // function handler
+    supports_class_fn supports_class=NULL;
+
+    supports_class = (supports_class_fn)dlsym(handle, "supports_class");
+
+	if(!supports_class) {
+        debug_error(dlerror());
+        Universe_error_exit("Library doesn't have expected format");
+    }
+    
+    // test class responsibility
+    return (*supports_class)(SEND(class, chars));*/
+    return false;
+}
+
+
+/*
+ * Format definitions for Primitive naming scheme.
+ *
+ */
+#define CLASS_METHOD_FORMAT_S "%s_%s"
+// as in AClass_aClassMethod
+#define INSTANCE_METHOD_FORMAT_S "_%s_%s"
+// as in _AClass_anInstanceMethod
+
+
+/*
+ * set the routines for primitive marked invokables of the given class
+ *
+ */
+void VMClass::set_primitives(VMClass* cl, void* handle, const pString& cname,
+                    const char* format
+                    ) {  /*  
+    pVMPrimitive the_primitive;
+    routine_fn   routine=NULL;
+    
+    // iterate invokables
+    for(int i = 0; i < SEND(class, get_number_of_instance_invokables); i++) {
+        the_primitive = (pVMPrimitive)SEND(class, get_instance_invokable, i);
+        
+        if(TSEND(VMInvokable, the_primitive, is_primitive)) {
+            //
+            // we have a primitive to load
+            // get it's selector
+            //
+            pVMSymbol sig = TSEND(VMInvokable, the_primitive, get_signature);
+            pString selector = SEND(sig, get_plain_string);
+            
+			{ //string block                
+				char symbol[SEND(cname, length) + SEND(selector, length)+2 + 1];
+                                                                //2 for 2x '_'
+				sprintf(symbol, format,
+					SEND(cname, chars),
+					SEND(selector, chars));
+                 
+				// try loading the primitive
+				routine = (routine_fn)dlsym(handle, symbol);
+            }
+            
+            if(!routine) {
+                debug_error("could not load primitive '%s' for class %s\n"
+                            "ERR: routine not in library\n",
+                            SEND(selector, chars),
+                            SEND(cname, chars));
+                Universe_exit(ERR_FAIL);
+            }
+            
+            // set routine
+            SEND(the_primitive, set_routine, routine);
+            the_primitive->empty = false;
+        }
+    }*/
+}
+

@@ -5,8 +5,8 @@
 #include "VMArray.h"
 #include "VMObject.h"
 #include "VMInvokable.h"
-#include "../compiler/MethodGenerationContext.h"
 #include <iostream>
+class MethodGenerationContext;
 //#include "../memory/Heap.h"
 
 class VMFrame;
@@ -14,8 +14,9 @@ class VMFrame;
 class VMMethod : public VMArray, public VMInvokable{
 
 public:
+    static VMMethod* assemble(MethodGenerationContext*);
 	VMMethod(int bc_count, int number_of_constants);
-    //VMMethod(MethodGenerationContext* mgenc);
+   // VMMethod(MethodGenerationContext* mgenc);
 	virtual ~VMMethod();
     virtual int       get_number_of_locals() {return number_of_locals; }; 
     virtual void      set_number_of_locals(int nol) {number_of_locals = nol; }; 

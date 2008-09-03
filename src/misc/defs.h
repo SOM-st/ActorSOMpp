@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include <string>
 #include <list>
 #include <vector>
-//#include "ExtendedList.h"
+class VMObject;
+#include "ExtendedList.h"
 //
 // error codes
 //
@@ -51,6 +52,8 @@ THE SOFTWARE.
 // macro for freeing an array
 //
 using namespace std;
+#define path_separator '\\'
+#define file_separator '\\'
 
 //typedef int MethodGenerationContext;
 //typedef int class_generation_context;
@@ -64,7 +67,7 @@ typedef unsigned int uint16_t;
 typedef int int16_t;
 typedef unsigned short uint8_t;
 typedef short int8_t;
-typedef vector<string> pList;
+typedef ExtendedList<VMObject*> pList;
 
 
 #endif DEFS_H_

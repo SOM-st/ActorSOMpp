@@ -2,15 +2,17 @@
 
 #ifndef VMCLASS_H_
 #define VMCLASS_H_
+#include <vector>
 #include "VMObject.h"
-
+#include "../misc/defs.h"
 class VMSymbol;
 class VMArray;
 class VMPrimitive;
 
 class VMClass : public VMObject{
 public:
-	VMClass() { this->objectSize = sizeof(VMClass);};
+	VMClass();
+    VMClass(int number_of_fields);
 	virtual ~VMClass() {}
 
 	virtual VMClass*  get_super_class(); 
@@ -32,13 +34,26 @@ public:
     virtual VMSymbol* get_instance_field_name(int); 
     virtual int       get_number_of_instance_fields(); 
     virtual bool      has_primitives(); 
-    virtual void      load_primitives(const pString*,int);
+    virtual void      load_primitives(const vector<pString>&,int);
 
 	virtual void MarkReferences();
 	
 
 private:
 	int numberOfSuperInstanceFields();
+    
+    pString gen_loadstring(const pString& cp, 
+                       const pString& cname
+                       );
+
+    pString gen_core_loadstring(const pString& cp);
+
+    void* load_lib(const pString& path);
+
+    bool is_responsible(void* handle, const pString& cl);
+    void set_primitives(VMClass* cl, void* handle, const pString& cname,
+                    const char* format
+                    );
 
 	VMClass*  super_class; 
     VMSymbol* name; 

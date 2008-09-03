@@ -5,9 +5,9 @@ MethodGenerationContext::MethodGenerationContext() {
 	//signature = 0;
 	holder_genc = 0;
 	outer_genc = 0;
-	this->arguments.clear();
-	this->literals.clear();
-	this->locals.clear();
+	this->arguments.Clear();
+	this->literals.Clear();
+	this->locals.Clear();
 	primitive = false;
 	block_method = false;
 	finished = false;
@@ -17,14 +17,14 @@ MethodGenerationContext::MethodGenerationContext() {
 MethodGenerationContext::~MethodGenerationContext() {
 }
 
-int8_t MethodGenerationContext::find_literal_index(pVMSymbol lit) {//pVMObject lit) {
-	return (int8_t)index_of(literals, lit);//literals.index_of(lit);
+int8_t MethodGenerationContext::find_literal_index(VMSymbol* lit) {//pVMObject lit) {
+	return (int8_t)literals.IndexOf( (VMObject*)lit);//literals.IndexOf(lit);
 
 }
 
-bool MethodGenerationContext::find_var(pString var, int* index, int* context, bool* is_argument) {
-	if((*index = index_of(locals, var)) == -1) {//SEND(mgenc->locals, indexOfString, var)) == -1) {
-        if((*index = index_of(arguments, var)) == -1) {
+bool MethodGenerationContext::find_var(const pString& var, int* index, int* context, bool* is_argument) {
+	if((*index = locals.IndexOf( var)) == -1) {//SEND(mgenc->locals, IndexOfString, var)) == -1) {
+        if((*index = locals.IndexOf( var)) == -1) {
             if(!outer_genc)
                 return false;
             else {
@@ -39,10 +39,10 @@ bool MethodGenerationContext::find_var(pString var, int* index, int* context, bo
     return true;
 }
 
-bool MethodGenerationContext::find_field(pString field) {
+bool MethodGenerationContext::find_field(const pString& field) {
 	return holder_genc->find_field(field);
 }
-int MethodGenerationContext::get_number_of_arguments() { return arguments.size(); };
+int MethodGenerationContext::get_number_of_arguments() { return arguments.Size(); };
 uint8_t MethodGenerationContext::compute_stack_depth() {
 	uint8_t depth = 0;
     uint8_t max_depth = 0;
@@ -65,7 +65,7 @@ uint8_t MethodGenerationContext::compute_stack_depth() {
             case BC_SUPER_SEND       : {
                 // these are special: they need to look at the number of
                 // arguments (extractable from the signature)
-                pVMSymbol sig = literals.at(bytecode[i + 1]);
+                VMSymbol* sig = (VMSymbol*)literals.get(bytecode[i + 1]);
                     //SEND(mgenc->literals, get, mgenc->bytecode[i + 1]);
                 
 				//depth -= Signature_get_number_of_arguments(sig);
@@ -102,7 +102,7 @@ void MethodGenerationContext::set_is_block_method(bool is_block) {
 	block_method = is_block;
 }
 
-void MethodGenerationContext::set_signature(pVMSymbol sig) {
+void MethodGenerationContext::set_signature(VMSymbol* sig) {
 	signature = sig;
 }
 
@@ -110,32 +110,32 @@ void MethodGenerationContext::set_primitive(bool prim) {
 	primitive = prim;
 }
 
-void MethodGenerationContext::add_argument(pString arg) {
+void MethodGenerationContext::add_argument(const pString& arg) {
 	arguments.push_back(arg);
 }
 
-void MethodGenerationContext::add_local(pString local) {
+void MethodGenerationContext::add_local(const pString& local) {
 	locals.push_back(local);
 }
 
-void MethodGenerationContext::add_literal(pString lit) {
+void MethodGenerationContext::add_literal(VMObject* lit) {
 	literals.push_back(lit);
 }
 
-bool MethodGenerationContext::add_argument_if_absent(pString arg) {
-	if (index_of(arguments, arg) != -1) return false;
+bool MethodGenerationContext::add_argument_if_absent(const pString& arg) {
+	if (locals.IndexOf( arg) != -1) return false;
 	arguments.push_back(arg);
 	return true;
 }
 
-bool MethodGenerationContext::add_local_if_absent(pString local) {
-	if (index_of(locals, local) != -1) return false;
+bool MethodGenerationContext::add_local_if_absent(const pString& local) {
+	if (locals.IndexOf( local) != -1) return false;
 	locals.push_back(local);
 	return true;
 }
 
-bool MethodGenerationContext::add_literal_if_absent(pString lit) {
-	if (index_of(literals, lit) != -1) return false;
+bool MethodGenerationContext::add_literal_if_absent(VMObject* lit) {
+	if (literals.IndexOf( lit) != -1) return false;
 	literals.push_back(lit);
 	return true;
 }
@@ -151,7 +151,7 @@ MethodGenerationContext* MethodGenerationContext::get_outer() {
 	return outer_genc;
 }
 
-pVMSymbol MethodGenerationContext::get_signature() {
+VMSymbol* MethodGenerationContext::get_signature() {
 	return signature;
 }
 

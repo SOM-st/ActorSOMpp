@@ -3,10 +3,14 @@
 #include "VMFrame.h"
 #include "../compiler/MethodGenerationContext.h"
 
-
-VMMethod::VMMethod(int bc_count, int number_of_constants) : VMArray(bc_count+number_of_constants), VMInvokable()
+VMMethod* VMMethod::assemble(MethodGenerationContext* mgenc)
 {
-	objectSize = sizeof(VMMethod);
+    return NULL;
+}
+
+VMMethod::VMMethod(int bc_count, int number_of_constants) : VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ), VMInvokable()
+{
+	objectSize = sizeof(VMMethod) + bc_count + number_of_constants*sizeof(VMObject*);
     bc_length = bc_count;
     bc = (uint8_t*)&bc + sizeof(uint8_t*);
 }
@@ -28,6 +32,7 @@ void VMMethod::invoke(VMFrame* frame)
 
 void VMMethod::set_holder_all(VMClass* hld)
 {
+   // for(int i = this->
     //go through indexable_fields
     //if (typeid(indexable_field[i]).name() == "class VMInvokable *") indexable_field[i]->setHolder(hld);
 }
