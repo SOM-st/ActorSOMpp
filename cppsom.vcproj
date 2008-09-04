@@ -159,6 +159,10 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\src\compiler\BytecodeGenerator.cpp"
+			>
+		</File>
+		<File
 			RelativePath=".\src\compiler\BytecodeGenerator.h"
 			>
 		</File>
@@ -212,6 +216,14 @@
 		</File>
 		<File
 			RelativePath=".\src\misc\HeapAllocator.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\interpreter\Interpreter.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\interpreter\Interpreter.h"
 			>
 		</File>
 		<File
