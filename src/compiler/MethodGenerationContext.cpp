@@ -1,5 +1,10 @@
 #include "MethodGenerationContext.h"
 #include "../interpreter/bytecodes.h"
+#include "../vmobjects/VMSymbol.h"
+#include "../vmobjects/VMMethod.h"
+#include "../vmobjects/Signature.h"
+#include "../vmobjects/VMMethod.h"
+#include "../vmobjects/VMPrimitive.h"
 
 MethodGenerationContext::MethodGenerationContext() {
 	//signature = 0;
@@ -14,11 +19,42 @@ MethodGenerationContext::MethodGenerationContext() {
 	bp = 0;
 }
 
+VMMethod* MethodGenerationContext::Assemble()
+{
+    // create a method instance with the given number of bytecodes and literals
+    int num_literals = this->literals.Size();
+    VMMethod* meth = _UNIVERSE->new_method(this->signature, bp, num_literals);
+    
+    // populate the fields that are immediately available
+    int num_locals = this->locals.Size();
+    meth->set_number_of_locals(num_locals);
+
+    meth->set_maximum_number_of_stack_elements(this->compute_stack_depth());
+    
+    // copy literals into the method
+    for(int i = 0; i < num_literals; i++) {
+        VMObject* l = literals.get(i);
+        meth->SetIndexableField(i, l);
+    }
+    
+    // copy bytecodes into method
+    for(size_t i = 0; i < bp; i++)
+        meth->set_bytecode(i, bytecode[i]);
+    
+    // return the method - the holder field is to be set later on!
+    return meth;
+}
+
+VMPrimitive* MethodGenerationContext::AssemblePrimitive()
+{
+    return VMPrimitive::GetEmptyPrimitive(this->signature);
+}
+
 MethodGenerationContext::~MethodGenerationContext() {
 }
 
-int8_t MethodGenerationContext::find_literal_index(VMSymbol* lit) {//pVMObject lit) {
-	return (int8_t)literals.IndexOf( (VMObject*)lit);//literals.IndexOf(lit);
+int8_t MethodGenerationContext::find_literal_index(VMObject* lit) {//pVMObject lit) {
+	return (int8_t)literals.IndexOf(lit);//literals.IndexOf(lit);
 
 }
 
@@ -68,7 +104,7 @@ uint8_t MethodGenerationContext::compute_stack_depth() {
                 VMSymbol* sig = (VMSymbol*)literals.get(bytecode[i + 1]);
                     //SEND(mgenc->literals, get, mgenc->bytecode[i + 1]);
                 
-				//depth -= Signature_get_number_of_arguments(sig);
+                depth -= Signature::GetNumberOfArguments(sig);
                 
 				depth++; // return value
                 i += 2;
@@ -79,7 +115,7 @@ uint8_t MethodGenerationContext::compute_stack_depth() {
             default                  :
                // debug_error("Illegal bytecode %d.\n", bytecode[i]);
                 //Universe_exit(1);
-				exit(1);
+                _UNIVERSE->quit(1);
         }
         
         if(depth > max_depth)
@@ -168,5 +204,5 @@ bool MethodGenerationContext::is_finished() {
 }
 
 void MethodGenerationContext::add_bytecode(uint8_t bc) {
-	bytecode[bp++] = bc;
+	bytecode.push_back(bc);
 }

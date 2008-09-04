@@ -7,23 +7,30 @@
 #include "../compiler/MethodGenerationContext.h"
 #include "../primitives/Primitive.h"
 #include "VMInvokable.h"
+class VMSymbol;
 
-class VMPrimitive : public VMObject, public VMInvokable
+class VMPrimitive : public VMObject, public VMInvokable, Primitive
 {
 public:
-    VMPrimitive();
-    VMPrimitive(MethodGenerationContext* mgenc);
+    VMPrimitive(VMSymbol* sig);
     virtual ~VMPrimitive();
     virtual bool is_primitive() { return true; };
     virtual void invoke(VMFrame*);
     virtual bool IsEmpty();
-    virtual void SetRoutine(Routine<Primitive>* rtn);
+    virtual void SetRoutine(Routine* rtn);
     virtual void MarkReferences();
+
+    static VMPrimitive* GetEmptyPrimitive(VMSymbol* sig);
+
+    //static void empty_routine(VMObject* self, VMFrame* frame);
+protected:
+    void SetEmpty(bool value) { empty = value; };
 private:
     bool empty;
-    Routine<Primitive>* routine;
+    Routine* routine;
     VMSymbol* signature;
     VMClass* holder;
+    static void empty_routine(VMObject* self, VMFrame* frame);
 };
 
 #endif

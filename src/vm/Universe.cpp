@@ -64,7 +64,6 @@ vector<pString> Universe::handle_arguments( int* vm_argc, int argc, char** argv 
         {
             if ((argc == i + 1) || class_path.size() > 0)
                 print_usage_and_exit(argv[0]);
-
             setup_class_path(pString(argv[++i]));
         } else if (strncmp(argv[i], "-d", 2) == 0) {
             dump_bytecodes++;
@@ -105,7 +104,9 @@ void Universe::start(int argc, char** argv)
     
     vector<pString> vm_argv = handle_arguments(&vm_argc, argc, argv);*/
 
-	if (!theUniverse) theUniverse = new Universe(argc,  argv);
+	theUniverse = new Universe();
+    theUniverse->initialize(argc, argv);
+
 
 }
 
@@ -152,7 +153,7 @@ int Universe::setup_class_path( const pString& cp )
         int i = 0;
         while( ss >> token)
         {
-            class_path[i] = token;
+            class_path.push_back(token);
             ++i;
         }
         cp_count = i;
@@ -188,9 +189,9 @@ void Universe::print_usage_and_exit( char* executable )
     quit(ERR_SUCCESS);
 }
 
+Universe::Universe(){};
 
-
-Universe::Universe(int argc, char** _argv)
+void Universe::initialize(int argc, char** _argv)
 {
     heapSize = 1000000;
     int vm_argc;
@@ -198,9 +199,10 @@ Universe::Universe(int argc, char** _argv)
 
 	heap = new Heap(heapSize);
     symboltable = new Symboltable();
-
+    compiler = new SourcecodeCompiler();
 	nil_object = new (heap) VMObject;
-
+    /*VMArray* vmo = new (heap, 4*sizeof(VMObject*)) VMArray(4);
+    VMMethod*/
     metaclass_class = this->new_metaclass_class();
 
     object_class    = this->new_system_class();
@@ -468,7 +470,7 @@ VMClass* Universe::load_class_basic( VMSymbol* name, VMClass* system_class)
     for (vector<pString>::iterator i = class_path.begin();
          i != class_path.end(); ++i)
     {
-        result = SourcecodeCompiler::compile_class(*i, name->GetStdString(), system_class);
+        result = compiler->compile_class(*i, name->GetStdString(), system_class);
         if (result) {
             if (dump_bytecodes) {
 
@@ -482,7 +484,7 @@ VMClass* Universe::load_class_basic( VMSymbol* name, VMClass* system_class)
 
 VMClass* Universe::load_shell_class( pString& stmt)
 {
-    VMClass* result = SourcecodeCompiler::compile_class_string(stmt, NULL);
+    VMClass* result = compiler->compile_class_string(stmt, NULL);
     return result;
 }
 
@@ -490,6 +492,7 @@ void Universe::load_system_class( VMClass* system_class)
 {
     VMClass* result =
         load_class_basic(system_class->get_name(), system_class);
+    pString s = system_class->get_name()->GetStdString();
 
     if (!result) {
         cout << "Can\'t load system class: " << system_class->get_name()->GetStdString();
@@ -634,7 +637,7 @@ VMMethod* Universe::new_method( VMSymbol* signature, size_t number_of_bytecodes,
 
 VMString* Universe::new_string( const pString& str)
 {
-    VMString* result = new (heap, str.length()) VMString(str);
+    VMString* result = new (heap, str.length()+1) VMString(str);
     result->SetClass(string_class);
 
     return result;
@@ -642,7 +645,7 @@ VMString* Universe::new_string( const pString& str)
 
 VMSymbol* Universe::new_symbol( const pString& str )
 {
-    VMSymbol* result = new (heap, str.length()) VMSymbol(str);
+    VMSymbol* result = new (heap, str.length()+1) VMSymbol(str);
     result->SetClass(symbol_class);
 
     symboltable->insert(result);

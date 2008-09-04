@@ -14,7 +14,6 @@ class VMFrame;
 class VMMethod : public VMArray, public VMInvokable{
 
 public:
-    static VMMethod* assemble(MethodGenerationContext*);
 	VMMethod(int bc_count, int number_of_constants);
    // VMMethod(MethodGenerationContext* mgenc);
 	virtual ~VMMethod();

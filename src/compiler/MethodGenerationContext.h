@@ -7,13 +7,19 @@
 #include "../misc/ExtendedVector.h"
 #include "GenerationContextCore.h"
 #include "../misc/ExtendedList.h"
+class VMMethod;
+class VMArray;
+class VMPrimitive;
 
 class MethodGenerationContext : public generation_context_core {
 public:
 	MethodGenerationContext();
 	~MethodGenerationContext();
+    
+    VMMethod* Assemble();
+    VMPrimitive* AssemblePrimitive();
 
-	int8_t find_literal_index(VMSymbol* lit);//pVMObject lit);
+	int8_t find_literal_index(VMObject* lit);//pVMObject lit);
 	bool find_var(const pString& var, int* index, int* context, bool* is_argument);
 	bool find_field(const pString& field);
 	uint8_t compute_stack_depth();

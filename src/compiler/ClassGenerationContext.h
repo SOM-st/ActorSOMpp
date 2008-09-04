@@ -3,6 +3,7 @@
 #define CLASSGENERATIONCONTEXT_H_
 class VMSymbol;
 class VMObject;
+class VMClass;
 
 #include "../misc/defs.h"
 #include "GenerationContextCore.h"
@@ -18,6 +19,8 @@ class class_generation_context : public generation_context_core
 public:
 	class_generation_context();
 	~class_generation_context();
+    VMClass* Assemble();
+    void AssembleSystemClass(VMClass* system_class);
 
 	bool find_field(const pString&);
 	void add_instance_field(VMObject*);

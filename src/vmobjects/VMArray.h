@@ -28,7 +28,8 @@ public:
 		return theEntries[idx];
 	}
 
-
+protected:
+    virtual void ResetEntriesPointer();
 private:
 	int size;
 	int entries;

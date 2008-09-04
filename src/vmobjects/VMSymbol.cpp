@@ -26,7 +26,7 @@ void VMSymbol::SetString(const std::string& str)
 	if (str.length() > string_length) {
 		//realloc?
 	} else {
-		for (int i = 0; i < string_length; i++) {
+		for (int i = 0; i < str.length(); i++) {
 			chars[i] = str[i];
 		}
 		chars[string_length] = '\0';

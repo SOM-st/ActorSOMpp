@@ -4,12 +4,20 @@
 #define SOURCECODECOMPILER_H_
 #include "../misc/defs.h"
 class VMClass;
+class Parser;
 
 static class SourcecodeCompiler {
 public:
-    static VMClass* compile_class(const pString& path, const pString& file,
+    SourcecodeCompiler();
+    ~SourcecodeCompiler();
+
+    VMClass* compile_class(const pString& path, const pString& file,
                                   VMClass* system_class);
-    static VMClass* compile_class_string(const pString& stream, VMClass* system_class);
+    VMClass* compile_class_string(const pString& stream, VMClass* system_class);
+private:
+    void show_compilation_error(const pString& filename, const char* message);
+    VMClass* compile(VMClass* system_class);
+    Parser* parser;
 };
 
 #endif

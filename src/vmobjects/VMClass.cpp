@@ -2,6 +2,17 @@
 #include "VMArray.h"
 #include "VMSymbol.h"
 #include "VMInvokable.h"
+#include <fstream>
+
+/*
+ * Format definitions for Primitive naming scheme.
+ *
+ */
+#define CLASS_METHOD_FORMAT_S "%s_%s"
+// as in AClass_aClassMethod
+#define INSTANCE_METHOD_FORMAT_S "_%s_%s"
+// as in _AClass_anInstanceMethod
+
 
 VMClass::VMClass() : VMObject()
 {
@@ -166,83 +177,91 @@ bool      VMClass::has_primitives()
 }
 
 
-void      VMClass::load_primitives(const vector<pString>& name,int cp_count)
+void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
 {//todo
     //// the library handle
+    ifstream* dlhandle = NULL;
     //void* dlhandle=NULL;
     //
     //// cached object properties
+    pString cname = this->name->GetStdString();
     //pString cname = this->name->GetStdString;
 
     //// iterate the classpathes
-    //for(int i = 0; (i < cp_count) && !dlhandle; i++) {
+    for(vector<pString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i) {
     //    //
     //    // check the core library
     //    //
     //    
     //    
-    //    pString loadstring = gen_core_loadstring(cp[i]);
-    //    dlhandle = load_lib(loadstring);
-    //    SEND(loadstring, free);
-    //    if(dlhandle && is_responsible(dlhandle, cname))
+        pString loadstring = gen_core_loadstring(*i);
+        dlhandle = load_lib(loadstring);
+        //SEND(loadstring, free);
+        if(dlhandle != NULL && dlhandle->good() && is_responsible(dlhandle, cname))
     //        //
     //        // the core library is found and responsible
     //        //
-    //        break;
+              break;
+        else if (dlhandle != NULL) {
+            dlhandle->close();
+            delete(dlhandle);
+            dlhandle = NULL;
+        }
     //    
     //    
     //    //
-    //    // the core library is not found or respondible, 
+    //    // the core library is not found or responsible, 
     //    // continue w/ class file
     //    //
     //    
     //    
-    //    loadstring = gen_loadstring(cp[i], cname);
-    //    dlhandle = load_lib(loadstring);
+        loadstring = gen_loadstring(*i, cname);
+        dlhandle = load_lib(loadstring);
     //    SEND(loadstring, free);
-    //    if(dlhandle) {
+        if(dlhandle != NULL && dlhandle->good()) {
     //        //
     //        // the class library was found...
     //        //
-    //        if(is_responsible(dlhandle, cname)) {
+            if(is_responsible(dlhandle, cname)) {
     //            //
     //            // ...and is responsible.
     //            //
-    //            break;
-    //        } else {
+                break;
+            } else {
     //            //
     //            // ... but says not responsible, but have to
     //            // close it
     //            //
-    //            dlclose(dlhandle);
-    //            Universe_error_exit("Library claims no responsiblity, "
-    //                                "but musn't!");        
-    //        }
-    //    }        
+                dlhandle->close();
+                delete(dlhandle);
+                _UNIVERSE->error_exit("Library claims no resonsibility, but musn't!");
+            }
+            dlhandle->close();
+            delete(dlhandle);
+            dlhandle = NULL;
+        }
     //    /*
     //     * continue checking the next class path
     //     *
     //     */
-    //}
+    }
 
     ////
     //// finished cycling,
     //// check if a lib was found.
     ////
-    //if(!dlhandle) {
-    //    debug_error("load failure: %s\n", dlerror());
-    //    debug_error("could not load primitive library for %s\n",
-    //                SEND(cname, chars));
-    //    Universe_exit(ERR_FAIL);
-    //}
-    //
-    //
+    if(!(dlhandle != NULL)) {
+        cout << "load failure: ";
+        cout << "could not load primitive library for " << cname << endl;
+        _UNIVERSE->quit(ERR_FAIL);
+    }
+
     ///*
     // * do the actual loading for both class and metaclass
     // *
     // */
-    //set_primitives(self, dlhandle, cname, INSTANCE_METHOD_FORMAT_S);
-    //set_primitives(self->class, dlhandle, cname, CLASS_METHOD_FORMAT_S);
+    set_primitives(this, dlhandle, cname, INSTANCE_METHOD_FORMAT_S);
+    set_primitives(this->GetClass(), dlhandle, cname, CLASS_METHOD_FORMAT_S);
 }
 
 
@@ -302,7 +321,7 @@ pString VMClass::gen_core_loadstring(const pString& cp) {/*
  * load the given library, return the handle
  *
  */
-void* VMClass::load_lib(const pString& path) {
+ifstream* VMClass::load_lib(const pString& path) {
 /*
     #if !defined(CSOM_WIN)
         #ifdef DEBUG
@@ -329,7 +348,7 @@ void* VMClass::load_lib(const pString& path) {
  * check, whether the lib referenced by the handle supports the class given
  *
  */
-bool VMClass::is_responsible(void* handle, const pString& cl) {
+bool VMClass::is_responsible(ifstream* handle, const pString& cl) {
 /*    // function handler
     supports_class_fn supports_class=NULL;
 
@@ -346,21 +365,13 @@ bool VMClass::is_responsible(void* handle, const pString& cl) {
 }
 
 
-/*
- * Format definitions for Primitive naming scheme.
- *
- */
-#define CLASS_METHOD_FORMAT_S "%s_%s"
-// as in AClass_aClassMethod
-#define INSTANCE_METHOD_FORMAT_S "_%s_%s"
-// as in _AClass_anInstanceMethod
 
 
 /*
  * set the routines for primitive marked invokables of the given class
  *
  */
-void VMClass::set_primitives(VMClass* cl, void* handle, const pString& cname,
+void VMClass::set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
                     const char* format
                     ) {  /*  
     pVMPrimitive the_primitive;

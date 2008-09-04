@@ -8,6 +8,8 @@
 class VMSymbol;
 class VMArray;
 class VMPrimitive;
+class class_generation_context;
+//class ifstream;
 
 class VMClass : public VMObject{
 public:
@@ -48,10 +50,10 @@ private:
 
     pString gen_core_loadstring(const pString& cp);
 
-    void* load_lib(const pString& path);
+    ifstream* load_lib(const pString& path);
 
-    bool is_responsible(void* handle, const pString& cl);
-    void set_primitives(VMClass* cl, void* handle, const pString& cname,
+    bool is_responsible(ifstream* handle, const pString& cl);
+    void set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
                     const char* format
                     );
 

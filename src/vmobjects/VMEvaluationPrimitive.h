@@ -16,8 +16,8 @@ public:
     virtual ~VMEvaluationPrimitive();
     virtual void MarkReferences();
 private:
-    VMSymbol* computeSignatureString(int argc);
-    void routine(VMObject* object, VMFrame* frame);
+    static VMSymbol* computeSignatureString(int argc);
+    static void evaluationRoutine(VMObject* object, VMFrame* frame);
     VMInteger* numberOfArguments;
 };
 

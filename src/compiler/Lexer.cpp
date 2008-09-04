@@ -1,7 +1,7 @@
 #include "Lexer.h"
 
 
-Lexer::Lexer(ifstream &file) : infile(file) {
+Lexer::Lexer(istream &file) : infile(file) {
 	peekDone = false;
 	bufp = 0;
 }
@@ -26,12 +26,13 @@ pString Lexer::getrawbuffer(void) {
 #define _BC (buf[bufp])
 #define EOB (bufp >= buf.length())
 
-void Lexer::fillbuffer(void) {
-	if(!infile.good()) // string stream
-        return;
-
-	std::getline(infile, buf);
+int Lexer::fillbuffer(void) {
+	if(!infile.good()) // file stream
+        return 0;
+    
+    std::getline(infile, buf);
     bufp = 0;
+    return buf.length();
 }
 
 
@@ -78,7 +79,7 @@ Symbol Lexer::getsym(void) {
         peekDone = false;
         sym = nextSym;
         symc = nextSymc;
-        strcpy(text, nextText);
+        strncpy(text, nextText, 512);
         return sym;
     }
 

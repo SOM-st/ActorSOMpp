@@ -13,6 +13,11 @@ VMArray::~VMArray()
 {
 }
 
+void VMArray::ResetEntriesPointer()
+{
+    theEntries = (VMObject**)&theEntries + this->GetOffset();
+}
+
 size_t VMArray::GetOffset()
 {
     return sizeof(VMObject**);

@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "Lexer.h"
 #include "ClassGenerationContext.h"
 #include "MethodGenerationContext.h"
+#include "BytecodeGenerator.h"
 //#include <vm/Universe.h>
 //using namespace std;
 //#include "GenerationContexts.h"
@@ -48,7 +49,8 @@ THE SOFTWARE.
 class Parser
 {
 public:
-	Parser(ifstream& file);
+	Parser(istream& file);
+    Parser(const pString& stream);
 	~Parser();
 	//void init(const FILE* fp);
 	//void init_string(pString str);
@@ -137,6 +139,7 @@ private:
 	/*static Symbol singleOpSyms[];
 	static Symbol binaryOpSyms[];
 	static Symbol keywordSelectorSyms[];*/
+    bytecode_generator* bcGen;
 };
 
 #endif

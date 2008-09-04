@@ -37,6 +37,11 @@ public:
 	void setGCField(bool value) { gcfield = value; } ;
 
 	//num_bytes parameter is set by the compiler.
+    //parameter additional_bytes (a_b) is used for:
+    //  - fields in VMObject, a_b must be set to (numberOfFields*sizeof(VMObject*))
+    //  - chars in VMString/VMSymbol, a_b must be set to (Stringlength + 1)
+    //  - array size in VMArray; a_b must be set to (size_of_array*sizeof(VMObect*))
+    //  - fields in VMMethod, a_b must be set to (number_of_bc + number_of_csts*sizeof(VMObject*))
 	void *operator new( size_t num_bytes, Heap *heap, unsigned int additional_bytes = 0)
 	{
 		return heap->Allocate(num_bytes + additional_bytes);

@@ -20,6 +20,8 @@ class VMMethod;
 class VMString;
 class VMBigInteger;
 class Symboltable;
+class SourcecodeCompiler;
+#include "../interpreter/Interpreter.h"
 #include "../memory/Heap.h"
 
 #define _HEAP Universe::GetUniverse()->GetHeap()
@@ -62,6 +64,7 @@ public:
 
 	map<VMSymbol*, VMObject*>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
+    Interpreter* GetInterpreter() {return interpreter;}
 	void RunGC();
 	
 
@@ -115,7 +118,8 @@ private:
     void print_usage_and_exit(char* executable);
 	
 
-    Universe(int, char**);
+    void initialize(int, char**);
+    Universe();
 	~Universe();
 
 	Heap *heap;
@@ -124,6 +128,8 @@ private:
     vector<pString> class_path;
     int cp_count;
     Symboltable* symboltable;
+    SourcecodeCompiler* compiler;
+    Interpreter* interpreter;
 };/*
 /*  Global objects  
 extern pVMObject nil_object;

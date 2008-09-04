@@ -26,7 +26,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
-#include <fstream>
+#include <istream>
 #include <string>
 #include "../misc/defs.h"
 
@@ -48,7 +48,8 @@ static char* symnames[] = {
 class Lexer {
 
 public:
-	Lexer(ifstream& file);
+	Lexer(istream& file);
+    Lexer(const pString& stream);
 	~Lexer();
 	Symbol getsym(void);
 	Symbol peek(void);
@@ -59,7 +60,7 @@ public:
 
 
 private:
-	void fillbuffer(void);
+	int fillbuffer(void);
 	void skipWhiteSpace(void);
 	void skipComment(void);	
 	
@@ -67,15 +68,19 @@ private:
 	{
 	}
 
-	ifstream& infile;
+	istream& infile;
+
+    pString stringInput;
 
 	Symbol sym;
 	char symc;
+    //TODO: change this to a stream or something
 	char text[BUFSIZ];
 
 	bool peekDone;
 	Symbol nextSym;
 	char nextSymc;
+    //^^
 	char nextText[BUFSIZ];
 	
 	std::string buf;

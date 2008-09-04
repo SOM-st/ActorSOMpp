@@ -3,16 +3,13 @@
 #include "VMFrame.h"
 #include "../compiler/MethodGenerationContext.h"
 
-VMMethod* VMMethod::assemble(MethodGenerationContext* mgenc)
-{
-    return NULL;
-}
-
 VMMethod::VMMethod(int bc_count, int number_of_constants) : VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ), VMInvokable()
 {
 	objectSize = sizeof(VMMethod) + bc_count + number_of_constants*sizeof(VMObject*);
     bc_length = bc_count;
     bc = (uint8_t*)&bc + sizeof(uint8_t*);
+    this->ResetEntriesPointer();
+    //theEntries = (VMObject**)&theEntries + this->GetOffset();
 }
 
 //VMMethod::VMMethod(MethodGenerationContext* mgenc) : VMArray(mgenc->), VMInvokable()
