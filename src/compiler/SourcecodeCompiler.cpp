@@ -36,12 +36,17 @@ VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& 
     VMSymbol* cname = result->get_name();
     pString cname_c = cname->GetStdString();
     if (file != cname_c) {
-        show_compilation_error(file, "File does not match class name");
+        
+        ostringstream Str;
+        Str << "Filename: " << file << " does not match class name " << cname_c;
+
+        show_compilation_error(file, Str.str().c_str());
         return NULL;
     }
     delete(parser);
     parser = NULL;
     delete(fp);
+    std::cout << "Compilation finished" << endl;
     return result;
 }
 
@@ -82,7 +87,7 @@ VMClass* SourcecodeCompiler::compile( VMClass* system_class )
 
     delete(cgc);
 
-    std::cout << "Compilation finished" << endl;
+    
     return result;
 }
 

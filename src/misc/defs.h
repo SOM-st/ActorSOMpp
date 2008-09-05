@@ -48,6 +48,10 @@ class VMObject;
     /*Maximum value of 32-bit integer is 0x7FFF FFFF (2 147 483 647)         */
   #define INT32_MAX 0x7FFFFFFF  /*2 147 483 647*/
 #endif
+#ifndef INT32_MIN
+    #define INT32_MIN (-2147483648)
+
+#endif
 //
 // macro for freeing an array
 //
@@ -57,12 +61,12 @@ using namespace std;
 
 //typedef int MethodGenerationContext;
 //typedef int class_generation_context;
-typedef string pVMSymbol;
+//typedef string pVMSymbol;
 typedef string pString;
 typedef unsigned long long uint64_t;
 typedef long long int64_t;
 typedef unsigned long uint32_t;
-typedef long int32_t, pVMInteger;
+typedef long int32_t;
 typedef unsigned int uint16_t;
 typedef int int16_t;
 typedef unsigned short uint8_t;

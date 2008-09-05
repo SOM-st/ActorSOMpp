@@ -5,6 +5,8 @@
 #include <vector>
 #include "VMObject.h"
 #include "../misc/defs.h"
+#include "../primitives/Core.h"
+
 class VMSymbol;
 class VMArray;
 class VMPrimitive;
@@ -42,7 +44,7 @@ public:
 	
 
 private:
-	int numberOfSuperInstanceFields();
+	
     
     pString gen_loadstring(const pString& cp, 
                        const pString& cname
@@ -56,6 +58,7 @@ private:
     void set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
                     const char* format
                     );
+    int numberOfSuperInstanceFields();
 
 	VMClass*  super_class; 
     VMSymbol* name; 

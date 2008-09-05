@@ -3,11 +3,14 @@
 #include "VMClass.h"
 #include "../vm/Universe.h"
 
+//needed to instanciate the Routine object for the  empty routine
+#include "../primitives/Routine.h"
+
 VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 {
     VMPrimitive* prim = new (_HEAP) VMPrimitive(sig);
     prim->empty = true;
-    prim->SetRoutine(new Routine(&VMPrimitive::empty_routine));
+    prim->SetRoutine(new (_HEAP) Routine<VMPrimitive>(prim, &VMPrimitive::empty_routine));
     return prim;
 }
 
@@ -22,6 +25,7 @@ VMPrimitive::VMPrimitive(VMSymbol* signature) : VMObject(), VMInvokable()
 
 VMPrimitive::~VMPrimitive()
 {
+    if (routine != NULL) Core::destroy(routine);
 }
 
 bool VMPrimitive::IsEmpty()
@@ -29,7 +33,7 @@ bool VMPrimitive::IsEmpty()
     return empty;
 }
 
-void VMPrimitive::SetRoutine(Routine* rtn)
+void VMPrimitive::SetRoutine(PrimitiveRoutine* rtn)
 {
     routine = rtn;
 }
@@ -44,6 +48,7 @@ void VMPrimitive::MarkReferences()
     VMObject::MarkReferences();
     signature->MarkReferences();
     holder->MarkReferences();
+   // routine->MarkReferences();
 }
 
 void VMPrimitive::empty_routine( VMObject* _self, VMFrame* frame )

@@ -115,6 +115,7 @@ uint8_t MethodGenerationContext::compute_stack_depth() {
             default                  :
                // debug_error("Illegal bytecode %d.\n", bytecode[i]);
                 //Universe_exit(1);
+                cout << "Illegal bytecode: " << bytecode[i];
                 _UNIVERSE->quit(1);
         }
         

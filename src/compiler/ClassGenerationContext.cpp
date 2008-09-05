@@ -65,7 +65,7 @@ VMClass* class_generation_context::Assemble()
     // Initialize the resulting class
     result->set_instance_fields(_UNIVERSE->new_array_list(instance_fields));
     result->set_instance_invokables(_UNIVERSE->new_array_list(instance_methods));
-    result->set_name(_UNIVERSE->symbol_for(ccname));
+    result->set_name(this->name);
     result->set_super_class(super_class);
     
     return result;

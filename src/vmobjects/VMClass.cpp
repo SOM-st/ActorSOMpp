@@ -2,16 +2,17 @@
 #include "VMArray.h"
 #include "VMSymbol.h"
 #include "VMInvokable.h"
+#include "VMPrimitive.h"
 #include <fstream>
 
 /*
  * Format definitions for Primitive naming scheme.
  *
  */
-#define CLASS_METHOD_FORMAT_S "%s_%s"
-// as in AClass_aClassMethod
-#define INSTANCE_METHOD_FORMAT_S "_%s_%s"
-// as in _AClass_anInstanceMethod
+#define CLASS_METHOD_FORMAT_S "%s::%s"
+// as in AClass::aClassMethod
+#define INSTANCE_METHOD_FORMAT_S "%s::%s_"
+// as in AClass::anInstanceMethod_
 
 
 VMClass::VMClass() : VMObject()
@@ -178,7 +179,8 @@ bool      VMClass::has_primitives()
 
 
 void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
-{//todo
+{//todo do this the "right" way. for now we have a fake dll lookup in Core.h
+
     //// the library handle
     ifstream* dlhandle = NULL;
     //void* dlhandle=NULL;
@@ -186,7 +188,7 @@ void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
     //// cached object properties
     pString cname = this->name->GetStdString();
     //pString cname = this->name->GetStdString;
-
+/*
     //// iterate the classpathes
     for(vector<pString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i) {
     //    //
@@ -243,7 +245,7 @@ void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
     //    /*
     //     * continue checking the next class path
     //     *
-    //     */
+    //     
     }
 
     ////
@@ -260,6 +262,9 @@ void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
     // * do the actual loading for both class and metaclass
     // *
     // */
+
+
+
     set_primitives(this, dlhandle, cname, INSTANCE_METHOD_FORMAT_S);
     set_primitives(this->GetClass(), dlhandle, cname, CLASS_METHOD_FORMAT_S);
 }
@@ -283,21 +288,17 @@ int VMClass::numberOfSuperInstanceFields()
 }
 
 //load_primitives helper
-
+#define shared_extension ".csp"
 pString VMClass::gen_loadstring(const pString& cp, 
                        const pString& cname
-                       ) {/*
-//    #define S_DOTSOM ".som."
-//    #define S_DOTSOM_LEN 5
+                       ) {
     
-    pString loadstring = String_new_from(cp);
-    SEND(loadstring, concatChars, file_separator);
-    SEND(loadstring, concat, cname);
-//    SEND(loadstring, concatChars, S_DOTSOM);
-    SEND(loadstring, concatChars, shared_extension);
-    
-    return loadstring;*/
-    return pString("");
+    pString loadstring = string(cp);
+    loadstring += file_separator;
+    loadstring += cname;
+    loadstring += shared_extension;
+
+    return loadstring;
 }
 
 
@@ -306,14 +307,13 @@ pString VMClass::gen_loadstring(const pString& cp,
  *  at the classpath given.
  *
  */
-pString VMClass::gen_core_loadstring(const pString& cp) {/*
+pString VMClass::gen_core_loadstring(const pString& cp) {
     #define S_CORE "SOMCore"
-    pString corename = String_new(S_CORE);
+    pString corename = string(S_CORE);
     pString result = gen_loadstring(cp, corename);
-    SEND(corename, free);
+    //SEND(corename, free);
     
-    return result;*/
-    return pString("");
+    return result;
 }
 
 
@@ -322,20 +322,22 @@ pString VMClass::gen_core_loadstring(const pString& cp) {/*
  *
  */
 ifstream* VMClass::load_lib(const pString& path) {
-/*
-    #if !defined(CSOM_WIN)
-        #ifdef DEBUG
-            #define    DL_LOADMODE RTLD_NOW
-        #else
-            #define    DL_LOADMODE RTLD_LAZY
-        #endif DEBUG
-    #endif
+    cout << "load_lib " << path << endl;
+    //#if !defined(CSOM_WIN)
+    //    #ifdef DEBUG
+    //        #define    DL_LOADMODE RTLD_NOW
+    //    #else
+    //        #define    DL_LOADMODE RTLD_LAZY
+    //    #endif DEBUG
+    //#endif
     
     // static handle. will be returned
-    static void* handle = NULL;
+    //ifstream* fs = new ifstream();
+
+    //fs->open(path.c_str(), std::ios_base::in);
     
 	// try load lib
-	if((handle=dlopen(SEND(path, chars), DL_LOADMODE)))
+	/*if((handle=dlopen(SEND(path, chars), DL_LOADMODE)))
 		//found.
 		return handle;
 	else
@@ -349,6 +351,7 @@ ifstream* VMClass::load_lib(const pString& path) {
  *
  */
 bool VMClass::is_responsible(ifstream* handle, const pString& cl) {
+
 /*    // function handler
     supports_class_fn supports_class=NULL;
 
@@ -361,7 +364,7 @@ bool VMClass::is_responsible(ifstream* handle, const pString& cl) {
     
     // test class responsibility
     return (*supports_class)(SEND(class, chars));*/
-    return false;
+    return true;
 }
 
 
@@ -373,45 +376,53 @@ bool VMClass::is_responsible(ifstream* handle, const pString& cl) {
  */
 void VMClass::set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
                     const char* format
-                    ) {  /*  
-    pVMPrimitive the_primitive;
-    routine_fn   routine=NULL;
-    
+                    ) {    
+    VMPrimitive* the_primitive;
+    PrimitiveRoutine*   routine=NULL;
+    VMInvokable* an_invokable;
     // iterate invokables
-    for(int i = 0; i < SEND(class, get_number_of_instance_invokables); i++) {
-        the_primitive = (pVMPrimitive)SEND(class, get_instance_invokable, i);
+    for(int i = 0; i < cl->get_number_of_instance_invokables(); i++) {
         
-        if(TSEND(VMInvokable, the_primitive, is_primitive)) {
+        an_invokable = (VMInvokable*)cl->get_instance_invokable(i);
+        cout << "cname: " << cname << endl;
+        cout << an_invokable->get_signature()->GetStdString() << endl;
+        if(an_invokable->is_primitive()) {
+            the_primitive = (VMPrimitive*) an_invokable;
             //
             // we have a primitive to load
             // get it's selector
             //
-            pVMSymbol sig = TSEND(VMInvokable, the_primitive, get_signature);
-            pString selector = SEND(sig, get_plain_string);
+            VMSymbol* sig =  the_primitive->get_signature();
+
+            pString selector = sig->GetPlainString();
             
-			{ //string block                
-				char symbol[SEND(cname, length) + SEND(selector, length)+2 + 1];
-                                                                //2 for 2x '_'
-				sprintf(symbol, format,
-					SEND(cname, chars),
-					SEND(selector, chars));
-                 
-				// try loading the primitive
-				routine = (routine_fn)dlsym(handle, symbol);
-            }
+   //         pString symbol = pString(cname);
+   //         symbol += "
+   //         symbol += selector;
+
+			//{ //string block          
+			//	char symbol[SEND(cname, length) + SEND(selector, length)+2 + 1];
+   //                                                             //2 for 2x '_'
+			//	sprintf(symbol, format,
+			//		SEND(cname, chars),
+			//		SEND(selector, chars));
+   //              
+			//	// try loading the primitive
+			//	routine = (routine_fn)dlsym(handle, symbol);
+   //         }
+
+            routine = Core::create(cname, selector);
             
             if(!routine) {
-                debug_error("could not load primitive '%s' for class %s\n"
-                            "ERR: routine not in library\n",
-                            SEND(selector, chars),
-                            SEND(cname, chars));
-                Universe_exit(ERR_FAIL);
+                cout << "could not load primitive '"<< selector <<"' for class " << cname << endl;
+                            
+                _UNIVERSE->quit(ERR_FAIL);
             }
             
             // set routine
-            SEND(the_primitive, set_routine, routine);
-            the_primitive->empty = false;
+            the_primitive->SetRoutine(routine);
+            the_primitive->SetEmpty(false);
         }
-    }*/
+    }
 }
 

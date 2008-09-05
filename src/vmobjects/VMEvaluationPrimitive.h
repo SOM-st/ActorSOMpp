@@ -17,7 +17,7 @@ public:
     virtual void MarkReferences();
 private:
     static VMSymbol* computeSignatureString(int argc);
-    static void evaluationRoutine(VMObject* object, VMFrame* frame);
+    void evaluationRoutine(VMObject* object, VMFrame* frame);
     VMInteger* numberOfArguments;
 };
 

@@ -1,32 +1,43 @@
 #include "VMString.h"
+#include "VMInteger.h"
 
 VMString::VMString() : VMObject()//, std::string()
 {
 	chars = 0;
+    string_length = _UNIVERSE->new_integer(0);
 	objectSize = sizeof(VMString);
 	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
 }
+
+
 
 VMString::VMString(const char* str) : VMObject()//, std::string()
 {
 	chars = (char*)&chars+sizeof(char*);
 	objectSize = sizeof(VMString) + strlen(str) + 1;
-	string_length = strlen(str);
-	for (int i = 0; i < string_length; i++) {
+	string_length = _UNIVERSE->new_integer(strlen(str));
+    int i = 0;
+	for (; i < strlen(str); ++i) {
 		chars[i] = str[i];
 	}
-	chars[string_length] = '\0';
+	chars[i] = '\0';
 	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
 }
 VMString::VMString( const string& s ): VMObject()
 {
 	chars = (char*)&chars+sizeof(char*);
 	objectSize = sizeof(VMString) + s.length() + 1;
-	string_length = s.length();
-	for (int i = 0; i < string_length; i++) {
+	string_length = _UNIVERSE->new_integer(s.length());
+    int i = 0;
+	for (; i < s.length(); ++i) {
 		chars[i] = s[i];
 	}
-	chars[string_length] = '\0';
+	chars[i] = '\0';
+}
+
+void VMString::MarkReferences(){
+	VMObject::MarkReferences();
+    string_length->MarkReferences();
 }
 
 //VMString::VMString( size_type length, const char& ch ): VMObject(), std::string(length, ch)
@@ -45,6 +56,11 @@ VMString::VMString( const string& s ): VMObject()
 //{
 //	objectSize = sizeof(VMString) + length;
 //}
+
+int VMString::GetStringLength()
+{
+    return string_length->GetEmbeddedInteger();
+}
 
 std::string VMString::GetStdString()
 {

@@ -236,7 +236,7 @@ void Parser::Classdef(class_generation_context* cgenc) {
         method(mgenc);
         
 		if(mgenc->is_primitive())
-            cgenc->add_instance_method((VMObject*)mgenc->Assemble());
+            cgenc->add_instance_method((VMObject*)mgenc->AssemblePrimitive());
             //SEND(cgenc->instance_methods, add, VMPrimitive_assemble(&mgenc));
         else
 			cgenc->add_instance_method((VMObject*)mgenc->Assemble());

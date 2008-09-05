@@ -55,6 +55,7 @@ Universe* Universe::GetUniverse()
 
 vector<pString> Universe::handle_arguments( int* vm_argc, int argc, char** argv )
 {
+
     vector<pString> vm_args = vector<pString>();
     *vm_argc = 0;
     
@@ -103,16 +104,15 @@ void Universe::start(int argc, char** argv)
     /*int vm_argc = 0;
     
     vector<pString> vm_argv = handle_arguments(&vm_argc, argc, argv);*/
-
+    Core::setup();
 	theUniverse = new Universe();
     theUniverse->initialize(argc, argv);
-
-
 }
 
 void Universe::quit(int err)
 {
     if (theUniverse) delete(theUniverse);
+    Core::tearDown();
    exit(err);
 }
 
@@ -194,17 +194,21 @@ Universe::Universe(){};
 void Universe::initialize(int argc, char** _argv)
 {
     heapSize = 1000000;
+
     int vm_argc;
     vector<pString> argv = this->handle_arguments(&vm_argc, argc, _argv);
 
+    cout << "Setting heap Size to: " << heapSize << endl;
 	heap = new Heap(heapSize);
     symboltable = new Symboltable();
     compiler = new SourcecodeCompiler();
+
 	nil_object = new (heap) VMObject;
+    cout << "We have a nil_object" << endl;
     /*VMArray* vmo = new (heap, 4*sizeof(VMObject*)) VMArray(4);
     VMMethod*/
     metaclass_class = this->new_metaclass_class();
-
+    cout << "Metaclass Class created, creating System classes" << endl;
     object_class    = this->new_system_class();
     nil_class       = this->new_system_class();
     class_class     = this->new_system_class();
@@ -217,9 +221,11 @@ void Universe::initialize(int argc, char** _argv)
     primitive_class = this->new_system_class();
     string_class    = this->new_system_class();
     double_class    = this->new_system_class();
-
+    cout << "System classes created" << endl;
+    
     nil_object->SetClass(nil_class);
 
+    cout << "Initialize System Classes" << endl;
     this->initialize_system_class(object_class, NULL, "Object");
     this->initialize_system_class(class_class, object_class, "Class");
     this->initialize_system_class(metaclass_class, class_class, "Metaclass");
@@ -236,6 +242,9 @@ void Universe::initialize(int argc, char** _argv)
     this->initialize_system_class(string_class, object_class, "String");
     this->initialize_system_class(double_class, object_class, "Double");
 
+    cout << "System classes initialized, now let's load them!"
+            << "(yeah right, like it works...)" << endl;
+
     this->load_system_class(object_class);
     this->load_system_class(class_class);
     this->load_system_class(metaclass_class);
@@ -250,14 +259,21 @@ void Universe::initialize(int argc, char** _argv)
     this->load_system_class(string_class);
     this->load_system_class(double_class);
 
+    cout << "ATM this is an unreachable point, but if you see this...."
+            << "YAY, the system classes are loaded" << endl;
+    
+    cout << "loading block class" << endl;
     block_class = load_class(symbol_for_chars("Block"));
-
+    
+    cout << "setting up true and false" << endl;
     true_object = new_instance(load_class(symbol_for_chars("True")));
     false_object = new_instance(load_class(symbol_for_chars("False")));
 
+    cout << "load System" << endl;
     system_class = load_class(symbol_for_chars("System"));
     VMObject* system_object = new_instance(system_class);
 
+    cout << "Set globals" << endl;
     this->set_global(symbol_for_chars("nil"), nil_object);
     this->set_global(symbol_for_chars("true"), true_object);
     this->set_global(symbol_for_chars("false"), false_object);
@@ -265,11 +281,18 @@ void Universe::initialize(int argc, char** _argv)
     this->set_global(symbol_for_chars("System"), system_class);
     this->set_global(symbol_for_chars("Block"), block_class);
 
+    cout << "Creating fake bootstrap method" << endl;
+    
     VMMethod* bootstrap_method = new_method(symbol_for_chars("bootstrap"), 1, 0);
     bootstrap_method->set_bytecode(0, BC_HALT);
     bootstrap_method->set_number_of_locals(0);
     bootstrap_method->set_maximum_number_of_stack_elements(2);
     bootstrap_method->set_holder(system_class);
+    
+    cout << "Cheer!!! We could start the Interpreter now!" << endl;
+    
+    interpreter->Start();
+
     //-----------------
 
     

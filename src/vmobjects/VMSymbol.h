@@ -8,15 +8,17 @@
 //#include <vector>
 //#include "../misc/HeapAllocator.h"
 //#include "../memory/Heap.h"
-
-class VMSymbol : public VMObject//, public std::string{
+class VMInteger;
+#include "VMString.h";
+class VMSymbol : public VMString//, public std::string{
 {
 public:
 	VMSymbol();
 	VMSymbol( const char* str );
 	VMSymbol( const std::string& s );
-	
-	
+	void SetString(const std::string&);
+    pString GetPlainString();
+	/*
 	virtual ~VMSymbol();
 	virtual int getObjectSize();
 	char* GetChars();
@@ -24,16 +26,14 @@ public:
 	void SetChars(const char*);
 	std::string GetStdString();
 	
-	virtual void MarkReferences(){
-		VMObject::MarkReferences();
-	}
+	virtual void MarkReferences();
 	
 private:
 	//vector<char, HeapAllocator<char> > chars;
-	int string_length;
+	VMInteger* string_length;
 	//std::string chars;
 	//char chars[0];
-	char* chars;
+	char* chars;*/
 };
 
 

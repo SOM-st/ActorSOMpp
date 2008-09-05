@@ -6,9 +6,12 @@
 #include "VMInteger.h"
 #include "../vm/Universe.h"
 
+//needed to instanciate the Routine object for the evaluation routine
+#include "../primitives/Routine.h"
+
 VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSignatureString(argc))
 {
-    this->SetRoutine(new Routine(&VMEvaluationPrimitive::evaluationRoutine));
+    this->SetRoutine(new (_HEAP) Routine<VMEvaluationPrimitive>(this, &VMEvaluationPrimitive::evaluationRoutine));
     this->SetEmpty(false);
     this->numberOfArguments = _UNIVERSE->new_integer(argc);
 }

@@ -25,6 +25,7 @@ public:
 	virtual int getObjectSize();
 	char* GetChars();
 	std::string GetStdString();
+    int  GetStringLength();
 	/*virtual pString GetClass(); //TODO: change string to VMClass
 	virtual void SetClass(pString className);
 	virtual pString GetFieldName(int index); //TODO: change string to VMSymbol
@@ -35,13 +36,11 @@ public:
 	virtual void Send(pString, VMObject*, int);
 	virtual VMObject* GetField(int index);
 	virtual void SetField(int index, VMObject* value);*/
-	virtual void MarkReferences(){
-		VMObject::MarkReferences();
-	}
+	virtual void MarkReferences();
 	
-private:
+protected:
 	//vector<char, HeapAllocator<char> > chars;
-	int string_length;
+	VMInteger* string_length;
 	//std::string chars;
 	//char chars[0];
 	char* chars;

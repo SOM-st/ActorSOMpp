@@ -6,10 +6,48 @@
 VMMethod::VMMethod(int bc_count, int number_of_constants) : VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ), VMInvokable()
 {
 	objectSize = sizeof(VMMethod) + bc_count + number_of_constants*sizeof(VMObject*);
-    bc_length = bc_count;
+    bc_length = _UNIVERSE->new_integer( bc_count );
+    number_of_locals = _UNIVERSE->new_integer(0);
+    maximum_number_of_stack_elements = _UNIVERSE->new_integer(0);
+    number_of_arguments = _UNIVERSE->new_integer(0);
     bc = (uint8_t*)&bc + sizeof(uint8_t*);
     this->ResetEntriesPointer();
     //theEntries = (VMObject**)&theEntries + this->GetOffset();
+}
+
+int       VMMethod::get_number_of_locals() 
+{
+    return number_of_locals->GetEmbeddedInteger(); 
+}
+
+void      VMMethod::set_number_of_locals(int nol) 
+{
+    number_of_locals->SetEmbeddedInteger(nol); 
+}
+
+int       VMMethod::get_maximum_number_of_stack_elements()
+{
+    return maximum_number_of_stack_elements->GetEmbeddedInteger(); 
+}
+
+void      VMMethod::set_maximum_number_of_stack_elements(int stel) 
+{
+    maximum_number_of_stack_elements->SetEmbeddedInteger(stel); 
+}
+
+int       VMMethod::get_number_of_arguments() 
+{
+    return number_of_arguments->GetEmbeddedInteger(); 
+}
+
+void      VMMethod::set_number_of_arguments(int noa) 
+{
+    number_of_arguments->SetEmbeddedInteger(noa); 
+}
+
+int       VMMethod::get_number_of_bytecodes() 
+{
+    return bc_length->GetEmbeddedInteger();
 }
 
 //VMMethod::VMMethod(MethodGenerationContext* mgenc) : VMArray(mgenc->), VMInvokable()

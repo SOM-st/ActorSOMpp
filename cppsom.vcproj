@@ -159,6 +159,30 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\src\primitives\Array.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Array.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\BigInteger.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\BigInteger.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Block.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Block.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\compiler\BytecodeGenerator.cpp"
 			>
 		</File>
@@ -171,6 +195,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\primitives\Class.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Class.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\compiler\ClassGenerationContext.cpp"
 			>
 		</File>
@@ -179,7 +211,23 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\primitives\Core.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Core.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\misc\defs.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Double.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Double.h"
 			>
 		</File>
 		<File
@@ -203,6 +251,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\misc\gettimeofday.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\misc\HashMap.h"
 			>
 		</File>
@@ -216,6 +268,14 @@
 		</File>
 		<File
 			RelativePath=".\src\misc\HeapAllocator.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Integer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Integer.h"
 			>
 		</File>
 		<File
@@ -247,6 +307,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\primitives\Object.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Object.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\compiler\Parser.cpp"
 			>
 		</File>
@@ -259,7 +327,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\vmobjects\Routine.h"
+			RelativePath=".\src\vmobjects\PrimitiveRoutine.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Routine.h"
 			>
 		</File>
 		<File
@@ -279,11 +351,35 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\primitives\String.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\String.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Symbol.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\Symbol.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\vmobjects\Symboltable.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\src\vmobjects\Symboltable.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\System.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\primitives\System.h"
 			>
 		</File>
 		<File

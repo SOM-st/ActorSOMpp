@@ -4,7 +4,7 @@
 #define VMARRAY_H_
 //#include <vector>
 #include "VMObject.h"
-
+#include "VMInteger.h"
 //template <class T>
 class VMArray : public VMObject
 {
@@ -24,15 +24,15 @@ public:
 
 	VMObject* operator[](int idx)
 	{
-		if (idx >= size) throw std::bad_exception();
+		if (idx >= size->GetEmbeddedInteger()) throw std::bad_exception();
 		return theEntries[idx];
 	}
 
 protected:
     virtual void ResetEntriesPointer();
 private:
-	int size;
-	int entries;
+	VMInteger* size;
+	VMInteger* entries;
 	VMObject** theEntries;
 	//void assertType(VMObject& vmo) const {}; //method to assert that only VMObject class is supported
 	//std::vector<T> theEntries;

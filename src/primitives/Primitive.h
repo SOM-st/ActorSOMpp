@@ -5,9 +5,6 @@
 
 class Primitive
 {
-public:
-    Primitive() {};
-    virtual ~Primitive() {};
 };
 
 #endif

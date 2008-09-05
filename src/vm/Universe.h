@@ -23,7 +23,7 @@ class Symboltable;
 class SourcecodeCompiler;
 #include "../interpreter/Interpreter.h"
 #include "../memory/Heap.h"
-
+#include "../primitives/Core.h"
 #define _HEAP Universe::GetUniverse()->GetHeap()
 #define _UNIVERSE Universe::GetUniverse()
 

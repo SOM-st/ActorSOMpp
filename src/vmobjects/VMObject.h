@@ -29,7 +29,7 @@ public:
 	virtual VMObject* GetField(int index);
 	virtual void SetField(int index, VMObject* value);
 	virtual void MarkReferences();
-	
+    virtual int32_t GetHash() { return hash; };
 	//sizeof doesn't work polymorphic :(
 	//every derived class must set objectSize = sizeof(CLASSNAME) in its constructor, so the heap and gc works
 	virtual int getObjectSize() {return objectSize;}
@@ -78,7 +78,7 @@ protected:
 	int numberOfFields;
 	bool gcfield : 1;
 	//bool		 : 0; //forces alignment
-	uint16_t hash;
+	int32_t hash;
 	int objectSize;
 	
     VMObject** fields;

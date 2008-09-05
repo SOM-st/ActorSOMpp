@@ -54,7 +54,7 @@ void GarbageCollector::Collect()
 			else 
 			{
 				std::cout << "Found trash, deleting" << std::endl;
-				//delete(object, heap);//doesn't really do anything for managed objects
+				delete(object, heap);//doesn't really do anything for managed objects
 				//add freed space as a new entry of the free list
 				memset(object, 0, bytesToSkip);
 				free_list_entry* newEntry = (free_list_entry*)pointer;
