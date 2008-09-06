@@ -145,7 +145,7 @@ bool Parser::expectOneOf(Symbol* ss) {
 
 
 
-void Parser::gen_push_variable(MethodGenerationContext* mgenc, pString var) {
+void Parser::gen_push_variable(MethodGenerationContext* mgenc, const pString& var) {
     // The purpose of this function is to find out whether the variable to be
     // pushed on the stack is a local variable, argument, or object field. This
     // is done by examining all available lexical contexts, starting with the
@@ -172,7 +172,7 @@ void Parser::gen_push_variable(MethodGenerationContext* mgenc, pString var) {
 }
 
 
-void Parser::gen_pop_variable(MethodGenerationContext* mgenc, pString var) {
+void Parser::gen_pop_variable(MethodGenerationContext* mgenc, const pString& var) {
     // The purpose of this function is to find out whether the variable to be
     // popped off the stack is a local variable, argument, or object field. This
     // is done by examining all available lexical contexts, starting with the
@@ -559,7 +559,7 @@ void Parser::primary(MethodGenerationContext* mgenc, bool* super) {
                 *super = true;
                 // sends to super push self as the receiver
                 //SEND(v, free);
-                v = "self";//String_new("self");
+                v = pString("self");//String_new("self");
             }
             
             gen_push_variable(mgenc, v);

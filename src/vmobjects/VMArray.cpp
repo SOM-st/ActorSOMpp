@@ -78,9 +78,8 @@ int VMArray::SetIndexableField(VMObject* item)
 		if (theEntries[i] == 0)
 		{
 			theEntries[i] = item;
-            ++entries;
-            /*int32_t tmp =  entries->GetEmbeddedInteger();
-			entries->SetEmbeddedInteger(++tmp);*/
+            int32_t tmp =  entries->GetEmbeddedInteger();
+			entries->SetEmbeddedInteger(++tmp);
 			return i;
         }
 	}
@@ -90,9 +89,9 @@ int VMArray::SetIndexableField(VMObject* item)
 void VMArray::SetIndexableField(int idx, VMObject* item)
 {
 	if (idx >= size->GetEmbeddedInteger()) throw std::bad_exception();
-    //int32_t tmp = entries->GetEmbeddedInteger();
-	if (theEntries[idx] == 0 && item != 0) ++entries;//entries->SetEmbeddedInteger(++tmp);
-	else if (item == 0) --entries;//entries->SetEmbeddedInteger(--tmp);
+    int32_t tmp = entries->GetEmbeddedInteger();
+	if (theEntries[idx] == 0 && item != 0) entries->SetEmbeddedInteger(tmp + 1);
+	else if (item == 0) entries->SetEmbeddedInteger(tmp - 1);
     //else: entry is replaced, number of entries does not change
 	theEntries[idx] = item;
 }

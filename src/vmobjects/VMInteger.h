@@ -14,40 +14,6 @@ public:
     virtual ~VMInteger();
     void SetEmbeddedInteger(int32_t);
     int32_t GetEmbeddedInteger();
-    
-    VMInteger operator++(int)
-    {
-        ++embeddedInteger;
-        return *this;
-    };
-    VMInteger operator++()
-    {
-        ++embeddedInteger;
-        return *this;
-    };
-
-    VMInteger operator--(int)
-    {
-        --embeddedInteger;
-        return *this;
-    };
-    VMInteger operator--()
-    {
-        --embeddedInteger;
-        return *this;
-    };
-
-    VMInteger operator+(VMInteger op2)
-    {
-        embeddedInteger += op2.GetEmbeddedInteger();
-        return *this;
-    };
-
-    VMInteger operator-(VMInteger op2)
-    {
-        embeddedInteger -= op2.GetEmbeddedInteger();
-        return *this;
-    };
 
 private:
     int32_t embeddedInteger;

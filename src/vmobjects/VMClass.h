@@ -55,7 +55,7 @@ private:
     ifstream* load_lib(const pString& path);
 
     bool is_responsible(ifstream* handle, const pString& cl);
-    void set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
+    static void set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
                     const char* format
                     );
     int numberOfSuperInstanceFields();

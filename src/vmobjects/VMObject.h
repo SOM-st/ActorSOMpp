@@ -25,10 +25,12 @@ public:
 	virtual int GetNumberOfFields();
 	virtual void SetNumberOfFields(int nof);
 	virtual int GetDefaultNumberOfFields();
-	virtual void Send(pString, VMObject*, int);
+	virtual void Send(pString, VMObject**, int);
 	virtual VMObject* GetField(int index);
+    virtual void Assert(bool value);
 	virtual void SetField(int index, VMObject* value);
 	virtual void MarkReferences();
+
     virtual int32_t GetHash() { return hash; };
 	//sizeof doesn't work polymorphic :(
 	//every derived class must set objectSize = sizeof(CLASSNAME) in its constructor, so the heap and gc works

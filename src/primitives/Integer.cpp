@@ -88,7 +88,7 @@ void _Integer::resendAsBigInteger(VMObject* object,
     VMObject* operands[] = { (VMObject*)right };
     
     pString ops = pString(op);
-    leftBigInteger->Send(ops, (VMObject*)operands, 1);
+    leftBigInteger->Send(ops, operands, 1);
     // no reference
     //SEND(op, free);
 }
@@ -101,7 +101,7 @@ void _Integer::resendAsDouble(VMObject* object, const char* op,
         _UNIVERSE->new_double((double)left->GetEmbeddedInteger());
     VMObject* operands[] = { (VMObject*)right };
     pString ops = pString(op);
-    leftDouble->Send(ops, (VMObject*)operands, 1);
+    leftDouble->Send(ops, operands, 1);
     //SEND(op, free);
 }
 

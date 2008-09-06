@@ -111,8 +111,8 @@ private:
 	void nestedBlock(MethodGenerationContext* mgenc);
 	void blockPattern(MethodGenerationContext* mgenc);
 	void blockArguments(MethodGenerationContext* mgenc);
-	void gen_push_variable(MethodGenerationContext* mgenc, pString var);
-	void gen_pop_variable(MethodGenerationContext* mgenc, pString var);
+	void gen_push_variable(MethodGenerationContext* mgenc, const pString& var);
+	void gen_pop_variable(MethodGenerationContext* mgenc, const pString& var);
 	
 //private fields
 	Lexer* lexer;

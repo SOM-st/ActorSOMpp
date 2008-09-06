@@ -10,10 +10,17 @@ class VMFrame;
 class VMInvokable
 {
 public:
+    /*VMInvokable() : VMObject() {};
+    VMInvokable(int nof) : VMObject(nof) {};*/
+
 	virtual void      invoke(VMFrame*) = 0;
 	virtual bool      is_primitive() {return false;} ;
-	virtual VMSymbol *get_signature() { return signature; };
-	virtual void      set_signature(VMSymbol* sig) { signature = sig; };
+	virtual VMSymbol *get_signature() { 
+        return signature; 
+    };
+	virtual void      set_signature(VMSymbol* sig) { 
+        signature = sig; 
+    };
 	virtual VMClass  *get_holder() { return holder; };
 	virtual void      set_holder(VMClass* hld) { holder = hld; };
     //virtual void invoke_method(VMFrame*) = 0;
