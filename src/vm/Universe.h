@@ -119,6 +119,9 @@ private:
 	
 
     void initialize(int, char**);
+
+    void prepareNilObject();
+
     Universe();
 	~Universe();
 

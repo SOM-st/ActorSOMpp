@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 
+
 Heap::Heap(int object_space_size)// : globals(INT32_MAX)
 {
 	object_space = (void*) malloc(object_space_size);
@@ -30,10 +31,14 @@ Heap::~Heap()
 void* Heap::Allocate(size_t size)
 {
 	if (size == 0) return NULL;
-	//std::cout << "allocating: " << (int)size << "bytes" << std::endl;
+#ifdef HEAPDEBUG 
+    std::cout << "allocating: " << (int)size << "bytes" << std::endl;
+#endif
 	if (size_of_free_heap <= buffersize_for_uninterruptable &&
 		uninterruptable_counter <= 0) 
 	{
+        cout << "Not enough free memory, only: " << size_of_free_heap << " bytes left." <<endl;
+        cout << "Starting Garbage Collection" << endl;
 		gc->Collect();
 	}
 	
@@ -84,8 +89,10 @@ void* Heap::Allocate(size_t size)
         }  else { 
 			// no space was left
 			// running the GC here will most certainly result in data loss!
-			//std::cout << "Not enough heap! Data loss is possible" << std::endl;
-			//std::cout << "FREE-Size: " << size_of_free_heap << ", uninterruptable_counter: " << uninterruptable_counter;
+//#ifdef HEAPDEBUG 
+            std::cout << "Not enough heap! Data loss is possible" << std::endl;
+			std::cout << "FREE-Size: " << size_of_free_heap << ", uninterruptable_counter: " << uninterruptable_counter << endl;
+//#endif
             
 			gc->Collect();
             //fulfill initial request
@@ -99,17 +106,29 @@ void* Heap::Allocate(size_t size)
 		exit(1);
     }
     memset(result, 0, size);
-	//std::cout << "available heap size before alloc: " << size_of_free_heap << std::endl;
+
+#ifdef HEAPDEBUG 
+    std::cout << "available heap size before alloc: " << size_of_free_heap << std::endl;
+#endif
 	// update the available size
     size_of_free_heap -= size;
-	//std::cout << "available heap size after alloc: " << size_of_free_heap << std::endl;
-	//std::cout << "heap-start: " << object_space << std::endl;
-	//std::cout << "allocated at address: " << result << std::endl;
+
+#ifdef HEAPDEBUG 
+    std::cout << "available heap size after alloc: " << size_of_free_heap << std::endl;
+    std::cout << "heap-start: " << hex  << object_space << std::endl;
+    std::cout << "allocated at address: " << hex << result << std::endl;
+#endif
     return result;
 }
 
 void Heap::Free(void* ptr)
 {
+    //add ptr to free list
+}
+
+void Heap::Free(void* ptr, int size)
+{
+    //add referenced space to free list
 }
 
 void* Heap::internalAllocate(size_t size)

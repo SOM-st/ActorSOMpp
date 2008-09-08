@@ -15,14 +15,14 @@
 // as in AClass::anInstanceMethod_
 
 
-VMClass::VMClass() : VMObject()
+VMClass::VMClass() : VMObject(4)
 {
-    this->objectSize = sizeof(VMClass);
+    //this->objectSize = sizeof(VMClass);
 }
 
-VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields)
+VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4)
 {
-    this->objectSize = sizeof(VMClass) + number_of_fields*sizeof(VMObject*);
+    //this->objectSize = sizeof(VMClass) + number_of_fields*sizeof(VMObject*);
 }
 
 
@@ -384,7 +384,7 @@ void VMClass::set_primitives(VMClass* cl, ifstream* handle, const pString& cname
     for(int i = 0; i < cl->get_number_of_instance_invokables(); i++) {
         
         an_invokable = (VMInvokable*)cl->get_instance_invokable(i);
-        cout << "cname: " << cname << endl;
+        cout << "cname: >" << cname << "<"<< endl;
         cout << an_invokable->get_signature()->GetStdString() << endl;
         if(an_invokable->is_primitive()) {
             the_primitive = (VMPrimitive*) an_invokable;

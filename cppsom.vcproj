@@ -335,6 +335,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\vm\Shell.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vm\Shell.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\vmobjects\Signature.cpp"
 			>
 		</File>
@@ -452,6 +460,10 @@
 		</File>
 		<File
 			RelativePath=".\src\vmobjects\VMInteger.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\vmobjects\VMInvokable.cpp"
 			>
 		</File>
 		<File

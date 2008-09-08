@@ -56,7 +56,7 @@ private:
     ExtendedList<std::string>            locals;
     pList            literals;
     bool                       finished;
-    uint32_t                   bp;
+    int32_t                   bp;
 	vector<uint8_t>            bytecode;
 };
 

@@ -1,20 +1,20 @@
 #include "VMString.h"
 #include "VMInteger.h"
 
-VMString::VMString() : VMObject()//, std::string()
+VMString::VMString() : VMObject(1)//, std::string()
 {
 	chars = 0;
     string_length = _UNIVERSE->new_integer(0);
-	objectSize = sizeof(VMString);
+	//objectSize = sizeof(VMString);
 	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
 }
 
 
 
-VMString::VMString(const char* str) : VMObject()//, std::string()
+VMString::VMString(const char* str) : VMObject(1)//, std::string()
 {
 	chars = (char*)&chars+sizeof(char*);
-	objectSize = sizeof(VMString) + strlen(str) + 1;
+	objectSize += strlen(str) + 1; //set actual object_size
 	string_length = _UNIVERSE->new_integer(strlen(str));
     int i = 0;
 	for (; i < strlen(str); ++i) {
@@ -23,10 +23,10 @@ VMString::VMString(const char* str) : VMObject()//, std::string()
 	chars[i] = '\0';
 	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
 }
-VMString::VMString( const string& s ): VMObject()
+VMString::VMString( const string& s ): VMObject(1)
 {
 	chars = (char*)&chars+sizeof(char*);
-	objectSize = sizeof(VMString) + s.length() + 1;
+	objectSize += s.length() + 1;
 	string_length = _UNIVERSE->new_integer(s.length());
     int i = 0;
 	for (; i < s.length(); ++i) {
@@ -64,7 +64,8 @@ int VMString::GetStringLength()
 
 std::string VMString::GetStdString()
 {
-	return std::string(chars);
+    if (chars == 0) return pString("");
+	return pString(chars);
 }
 
 char* VMString::GetChars()

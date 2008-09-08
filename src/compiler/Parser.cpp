@@ -263,10 +263,10 @@ void Parser::Classdef(class_generation_context* cgenc) {
             method(mgenc);
             
 			if(mgenc->is_primitive())
-				cgenc->add_class_method((VMObject*)mgenc->get_signature());
+                cgenc->add_class_method((VMObject*)mgenc->AssemblePrimitive());
                 //SEND(cgenc->class_methods, add, VMPrimitive_assemble(&mgenc));
             else
-				cgenc->add_class_method((VMObject*)mgenc->get_signature());
+				cgenc->add_class_method((VMObject*)mgenc->Assemble());
                 //SEND(cgenc->class_methods, add, VMMethod_assemble(&mgenc));
             delete(mgenc);
             //method_genc_release(&mgenc);
@@ -728,7 +728,7 @@ void Parser::literalNumber(MethodGenerationContext* mgenc) {
     VMInteger* literal = _UNIVERSE->new_integer(val);
 	stringstream s;
 	pString str_lit = "";
-	s << literal;
+	s << literal->GetEmbeddedInteger();
 	str_lit += s.str();
 	mgenc->add_literal_if_absent((VMObject*)literal);
     //SEND(mgenc->literals, addIfAbsent, literal);

@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 _Array* Array;
 
-void _Array::At(VMObject* object, VMFrame* frame) {
+void _Array::At_(VMObject* object, VMFrame* frame) {
     VMInteger* index = (VMInteger*) frame->Pop();
     VMArray* self = (VMArray*) frame->Pop();
     int i = index->GetEmbeddedInteger();
@@ -44,7 +44,7 @@ void _Array::At(VMObject* object, VMFrame* frame) {
 }
 
 
-void _Array::AtPut(VMObject* object, VMFrame* frame) {
+void _Array::AtPut_(VMObject* object, VMFrame* frame) {
     VMObject* value = frame->Pop();
     VMInteger* index = (VMInteger*)frame->Pop();
     VMArray* self = (VMArray*)frame->GetStackElement(0);
@@ -61,7 +61,7 @@ void _Array::Length(VMObject* object, VMFrame* frame) {
 }
 
 
-void _Array::New(VMObject* object, VMFrame* frame) {
+void _Array::New_(VMObject* object, VMFrame* frame) {
     VMInteger* length = (VMInteger*)frame->Pop();
     VMClass* self = (VMClass*)frame->Pop();        
     int size = length->GetEmbeddedInteger();

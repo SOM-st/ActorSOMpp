@@ -16,8 +16,8 @@ public:
 	VMSymbol();
 	VMSymbol( const char* str );
 	VMSymbol( const std::string& s );
-	void SetString(const std::string&);
-    pString GetPlainString();
+	virtual void SetString(const std::string&);
+    virtual pString GetPlainString();
 	/*
 	virtual ~VMSymbol();
 	virtual int getObjectSize();

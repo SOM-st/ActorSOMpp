@@ -4,8 +4,12 @@
 #include "VMEvaluationPrimitive.h"
 #include "../vm/Universe.h"
 
-VMBlock::VMBlock() : VMObject()
+VMBlock::VMBlock() : VMObject(2)
 {
+    //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
+    
+     blockMethod = NULL;
+     context = NULL;
 }
 
 VMBlock::~VMBlock()
@@ -15,8 +19,8 @@ VMBlock::~VMBlock()
 void VMBlock::MarkReferences()
 {
     VMObject::MarkReferences();
-    blockMethod->MarkReferences();
-    context->MarkReferences();
+    if (blockMethod != NULL) blockMethod->MarkReferences();
+    if (context != NULL) context->MarkReferences();
 }
 
 void VMBlock::SetMethod(VMMethod* bMethod)

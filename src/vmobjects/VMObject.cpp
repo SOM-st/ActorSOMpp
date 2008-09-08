@@ -4,18 +4,18 @@
 #include "VMFrame.h"
 #include "VMInvokable.h"
 
-VMObject::VMObject()
-{
-	VMObject(1);
-}
+//VMObject::VMObject()
+//{
+//    VMObject::VMObject(0);
+//}
 
 VMObject::VMObject( int number_of_fields )
 {
+    fields = (VMObject**)&clazz;//fields + sizeof(VMObject**); 
+    this->SetNumberOfFields(number_of_fields+1); //CSOM calculates VMObject::clazz's size out here. why????
     gcfield = 0; 
 	hash = (int32_t)this;
-	objectSize = sizeof(VMObject) + number_of_fields*sizeof(VMObject*);
-    fields = (VMObject**)&fields + sizeof(VMObject**);
-    this->SetNumberOfFields(number_of_fields);
+	objectSize = sizeof(VMObject) + number_of_fields*sizeof(VMObject*);//sizeof(VMObject) includes the space for the clazz field
 }
 
 VMObject::~VMObject() {}
@@ -57,7 +57,7 @@ void VMObject::SetNumberOfFields(int nof)
 
 int VMObject::GetDefaultNumberOfFields()
 {
-	return 0;
+	return this->numberOfFields - 1; //clazz is not a field, is it?
 }
 
 void VMObject::Send(pString selector_string, VMObject** arguments, int argc)
@@ -83,7 +83,7 @@ void VMObject::Assert(bool value)
 
 VMObject* VMObject::GetField(int index)
 {
-    return this->fields[index];
+    return this->fields[index]; 
 }
 
 void VMObject::SetField(int index, VMObject* value)

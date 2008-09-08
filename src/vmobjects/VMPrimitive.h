@@ -8,7 +8,7 @@
 #include "VMInvokable.h"
 class VMSymbol;
 
-class VMPrimitive : public VMObject, public VMInvokable
+class VMPrimitive : public VMInvokable //public VMObject, 
 {
 public:
     VMPrimitive(VMSymbol* sig);
@@ -18,13 +18,14 @@ public:
     virtual bool IsEmpty();
     virtual void SetRoutine(PrimitiveRoutine* rtn);
     virtual void MarkReferences();
-    virtual void SetEmpty(bool value) { empty = value; };
+    virtual void SetEmpty(bool value) { *empty = value; };
     static VMPrimitive* GetEmptyPrimitive(VMSymbol* sig);
 
     //static void empty_routine(VMObject* self, VMFrame* frame);
     
 private:
-    bool empty;
+    bool* empty;
+    //VMObject*   : 0; //for alignment inside the fields
     PrimitiveRoutine* routine;
     VMSymbol* signature;
     VMClass* holder;

@@ -3,16 +3,30 @@
 #include "VMFrame.h"
 #include "../compiler/MethodGenerationContext.h"
 
-VMMethod::VMMethod(int bc_count, int number_of_constants) : VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ), VMInvokable()
+#define _BC ((uint8_t*)&fields[this->GetNumberOfFields()+1] + this->GetOffset())
+
+VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokable(nof + 5)//VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ),
 {
-	objectSize = sizeof(VMMethod) + bc_count + number_of_constants*sizeof(VMObject*);
+    //this->SetNumberOfFields(this->GetNumberOfFields() + 4);
+	objectSize += bc_count + number_of_constants*sizeof(VMObject*);
     bc_length = _UNIVERSE->new_integer( bc_count );
+    number_of_literals = _UNIVERSE->new_integer(0);
     number_of_locals = _UNIVERSE->new_integer(0);
     maximum_number_of_stack_elements = _UNIVERSE->new_integer(0);
     number_of_arguments = _UNIVERSE->new_integer(0);
-    bc = (uint8_t*)&bc + sizeof(uint8_t*);
-    this->ResetEntriesPointer();
+    //uint8_t* bc = _BC;
+    //this->ResetEntriesPointer();
     //theEntries = (VMObject**)&theEntries + this->GetOffset();
+}
+
+void VMMethod::MarkReferences()
+{
+    //VMArray::MarkReferences();
+    VMInvokable::MarkReferences();
+    number_of_locals->MarkReferences();
+    maximum_number_of_stack_elements->MarkReferences();
+    number_of_arguments->MarkReferences();
+    bc_length->MarkReferences();
 }
 
 int       VMMethod::get_number_of_locals() 
@@ -56,36 +70,54 @@ int       VMMethod::get_number_of_bytecodes()
 
 size_t VMMethod::GetOffset()
 {
-    return VMArray::GetOffset() + sizeof(int)*4 + sizeof(uint8_t*);
+    return this->number_of_literals->GetEmbeddedInteger();
+}
+
+void VMMethod::SetLiteral(int index, VMObject* object)
+{
+    if (this->GetField(this->GetNumberOfFields() + index) == NULL)
+        this->number_of_literals->SetEmbeddedInteger(number_of_literals->GetEmbeddedInteger()+1);
+    this->SetField(this->GetNumberOfFields() + index, object);
+}
+
+VMObject* VMMethod::GetLiteral(int index)
+{
+    return this->GetField(this->GetNumberOfFields()+ 1 + index);
 }
 
 void VMMethod::invoke(VMFrame* frame)
 {
-    //VMFrame* frm = new (_HEAP)VMFrame(this);
-    //frm->CopyArgumentsFrom(frame);
+    VMFrame* frm = _UNIVERSE->GetInterpreter()->PushNewFrame(this);
+    frm->CopyArgumentsFrom(frame);
 }
 
 void VMMethod::set_holder_all(VMClass* hld)
 {
-   // for(int i = this->
-    //go through indexable_fields
-    //if (typeid(indexable_field[i]).name() == "class VMInvokable *") indexable_field[i]->setHolder(hld);
+    for (int i = 0; i < this->number_of_literals->GetEmbeddedInteger(); ++i)
+    {
+        VMObject* o = GetLiteral(i);
+        if (dynamic_cast<VMInvokable*>(o) != NULL) 
+        {
+            ((VMInvokable*)o)->set_holder(hld);
+        }
+    }
 }
 
 VMObject* VMMethod::get_constant(int indx)
 {
     //VMArray* 
-    return (VMObject*)bc[indx];
+    uint8_t bc = _BC[indx+1];
+    return this->GetLiteral(bc);
 }
 
 uint8_t VMMethod::get_bytecode(int indx)
 {
-    return bc[indx];
+    return _BC[indx];
 }
 
 void VMMethod::set_bytecode(int indx, uint8_t val)
 {
-    bc[indx] = val;
+    _BC[indx] = val;
 }
 
 VMMethod::~VMMethod() {}

@@ -98,19 +98,16 @@ static const char* bytecode_names[] = {
     "RETURN_NON_LOCAL"
 };
 
-//static inline char* bytecodes_get_bytecode_name(uint8_t bc) {
-//    if (universe_use_threaded_interpretation && bc >= Interpreter_threaded_first_super_bc())
-//        return (char*)"SUPER INSTRUCTION";
-//    else
-//        return (char*)bytecode_names[bc];
-//}
-//
-//static inline uint8_t bytecodes_get_bytecode_length(uint8_t bc) {
-//
-//    if (universe_use_threaded_interpretation)
-//        return inst_handler_entries[bc].length;
-//    else
-//        return bytecode_lengths[bc];// Return the length of the given bytecode
-//}
+class Bytecode
+{
+public:
+    static char* GetBytecodeName(uint8_t bc) {
+        return (char*)bytecode_names[bc];
+    }
 
+    static uint8_t GetBytecodeLength(uint8_t bc) {
+
+        return bytecode_lengths[bc];// Return the length of the given bytecode
+    }
+};
 #endif

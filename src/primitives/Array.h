@@ -37,9 +37,9 @@ class VMFrame;
 class _Array : Primitive
 {
 public:
-    void New(VMObject* object, VMFrame* frame);
-    void At(VMObject* object, VMFrame* frame);
-    void AtPut(VMObject* object, VMFrame* frame);
+    void New_(VMObject* object, VMFrame* frame);
+    void At_(VMObject* object, VMFrame* frame);
+    void AtPut_(VMObject* object, VMFrame* frame);
     void Length(VMObject* object, VMFrame* frame);
 };
 extern _Array* Array;

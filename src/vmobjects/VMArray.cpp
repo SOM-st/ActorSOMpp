@@ -2,36 +2,43 @@
 
 #include "../vm/Universe.h"
 
-VMArray::VMArray(int size)
+#define theEntries(i) fields[this->GetNumberOfFields()+1+i]
+
+VMArray::VMArray(int size, int nof) : VMObject(nof+2)
 {
+    //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
 	this->size = _UNIVERSE->new_integer(size);
 	this->entries = _UNIVERSE->new_integer(0);
-	objectSize = sizeof(VMArray) + size * sizeof(VMObject*);
-	theEntries = (VMObject**)&theEntries + this->GetOffset();
+	objectSize += size * sizeof(VMObject*); //calculate actual object size including the entries
+	//VMObject** t = theEntries;
 }
+
+
 
 VMArray::~VMArray()
 {
 }
-
-void VMArray::ResetEntriesPointer()
-{
-    theEntries = (VMObject**)&theEntries + this->GetOffset();
-}
-
-size_t VMArray::GetOffset()
-{
-    return sizeof(VMObject**);
-}
+//
+//void VMArray::ResetEntriesPointer()
+//{
+//    //theEntries = theEntries;(VMObject**)&theEntries + this->GetOffset();
+//}
+//
+//size_t VMArray::GetOffset()
+//{
+//    //return sizeof(VMInteger*)*2;
+//    return 0;
+//}
 
 VMArray* VMArray::CopyAndExtendWith(VMObject* item)
 {
+
 	VMArray* result = new (_HEAP, this->entries->GetEmbeddedInteger()+1) VMArray(this->entries->GetEmbeddedInteger()+1);
 	int j = 0;
 	for (int i = 0; i < this->size->GetEmbeddedInteger(); ++i)
 	{
-		if (this->theEntries[i] != 0){
-			result->SetIndexableField(j, theEntries[i]);
+		if (theEntries(i) != NULL){
+			result->SetIndexableField(j, theEntries(i));
 			++j;
 		}
 	}
@@ -51,7 +58,7 @@ VMObject* VMArray::GetIndexableField(int idx)
 	}
 	return 0;*/
     if (idx >= size->GetEmbeddedInteger()) throw std::bad_exception();
-    return theEntries[idx];
+    return theEntries(idx);
 }
 
 void VMArray::CopyIndexableFieldsFrom(VMArray* from)
@@ -75,9 +82,9 @@ int VMArray::SetIndexableField(VMObject* item)
 	if (size <= entries) throw std::bad_exception();
 	for (int i = 0; i < size->GetEmbeddedInteger(); ++i)
 	{
-		if (theEntries[i] == 0)
+		if (theEntries(i) == NULL)
 		{
-			theEntries[i] = item;
+			theEntries(i) = item;
             int32_t tmp =  entries->GetEmbeddedInteger();
 			entries->SetEmbeddedInteger(++tmp);
 			return i;
@@ -90,10 +97,10 @@ void VMArray::SetIndexableField(int idx, VMObject* item)
 {
 	if (idx >= size->GetEmbeddedInteger()) throw std::bad_exception();
     int32_t tmp = entries->GetEmbeddedInteger();
-	if (theEntries[idx] == 0 && item != 0) entries->SetEmbeddedInteger(tmp + 1);
+	if (theEntries(idx) == 0 && item != 0) entries->SetEmbeddedInteger(tmp + 1);
 	else if (item == 0) entries->SetEmbeddedInteger(tmp - 1);
     //else: entry is replaced, number of entries does not change
-	theEntries[idx] = item;
+	theEntries(idx) = item;
 }
 
 int VMArray::GetArraySize()
@@ -114,7 +121,7 @@ void VMArray::MarkReferences()
     this->entries->MarkReferences();
 	for (int i = 0 ; i < size->GetEmbeddedInteger() ; ++i)
 	{
-		if (theEntries[i] != NULL)
-			theEntries[i]->MarkReferences();
+		if (theEntries(i) != NULL)
+			theEntries(i)->MarkReferences();
 	}
 }

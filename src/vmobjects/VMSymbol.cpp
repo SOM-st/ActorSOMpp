@@ -6,9 +6,9 @@ VMSymbol::VMSymbol() : VMString()//, std::string()
 {
 	//chars = 0;
 	//objectSize = sizeof(VMSymbol);
-    if (sizeof(VMSymbol) == sizeof(VMString))
+    /*if (sizeof(VMSymbol) == sizeof(VMString))
         cout << "si" << endl;
-    else cout << "oh no" << endl;
+    else cout << "oh no" << endl;*/
 	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
 }
 
@@ -99,7 +99,8 @@ pString VMSymbol::GetPlainString()
                 break;
         #endif EXPERIMENTAL
             default:
-                plain_string += c;
+                if (c != 0)
+                    plain_string += c;
                 break;
         }
     }

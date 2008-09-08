@@ -1,4 +1,5 @@
 #include "Universe.h"
+#include "Shell.h"
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMMethod.h"
@@ -191,19 +192,25 @@ void Universe::print_usage_and_exit( char* executable )
 
 Universe::Universe(){};
 
-void Universe::initialize(int argc, char** _argv)
+void Universe::prepareNilObject()
+{
+    nil_object->SetField(0, nil_object);
+}
+
+void Universe::initialize(int _argc, char** _argv)
 {
     heapSize = 1000000;
 
-    int vm_argc;
-    vector<pString> argv = this->handle_arguments(&vm_argc, argc, _argv);
+    int argc;
+    vector<pString> argv = this->handle_arguments(&argc, _argc, _argv);
 
     cout << "Setting heap Size to: " << heapSize << endl;
 	heap = new Heap(heapSize);
     symboltable = new Symboltable();
     compiler = new SourcecodeCompiler();
-
+    interpreter = new Interpreter();
 	nil_object = new (heap) VMObject;
+    prepareNilObject();
     cout << "We have a nil_object" << endl;
     /*VMArray* vmo = new (heap, 4*sizeof(VMObject*)) VMArray(4);
     VMMethod*/
@@ -259,8 +266,7 @@ void Universe::initialize(int argc, char** _argv)
     this->load_system_class(string_class);
     this->load_system_class(double_class);
 
-    cout << "ATM this is an unreachable point, but if you see this...."
-            << "YAY, the system classes are loaded" << endl;
+    cout << "YAY, the system classes are loaded" << endl;
     
     cout << "loading block class" << endl;
     block_class = load_class(symbol_for_chars("Block"));
@@ -286,93 +292,108 @@ void Universe::initialize(int argc, char** _argv)
     VMMethod* bootstrap_method = new_method(symbol_for_chars("bootstrap"), 1, 0);
     bootstrap_method->set_bytecode(0, BC_HALT);
     bootstrap_method->set_number_of_locals(0);
+    bootstrap_method->set_number_of_arguments(0);
     bootstrap_method->set_maximum_number_of_stack_elements(2);
     bootstrap_method->set_holder(system_class);
+    cout << "Cheer!!! We can start the Interpreter now!" << endl;
+
+    if (true) {
+        Shell* shell = new Shell(bootstrap_method);
+        shell->Start();
+        return;
+    }
+    VMArray* arguments_array = _UNIVERSE->new_array_from_argv(argc, argv);
     
-    cout << "Cheer!!! We could start the Interpreter now!" << endl;
+    VMFrame* bootstrap_frame = interpreter->PushNewFrame(bootstrap_method);
+    bootstrap_frame->Push(system_object);
+    bootstrap_frame->Push((VMObject*)arguments_array);
+
+    VMInvokable* initialize = 
+        (VMInvokable*)system_class->lookup_invokable(this->symbol_for_chars("initialize:"));
+    initialize->invoke(bootstrap_frame);
     
     interpreter->Start();
 
     //-----------------
 
-    
-	//while (1) {
-		VMObject *vmo = new (heap) VMObject;
-		cout << "vmo (VMObject) Obj size:" << vmo->getObjectSize() << endl;
-		//cout << sizeof(*vmo) << endl;
-		VMObject *vmo2 = new (heap, 0) VMMethod(0,0);
-		cout << "vmo2 (VMMethod) Obj size:" << vmo2->getObjectSize() << endl;
-		//cout << sizeof(*vmo2) << endl;
-	//}
-	//vector<VMObject*, HeapAllocator<VMObject*> > v = vector<VMObject*, HeapAllocator<VMObject*> >(HeapAllocator<VMObject*>(heap));
-	//v.push_back(vmo);
-	//v.push_back(vmo2);
+ //   
+	////while (1) {
+	//	VMObject *vmo = new (heap) VMObject;
+	//	cout << "vmo (VMObject) Obj size:" << vmo->getObjectSize() << endl;
+	//	//cout << sizeof(*vmo) << endl;
+	//	VMObject *vmo2 = new (heap, 0) VMMethod(0,0);
+	//	cout << "vmo2 (VMMethod) Obj size:" << vmo2->getObjectSize() << endl;
+	//	//cout << sizeof(*vmo2) << endl;
+	////}
+	////vector<VMObject*, HeapAllocator<VMObject*> > v = vector<VMObject*, HeapAllocator<VMObject*> >(HeapAllocator<VMObject*>(heap));
+	////v.push_back(vmo);
+	////v.push_back(vmo2);
 
-	VMString *vmstr = new (heap) VMString;
-	cout << "vmstr Obj size:" << vmstr->getObjectSize() << endl;
-	VMString *vmstr2 = new (heap, strlen("Stringtest")+1 ) VMString("Stringtest");
-	cout << "vmstr2 Obj size:" << vmstr2->getObjectSize() << endl;
-	cout << vmstr2->GetChars() << endl;
+	//VMString *vmstr = new (heap) VMString;
+	//cout << "vmstr Obj size:" << vmstr->getObjectSize() << endl;
+	//VMString *vmstr2 = new (heap, strlen("Stringtest")+1 ) VMString("Stringtest");
+	//cout << "vmstr2 Obj size:" << vmstr2->getObjectSize() << endl;
+	//cout << vmstr2->GetChars() << endl;
 
-	VMArray* vma = new (heap, 4*sizeof(VMObject*)) VMArray(4);
-	vma->SetIndexableField(0, vmo);
-	vma->SetIndexableField(1, vmo2);
-	vma->SetIndexableField(2, vmstr);
-	vma->SetIndexableField(3, vmstr2);
-	cout << "sizeof(VMArray)" << sizeof(VMArray) << endl;
-	cout << "vma Obj size:" << vma->getObjectSize() << endl;
-	cout << "vma array size:" << vma->GetArraySize() << endl;
+	//VMArray* vma = new (heap, 4*sizeof(VMObject*)) VMArray(4);
+	//vma->SetIndexableField(0, vmo);
+	//vma->SetIndexableField(1, vmo2);
+	//vma->SetIndexableField(2, vmstr);
+	//vma->SetIndexableField(3, vmstr2);
+	//cout << "sizeof(VMArray)" << sizeof(VMArray) << endl;
+	//cout << "vma Obj size:" << vma->getObjectSize() << endl;
+	//cout << "vma array size:" << vma->GetArraySize() << endl;
 
-    VMInvokable* inv = dynamic_cast<VMInvokable*>(vmo2);
+ //   VMInvokable* inv = dynamic_cast<VMInvokable*>(vmo2);
 
-    if (inv != NULL) cout << "inv is invokable" << endl;
+ //   if (inv != NULL) cout << "inv is invokable" << endl;
 
-    inv = dynamic_cast<VMInvokable*>(vmo);
-    if (inv == NULL) cout << "inv is not invokable" << endl;
+ //   inv = dynamic_cast<VMInvokable*>(vmo);
+ //   if (inv == NULL) cout << "inv is not invokable" << endl;
 
-    //if (typeid(vmo2).name() == VMObject) cout << "yeah" << endl;
-    //cout << typeid(vmo2).name() << endl;
-    //cout << typeid(vmo2) << endl;
-	//vmstr->FromCString("VMString Test");
-	//cout << vmstr->ToCString() << endl;
-	//cout << vmo->getObjectSize() << endl;
-	//cout << vmo2->getObjectSize() << endl;
-	
-	//this->RunGC();
-
-	/*ExtendedList *list = new ExtendedList();
-	list->Add(vmo);
-	list->Add(vmo2);
-	cout << "List-size:" << list->Size() << endl;*/
-	
-	//if (argc < 2) {
-	//	cout << "Please specify the file(s) you'd like to parse" << endl;
-	//	cout << "Usage: cppsom [files]" << endl;
-	//	return -1;
-	//}
+ //   //if (typeid(vmo2).name() == VMObject) cout << "yeah" << endl;
+ //   //cout << typeid(vmo2).name() << endl;
+ //   //cout << typeid(vmo2) << endl;
+	////vmstr->FromCString("VMString Test");
+	////cout << vmstr->ToCString() << endl;
+	////cout << vmo->getObjectSize() << endl;
+	////cout << vmo2->getObjectSize() << endl;
 	//
-	//for (int i = 1; i < argc; i++) { 
-	//	ifstream fp;
-	//	fp.open(argv[i], std::ios_base::in);
-	//	if (!fp.is_open()) {
-	//		cout << "error opening " << argv[i] <<endl;
-	//		continue;
-	//	}
-	//	//int cdc = 1;
-	//	class_generation_context cdc;
-	//	cout << "starting " << argv[i] << endl;
-	//	Parser* p = new Parser(fp);
-	//	p->Classdef(&cdc);
+	////this->RunGC();
 
-	//	//clean up
-	//	fp.close();
-	//	delete(p);
-	//	
-	//	cout << "finished " << argv[i] << endl;
+	///*ExtendedList *list = new ExtendedList();
+	//list->Add(vmo);
+	//list->Add(vmo2);
+	//cout << "List-size:" << list->Size() << endl;*/
+	//
+	////if (argc < 2) {
+	////	cout << "Please specify the file(s) you'd like to parse" << endl;
+	////	cout << "Usage: cppsom [files]" << endl;
+	////	return -1;
+	////}
+	////
+	////for (int i = 1; i < argc; i++) { 
+	////	ifstream fp;
+	////	fp.open(argv[i], std::ios_base::in);
+	////	if (!fp.is_open()) {
+	////		cout << "error opening " << argv[i] <<endl;
+	////		continue;
+	////	}
+	////	//int cdc = 1;
+	////	class_generation_context cdc;
+	////	cout << "starting " << argv[i] << endl;
+	////	Parser* p = new Parser(fp);
+	////	p->Classdef(&cdc);
 
-	//}
-    
-    //---------------------
+	////	//clean up
+	////	fp.close();
+	////	delete(p);
+	////	
+	////	cout << "finished " << argv[i] << endl;
+
+	////}
+ //   
+ //   //---------------------
 }
 
 Universe::~Universe()

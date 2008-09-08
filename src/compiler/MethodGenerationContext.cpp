@@ -13,6 +13,7 @@ MethodGenerationContext::MethodGenerationContext() {
 	this->arguments.Clear();
 	this->literals.Clear();
 	this->locals.Clear();
+    this->bytecode.clear();
 	primitive = false;
 	block_method = false;
 	finished = false;
@@ -34,7 +35,7 @@ VMMethod* MethodGenerationContext::Assemble()
     // copy literals into the method
     for(int i = 0; i < num_literals; i++) {
         VMObject* l = literals.get(i);
-        meth->SetIndexableField(i, l);
+        meth->SetLiteral(i, l);
     }
     
     // copy bytecodes into method
@@ -83,6 +84,7 @@ uint8_t MethodGenerationContext::compute_stack_depth() {
 	uint8_t depth = 0;
     uint8_t max_depth = 0;
     unsigned int i = 0;
+    
     while(i < bp) {
         switch(bytecode[i]) {
             case BC_HALT             :          i++;    break;
@@ -206,4 +208,5 @@ bool MethodGenerationContext::is_finished() {
 
 void MethodGenerationContext::add_bytecode(uint8_t bc) {
 	bytecode.push_back(bc);
+    ++bp;
 }

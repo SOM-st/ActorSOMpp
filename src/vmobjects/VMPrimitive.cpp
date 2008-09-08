@@ -9,28 +9,30 @@
 VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 {
     VMPrimitive* prim = new (_HEAP) VMPrimitive(sig);
-    prim->empty = true;
+    *(prim->empty) = true;
     prim->SetRoutine(new (_HEAP) Routine<VMPrimitive>(prim, &VMPrimitive::empty_routine));
     return prim;
 }
 
-VMPrimitive::VMPrimitive(VMSymbol* signature) : VMObject(), VMInvokable()
+VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(4)//,VMObject()
 {
+    //the only class that explicitly does this.
     this->SetClass(primitive_class);
-
+    this->empty = (bool*)_HEAP->Allocate(sizeof(bool));
     this->set_signature(signature);
     this->routine = NULL;
-    this->empty = false;
+    *(this->empty) = false;
 }
 
 VMPrimitive::~VMPrimitive()
 {
+    _HEAP->Free(empty, sizeof(bool));
     if (routine != NULL) Core::destroy(routine);
 }
 
 bool VMPrimitive::IsEmpty()
 {
-    return empty;
+    return *empty;
 }
 
 void VMPrimitive::SetRoutine(PrimitiveRoutine* rtn)

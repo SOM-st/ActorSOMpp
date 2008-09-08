@@ -4,9 +4,10 @@
 #include "VMInteger.h"
 #include "../vm/Universe.h"
 
-VMFrame::VMFrame(int size) : VMArray(size)
+VMFrame::VMFrame(int size) : VMArray(size, FRAME_NUMBER_OF_FIELDS)
 {
-    this->objectSize = sizeof(VMFrame) + size*sizeof(VMObject*);
+   // this->SetNumberOfFields(this->GetNumberOfFields() + 6);
+    //this->objectSize = sizeof(VMFrame) + size*sizeof(VMObject*);
     this->local_offset = new (_HEAP) VMInteger(0);
     this->bytecode_index = new (_HEAP) VMInteger(0);
     this->stack_pointer = new (_HEAP) VMInteger(0);
@@ -184,11 +185,11 @@ void      VMFrame::CopyArgumentsFrom(VMFrame* frame)
         this->SetIndexableField(i, stackElem);
     }
 }
-
-size_t VMFrame::GetOffset()
-{
-    return VMArray::GetOffset() + sizeof(VMFrame*)*2 + sizeof(VMMethod*) + sizeof(VMInteger*)*3;
-}
+//
+//size_t VMFrame::GetOffset()
+//{
+//    return VMArray::GetOffset() + sizeof(VMFrame*)*2 + sizeof(VMMethod*) + sizeof(VMInteger*)*3;
+//}
 
 void VMFrame::MarkReferences()
 {

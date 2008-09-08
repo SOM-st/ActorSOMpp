@@ -9,6 +9,7 @@ class VMMethod;
 class VMObject;
 class VMSymbol;
 class VMClass;
+#include "../misc/defs.h"
 
 class Interpreter
 {
@@ -24,6 +25,10 @@ public:
 private:
     VMFrame* frame;
     VMFrame* popFrame();
+    pString uG;
+    pString dnu;
+    pString eB;
+
     void popFrameAndPushResult(VMObject* result);
     void send(VMSymbol* signature, VMClass* receiver_class);
     

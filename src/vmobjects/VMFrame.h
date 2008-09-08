@@ -40,9 +40,10 @@ public:
     virtual void      PrintStackTrace();
     virtual int       ArgumentStackIndex(int index);
     virtual void      CopyArgumentsFrom(VMFrame* frame);
-    virtual size_t GetOffset();
+    //virtual size_t GetOffset();
     virtual void MarkReferences();
 private:
+#define FRAME_NUMBER_OF_FIELDS 6
     VMFrame*   previous_frame;
     VMFrame*   context;
     VMMethod*  method;

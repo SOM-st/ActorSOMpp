@@ -14,8 +14,8 @@ class VMClass;
 class VMObject{
 
 public:
-	VMObject();
-    VMObject(int number_of_fields);
+	//VMObject();
+    VMObject(int number_of_fields = 0);
 	virtual ~VMObject();
 
 	virtual VMClass* GetClass();
@@ -33,7 +33,9 @@ public:
 
     virtual int32_t GetHash() { return hash; };
 	//sizeof doesn't work polymorphic :(
-	//every derived class must set objectSize = sizeof(CLASSNAME) in its constructor, so the heap and gc works
+    //so every derived class must specify its number of fields in the constructor
+    //and calculate the correct objectSize, by adding the bytes of additional data
+    //like in VMString or VMArray to the objectSize in the constructor
 	virtual int getObjectSize() {return objectSize;}
 	bool getGCField() {return gcfield;} ;
 	void setGCField(bool value) { gcfield = value; } ;
@@ -46,7 +48,8 @@ public:
     //  - fields in VMMethod, a_b must be set to (number_of_bc + number_of_csts*sizeof(VMObject*))
 	void *operator new( size_t num_bytes, Heap *heap, unsigned int additional_bytes = 0)
 	{
-		return heap->Allocate(num_bytes + additional_bytes);
+        void* bla =heap->Allocate(num_bytes + additional_bytes);
+		return bla;
 	}
 
 	void *operator new[](size_t num_bytes, Heap *heap)
@@ -56,12 +59,14 @@ public:
 
 	void operator delete(void* self, Heap *heap, unsigned int additional_bytes)
 	{
-		heap->Free(self);
+        int size = ((VMObject*)self)->getObjectSize();
+		heap->Free(self, size);
 	}
 
 	 void operator delete( void *self, Heap *heap) 
 	 {
-		 heap->Free(self); 
+         int size = ((VMObject*)self)->getObjectSize();
+		 heap->Free(self, size); 
 	 } 
 
 	 void operator delete[]( void *self, Heap *heap ) 
@@ -78,8 +83,8 @@ public:
 	}*/
 protected:
 	int numberOfFields;
-	bool gcfield : 1;
-	//bool		 : 0; //forces alignment
+	bool gcfield;
+//	bool		 : 0; //forces alignment
 	int32_t hash;
 	int objectSize;
 	

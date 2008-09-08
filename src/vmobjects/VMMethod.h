@@ -12,10 +12,10 @@ class MethodGenerationContext;
 
 class VMFrame;
 
-class VMMethod : public VMArray, public VMInvokable{
+class VMMethod :  public VMInvokable{//public VMArray,
 
 public:
-	VMMethod(int bc_count, int number_of_constants);
+	VMMethod(int bc_count, int number_of_constants, int nof = 0);
    // VMMethod(MethodGenerationContext* mgenc);
 	virtual ~VMMethod();
     virtual int       get_number_of_locals();
@@ -23,7 +23,7 @@ public:
     virtual int       get_maximum_number_of_stack_elements();
     virtual void      set_maximum_number_of_stack_elements(int stel);
     virtual int       get_number_of_arguments();
-    virtual void      set_number_of_arguments(int noa);
+    virtual void      set_number_of_arguments(int);
     virtual int       get_number_of_bytecodes();
     virtual void      set_holder_all(VMClass* hld); 
     virtual VMObject *get_constant(int indx); 
@@ -31,19 +31,17 @@ public:
     virtual void      set_bytecode(int indx, uint8_t); 
 	virtual void	  invoke(VMFrame* frame);
     virtual size_t    GetOffset();
-	virtual void MarkReferences()
-	{
-		VMArray::MarkReferences();
-		VMInvokable::MarkReferences();
-	}
-
-	
+	virtual void MarkReferences();
+    virtual void SetLiteral(int index, VMObject* o);
+	virtual VMObject* GetLiteral(int index);
 private:
+    uint8_t* calculateBytecodeStart();
+    VMInteger* number_of_literals;
     VMInteger* number_of_locals;
     VMInteger* maximum_number_of_stack_elements;
     VMInteger* bc_length;
     VMInteger* number_of_arguments;
-	uint8_t* bc;	
+	//uint8_t* bc;	
 };
 
 

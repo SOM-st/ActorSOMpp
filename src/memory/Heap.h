@@ -1,5 +1,7 @@
 #pragma once
 
+//#define HEAPDEBUG
+
 #ifndef HEAP_H_
 #define HEAP_H_
 
@@ -21,7 +23,8 @@ public:
 	Heap(int object_space_size = 1000000);
 	~Heap();
 	void* Allocate(size_t size);
-	void Free(void* ptr);
+    void Free(void* ptr);
+	void Free(void* ptr, int size);
 	
 	void GCCollect() {gc->Collect();}
 	//void SetGlobal(pString name, void* val);
