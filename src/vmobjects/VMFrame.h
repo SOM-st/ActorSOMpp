@@ -11,11 +11,11 @@ class VMInteger;
 class VMFrame : public VMArray
 {
 public:
-    VMFrame(int size);
+    VMFrame(int size, int nof = 0);
     virtual ~VMFrame();
 
     virtual VMFrame  *GetPreviousFrame();
-    virtual void     SetPreviousFrame(VMFrame*);
+    virtual void     SetPreviousFrame(VMObject*);
     virtual void     ClearPreviousFrame();
     virtual bool     HasPreviousFrame();
     virtual bool     IsBootstrapFrame();
@@ -42,6 +42,7 @@ public:
     virtual void      CopyArgumentsFrom(VMFrame* frame);
     //virtual size_t GetOffset();
     virtual void MarkReferences();
+    virtual void PrintStack();
 private:
 #define FRAME_NUMBER_OF_FIELDS 6
     VMFrame*   previous_frame;

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <cctype>
 #include <sstream>
 #include "BytecodeGenerator.h"
-
+#include "../vmobjects/VMSymbol.h"
 #include "../vm/Universe.h"
 //#include <string>
 //#include <memory/gc.h>
@@ -153,17 +153,24 @@ void Parser::gen_push_variable(MethodGenerationContext* mgenc, const pString& va
     int index = 0;
     int context = 0;
     bool is_argument = false;
+    if(strcmp(mgenc->get_signature()->GetChars(), "print") == 0)
+        {
+            cout << "hier";
+        }
 	//cout << "emit push arg/local/field/global" << endl;
-    if(mgenc->find_var(var, &index, &context, &is_argument))
+    if(mgenc->find_var(var, &index, &context, &is_argument)) {
 		if(is_argument) 
             bcGen->emit_PUSH_ARGUMENT(mgenc, index, context);
-        else bcGen->emit_PUSH_LOCAL(mgenc, index, context);
-	else if(mgenc->find_field(var)) {
+        else 
+            bcGen->emit_PUSH_LOCAL(mgenc, index, context);
+    } else if(mgenc->find_field(var)) {
         VMSymbol* fieldName = _UNIVERSE->symbol_for(var);
 		mgenc->add_literal_if_absent((VMObject*)fieldName);
+        bcGen->emit_PUSH_FIELD(mgenc, fieldName);
 		//SEND(mgenc->literals, addIfAbsent, fieldName);
         //bytecode_generator::emit_PUSH_FIELD(mgenc, fieldName);
     } else {
+        
         VMSymbol* global = _UNIVERSE->symbol_for(var);
 		mgenc->add_literal_if_absent((VMObject*)global);
         //SEND(mgenc->literals, addIfAbsent, global);
@@ -181,10 +188,10 @@ void Parser::gen_pop_variable(MethodGenerationContext* mgenc, const pString& var
     int context = 0;
     bool is_argument = false;
 	//cout << "emit pop arg/local/field" << endl;
-	if(mgenc->find_var(var, &index, &context, &is_argument))
+    if(mgenc->find_var(var, &index, &context, &is_argument)) {
         if(is_argument) bcGen->emit_POP_ARGUMENT(mgenc, index, context);
         else bcGen->emit_POP_LOCAL(mgenc, index, context);
-    else bcGen->emit_POP_FIELD(mgenc, _UNIVERSE->symbol_for(var));
+    } else bcGen->emit_POP_FIELD(mgenc, _UNIVERSE->symbol_for(var));
 }
 
 
@@ -504,7 +511,7 @@ void Parser::expression(MethodGenerationContext* mgenc) {
 
 void Parser::assignation(MethodGenerationContext* mgenc) {
 	list<pString> l;
-    
+    //cout << "assignation" << endl;
     assignments(mgenc, l);
     evaluation(mgenc);
     list<pString>::iterator i;
@@ -517,7 +524,7 @@ void Parser::assignation(MethodGenerationContext* mgenc) {
 }
 
 
-void Parser::assignments(MethodGenerationContext* mgenc, list<pString> l) {
+void Parser::assignments(MethodGenerationContext* mgenc, list<pString>& l) {
     if(sym == Identifier) {
         l.push_back(assignment(mgenc));//SEND(l, add, assignment(mgenc));
         PEEK;//peek();
@@ -555,7 +562,7 @@ void Parser::primary(MethodGenerationContext* mgenc, bool* super) {
     switch(sym) {
         case Identifier: {
             pString v = variable();
-			if(v == "super") { //SEND(v, compareToChars, "super") == 0) {
+			if(v == pString("super")) { //SEND(v, compareToChars, "super") == 0) {
                 *super = true;
                 // sends to super push self as the receiver
                 //SEND(v, free);
@@ -638,7 +645,7 @@ void Parser::unaryMessage(MethodGenerationContext* mgenc, bool super) {
     //SEND(mgenc->literals, addIfAbsent, msg);
     if(super) bcGen->emit_SUPER_SEND(mgenc, msg);
     else bcGen->emit_SEND(mgenc, msg);
-	cout << endl;
+	//cout << endl;
 }
 
 
@@ -726,10 +733,10 @@ void Parser::literalNumber(MethodGenerationContext* mgenc) {
         val = literalDecimal();
     
     VMInteger* literal = _UNIVERSE->new_integer(val);
-	stringstream s;
+	/*stringstream s;
 	pString str_lit = "";
 	s << literal->GetEmbeddedInteger();
-	str_lit += s.str();
+	str_lit += s.str();*/
 	mgenc->add_literal_if_absent((VMObject*)literal);
     //SEND(mgenc->literals, addIfAbsent, literal);
     bcGen->emit_PUSH_CONSTANT(mgenc, (VMObject*)literal);

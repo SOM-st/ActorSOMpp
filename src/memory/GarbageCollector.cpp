@@ -4,6 +4,7 @@
 #include "../vmobjects/VMSymbol.h"
 #include "Heap.h"
 #include <vector>
+#include "../misc/SymbolCompare.h"
 
 GarbageCollector::GarbageCollector(Heap* h)
 {
@@ -82,10 +83,10 @@ void GarbageCollector::Collect()
 
 void GarbageCollector::markReachableObjects()
 {
-	map<VMSymbol*, VMObject*> globals = Universe::GetUniverse()->GetGlobals();
+	map<VMSymbol*, VMObject*, SymbolCompare> globals = Universe::GetUniverse()->GetGlobals();
 
 	
-	for (map<VMSymbol*, VMObject*>::iterator it = globals.begin(); it!= globals.end(); ++it)
+	for (map<VMSymbol*, VMObject*, SymbolCompare>::iterator it = globals.begin(); it!= globals.end(); ++it)
 	{
 		markObject(&(*it->second));
 	}

@@ -31,17 +31,21 @@ VMMethod* MethodGenerationContext::Assemble()
     meth->set_number_of_locals(num_locals);
 
     meth->set_maximum_number_of_stack_elements(this->compute_stack_depth());
-    
+    cout << "num_locals: " << num_locals << endl;
+    cout << "num_literals: " << num_literals << endl;
     // copy literals into the method
     for(int i = 0; i < num_literals; i++) {
         VMObject* l = literals.get(i);
         meth->SetLiteral(i, l);
     }
     
+    cout << "bp: " << bp;
+    cout << "bcs ";
     // copy bytecodes into method
-    for(size_t i = 0; i < bp; i++)
+    for(size_t i = 0; i < bp; i++){
         meth->set_bytecode(i, bytecode[i]);
-    
+        cout << bytecode[i] << " ";}
+    cout << endl;
     // return the method - the holder field is to be set later on!
     return meth;
 }

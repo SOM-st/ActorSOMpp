@@ -15,6 +15,8 @@ public:
 	VMString();
 	VMString( const char* str );
 	VMString( const string& s );
+
+    
 	/*VMString( const string& s );
 	VMString( size_type length, const char& ch );
 	VMString( const char* str );
@@ -26,6 +28,7 @@ public:
 	char* GetChars();
 	std::string GetStdString();
     int  GetStringLength();
+    
 	/*virtual pString GetClass(); //TODO: change string to VMClass
 	virtual void SetClass(pString className);
 	virtual pString GetFieldName(int index); //TODO: change string to VMSymbol

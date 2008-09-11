@@ -10,8 +10,7 @@ class VMFrame;
 class VMInvokable : public VMObject
 {
 public:
-    VMInvokable() : VMObject() {};
-    VMInvokable(int nof) : VMObject(nof+2) {};
+    VMInvokable(int nof = 0) : VMObject(nof+2) {};
 
 	virtual void      invoke(VMFrame*) = 0;
 	virtual bool      is_primitive();

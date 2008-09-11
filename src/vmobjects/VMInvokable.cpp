@@ -18,7 +18,8 @@ void      VMInvokable::set_signature(VMSymbol* sig)
 { 
     signature = sig;
     
-    if (!is_primitive()) ((VMMethod*)this)->set_number_of_arguments(Signature::GetNumberOfArguments(signature));
+    if (!is_primitive()) 
+        ((VMMethod*)this)->set_number_of_arguments(Signature::GetNumberOfArguments(signature));
 }
 
 VMClass  *VMInvokable::get_holder() 

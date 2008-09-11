@@ -86,7 +86,7 @@ private:
 	void result(MethodGenerationContext* mgenc);
 	void expression(MethodGenerationContext* mgenc);
 	void assignation(MethodGenerationContext* mgenc);
-	void assignments(MethodGenerationContext* mgenc, list<string> l);
+	void assignments(MethodGenerationContext* mgenc, list<string>& l);
 	pString assignment(MethodGenerationContext* mgenc);
 	void evaluation(MethodGenerationContext* mgenc);
 	void primary(MethodGenerationContext* mgenc, bool* super);

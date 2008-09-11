@@ -2,9 +2,11 @@
 #include "VMMethod.h"
 #include "VMObject.h"
 #include "VMInteger.h"
+#include "VMClass.h"
+#include "VMSymbol.h"
 #include "../vm/Universe.h"
 
-VMFrame::VMFrame(int size) : VMArray(size, FRAME_NUMBER_OF_FIELDS)
+VMFrame::VMFrame(int size, int nof) : VMArray(size, FRAME_NUMBER_OF_FIELDS)
 {
    // this->SetNumberOfFields(this->GetNumberOfFields() + 6);
     //this->objectSize = sizeof(VMFrame) + size*sizeof(VMObject*);
@@ -19,22 +21,23 @@ VMFrame::~VMFrame()
 
 VMFrame* VMFrame::GetPreviousFrame()
 {
-    return this->previous_frame;
+    return (VMFrame*) this->previous_frame;
 }
 
-void     VMFrame::SetPreviousFrame(VMFrame* frm)
+void     VMFrame::SetPreviousFrame(VMObject* frm)
 {
-    this->previous_frame = frm;
+    this->fields[4] = frm; //HACK: 4 == previous_frame
+    //this->previous_frame = frm;
 }
 
 void     VMFrame::ClearPreviousFrame()
 {
-    this->previous_frame = NULL;//= NilObject;
+    this->fields[4] = nil_object;
 }
 
 bool     VMFrame::HasPreviousFrame()
 {
-    return this->previous_frame != NULL;
+    return this->previous_frame != nil_object;
 }
 
 bool     VMFrame::IsBootstrapFrame()
@@ -54,7 +57,7 @@ void     VMFrame::SetContext(VMFrame* frm)
 
 bool     VMFrame::HasContext()
 {
-    return this->context !=  NULL; //nil_object;
+    return this->context !=  nil_object; //nil_object;
 }
 
 VMFrame* VMFrame::GetContextLevel(int lvl)
@@ -90,16 +93,27 @@ void      VMFrame::SetMethod(VMMethod* method)
 
 VMObject* VMFrame::Pop()
 {
-    int32_t sp = this->stack_pointer->GetEmbeddedInteger();
-    this->stack_pointer->SetEmbeddedInteger(sp - 1);
+    int32_t sp = this->stack_pointer->GetEmbeddedInteger()-1;
+    this->stack_pointer->SetEmbeddedInteger(sp);
     return this->GetIndexableField(sp);
 }
 
 void      VMFrame::Push(VMObject* obj)
 {
-    int32_t sp = this->stack_pointer->GetEmbeddedInteger() + 1;
-    this->stack_pointer->SetEmbeddedInteger(sp);
+    int32_t sp = this->stack_pointer->GetEmbeddedInteger();
+    this->stack_pointer->SetEmbeddedInteger(sp+1);
     this->SetIndexableField(sp, obj);
+}
+
+void VMFrame::PrintStack()
+{
+    cout << "SP: " << this->stack_pointer->GetEmbeddedInteger() << endl;
+    for (int i = 0; i < this->GetNumberOfIndexableFields()+1; ++i)
+    {
+        VMObject* vmo = this->GetIndexableField(i);
+        if (vmo == NULL) cout << "NULL" << endl;
+        else cout << "index: " << i << " object:" << vmo->GetClass()->get_name()->GetChars() << endl;
+    }
 }
 
 void      VMFrame::ResetStackPointer()
@@ -112,6 +126,7 @@ void      VMFrame::ResetStackPointer()
     // Set the stack pointer to its initial value thereby clearing the stack
     size_t num_lo = meth->get_number_of_locals();
     this->stack_pointer->SetEmbeddedInteger(lo + num_lo - 1);
+    cout << "lo: " << lo << ", num_lo: " << num_lo << ", sp: "<<(lo+num_lo-1)<<endl;
 }
 
 int       VMFrame::GetBytecodeIndex()

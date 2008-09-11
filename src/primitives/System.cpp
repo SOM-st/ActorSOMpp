@@ -98,7 +98,7 @@ void  _System::PrintNewline(VMObject* object, VMFrame* frame) {
 
 void  _System::Time(VMObject* object, VMFrame* frame) {
     VMObject* self = frame->Pop();
-    timeval* now;
+    timeval* now = NULL;
     gettimeofday(now, NULL);
     long long diff = 
         ((now->tv_sec - start_time->tv_sec) * 1000) + //seconds

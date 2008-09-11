@@ -28,12 +28,12 @@ VMSymbol::VMSymbol( const std::string& s ): VMString(s)
 
 void VMSymbol::SetString(const std::string& str)
 {
-	if (str.length() > GetStringLength()) {
+	if (str.length() > (size_t)GetStringLength()) {
 		//realloc?
         cout << "Problem: trying to SetString of a VMSymbol that doesn't have enough mem" << endl;
 	} else {
         int i;
-		for (i = 0; i < str.length(); i++) {
+		for (i = 0; i < (size_t)str.length(); i++) {
 			chars[i] = str[i];
 		}
 		chars[i] = '\0';
@@ -45,7 +45,7 @@ pString VMSymbol::GetPlainString()
     
     pString plain_string;
     
-    for(size_t i=0; i <= this->GetStringLength(); i++) {
+    for(size_t i=0; i <= (size_t)this->GetStringLength(); i++) {
         char c = this->GetChars()[i];
         switch (c) {
             case '~':

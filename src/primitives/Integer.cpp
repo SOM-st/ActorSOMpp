@@ -50,11 +50,11 @@ _Integer* Integer;
  * of an Integer operation).
  */
 #define CHECK_COERCION(obj,receiver,op) { \
-    if(dynamic_cast<VMBigInteger*>(rightObj) != NULL) { \
+    if(dynamic_cast<VMBigInteger*>(obj) != NULL) { \
         resendAsBigInteger( \
             object, (op), (receiver), (VMBigInteger*)(obj)); \
         return; \
-    } else if(dynamic_cast<VMDouble*>(rightObj) != NULL) { \
+    } else if(dynamic_cast<VMDouble*>(obj) != NULL) { \
         resendAsDouble( \
             object, (op), (receiver), (VMDouble*)(obj)); \
         return; \
@@ -69,8 +69,9 @@ _Integer* Integer;
 
 void _Integer::pushResult(VMObject* object, VMFrame* frame, 
                               int64_t result) {
+    int32_t i32min = INT32_MIN;
     // Check with integer bounds and push:
-    if(result > INT32_MAX || result < INT32_MIN)
+    if(result > INT32_MAX || result < i32min)
         frame->Push((VMObject*)_UNIVERSE->new_biginteger(result));
     else
         frame->Push((VMObject*)_UNIVERSE->new_integer((int32_t)result));

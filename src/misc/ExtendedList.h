@@ -81,7 +81,8 @@ int ExtendedList<T>::Size()
 template <class T>
 int ExtendedList<T>::IndexOf(const T& needle) {
     for (std::list<T>::iterator it = theList.begin(); it!=theList.end(); ++it) {
-		if (*it == needle) return distance(theList.begin(), it);
+		if (*it == needle) 
+            return distance(theList.begin(), it);
 		//cout << *it << endl;
 	}
 	return -1;

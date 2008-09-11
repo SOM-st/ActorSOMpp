@@ -47,7 +47,7 @@ void VMPrimitive::invoke(VMFrame *frm)
 
 void VMPrimitive::MarkReferences()
 {
-    VMObject::MarkReferences();
+    VMInvokable::MarkReferences();
     signature->MarkReferences();
     holder->MarkReferences();
    // routine->MarkReferences();

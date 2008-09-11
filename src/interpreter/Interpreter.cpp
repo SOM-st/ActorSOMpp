@@ -42,7 +42,7 @@ void Interpreter::Start()
         int next_bytecode_index = bytecode_index + bytecode_length;
 
         _FRAME->SetBytecodeIndex(next_bytecode_index);
-        
+        cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) << endl;
 // Handle the current bytecode
         switch(bytecode) {
             case BC_HALT:             return; // handle the halt bytecode
@@ -199,6 +199,10 @@ void Interpreter::do_push_constant( int bytecode_index )
     VMMethod* method = _METHOD;
 
     VMObject* constant = method->get_constant(bytecode_index);
+    _FRAME->Push(constant);
+    
+   // _FRAME->PrintStack();
+
 }
 
 void Interpreter::do_push_global( int bytecode_index)
@@ -257,8 +261,12 @@ void Interpreter::do_pop_field( int bytecode_index )
 void Interpreter::do_send( int bytecode_index )
 {
     VMMethod* method = _METHOD;
-
+    
     VMSymbol* signature = (VMSymbol*) method->get_constant(bytecode_index);
+    if (bytecode_index >= 13)
+    {
+        cout << signature->GetChars() << "\n";
+    }
     int num_of_args = Signature::GetNumberOfArguments(signature);
 
     VMObject* receiver = _FRAME->GetStackElement(num_of_args - 1);

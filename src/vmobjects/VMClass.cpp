@@ -28,7 +28,7 @@ VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4)
 
 bool VMClass::has_super_class()
 {
-    return super_class == NULL;
+    return (super_class != NULL && super_class != nil_object);
 }
 
 
@@ -142,7 +142,8 @@ VMObject* VMClass::lookup_invokable(VMSymbol* name)
     for (int i = 0; i < get_number_of_instance_invokables(); ++i)
     {
         invokable = (VMInvokable*)(get_instance_invokable(i));
-        if (invokable->get_signature() == name) return (VMObject*)invokable;
+        if (invokable->get_signature() == name) 
+            return (VMObject*)invokable;
     }
     //look in super class
     if (this->has_super_class()) 

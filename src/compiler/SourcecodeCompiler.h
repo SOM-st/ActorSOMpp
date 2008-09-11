@@ -6,7 +6,7 @@
 class VMClass;
 class Parser;
 
-static class SourcecodeCompiler {
+class SourcecodeCompiler {
 public:
     SourcecodeCompiler();
     ~SourcecodeCompiler();

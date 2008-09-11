@@ -2,8 +2,10 @@
 #include "../vm/Universe.h"
 #include "VMFrame.h"
 #include "../compiler/MethodGenerationContext.h"
+#include "VMClass.h"
+#include "VMSymbol.h"
 
-#define _BC ((uint8_t*)&fields[this->GetNumberOfFields()+1] + this->GetOffset())
+#define _BC ((uint8_t*)&fields[this->GetNumberOfFields()+1 + this->GetOffset()])
 
 VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokable(nof + 5)//VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ),
 {
@@ -29,37 +31,38 @@ void VMMethod::MarkReferences()
     bc_length->MarkReferences();
 }
 
-int       VMMethod::get_number_of_locals() 
+int VMMethod::get_number_of_locals() 
 {
     return number_of_locals->GetEmbeddedInteger(); 
 }
 
-void      VMMethod::set_number_of_locals(int nol) 
+void VMMethod::set_number_of_locals(int nol) 
 {
     number_of_locals->SetEmbeddedInteger(nol); 
 }
 
-int       VMMethod::get_maximum_number_of_stack_elements()
+int VMMethod::get_maximum_number_of_stack_elements()
 {
     return maximum_number_of_stack_elements->GetEmbeddedInteger(); 
 }
 
-void      VMMethod::set_maximum_number_of_stack_elements(int stel) 
+void VMMethod::set_maximum_number_of_stack_elements(int stel) 
 {
     maximum_number_of_stack_elements->SetEmbeddedInteger(stel); 
 }
 
-int       VMMethod::get_number_of_arguments() 
+int VMMethod::get_number_of_arguments() 
 {
     return number_of_arguments->GetEmbeddedInteger(); 
 }
 
-void      VMMethod::set_number_of_arguments(int noa) 
+void VMMethod::set_number_of_arguments(int noa) 
 {
+    cout << "args:" << noa << endl;
     number_of_arguments->SetEmbeddedInteger(noa); 
 }
 
-int       VMMethod::get_number_of_bytecodes() 
+int VMMethod::get_number_of_bytecodes() 
 {
     return bc_length->GetEmbeddedInteger();
 }
@@ -75,14 +78,17 @@ size_t VMMethod::GetOffset()
 
 void VMMethod::SetLiteral(int index, VMObject* object)
 {
-    if (this->GetField(this->GetNumberOfFields() + index) == NULL)
+    int fieldIndex = this->GetNumberOfFields() + 1 + index;
+    cout << "SetLiteral: " << index << "(" << fieldIndex << ")" << endl;
+    cout << "with: " << object->GetClass()->get_name()->GetStdString() << endl;
+    if (this->GetField(fieldIndex) == NULL)
         this->number_of_literals->SetEmbeddedInteger(number_of_literals->GetEmbeddedInteger()+1);
-    this->SetField(this->GetNumberOfFields() + index, object);
+    this->SetField(fieldIndex, object);
 }
 
 VMObject* VMMethod::GetLiteral(int index)
 {
-    return this->GetField(this->GetNumberOfFields()+ 1 + index);
+    return this->GetField(this->GetNumberOfFields()+ 1 + index); //doesn't work like this... needs BC index
 }
 
 void VMMethod::invoke(VMFrame* frame)

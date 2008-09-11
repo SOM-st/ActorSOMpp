@@ -54,6 +54,8 @@ double coerce_double(VMObject* x) {
         return (double)((VMBigInteger*)x)->GetEmbeddedInteger();
     else
         _UNIVERSE->error_exit("Attempt to apply Double operation to non-number.");
+
+    return 0.0f;
 }
 
 

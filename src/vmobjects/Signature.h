@@ -5,7 +5,7 @@
 
 class VMSymbol;
 
-static class Signature
+class Signature
 {
 public:
     static int GetNumberOfArguments(VMSymbol* sig);

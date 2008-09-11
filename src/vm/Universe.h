@@ -24,6 +24,7 @@ class SourcecodeCompiler;
 #include "../interpreter/Interpreter.h"
 #include "../memory/Heap.h"
 #include "../primitives/Core.h"
+#include "../misc/SymbolCompare.h"
 #define _HEAP Universe::GetUniverse()->GetHeap()
 #define _UNIVERSE Universe::GetUniverse()
 
@@ -62,7 +63,7 @@ public:
     static void quit(int);
     static void error_exit(const char*);
 
-	map<VMSymbol*, VMObject*>  GetGlobals() {return globals;}
+	map<VMSymbol*, VMObject*, SymbolCompare>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
     Interpreter* GetInterpreter() {return interpreter;}
 	void RunGC();
@@ -127,7 +128,7 @@ private:
 
 	Heap *heap;
     int heapSize;
-	map<VMSymbol*, VMObject*> globals;
+	map<VMSymbol*, VMObject*, SymbolCompare> globals;
     vector<pString> class_path;
     int cp_count;
     Symboltable* symboltable;

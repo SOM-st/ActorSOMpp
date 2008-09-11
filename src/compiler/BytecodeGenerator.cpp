@@ -8,16 +8,19 @@
 //#include "../vmobjects/VMString.h"
 
 #define EMIT1(BC) \
+    printf("%s(emit1) ", Bytecode::GetBytecodeName(BC));\
 	mgenc->add_bytecode(BC)
     //mgenc->bytecode[mgenc->bp++] = (BC)
 
 #define EMIT2(BC, IDX) \
+    printf("%s(emit2) ", Bytecode::GetBytecodeName(BC));\
 	mgenc->add_bytecode(BC);\
 	mgenc->add_bytecode(IDX)
     //mgenc->bytecode[mgenc->bp++] = (BC); \
 	//mgenc->bytecode[mgenc->bp++] = (IDX)
 
 #define EMIT3(BC, IDX, CTX) \
+    printf("%s(emit3) ", Bytecode::GetBytecodeName(BC));\
 	mgenc->add_bytecode(BC);\
 	mgenc->add_bytecode(IDX);\
 	mgenc->add_bytecode(CTX)

@@ -292,7 +292,7 @@ void Universe::initialize(int _argc, char** _argv)
     VMMethod* bootstrap_method = new_method(symbol_for_chars("bootstrap"), 1, 0);
     bootstrap_method->set_bytecode(0, BC_HALT);
     bootstrap_method->set_number_of_locals(0);
-    bootstrap_method->set_number_of_arguments(0);
+    //bootstrap_method->set_number_of_arguments(0);
     bootstrap_method->set_maximum_number_of_stack_elements(2);
     bootstrap_method->set_holder(system_class);
     cout << "Cheer!!! We can start the Interpreter now!" << endl;
@@ -711,6 +711,7 @@ VMClass* Universe::new_system_class()
 
 VMSymbol* Universe::symbol_for( const pString& str)
 {
+    
     VMSymbol* result = symboltable->lookup(str);
     
     return result ?
@@ -731,5 +732,10 @@ void Universe::RunGC()
 
 void Universe::set_global(VMSymbol* name, VMObject *val)
 {
-	globals[name] = val;
+    pString str =  name->GetStdString();
+    if (str == pString("self"))
+    {
+        cout <<  "self";
+    }
+	globals.insert(pair<VMSymbol*, VMObject*>(name, val));
 }

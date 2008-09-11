@@ -105,9 +105,9 @@ void Shell::Start()
         statement += SHELL_PART_2;*/
         //sprintf(stmt, "%s%d%s", SHELL_PREFIX, counter, SHELL_PART_1);
         ++counter;
-        
+        runClass = _UNIVERSE->load_shell_class(statement);
         // Compile and load the newly generated class
-        if(! (runClass = _UNIVERSE->load_shell_class(statement))) {
+        if(runClass == NULL) {
             cout << "can't compile statement.";
             continue;            
         }
