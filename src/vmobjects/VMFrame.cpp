@@ -26,13 +26,14 @@ VMFrame* VMFrame::GetPreviousFrame()
 
 void     VMFrame::SetPreviousFrame(VMObject* frm)
 {
-    this->fields[4] = frm; //HACK: 4 == previous_frame
-    //this->previous_frame = frm;
+    this->fields[3] = frm; //HACK: 4 == previous_frame
+    //this->previous_frame = (VMFrame*)frm;
 }
 
 void     VMFrame::ClearPreviousFrame()
 {
-    this->fields[4] = nil_object;
+    this->fields[3] = nil_object;
+    //this->previous_frame = (VMFrame*)nil_object;
 }
 
 bool     VMFrame::HasPreviousFrame()
@@ -93,15 +94,15 @@ void      VMFrame::SetMethod(VMMethod* method)
 
 VMObject* VMFrame::Pop()
 {
-    int32_t sp = this->stack_pointer->GetEmbeddedInteger()-1;
-    this->stack_pointer->SetEmbeddedInteger(sp);
+    int32_t sp = this->stack_pointer->GetEmbeddedInteger();
+    this->stack_pointer->SetEmbeddedInteger(sp-1);
     return this->GetIndexableField(sp);
 }
 
 void      VMFrame::Push(VMObject* obj)
 {
-    int32_t sp = this->stack_pointer->GetEmbeddedInteger();
-    this->stack_pointer->SetEmbeddedInteger(sp+1);
+    int32_t sp = this->stack_pointer->GetEmbeddedInteger() + 1;
+    this->stack_pointer->SetEmbeddedInteger(sp);
     this->SetIndexableField(sp, obj);
 }
 

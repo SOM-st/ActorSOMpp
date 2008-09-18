@@ -65,7 +65,7 @@ int8_t MethodGenerationContext::find_literal_index(VMObject* lit) {//pVMObject l
 
 bool MethodGenerationContext::find_var(const pString& var, int* index, int* context, bool* is_argument) {
 	if((*index = locals.IndexOf( var)) == -1) {//SEND(mgenc->locals, IndexOfString, var)) == -1) {
-        if((*index = locals.IndexOf( var)) == -1) {
+        if((*index = arguments.IndexOf( var)) == -1) {
             if(!outer_genc)
                 return false;
             else {

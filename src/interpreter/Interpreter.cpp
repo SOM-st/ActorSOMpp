@@ -42,7 +42,7 @@ void Interpreter::Start()
         int next_bytecode_index = bytecode_index + bytecode_length;
 
         _FRAME->SetBytecodeIndex(next_bytecode_index);
-        cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) << endl;
+        //cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) << endl;
 // Handle the current bytecode
         switch(bytecode) {
             case BC_HALT:             return; // handle the halt bytecode
@@ -269,7 +269,7 @@ void Interpreter::do_send( int bytecode_index )
     }
     int num_of_args = Signature::GetNumberOfArguments(signature);
 
-    VMObject* receiver = _FRAME->GetStackElement(num_of_args - 1);
+    VMObject* receiver = _FRAME->GetStackElement(num_of_args-1);
 
     this->send(signature, receiver->GetClass());
 }

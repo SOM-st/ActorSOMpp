@@ -19,31 +19,31 @@
 
 // Here we go:
 // externally refenced variables:
-VMObject* nil_object;
-VMObject* true_object;
-VMObject* false_object;
+VMObject* nil_object = NULL;
+VMObject* true_object = NULL;
+VMObject* false_object = NULL;
 
-VMClass* object_class;
-VMClass* class_class;
-VMClass* metaclass_class;
+VMClass* object_class = NULL;
+VMClass* class_class = NULL;
+VMClass* metaclass_class = NULL;
 
-VMClass* nil_class;
-VMClass* integer_class;
-VMClass* biginteger_class;
-VMClass* array_class;
-VMClass* method_class;
-VMClass* symbol_class;
-VMClass* frame_class;
-VMClass* primitive_class;
-VMClass* string_class;
-VMClass* system_class;
-VMClass* block_class;
-VMClass* double_class;
+VMClass* nil_class = NULL;
+VMClass* integer_class = NULL;
+VMClass* biginteger_class = NULL;
+VMClass* array_class = NULL;
+VMClass* method_class = NULL;
+VMClass* symbol_class = NULL;
+VMClass* frame_class = NULL;
+VMClass* primitive_class = NULL;
+VMClass* string_class = NULL;
+VMClass* system_class = NULL;
+VMClass* block_class = NULL;
+VMClass* double_class = NULL;
 
 short dump_bytecodes;
 short gc_verbosity;
 
-Universe* Universe::theUniverse;
+Universe* Universe::theUniverse = NULL;
 
 //Singleton accessor
 Universe* Universe::GetUniverse()
