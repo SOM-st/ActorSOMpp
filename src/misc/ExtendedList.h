@@ -5,6 +5,11 @@
 #include <list>
 #include <memory>
 #include <iterator>
+#include <iostream>
+
+using namespace std;
+
+
 
 template <class T>
 class ExtendedList{
@@ -20,9 +25,17 @@ public:
 	int Size();
 	T get(int index);
 	int IndexOf(const T& needle);
+    typedef typename list<T>::iterator iterator_t;
+    typedef typename list<T>::const_iterator const_iterator_t;
+    iterator_t begin() // changed return type to above typedefs
+    {
+        return theList.begin();
+    }
+    // implement for const objects...
+    const_iterator_t begin() const { return theList.begin(); }
 
 private:
-	std::list<T> theList;
+	list<T> theList;
 };
 
 
@@ -65,7 +78,7 @@ void ExtendedList<T>::Clear()
 template <class T>
 T ExtendedList<T>::get(int index)
 {
-    for (std::list<T>::iterator it = theList.begin(); it!=theList.end(); ++it){
+    for (iterator_t it = theList.begin(); it!=theList.end(); ++it){
 		if (index == 0) return *it;
 		--index;
 	}
@@ -80,7 +93,7 @@ int ExtendedList<T>::Size()
 
 template <class T>
 int ExtendedList<T>::IndexOf(const T& needle) {
-    for (std::list<T>::iterator it = theList.begin(); it!=theList.end(); ++it) {
+    for (iterator_t it = theList.begin(); it!=theList.end(); ++it) {
 		if (*it == needle) 
             return distance(theList.begin(), it);
 		//cout << *it << endl;

@@ -23,12 +23,13 @@ VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(4)//,VMObject()
     this->routine = NULL;
     *(this->empty) = false;
 }
-
-VMPrimitive::~VMPrimitive()
-{
-    _HEAP->Free(empty, sizeof(bool));
-    if (routine != NULL) Core::destroy(routine);
-}
+//TODO: this is a memory leak. The empty flag is not freed and the routine is not destroyed
+//, but G++ doesn't like the destructor of VMObject classes
+//VMPrimitive::~VMPrimitive(Heap* heap)
+//{
+//    _HEAP->Free(empty, sizeof(bool));
+//    if (routine != NULL) Core::destroy(routine);
+//}
 
 bool VMPrimitive::IsEmpty()
 {

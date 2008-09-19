@@ -20,6 +20,6 @@ void VMBigInteger::SetEmbeddedInteger(int64_t val)
     this->embeddedInteger = val;
 }
 
-VMBigInteger::~VMBigInteger()
-{
-}
+//VMBigInteger::~VMBigInteger()
+//{
+//}

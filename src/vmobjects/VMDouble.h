@@ -10,7 +10,7 @@ class VMDouble : public VMObject
 public:
     VMDouble();
     VMDouble(double);
-    virtual ~VMDouble();
+    //virtual ~VMDouble();
     void SetEmbeddedDouble(double);
     double GetEmbeddedDouble();
 private:

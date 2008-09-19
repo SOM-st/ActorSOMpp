@@ -73,7 +73,7 @@ void Shell::Start()
         inp = pString(inbuf);
 
         if (inp.length() == 0) continue;
-        if (inp == pString(QUIT_CMD)) return;
+        //if (inp == pString(QUIT_CMD)) return;
         //do {
         //    if(!feof(stdin))
         //        SEND(inp, concatChar, fgetc(stdin));

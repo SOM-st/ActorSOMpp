@@ -20,6 +20,6 @@ int32_t VMInteger::GetEmbeddedInteger()
     return this->embeddedInteger;
 }
 
-VMInteger::~VMInteger()
-{
-}
+//VMInteger::~VMInteger()
+//{
+//}

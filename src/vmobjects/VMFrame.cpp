@@ -14,10 +14,10 @@ VMFrame::VMFrame(int size, int nof) : VMArray(size, FRAME_NUMBER_OF_FIELDS)
     this->bytecode_index = new (_HEAP) VMInteger(0);
     this->stack_pointer = new (_HEAP) VMInteger(0);
 }
-
-VMFrame::~VMFrame()
-{
-}
+//
+//VMFrame::~VMFrame()
+//{
+//}
 
 VMFrame* VMFrame::GetPreviousFrame()
 {

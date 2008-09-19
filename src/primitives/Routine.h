@@ -24,4 +24,4 @@
       virtual void Call(VMObject* obj, VMFrame* frm)
         { (*pt2Object.*fpt)(obj, frm);};             // execute member function
    };
-#endif;
+#endif

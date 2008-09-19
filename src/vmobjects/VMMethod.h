@@ -17,7 +17,7 @@ class VMMethod :  public VMInvokable{//public VMArray,
 public:
 	VMMethod(int bc_count, int number_of_constants, int nof = 0);
    // VMMethod(MethodGenerationContext* mgenc);
-	virtual ~VMMethod();
+	//virtual ~VMMethod();
     virtual int       get_number_of_locals();
     virtual void      set_number_of_locals(int nol);
     virtual int       get_maximum_number_of_stack_elements();

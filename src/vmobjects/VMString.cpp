@@ -85,5 +85,5 @@ int VMString::getObjectSize()
 	return objectSize;// + chars.size();
 }
 
-VMString::~VMString() {}
+//VMString::~VMString() {}
 

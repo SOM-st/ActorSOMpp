@@ -35,7 +35,10 @@ bool VMClass::has_super_class()
 bool VMClass::add_instance_invokable(VMObject *ptr)
 {
     VMInvokable* newInvokable = dynamic_cast<VMInvokable*>(ptr);
-    if (newInvokable == NULL) throw std::bad_typeid("Trying to add non-invokable to invokables array");
+    if (newInvokable == NULL) {
+        cout << "Error: trying to add non-invokable to invokables array" << endl;
+        throw std::bad_typeid();//("Trying to add non-invokable to invokables array");
+    }
 	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i)
 	{
         VMInvokable* inv = dynamic_cast<VMInvokable*>( instance_invokables->GetIndexableField(i) );
@@ -50,7 +53,8 @@ bool VMClass::add_instance_invokable(VMObject *ptr)
 			//	  return false;
 			//}
         } else {
-            throw std::bad_typeid("Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
+            cout << "Invokables array corrupted. Either NULL pointer added or pointer to non-invokable." << endl;
+            throw std::bad_typeid();//"Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
         }
 	}
 	if (instance_invokables->GetNumberOfIndexableFields() >= instance_invokables->GetArraySize())

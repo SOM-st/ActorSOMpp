@@ -11,7 +11,7 @@ class VMInteger : public VMObject
 public:
     VMInteger();
     VMInteger(int32_t);
-    virtual ~VMInteger();
+    //virtual ~VMInteger();
     void SetEmbeddedInteger(int32_t);
     int32_t GetEmbeddedInteger();
 

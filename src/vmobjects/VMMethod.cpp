@@ -126,5 +126,5 @@ void VMMethod::set_bytecode(int indx, uint8_t val)
     _BC[indx] = val;
 }
 
-VMMethod::~VMMethod() {}
+//VMMethod::~VMMethod() {}
 

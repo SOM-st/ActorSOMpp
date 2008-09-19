@@ -12,7 +12,7 @@ class VMPrimitive : public VMInvokable //public VMObject,
 {
 public:
     VMPrimitive(VMSymbol* sig);
-    virtual ~VMPrimitive();
+    //virtual ~VMPrimitive();
     virtual bool is_primitive() { return true; };
     virtual void invoke(VMFrame*);
     virtual bool IsEmpty();

@@ -78,7 +78,7 @@ vector<pString> Universe::handle_arguments( int* vm_argc, int argc, char** argv 
             (strncmp(argv[i], "--help", 6) == 0)) {
                 print_usage_and_exit(argv[0]);
         } else {
-            vector<pString> ext_path_tokens = vector<pString>();
+            vector<pString> ext_path_tokens = vector<pString>(2);
             pString tmp_string = pString(argv[i]);
             if (this->get_path_class_ext(ext_path_tokens, tmp_string) == ERR_SUCCESS)
             {
@@ -297,7 +297,7 @@ void Universe::initialize(int _argc, char** _argv)
     bootstrap_method->set_holder(system_class);
     cout << "Cheer!!! We can start the Interpreter now!" << endl;
 
-    if (true) {
+    if (argc == 0) {
         Shell* shell = new Shell(bootstrap_method);
         shell->Start();
         return;
@@ -403,7 +403,7 @@ Universe::~Universe()
 }
 
 
-void Universe::assert( bool value)
+void Universe::Assert( bool value)
 {
     if (!value) {
         cout << "Assertion failed" << endl;
@@ -419,7 +419,7 @@ VMClass* Universe::get_block_class()
 
 VMClass* Universe::get_block_class_with_args( int number_of_arguments)
 {
-    this->assert(number_of_arguments < 10);
+    this->Assert(number_of_arguments < 10);
 
     ostringstream Str;
     Str << "Block" << number_of_arguments ;

@@ -15,9 +15,9 @@ VMArray::VMArray(int size, int nof) : VMObject(nof+2)
 
 
 
-VMArray::~VMArray()
-{
-}
+//VMArray::~VMArray()
+//{
+//}
 //
 //void VMArray::ResetEntriesPointer()
 //{
@@ -79,7 +79,7 @@ int VMArray::GetNumberOfIndexableFields()
 
 int VMArray::SetIndexableField(VMObject* item)
 {
-	if (size <= entries) throw std::bad_exception();
+	if (size->GetEmbeddedInteger() <= entries->GetEmbeddedInteger()) throw std::bad_exception();
 	for (int i = 0; i < size->GetEmbeddedInteger(); ++i)
 	{
 		if (theEntries(i) == NULL)

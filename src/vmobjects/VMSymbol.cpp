@@ -97,7 +97,7 @@ pString VMSymbol::GetPlainString()
             case ' ':
                 SEND(self->plain_string, concatChar, '_';
                 break;
-        #endif EXPERIMENTAL
+        #endif
             default:
                 if (c != 0)
                     plain_string += c;

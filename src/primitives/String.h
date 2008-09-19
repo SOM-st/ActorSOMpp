@@ -47,3 +47,4 @@ public:
 extern _String* String;
 
 #endif CORE_STRING_H_
+

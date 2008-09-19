@@ -20,6 +20,6 @@ double VMDouble::GetEmbeddedDouble()
     return this->embeddedDouble;
 }
 
-VMDouble::~VMDouble()
-{
-}
+//VMDouble::~VMDouble()
+//{
+//}

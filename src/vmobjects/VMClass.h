@@ -17,7 +17,7 @@ class VMClass : public VMObject{
 public:
 	VMClass();
     VMClass(int number_of_fields);
-	virtual ~VMClass() {}
+	//virtual ~VMClass() {}
 
 	virtual VMClass*  get_super_class(); 
     virtual void      set_super_class(VMClass*); 

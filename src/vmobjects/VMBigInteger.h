@@ -10,7 +10,7 @@ class VMBigInteger : public VMObject
 public:
     VMBigInteger();
     VMBigInteger(int64_t);
-    virtual ~VMBigInteger();
+    //virtual ~VMBigInteger();
 
     void SetEmbeddedInteger(int64_t);
     int64_t GetEmbeddedInteger();

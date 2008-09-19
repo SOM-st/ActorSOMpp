@@ -12,9 +12,9 @@ VMBlock::VMBlock() : VMObject(2)
      context = NULL;
 }
 
-VMBlock::~VMBlock()
-{
-}
+//VMBlock::~VMBlock()
+//{
+//}
 
 void VMBlock::MarkReferences()
 {

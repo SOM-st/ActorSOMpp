@@ -123,8 +123,8 @@ bool Parser::expect(Symbol s) {
     fprintf(stderr, "Error: unexpected symbol. Expected %s, but found %s", 
             symnames[s], symnames[sym]);
     if(_PRINTABLE_SYM)
-        fprintf(stderr, " (%s)", text);
-	fprintf(stderr, ": %s\n", lexer->getrawbuffer());
+        fprintf(stderr, " (%s)", text.c_str());
+	fprintf(stderr, ": %s\n", lexer->getrawbuffer().c_str());
     return false;
 }
 
@@ -137,8 +137,8 @@ bool Parser::expectOneOf(Symbol* ss) {
         fprintf(stderr, "%s, ", symnames[*ss++]);
     fprintf(stderr, "but found %s", symnames[sym]);
     if(_PRINTABLE_SYM)
-        fprintf(stderr, " (%s)", text);
-	fprintf(stderr, ": %s\n", lexer->getrawbuffer());
+        fprintf(stderr, " (%s)", text.c_str());
+	fprintf(stderr, ": %s\n", lexer->getrawbuffer().c_str());
     return false;
 }
 
@@ -771,7 +771,7 @@ void Parser::literalSymbol(MethodGenerationContext* mgenc) {
     VMSymbol* symb;
     expect(Pound);
     if(sym == STString) {
-        pString s = string();
+        pString s = _string();
         symb = _UNIVERSE->symbol_for(s);
         //SEND(s, free);
     } else
@@ -784,7 +784,7 @@ void Parser::literalSymbol(MethodGenerationContext* mgenc) {
 
 
 void Parser::literalString(MethodGenerationContext* mgenc) {
-    pString s = string();
+    pString s = _string();
 	
     VMString* str = _UNIVERSE->new_string(s);
     mgenc->add_literal_if_absent((VMObject*)str);
@@ -815,7 +815,7 @@ VMSymbol* Parser::keywordSelector(void) {
 }
 
 
-pString Parser::string(void) {
+pString Parser::_string(void) {
     pString s(text); 
     expect(STString);    
     return s; // <-- Literal strings are At Most BUFSIZ chars long.

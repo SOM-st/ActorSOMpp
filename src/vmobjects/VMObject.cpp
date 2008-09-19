@@ -18,7 +18,7 @@ VMObject::VMObject( int number_of_fields )
 	objectSize = sizeof(VMObject) + number_of_fields*sizeof(VMObject*);//sizeof(VMObject) includes the space for the clazz field
 }
 
-VMObject::~VMObject() {}
+//VMObject::~VMObject() {}
 
 VMClass* VMObject::GetClass()
 {
@@ -78,7 +78,7 @@ void VMObject::Send(pString selector_string, VMObject** arguments, int argc)
 
 void VMObject::Assert(bool value)
 {
-    _UNIVERSE->assert(value);
+    _UNIVERSE->Assert(value);
 }
 
 VMObject* VMObject::GetField(int index)

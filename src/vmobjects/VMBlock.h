@@ -12,7 +12,7 @@ class VMBlock : public VMObject
 {
 public:
     VMBlock();
-    virtual ~VMBlock();
+    //virtual ~VMBlock();
     virtual void MarkReferences();
     void SetMethod(VMMethod*);
     VMMethod* GetMethod();

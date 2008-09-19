@@ -4,6 +4,7 @@
 #include "../vmobjects/VMSymbol.h"
 #include "Heap.h"
 #include <vector>
+#include <map>
 #include "../misc/SymbolCompare.h"
 
 GarbageCollector::GarbageCollector(Heap* h)

@@ -255,10 +255,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\misc\HashMap.h"
-			>
-		</File>
-		<File
 			RelativePath=".\src\memory\Heap.cpp"
 			>
 		</File>

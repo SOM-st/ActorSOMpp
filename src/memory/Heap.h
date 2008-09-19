@@ -7,7 +7,7 @@
 
 #include "GarbageCollector.h"
 #include "../misc/defs.h"
-#include "../misc/HashMap.h"
+//#include "../misc/HashMap.h"
 
 struct free_list_entry {
     free_list_entry* next;

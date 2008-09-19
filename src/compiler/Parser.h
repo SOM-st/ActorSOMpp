@@ -107,7 +107,7 @@ private:
 	void literalString(MethodGenerationContext* mgenc);
 	VMSymbol* selector(void);
 	VMSymbol* keywordSelector(void);
-	pString string(void);
+	pString _string(void);
 	void nestedBlock(MethodGenerationContext* mgenc);
 	void blockPattern(MethodGenerationContext* mgenc);
 	void blockArguments(MethodGenerationContext* mgenc);

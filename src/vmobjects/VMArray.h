@@ -11,7 +11,7 @@ class VMArray : public VMObject
 {
 public:
     VMArray(int size, int nof = 0);
-	virtual ~VMArray();
+	//virtual ~VMArray();
 	virtual void MarkReferences();
 	void SetIndexableField(int idx, VMObject* item);
 	int SetIndexableField(VMObject* item);

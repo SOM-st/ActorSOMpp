@@ -19,6 +19,15 @@ public:
 	{
 		return theVector[key];
 	}
+    
+    typedef typename vector<T>::iterator iterator_t;
+    typedef typename vector<T>::const_iterator const_iterator_t;
+    iterator_t begin() // changed return type to above typedefs
+    {
+        return theVector.begin();
+    }
+    // implement for const objects...
+    const_iterator_t begin() const { return theVector.begin(); }
 
 private:
 	vector<T> theVector;
@@ -58,7 +67,7 @@ int ExtendedVector<T>::Size()
 
 template <class T>
 int ExtendedVector<T>::IndexOf(const T& needle) {
-	for (vector<T>::iterator it = theVector.begin(); it!=theVector.end(); ++it) {
+	for (iterator_t it = theVector.begin(); it!=theVector.end(); ++it) {
 		if (*it == needle) return distance(theVector.begin(), it);
 		//cout << *it << endl;
 	}

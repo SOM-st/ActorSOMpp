@@ -6,6 +6,7 @@
 //#include <map>
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
+#include <map>
 //#include "../vmobjects/VMObject.h"
 //#include "../vmobjects/VMSymbol.h"
 class VMObject;
@@ -71,7 +72,7 @@ public:
 
     //
 
-    void          assert(bool);
+    void          Assert(bool);
 
     VMSymbol*     symbol_for(const pString&);
     VMSymbol*     symbol_for_chars(const char*);

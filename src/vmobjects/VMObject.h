@@ -16,7 +16,7 @@ class VMObject{
 public:
 	//VMObject();
     VMObject(int number_of_fields = 0);
-	virtual ~VMObject();
+	//virtual ~VMObject();
 
 	virtual VMClass* GetClass();
 	virtual void SetClass(VMClass* cl);

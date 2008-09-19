@@ -16,9 +16,9 @@ VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSign
     this->numberOfArguments = _UNIVERSE->new_integer(argc);
 }
 
-VMEvaluationPrimitive::~VMEvaluationPrimitive()
-{
-}
+//VMEvaluationPrimitive::~VMEvaluationPrimitive()
+//{
+//}
 
 void VMEvaluationPrimitive::MarkReferences()
 {

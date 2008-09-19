@@ -1,3 +1,4 @@
+
 #pragma once
 #ifndef VMSTRING_H_
 #define VMSTRING_H_
@@ -23,7 +24,7 @@ public:
 	VMString( const char* str, size_type length );
 	VMString( const string& str, size_type index, size_type length );*/
 
-	virtual ~VMString();
+	//virtual ~VMString();
 	virtual int getObjectSize();
 	char* GetChars();
 	std::string GetStdString();

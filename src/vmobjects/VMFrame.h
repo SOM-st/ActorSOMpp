@@ -12,7 +12,7 @@ class VMFrame : public VMArray
 {
 public:
     VMFrame(int size, int nof = 0);
-    virtual ~VMFrame();
+    //virtual ~VMFrame();
 
     virtual VMFrame  *GetPreviousFrame();
     virtual void     SetPreviousFrame(VMObject*);
