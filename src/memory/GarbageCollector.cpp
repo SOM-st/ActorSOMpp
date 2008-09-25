@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include "../misc/SymbolCompare.h"
+#include <string.h>
 
 GarbageCollector::GarbageCollector(Heap* h)
 {

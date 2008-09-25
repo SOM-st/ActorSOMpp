@@ -49,4 +49,4 @@ public:
 
 extern _Double* Double;
 
-#endif CORE_DOUBLE_H_
+#endif

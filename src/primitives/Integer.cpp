@@ -156,7 +156,7 @@ void  _Integer::Star(VMObject* object, VMFrame* frame) {
     // Do operation:
     VMInteger* right = (VMInteger*)rightObj;
     
-    int64_t result = (int64_t)left->GetEmbeddedInteger() + 
+    int64_t result = (int64_t)left->GetEmbeddedInteger() * 
         (int64_t)right->GetEmbeddedInteger();
     pushResult(object, frame, result); 
 }

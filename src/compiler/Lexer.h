@@ -37,7 +37,7 @@ typedef enum {
     Primitive, Separator, STString, Identifier, Keyword, KeywordSequence,
     OperatorSequence
 } Symbol;
-static char* symnames[] = {
+static const char* symnames[] = {
     "NONE", "Integer", "Not", "And", "Or", "Star", "Div", "Mod", "Plus",
     "Minus", "Equal", "More", "Less", "Comma", "At", "Per", "NewBlock",
     "EndBlock", "Colon", "Period", "Exit", "Assign", "NewTerm", "EndTerm",

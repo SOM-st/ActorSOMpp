@@ -1,5 +1,6 @@
 #include "SymbolCompare.h"
 #include "../vmobjects/VMString.h"
+#include <string.h>
 
 bool SymbolCompare::operator()(  VMString* s1,  VMString* s2 ) const {
         int minStrLength = s1->GetStringLength() < s2->GetStringLength() ?

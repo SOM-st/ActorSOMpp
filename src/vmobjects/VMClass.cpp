@@ -4,6 +4,7 @@
 #include "VMInvokable.h"
 #include "VMPrimitive.h"
 #include <fstream>
+#include <typeinfo>
 
 /*
  * Format definitions for Primitive naming scheme.

@@ -53,7 +53,7 @@ private:
 };
 
 extern _System* System_;
-#endif CORE_SYSTEM_H_
+#endif
 
 
 

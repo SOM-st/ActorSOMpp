@@ -16,6 +16,8 @@
 #include "../vmobjects/Symboltable.h"
 #include "../interpreter/bytecodes.h"
 #include <sstream> 
+#include <string.h>
+#include <stdlib.h>
 
 // Here we go:
 // externally refenced variables:

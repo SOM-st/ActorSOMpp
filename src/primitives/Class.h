@@ -35,10 +35,10 @@ class VMFrame;
 class _Class : Primitive
 {
 public:
-    void  _Class::New(VMObject* object, VMFrame* frame);
+    void  New(VMObject* object, VMFrame* frame);
 };
 
 extern _Class* Class;
 
 
-#endif CORE_CLASS_H_
+#endif

@@ -1,6 +1,7 @@
 #include "Heap.h"
 #include <iostream>
 #include <stdlib.h>
+#include <string.h>
 
 
 Heap::Heap(int object_space_size)// : globals(INT32_MAX)

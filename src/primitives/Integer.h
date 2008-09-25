@@ -66,4 +66,4 @@ private:
 
 extern _Integer* Integer;
 
-#endif CORE_INTEGER_H_
+#endif

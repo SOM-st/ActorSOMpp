@@ -35,7 +35,8 @@ THE SOFTWARE.
 #include "BytecodeGenerator.h"
 #include "../vmobjects/VMSymbol.h"
 #include "../vm/Universe.h"
-//#include <string>
+#include <stdlib.h>
+#include <string.h>
 //#include <memory/gc.h>
 //#include <vmobjects/VMString.h>
 

@@ -40,7 +40,7 @@ public:
 
 extern _Symbol* Symbol;
 
-#endif CORE_SYMBOL_H_
+#endif
 
 
 

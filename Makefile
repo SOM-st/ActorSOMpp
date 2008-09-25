@@ -39,7 +39,7 @@ export TEST_DIR	=$(ROOT_DIR)/TestSuite
 
 ifeq ($(OS),)
 # only Windows has OS predefined. for now only windows works
-#	UNAME		:= $(shell uname -s)
+	UNAME		:= $(shell uname -s)
 else
 	UNAME		:=windows
 endif

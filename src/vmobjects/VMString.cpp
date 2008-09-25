@@ -1,5 +1,6 @@
 #include "VMString.h"
 #include "VMInteger.h"
+#include <string.h>
 
 VMString::VMString() : VMObject(1)//, std::string()
 {

@@ -1,5 +1,5 @@
 #include "Lexer.h"
-
+#include <string.h>
 
 Lexer::Lexer(istream &file) : infile(file) {
 	peekDone = false;

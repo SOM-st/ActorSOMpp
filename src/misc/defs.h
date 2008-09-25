@@ -56,8 +56,8 @@ class VMObject;
 // macro for freeing an array
 //
 using namespace std;
-#define path_separator '\\'
-#define file_separator '\\'
+#define path_separator '/'
+#define file_separator '/'
 
 //typedef int MethodGenerationContext;
 //typedef int class_generation_context;

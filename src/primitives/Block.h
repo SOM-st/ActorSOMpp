@@ -43,4 +43,4 @@ public:
 
 extern _Block* Block;
 
-#endif CORE_BLOCK_H_
+#endif

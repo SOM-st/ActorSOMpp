@@ -51,7 +51,7 @@ public:
 };
 
 extern _BigInteger* BigInteger;
-#endif CORE_BIGINTEGER_H_
+#endif
 
 
 

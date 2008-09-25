@@ -42,4 +42,4 @@ void  Hashcode(VMObject* object, VMFrame* frame);
 
 extern _Object* Object;
 
-#endif CORE_OBJECT_H_
+#endif
