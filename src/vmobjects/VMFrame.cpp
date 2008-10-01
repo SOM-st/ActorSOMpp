@@ -84,6 +84,7 @@ VMFrame* VMFrame::GetOuterContext()
 
 VMMethod* VMFrame::GetMethod()
 {
+  
     return this->method;
 }
 
@@ -164,6 +165,11 @@ void      VMFrame::SetLocal(int index, int contextLevel, VMObject* value)
     VMFrame* context = this->GetContextLevel(contextLevel);
     size_t lo = context->local_offset->GetEmbeddedInteger();
     context->SetIndexableField(lo+index, value);
+}
+
+VMInteger* VMFrame::GetStackPointer()
+{
+    return stack_pointer;
 }
 
 VMObject* VMFrame::GetArgument(int index, int contextLevel)

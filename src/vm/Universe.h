@@ -53,7 +53,7 @@ extern VMClass* double_class;
 
 // for runtime debug
 extern short dump_bytecodes;
-
+extern short gc_verbosity;
 
 using namespace std;
 class Universe
@@ -106,7 +106,6 @@ public:
     void         load_system_class(VMClass*);
     VMClass*      load_class_basic(VMSymbol*, VMClass*);
     VMClass*      load_shell_class(pString&);
-
     
     //
 private:
@@ -126,7 +125,7 @@ private:
 
     Universe();
 	~Universe();
-
+    
 	Heap *heap;
     int heapSize;
 	map<VMSymbol*, VMObject*, SymbolCompare> globals;

@@ -81,7 +81,7 @@ void VMMethod::SetLiteral(int index, VMObject* object)
     int fieldIndex = this->GetNumberOfFields() + 1 + index;
     cout << "SetLiteral: " << index << "(" << fieldIndex << ")" << endl;
     cout << "with: " << object->GetClass()->get_name()->GetStdString() << endl;
-    if (this->GetField(fieldIndex) == NULL)
+    //if (this->GetField(fieldIndex) == NULL)
         this->number_of_literals->SetEmbeddedInteger(number_of_literals->GetEmbeddedInteger()+1);
     this->SetField(fieldIndex, object);
 }
@@ -113,6 +113,10 @@ VMObject* VMMethod::get_constant(int indx)
 {
     //VMArray* 
     uint8_t bc = _BC[indx+1];
+    cout << "Get Constant at: " << bc  <<  " of "<< this->number_of_literals->GetEmbeddedInteger() << endl;
+    if (bc >= this->number_of_literals->GetEmbeddedInteger()) {
+        return NULL;
+    }
     return this->GetLiteral(bc);
 }
 
@@ -121,9 +125,23 @@ uint8_t VMMethod::get_bytecode(int indx)
     return _BC[indx];
 }
 
+int VMMethod::BytecodeLength() 
+{
+    return this->bc_length->GetEmbeddedInteger();
+}
+
 void VMMethod::set_bytecode(int indx, uint8_t val)
 {
+    //for some reason this seems to overwrite bc_length in some cases.... wtf?
+    //example: in DoesNotUnderstand:argument:, there are 27 bytecodes. When setting _BC[25] = 0
+    //the bc_length variable resets its embedded integer to 0!?
+    int bl = bc_length->GetEmbeddedInteger();
     _BC[indx] = val;
+    if (bc_length->GetEmbeddedInteger() != bl) {
+        cout << "WTF? bc_length has changed:" << endl << "wrote "<<val<<" to index "<<indx<<"("<<_BC[indx]<<")" <<endl;
+       cout << "bc_length changed from "<< bl << " to " << bc_length->GetEmbeddedInteger();
+       bc_length->SetEmbeddedInteger(bl);
+    }
 }
 
 //VMMethod::~VMMethod() {}

@@ -34,8 +34,12 @@ public:
 	virtual void MarkReferences();
     virtual void SetLiteral(int index, VMObject* o);
 	virtual VMObject* GetLiteral(int index);
+
+    virtual int BytecodeLength();
+//protected:
+//    virtual uint8_t* calculateBytecodeStart();
 private:
-    uint8_t* calculateBytecodeStart();
+    
     VMInteger* number_of_literals;
     VMInteger* number_of_locals;
     VMInteger* maximum_number_of_stack_elements;

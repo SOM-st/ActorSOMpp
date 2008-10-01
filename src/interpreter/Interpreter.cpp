@@ -8,7 +8,7 @@
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMInvokable.h"
 #include "../vmobjects/Signature.h"
-
+#include "../compiler/Disassembler.h"
 // convenience macros for frequently used function invocations
 #define _FRAME this->GetFrame()
 #define _SETFRAME(f) this->SetFrame(f)
@@ -39,10 +39,13 @@ void Interpreter::Start()
 
         int bytecode_length = Bytecode::GetBytecodeLength(bytecode);
 
+        if(dump_bytecodes >1)
+            Disassembler::DumpBytecode(_FRAME, method, bytecode_index);
+
         int next_bytecode_index = bytecode_index + bytecode_length;
 
         _FRAME->SetBytecodeIndex(next_bytecode_index);
-        //cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) << endl;
+        cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) << endl;
 // Handle the current bytecode
         switch(bytecode) {
             case BC_HALT:             return; // handle the halt bytecode
@@ -85,7 +88,13 @@ VMFrame* Interpreter::GetFrame()
 
 VMMethod* Interpreter::GetMethod()
 {
-    return _FRAME->GetMethod();
+    VMMethod* method = _FRAME->GetMethod();
+      for (int i = 0; i < method->BytecodeLength(); ++i)
+    {
+        printf("%d ", method->get_bytecode(i));
+    }
+    printf("\n");
+    return method;
 }
 
 VMObject* Interpreter::GetSelf()
@@ -263,14 +272,14 @@ void Interpreter::do_send( int bytecode_index )
     VMMethod* method = _METHOD;
     
     VMSymbol* signature = (VMSymbol*) method->get_constant(bytecode_index);
-    if (bytecode_index >= 13)
+    if (true)//(bytecode_index >= 13)
     {
-        cout << signature->GetChars() << "\n";
+       // cout << "sig: " << signature->GetChars() << endl;
     }
     int num_of_args = Signature::GetNumberOfArguments(signature);
 
     VMObject* receiver = _FRAME->GetStackElement(num_of_args-1);
-
+    //cout << "rec: " << receiver->GetClass()->get_name()->GetChars() << endl;
     this->send(signature, receiver->GetClass());
 }
 

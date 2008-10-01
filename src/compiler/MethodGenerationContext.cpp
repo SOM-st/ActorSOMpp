@@ -22,8 +22,16 @@ MethodGenerationContext::MethodGenerationContext() {
 
 VMMethod* MethodGenerationContext::Assemble()
 {
+    if (this->signature->GetStdString() == pString("doesNotUnderstand:arguments:"))
+    {
+        cout << "hier: " << endl;
+    }
     // create a method instance with the given number of bytecodes and literals
     int num_literals = this->literals.Size();
+    if (num_literals > 0)
+    {
+        cout << "hier2" << endl;
+    }
     VMMethod* meth = _UNIVERSE->new_method(this->signature, bp, num_literals);
     
     // populate the fields that are immediately available
@@ -43,6 +51,10 @@ VMMethod* MethodGenerationContext::Assemble()
     cout << "bcs ";
     // copy bytecodes into method
     for(size_t i = 0; i < bp; i++){
+        if (i == 25)
+        {
+            cout << "bla";
+        }
         meth->set_bytecode(i, bytecode[i]);
         cout << bytecode[i] << " ";}
     cout << endl;

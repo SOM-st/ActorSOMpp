@@ -18,7 +18,7 @@
 #include <sstream> 
 #include <string.h>
 #include <stdlib.h>
-
+#include "../compiler/Disassembler.h"
 // Here we go:
 // externally refenced variables:
 VMObject* nil_object = NULL;
@@ -61,7 +61,8 @@ vector<pString> Universe::handle_arguments( int* vm_argc, int argc, char** argv 
 
     vector<pString> vm_args = vector<pString>();
     *vm_argc = 0;
-    
+    dump_bytecodes = 0;
+    gc_verbosity = 0;
     for (int i = 1; i < argc ; ++i)
     {
         if (strncmp(argv[i], "-cp", 3) == 0) 
@@ -304,6 +305,11 @@ void Universe::initialize(int _argc, char** _argv)
         shell->Start();
         return;
     }
+
+    /* only trace bootstrap if the number of cmd-line "-d"s is > 2 */
+    int trace = 2 - dump_bytecodes;
+    if(!(trace > 0)) dump_bytecodes = 1;
+
     VMArray* arguments_array = _UNIVERSE->new_array_from_argv(argc, argv);
     
     VMFrame* bootstrap_frame = interpreter->PushNewFrame(bootstrap_method);
@@ -314,6 +320,9 @@ void Universe::initialize(int _argc, char** _argv)
         (VMInvokable*)system_class->lookup_invokable(this->symbol_for_chars("initialize:"));
     initialize->invoke(bootstrap_frame);
     
+    // reset "-d" indicator
+    if(!(trace>0)) dump_bytecodes = 2 - trace;
+
     interpreter->Start();
 
     //-----------------
@@ -519,7 +528,8 @@ VMClass* Universe::load_class_basic( VMSymbol* name, VMClass* system_class)
         result = compiler->compile_class(*i, name->GetStdString(), system_class);
         if (result) {
             if (dump_bytecodes) {
-
+                Disassembler::Dump(result->GetClass());
+                Disassembler::Dump(result);
             }
             return result;
         }
@@ -531,6 +541,8 @@ VMClass* Universe::load_class_basic( VMSymbol* name, VMClass* system_class)
 VMClass* Universe::load_shell_class( pString& stmt)
 {
     VMClass* result = compiler->compile_class_string(stmt, NULL);
+     if(dump_bytecodes)
+         Disassembler::Dump(result);
     return result;
 }
 
