@@ -219,7 +219,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\misc\debug.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\misc\defs.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\compiler\Disassembler.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\compiler\Disassembler.h"
 			>
 		</File>
 		<File

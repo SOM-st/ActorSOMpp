@@ -128,7 +128,7 @@ void      VMFrame::ResetStackPointer()
     // Set the stack pointer to its initial value thereby clearing the stack
     size_t num_lo = meth->get_number_of_locals();
     this->stack_pointer->SetEmbeddedInteger(lo + num_lo - 1);
-    cout << "lo: " << lo << ", num_lo: " << num_lo << ", sp: "<<(lo+num_lo-1)<<endl;
+    //cout << "lo: " << lo << ", num_lo: " << num_lo << ", sp: "<<(lo+num_lo-1)<<endl;
 }
 
 int       VMFrame::GetBytecodeIndex()

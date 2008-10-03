@@ -49,14 +49,16 @@ VMMethod* MethodGenerationContext::Assemble()
     
     cout << "bp: " << bp;
     cout << "bcs ";
+    if (bp == 40)
+        cout << "hier" << endl;
     // copy bytecodes into method
     for(size_t i = 0; i < bp; i++){
-        if (i == 25)
+        if (i == 31)
         {
             cout << "bla";
         }
         meth->set_bytecode(i, bytecode[i]);
-        cout << bytecode[i] << " ";}
+        cout << (int)bytecode[i] << " ";}
     cout << endl;
     // return the method - the holder field is to be set later on!
     return meth;

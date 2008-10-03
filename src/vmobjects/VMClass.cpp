@@ -160,9 +160,11 @@ VMObject* VMClass::lookup_invokable(VMSymbol* name)
 
 int       VMClass::lookup_field_index(VMSymbol* name)
 {
-    for (int i = get_number_of_instance_fields() - 1; i >= 0; --i)
+    for (int i = 0; i <=get_number_of_instance_fields(); ++i) //even with get_number_of_instance_fields == 0 there is the class field
     {
-        if (name == this->get_instance_field_name(i)) return i;
+        if (name == this->get_instance_field_name(i) ||
+            name->GetStdString() == this->get_instance_field_name(i)->GetStdString()) 
+                return i;
     }
 	return -1;
 }
@@ -170,7 +172,8 @@ int       VMClass::lookup_field_index(VMSymbol* name)
 
 int       VMClass::get_number_of_instance_fields()
 {
-	return instance_fields->GetNumberOfIndexableFields();
+	return instance_fields->GetNumberOfIndexableFields()
+           + this->numberOfSuperInstanceFields();
 }
 
 bool      VMClass::has_primitives()

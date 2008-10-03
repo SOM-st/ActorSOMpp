@@ -89,17 +89,18 @@ VMFrame* Interpreter::GetFrame()
 VMMethod* Interpreter::GetMethod()
 {
     VMMethod* method = _FRAME->GetMethod();
+    cout << "bytecodes: ";
       for (int i = 0; i < method->BytecodeLength(); ++i)
     {
-        printf("%d ", method->get_bytecode(i));
+        cout  << (int)method->get_bytecode(i)<< " ";
     }
-    printf("\n");
+    cout << endl;
     return method;
 }
 
 VMObject* Interpreter::GetSelf()
 {
-    VMFrame* context = _FRAME->GetContext();
+    VMFrame* context = _FRAME->GetOuterContext();//ups...
     return context->GetArgument(0,0);
 }
 
@@ -274,12 +275,12 @@ void Interpreter::do_send( int bytecode_index )
     VMSymbol* signature = (VMSymbol*) method->get_constant(bytecode_index);
     if (true)//(bytecode_index >= 13)
     {
-       // cout << "sig: " << signature->GetChars() << endl;
+        cout << "sig: " << signature->GetChars() << endl;
     }
     int num_of_args = Signature::GetNumberOfArguments(signature);
 
     VMObject* receiver = _FRAME->GetStackElement(num_of_args-1);
-    //cout << "rec: " << receiver->GetClass()->get_name()->GetChars() << endl;
+    cout << "rec("<<num_of_args-1<<"): " << receiver->GetClass()->get_name()->GetChars() << endl;
     this->send(signature, receiver->GetClass());
 }
 

@@ -79,8 +79,8 @@ size_t VMMethod::GetOffset()
 void VMMethod::SetLiteral(int index, VMObject* object)
 {
     int fieldIndex = this->GetNumberOfFields() + 1 + index;
-    cout << "SetLiteral: " << index << "(" << fieldIndex << ")" << endl;
-    cout << "with: " << object->GetClass()->get_name()->GetStdString() << endl;
+    //cout << "SetLiteral: " << index << "(" << fieldIndex << ")" << endl;
+    //cout << "with: " << object->GetClass()->get_name()->GetStdString() << endl;
     //if (this->GetField(fieldIndex) == NULL)
         this->number_of_literals->SetEmbeddedInteger(number_of_literals->GetEmbeddedInteger()+1);
     this->SetField(fieldIndex, object);
@@ -113,7 +113,7 @@ VMObject* VMMethod::get_constant(int indx)
 {
     //VMArray* 
     uint8_t bc = _BC[indx+1];
-    cout << "Get Constant at: " << bc  <<  " of "<< this->number_of_literals->GetEmbeddedInteger() << endl;
+    //cout << "Get Constant at: " << bc  <<  " of "<< this->number_of_literals->GetEmbeddedInteger() << endl;
     if (bc >= this->number_of_literals->GetEmbeddedInteger()) {
         return NULL;
     }
@@ -138,9 +138,10 @@ void VMMethod::set_bytecode(int indx, uint8_t val)
     int bl = bc_length->GetEmbeddedInteger();
     _BC[indx] = val;
     if (bc_length->GetEmbeddedInteger() != bl) {
+         cout << "bc_length changed from "<< bl << " to " << bc_length->GetEmbeddedInteger() << endl;
+        bc_length->SetEmbeddedInteger(bl);
         cout << "WTF? bc_length has changed:" << endl << "wrote "<<val<<" to index "<<indx<<"("<<_BC[indx]<<")" <<endl;
-       cout << "bc_length changed from "<< bl << " to " << bc_length->GetEmbeddedInteger();
-       bc_length->SetEmbeddedInteger(bl);
+      
     }
 }
 

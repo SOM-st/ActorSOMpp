@@ -834,7 +834,7 @@ void Parser::nestedBlock(MethodGenerationContext* mgenc) {
         blockPattern(mgenc);
     
     // generate Block signature
-    pString block_sig = BLOCK_METHOD_S;// String_new(BLOCK_METHOD_S);
+    pString block_sig = pString(BLOCK_METHOD_S);// String_new(BLOCK_METHOD_S);
 	size_t arg_size = mgenc->get_number_of_arguments();// SEND(mgenc->arguments, size);
     for(size_t i = 1; i < arg_size; i++)
 		block_sig += ":";//.append(':');
@@ -866,7 +866,7 @@ void Parser::blockArguments(MethodGenerationContext* mgenc) {
         expect(Colon);
 		mgenc->add_argument_if_absent(argument());
         //SEND(mgenc->arguments, addStringIfAbsent, argument());
-		argument();
+		//argument();
     } while(sym == Colon);
 }
 

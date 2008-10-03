@@ -103,6 +103,12 @@ void Disassembler::DumpMethod(VMMethod* method, const char* indent) {
         int max_stack = method->get_maximum_number_of_stack_elements();  
         debug_dump("%s<%d locals, %d stack, %d bc_count>\n", indent, locals, max_stack, method->get_number_of_bytecodes());
     }
+    cout << "bytecodes: ";
+      for (int i = 0; i < method->get_number_of_bytecodes(); ++i)
+    {
+        cout  << (int)method->get_bytecode(i)<< " ";
+    }
+    cout << endl;
     // output bytecodes
     for(int bc_idx = 0; 
         bc_idx < method->get_number_of_bytecodes(); 
@@ -141,6 +147,7 @@ void Disassembler::DumpMethod(VMMethod* method, const char* indent) {
                 char* nindent = new char[strlen(indent)+1+1];
                 debug_print("block: (index: %d) ", BC_1);
                 sprintf(nindent, "%s\t", indent);
+                
                 Disassembler::DumpMethod(
                     (VMMethod*)(method->get_constant(bc_idx)), nindent);
                 break;
