@@ -89,12 +89,12 @@ VMFrame* Interpreter::GetFrame()
 VMMethod* Interpreter::GetMethod()
 {
     VMMethod* method = _FRAME->GetMethod();
-    cout << "bytecodes: ";
+   /* cout << "bytecodes: ";
       for (int i = 0; i < method->BytecodeLength(); ++i)
     {
         cout  << (int)method->get_bytecode(i)<< " ";
     }
-    cout << endl;
+    cout << endl;*/
     return method;
 }
 

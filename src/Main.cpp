@@ -47,13 +47,14 @@ THE SOFTWARE.
 int main(int argc, char** argv) {
 
     cout << "This will be CppSOM.\n" << endl;
+
    // int vm_argc = 0;
    // pString* vm_argv = NULL;
 
    // Universe::handle_arguments(&vm_argc, argc, argv);
     Universe::start(argc, argv);
 
-    
+
 
     Universe::quit(ERR_SUCCESS);
 }

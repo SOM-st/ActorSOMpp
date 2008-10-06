@@ -10,6 +10,7 @@
 VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokable(nof + 5)//VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ),
 {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 4);
+    cout << "noc" << number_of_constants << endl;
 	objectSize += bc_count + number_of_constants*sizeof(VMObject*);
     bc_length = _UNIVERSE->new_integer( bc_count );
     number_of_literals = _UNIVERSE->new_integer(0);
@@ -135,13 +136,16 @@ void VMMethod::set_bytecode(int indx, uint8_t val)
     //for some reason this seems to overwrite bc_length in some cases.... wtf?
     //example: in DoesNotUnderstand:argument:, there are 27 bytecodes. When setting _BC[25] = 0
     //the bc_length variable resets its embedded integer to 0!?
+    //happens with VS 2008 and VS 2005
     int bl = bc_length->GetEmbeddedInteger();
     _BC[indx] = val;
     if (bc_length->GetEmbeddedInteger() != bl) {
+       
          cout << "bc_length changed from "<< bl << " to " << bc_length->GetEmbeddedInteger() << endl;
         bc_length->SetEmbeddedInteger(bl);
         cout << "WTF? bc_length has changed:" << endl << "wrote "<<val<<" to index "<<indx<<"("<<_BC[indx]<<")" <<endl;
-      
+       /*int i;
+       cin >> i;*/
     }
 }
 

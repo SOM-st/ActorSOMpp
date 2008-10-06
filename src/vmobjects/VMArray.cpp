@@ -57,7 +57,12 @@ VMObject* VMArray::GetIndexableField(int idx)
 		}
 	}
 	return 0;*/
-    if (idx > entries->GetEmbeddedInteger() || idx < 0) throw std::bad_exception();
+    if (idx > entries->GetEmbeddedInteger() || idx < 0)  {
+        cout << "Array index out of bounds: Accessing " << idx << ", but only " << entries->GetEmbeddedInteger();
+        cout << " entries are available\n";
+        _UNIVERSE->error_exit("Array index out of bounds exception");
+        //throw std::bad_exception();
+    }
     return theEntries(idx);
 }
 
@@ -79,7 +84,12 @@ int VMArray::GetNumberOfIndexableFields()
 
 int VMArray::SetIndexableField(VMObject* item)
 {
-	if (size->GetEmbeddedInteger() <= entries->GetEmbeddedInteger()) throw std::bad_exception();
+    if (size->GetEmbeddedInteger() <= entries->GetEmbeddedInteger()) {
+        cout << "Array index out of bounds: Accessing " << size->GetEmbeddedInteger()+1 << ", but there is only space for " << size->GetEmbeddedInteger();
+        cout << " entries available\n";
+        _UNIVERSE->error_exit("Array index out of bounds exception");
+        //throw std::bad_exception();
+    }
 	for (int i = 0; i < size->GetEmbeddedInteger(); ++i)
 	{
 		if (theEntries(i) == NULL)
@@ -95,7 +105,12 @@ int VMArray::SetIndexableField(VMObject* item)
 
 void VMArray::SetIndexableField(int idx, VMObject* item)
 {
-	if (idx >= size->GetEmbeddedInteger()) throw std::bad_exception();
+	if (idx >= size->GetEmbeddedInteger()) {
+        cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
+        cout << " entries available\n";
+        _UNIVERSE->error_exit("Array index out of bounds exception");
+        //throw std::bad_exception();
+    }
     int32_t tmp = entries->GetEmbeddedInteger();
 	if (idx >= tmp && item != 0) entries->SetEmbeddedInteger(tmp + 1);
 	else if (item == 0) entries->SetEmbeddedInteger(tmp - 1);
