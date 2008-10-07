@@ -1,0 +1,379 @@
+"
+
+$Id: All.som 92 2007-09-06 09:23:43Z tobias.pape $
+
+Copyright (c) 2001-2007 see AUTHORS file
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+"
+
+Test = (
+    hashTest = (
+        | ht string array t | 
+        'Testing Hashtable...' println.
+        ht := Hashtable new.
+        ht isEmpty
+            ifFalse: [ 'New Hashtable not empty!' println ].
+        
+        ht at: 'a' put: 'b'.
+        (ht containsValue: 'b')
+            ifFalse: [ '1 not in Hashtable' println ].
+        ht isEmpty
+            ifTrue: [ 'Nonempty Hashtable empty!' println ].
+        ((ht size) = 1)
+            ifFalse: [
+                'Hashtable has wrong size!' println ].
+        
+        ht at: 'c' put: 'd'.
+        ((ht size) = 2)
+            ifFalse: [
+                'Hashtable has wrong size!' println ].
+        
+        ht at: 1 put: 2.
+        t := Hashtable new.
+        ht at: Hashtable put: t.
+        (ht containsValue: 'b')
+            ifFalse: [ '1 not in Hashtable' println ].
+        (ht containsValue: 'd')
+            ifFalse: [ '2 not in Hashtable' println ].
+        (ht containsValue: 2)
+            ifFalse: [ '3 not in Hashtable' println ].
+        (ht containsValue: t)
+            ifFalse: [ '4 not in Hashtable' println ].
+        (ht containsKey: Hashtable)
+            ifFalse: [ 'key not found' println ].
+        
+        ht clear.
+        ht isEmpty
+            ifFalse: [
+                'cleared hashtable is not empty!' println ].
+        ht size = 0
+            ifFalse: [
+                'cleared hashtable has elements!' println ].
+        
+        string := (ht get: 'a').
+        (string = 'b')
+            ifTrue: [ 'get from Hashtable' println ].
+        'Test passed' println
+    )
+    
+    doubleTest = (
+        'Testing Double' println.
+        ((4/3) + (4/5)) asString = '1'
+            ifFalse: [
+                'integer division incorrect' println. system exit ].
+        ((4//3) + (4//5)) asString = '2.1333333333333333'
+            ifFalse: [ 'double division incorrect. expected: 2.1333333333333333 but was ' print. ((4//3) + (4//5)) asString println ].
+        'Test passed' println
+    )
+    
+    bigIntegerTest = (| bi i a |
+    
+        'Testing BigInteger' println.
+        "bi contains 2147483648 - the smallest BigInteger value"
+        "i contains 2147483647 - the largest Integer value"
+        
+        "Test that normal integers work"
+        a := 2147483646.
+        a asString = '2147483646'
+            ifFalse: [
+                'failed to assign to integer' println. system exit ].
+        a class asString = 'Integer'
+            ifFalse: [
+                'failed to create Integer variable' println. system exit ].
+        a := a + 1.
+        a asString = '2147483647'
+            ifFalse: [ 'failed to add to integer' println. system exit ].
+        a class asString = 'Integer'
+            ifFalse: [
+                'addition caused undue conversion to something other than Integer' println. system exit ].
+        
+        " Store the Integer in i"
+        i := a.
+        
+        " ------------------------- Addition --------------------------------- "
+        "Test conversion from Integer to BigInteger"
+        a := a + 1.
+        a asString = '2147483648'
+            ifFalse: [
+                    'addition exceeding range of Integer failed' println. system exit ].
+        a class asString = 'BigInteger'
+            ifFalse: [
+                'addition exceeding range of Integer caused conversion to something other than BigInteger' println. system exit ].
+        
+        " Store the BigInteger in bi"
+        bi := a.
+        
+        "Test conversion from BigInteger to Integer"
+        a := a + (-1).
+        a asString = '2147483647'
+            ifFalse: [
+                'addition into range of Integer failed' println. system exit ].
+        a class asString = 'Integer'
+            ifFalse: [
+                'warning: addition into range of Integer did not cause conversion to Integer' println ].
+        
+        " ------------------------- Subtraction ------------------------------ "
+        "Test conversion from Integer to BigInteger"
+        a := i - (-1).
+        a asString = '2147483648'
+            ifFalse: [
+                'subtraction exceeding range of Integer failed' println. system exit ].
+        a class asString = 'BigInteger'
+            ifFalse: [
+                'subtraction exceeding range of Integer caused conversion to something other than BigInteger' println. system exit ].
+        
+        "Test conversion from BigInteger to Integer"
+        a := a - 1.
+        a asString = '2147483647'
+            ifFalse: [
+                'subtraction into range of Integer failed' println ].
+        a class asString = 'Integer'
+            ifFalse: [
+                'warning: subtraction into range of Integer did not cause conversion to Integer' println ].
+        
+        " ------------------------- Multiplication --------------------------- "
+        "Test conversion from Integer to BigInteger"
+        a := i * 2.
+        a asString = '4294967294'
+            ifFalse: [
+                'multiplication exceeding range of Integer failed' println. system exit ].
+        a class asString = 'BigInteger'
+            ifFalse: [
+                'multiplication exceeding range of Integer caused conversion to something other than BigInteger' println. system exit ].
+        
+        "Test conversion from BigInteger to Integer"
+        a := a * 0.
+        a asString = '0'
+            ifFalse: [
+                'multiplication into range of Integer failed' println. system exit ].
+        a class asString = 'Integer'
+            ifFalse: [
+                'multiplication into range of Integer did not cause conversion to Integer' println. system exit ].
+        
+        " ------------------------- Division --------------------------------- "
+        "Test conversion from Integer to BigInteger - TODO requires doubles
+        a := i / 2.
+        a asString = '4294967294'
+            ifFalse: [
+                'division exceeding range of Integer failed' println. system exit ].
+        a class asString = 'BigInteger'
+            ifFalse: [
+                'division exceeding range of Integer caused conversion to something other than BigInteger' println. system exit ].
+        "
+        
+        "Test conversion from BigInteger to Integer"
+        a := bi / 2.
+        a asString = '1073741824'
+            ifFalse: [
+               'division into range of Integer failed'  println. system exit ].
+        a class asString = 'Integer'
+            ifFalse: [
+                'division into range of Integer did not cause conversion to Integer' println. system exit ].
+        
+        "Canonic values"
+        a := bi.
+        i := bi.
+        a = i ifFalse: [ 'equality check failed' println. system exit ].
+        a == i ifFalse: [ 'identity check failed' println. system exit ].
+        
+        'Test passed' println.
+    )
+    
+    arrayTest = ( 
+        | a |
+        'Testing array...' println.
+        a := Array new: 3.
+        a at: 1 put: 'hello'.
+        a at: 2 put: #world.
+        a at: 3 put: 23.
+        
+        (a length = 3) 
+            ifFalse: [
+                'length is ' print.
+                a length println.
+                system exit
+            ].
+        (a at: 2) = #world ifFalse: [
+            'Element at 2 should be #world.' println.
+            system exit
+        ].
+        (a at: 3) = 23 ifFalse: [
+            'Element at 3 should be 23.' println.
+            system exit
+        ].
+        (a contains: 23) ifFalse: [
+            'Containment check for 23 should be true.' println.
+            system exit
+        ].
+        'Test passed' println
+        
+    )
+    
+    integerTest = (
+        | a b |
+        'Testing Integer...' println.
+        a := 42.
+        b := 42.
+        a = b ifFalse: [
+            '42 and 42 are not equal' println.
+            system exit].
+        a == b ifFalse: [
+            '42 and 42 are not identical' println].
+        'Test passed' println
+    )
+    
+    closureTest = (
+        | factorial result facs |
+        'Testing Closures...' println.
+        facs := Array new: 10.
+        facs at: 1 put: 1.
+        facs at: 2 put: 2.
+        facs at: 3 put: 6.
+        facs at: 4 put: 24.
+        facs at: 5 put: 120.
+        facs at: 6 put: 720.
+        facs at: 7 put: 5040.
+        facs at: 8 put: 40320.
+        facs at: 9 put: 362880.
+        facs at: 10 put: 3628800.
+        factorial := [ :n |
+            n = 1
+                ifTrue: [ 1 ]
+                ifFalse: [ (factorial value: n - 1) * n ] ].
+        result := (1 to: 10) collect: factorial.
+        result doIndexes: [ :i |
+            (result at: i) = (facs at: i) ifFalse: [
+                'incorrect result' println. system exit ] ].
+        'Test passed' println
+    )
+    
+    coertionTest = (
+        'Coertion Test...' println.
+        25 sqrt = 5 ifFalse: [
+            '25 sqrt should be equal to 5.' println.
+            system exit ].
+        (2 // 4) * 2 = 1 ifFalse: [
+            '(2//4)*2 should be equal to 1.' println.
+            system exit ].
+        2 * (2 // 4) = 1 ifFalse: [
+            '2*(2//4) should be equal to 1.' println.
+            system exit ].
+        'Test passed' println
+    )
+    
+    objectSizeTest = (
+        (Object new objectSize / 4) println.
+        (42 objectSize / 4) println.
+        ('hello' objectSize / 4) println.
+        (Array new objectSize / 4) println.
+        ((Array new: 1) objectSize / 4) println.
+        Object new objectSize / 4 = 6
+            ifFalse: [
+                'Plain object does not have size 5.' println ].
+        42 objectSize / 4 = 7
+            ifFalse: [
+                'Integer object does not have size 6.' println ].
+        'hello' objectSize / 4 = 7
+            ifFalse: [
+                'String object does not have size 6.' println ].
+        Array new objectSize / 4 = 6
+            ifFalse: [
+                'Empty array object does not have size 5.' println ].
+        (Array new: 1) objectSize / 4 = 7
+            ifFalse: [
+                'Array object (length 1) does not have size 5.' println ].
+    )
+    
+    preliminaryTest = (
+        | a sum |
+        sum := 0.
+        a := Array new:3.
+        a at:1 put: 1.
+        a at:2 put: 2.
+        a at:3 put: 3.
+
+        a do: [ :i |
+            sum := sum + i.
+            i<2 ifTrue: [ sum := sum*2 ].
+            i>2 ifFalse: [ sum := sum*2 ] ].
+        sum = 15 ifFalse: [ 'Preliminary failed' println ]
+    )
+    
+    symbolTest = (
+        'gunk' asSymbol asString = 'gunk'
+            ifFalse: [
+                'Conversion from string to symbol and back failed' println ].
+        #oink asString = 'oink'
+            ifFalse: [
+                'Symbol #oink does not evaluate to String oink' println ]
+    )
+    
+    selfBlockTest = (
+        self give42 value = 42
+            ifFalse: [
+                'access to self in block failed' println ].
+    )
+
+    give42 = (
+        ^[ self giveBlock value ]
+    )
+
+    giveBlock = (
+        ^self test value
+    )
+
+    test = (
+        ^[ self test2 value ]
+    )
+
+    test2 = (
+        ^[ 42 ]
+    )
+    
+    reflectionTest = (
+        (Object methods at: 1) signature = #class ifFalse: [
+            'The first method in Object is not #class.' ].
+        (Object hasMethod: #==) ifFalse: [
+            'Object should have the method #==.' println ].
+        (Object new respondsTo: #isNil) ifFalse: [
+            'An Object instance should respond to #isNil.' println ].
+        (23 respondsTo: #isNil) ifFalse: [
+            'Any object should respond to #isNil (even 23).' println ].
+        (23 respondsTo: #+) ifFalse: [
+            '23 should respond to #+.' println ]
+    )
+    
+    run = (
+        '11111111111111111' println.
+        self preliminaryTest.
+        self arrayTest.
+        self integerTest.
+        self bigIntegerTest.
+        self doubleTest.
+        self coertionTest.
+        self objectSizeTest.
+        self symbolTest.
+        self selfBlockTest.
+        "self reflectionTest."
+        "self closureTest"
+        "self hashTest"
+    )
+    
+)

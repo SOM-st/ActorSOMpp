@@ -42,8 +42,9 @@ public:
 	bool is_primitive();
 	bool is_block_method();
 	bool is_finished();
-	void inc_bp() { bp++; };
-	void dec_bp() { bp--; };
+	void inc_bp() { ++bp; };
+	void dec_bp() { --bp; };
+    void RemoveLastBytecode() { bytecode.pop_back(); };
 	int get_number_of_arguments();
 	void add_bytecode(uint8_t bc);
 private:

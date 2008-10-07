@@ -361,7 +361,9 @@ PrimitiveRoutine* Core::create(const pString& cname, const pString& fname)
         cout << "Primitive Class not found" << endl;
         return NULL;
     }
-    cout << "Primitive Loaded" << endl;
+#ifdef __DEBUG
+    cout << "Primitive " << cname << "::" << fname << " Loaded" << endl;
+#endif
     return result;
 }
 

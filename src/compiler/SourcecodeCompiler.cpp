@@ -21,7 +21,7 @@ VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& 
     VMClass* result = system_class;
 
     pString fname = path + file_separator + file + ".som";
-    std::cout << "compiling " << fname << endl;
+    //std::cout << "compiling " << fname << endl;
     ifstream* fp = new ifstream();
     fp->open(fname.c_str(), std::ios_base::in);
 	if (!fp->is_open()) {
@@ -46,7 +46,7 @@ VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& 
     delete(parser);
     parser = NULL;
     delete(fp);
-    std::cout << "Compilation finished" << endl;
+    //std::cout << "Compilation finished" << endl;
     return result;
 }
 

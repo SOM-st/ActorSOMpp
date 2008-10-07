@@ -1,6 +1,6 @@
 "
 
-$Id: System.som 92 2007-09-06 09:23:43Z tobias.pape $
+$Id: System.som 226 2008-04-21 12:45:01Z michael.haupt $
 
 Copyright (c) 2001-2007 see AUTHORS file
 
@@ -31,12 +31,20 @@ System = (
     
     "Initializing"
     initialize: arguments = (
+        | application |
+        
         "Make sure we have got at least one argument"
         (arguments length < 1) ifTrue: [ 'No class specified' println. ^nil ].
         
         "Load the class with the specified name, create an instance of it, and
-         run it"
-        (self resolve: (arguments at: 0) asSymbol) new run
+         run it. If there is more than only the class given on the command line,
+         and the class has a method #run:, the arguments array is passed to it,
+         otherwise, #run is sent."
+        application := (self resolve: (arguments at: 1) asSymbol) new.
+        
+        (arguments length > 1) && (application class hasMethod: #run:)
+            ifTrue:  [ application run: arguments ]
+            ifFalse: [ application run ]
     )
     
     "Loading and resolving"
@@ -54,8 +62,8 @@ System = (
              as soon as we find a super-class in the globals dictionary because
              in this case, all its super-classes must have been added to the
              dictionary earlier"
-            current_class := class.
-            [ (self global: (current_class name)) == nil ] whileTrue: [
+             current_class := class.
+             [ (self global: (current_class name)) == nil ] whileTrue: [
                 self global: (current_class name) put: current_class.
                 current_class := current_class superclass. ].
             ^class ].

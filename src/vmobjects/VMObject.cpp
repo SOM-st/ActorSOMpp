@@ -57,7 +57,7 @@ void VMObject::SetNumberOfFields(int nof)
 
 int VMObject::GetDefaultNumberOfFields()
 {
-	return this->numberOfFields - 1; //clazz is not a field, is it?
+	return this->numberOfFields - 1; 
 }
 
 void VMObject::Send(pString selector_string, VMObject** arguments, int argc)

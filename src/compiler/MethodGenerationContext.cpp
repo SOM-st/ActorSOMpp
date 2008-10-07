@@ -22,16 +22,9 @@ MethodGenerationContext::MethodGenerationContext() {
 
 VMMethod* MethodGenerationContext::Assemble()
 {
-    if (this->signature->GetStdString() == pString("doesNotUnderstand:arguments:"))
-    {
-        cout << "hier: " << endl;
-    }
     // create a method instance with the given number of bytecodes and literals
     int num_literals = this->literals.Size();
-    if (num_literals > 0)
-    {
-        cout << "hier2" << endl;
-    }
+    
     VMMethod* meth = _UNIVERSE->new_method(this->signature, bp, num_literals);
     
     // populate the fields that are immediately available
@@ -39,27 +32,29 @@ VMMethod* MethodGenerationContext::Assemble()
     meth->set_number_of_locals(num_locals);
 
     meth->set_maximum_number_of_stack_elements(this->compute_stack_depth());
+#ifdef __DEBUG
     cout << "num_locals: " << num_locals << endl;
     cout << "num_literals: " << num_literals << endl;
+#endif
     // copy literals into the method
     for(int i = 0; i < num_literals; i++) {
         VMObject* l = literals.get(i);
         meth->SetLiteral(i, l);
     }
-    
+#ifdef __DEBUG
     cout << "bp: " << bp;
     cout << "bcs ";
-    if (bp == 40)
-        cout << "hier" << endl;
+#endif
     // copy bytecodes into method
     for(size_t i = 0; i < bp; i++){
-        if (i == 31)
-        {
-            cout << "bla";
-        }
         meth->set_bytecode(i, bytecode[i]);
-        cout << (int)bytecode[i] << " ";}
+#ifdef __DEBUG
+        cout << (int)bytecode[i] << " ";
+#endif
+    }
+#ifdef __DEBUG
     cout << endl;
+#endif
     // return the method - the holder field is to be set later on!
     return meth;
 }

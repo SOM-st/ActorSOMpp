@@ -103,12 +103,14 @@ void Disassembler::DumpMethod(VMMethod* method, const char* indent) {
         int max_stack = method->get_maximum_number_of_stack_elements();  
         debug_dump("%s<%d locals, %d stack, %d bc_count>\n", indent, locals, max_stack, method->get_number_of_bytecodes());
     }
+#ifdef _DEBUG
     cout << "bytecodes: ";
       for (int i = 0; i < method->get_number_of_bytecodes(); ++i)
     {
         cout  << (int)method->get_bytecode(i)<< " ";
     }
     cout << endl;
+#endif
     // output bytecodes
     for(int bc_idx = 0; 
         bc_idx < method->get_number_of_bytecodes(); 
@@ -217,10 +219,10 @@ void Disassembler::DumpBytecode(VMFrame* frame, VMMethod* method, int bc_idx) {
     static long long indentc = 0;
     static char      ikind   = '@';
     uint8_t          bc      = BC_0;
-    VMClass*         cl   = method->get_holder();
-    
+    VMObject*         clo   = method->get_holder();
+    VMClass* cl = dynamic_cast<VMClass*>(clo);
     // Determine Context: Class or Block?
-    if(dynamic_cast<VMClass*>(cl) != NULL) {
+    if(cl != NULL) {
         VMSymbol* cname = cl->get_name();
         VMSymbol* sig = method->get_signature();
         //pString s_cname = SEND(cname, get_string);

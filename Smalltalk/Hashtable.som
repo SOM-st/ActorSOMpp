@@ -1,6 +1,6 @@
 "
 
-$Id: Hashtable.som 92 2007-09-06 09:23:43Z tobias.pape $
+$Id: Hashtable.som 263 2008-05-07 07:32:32Z michael.haupt $
 
 Copyright (c) 2001-2007 see AUTHORS file
 
@@ -29,7 +29,7 @@ Hashtable = (
     
     "Testing"
     containsKey: key = ( | idx e |
-        idx := key hashcode % table length.
+        idx := self indexForKey: key.
         e := table at: idx.
         e isNil ifFalse: [ e keys do: [ :k | k = key ifTrue: [ ^true ] ] ].
         ^false.
@@ -47,14 +47,14 @@ Hashtable = (
     
     "Accessing"
     get: key = ( | idx e |
-        idx := key hashcode % table length.
+        idx := self indexForKey: key.
         e := table at: idx.
         e isNil ifTrue: [ ^nil ].
         ^e getValue: key.
     )
     
     at: key put: value = ( | idx |
-        idx := key hashcode % table length.
+        idx := self indexForKey: key.
         (table at: idx) isNil
             ifTrue: [
                 table at: idx put:
@@ -85,6 +85,9 @@ Hashtable = (
     
     "Clearing"
     clear = ( table := Array new: 11. count := 0 )
+    
+    "Private"
+    indexForKey: aKey = ( ^(aKey hashcode % table length) abs + 1 )
     
     ----------------
     

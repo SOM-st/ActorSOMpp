@@ -137,7 +137,7 @@ int Universe::get_path_class_ext(vector<pString>& tokens,const pString& arg )
     if (fp_index < 0) 
     { //no new path
         return ERR_FAIL;
-    } else tokens[0] = arg.substr(0, fp_index-1);
+    } else tokens[0] = arg.substr(0, fp_index);
 
     ssep_index = ( (ssep_index >= 0) && (ssep_index > fp_index)) ?
                  (ssep_index - 1) :
@@ -253,7 +253,7 @@ void Universe::initialize(int _argc, char** _argv)
     this->initialize_system_class(double_class, object_class, "Double");
 
     cout << "System classes initialized, now let's load them!"
-            << "(yeah right, like it works...)" << endl;
+            << endl;
 
     this->load_system_class(object_class);
     this->load_system_class(class_class);
@@ -305,6 +305,9 @@ void Universe::initialize(int _argc, char** _argv)
         shell->Start();
         return;
     }
+    /*char g[10];
+    cout << "Press a key, to start Interpreter" << endl;
+    cin.getline(g,10);*/
 
     /* only trace bootstrap if the number of cmd-line "-d"s is > 2 */
     int trace = 2 - dump_bytecodes;
@@ -571,11 +574,12 @@ VMArray* Universe::new_array( int size)
 VMArray* Universe::new_array_from_argv( int size, const vector<pString>& argv)
 {
     VMArray* result = new_array(argv.size());
-
-    for (vector<pString>::iterator i = class_path.begin();
-         i != class_path.end(); ++i)
+    int j = 0;
+    for (vector<pString>::const_iterator i = argv.begin();
+         i != argv.end(); ++i)
     {
-        result->SetIndexableField(new_string(*i));
+        result->SetIndexableField(j, new_string(*i));
+        ++j;
     }
 
     return result;

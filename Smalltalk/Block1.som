@@ -1,6 +1,6 @@
 "
 
-$Id: Block1.som 144 2007-11-19 23:32:02Z michael.haupt $
+$Id: Block1.som 220 2008-04-20 07:37:15Z michael.haupt $
 
 Copyright (c) 2001-2007 see AUTHORS file
 
@@ -24,6 +24,8 @@ THE SOFTWARE.
 "
 
 Block1 = Block (
+
+    "For the creation of Block instances, see Universe_new_block()."
 
     "Evaluating"
     value = primitive

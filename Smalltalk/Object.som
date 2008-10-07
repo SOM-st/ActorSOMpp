@@ -1,6 +1,6 @@
 "
 
-$Id: Object.som 176 2008-03-19 10:21:59Z michael.haupt $
+$Id: Object.som 225 2008-04-21 12:23:00Z michael.haupt $
 
 Copyright (c) 2001-2007 see AUTHORS file
 
@@ -73,5 +73,18 @@ Object = nil (
     )
     
     unknownGlobal: name = ( ^system resolve: name )
+    
+    "Reflection"
+    respondsTo: aSymbol = (
+        (self class hasMethod: aSymbol)
+            ifTrue:  [ ^true ]
+            ifFalse: [ | cls |
+                cls := self class superclass.
+                [ cls isNil ] whileFalse: [
+                    (cls hasMethod: aSymbol)
+                        ifTrue:  [ ^true ]
+                        ifFalse: [ cls := cls superclass ] ].
+                ^ false ]
+    )
     
 )

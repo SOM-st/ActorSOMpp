@@ -56,7 +56,7 @@ void _Array::AtPut_(VMObject* object, VMFrame* frame) {
 void _Array::Length(VMObject* object, VMFrame* frame) {
     VMArray* self = (VMArray*) frame->Pop();
     VMInteger* new_int= 
-        _UNIVERSE->new_integer(self->GetNumberOfFields());
+        _UNIVERSE->new_integer(self->GetNumberOfIndexableFields());
     frame->Push((VMObject*)new_int);
 }
 

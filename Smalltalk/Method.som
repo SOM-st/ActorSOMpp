@@ -1,6 +1,6 @@
 "
 
-$Id: Method.som 92 2007-09-06 09:23:43Z tobias.pape $
+$Id: Method.som 224 2008-04-21 12:03:47Z michael.haupt $
 
 Copyright (c) 2001-2007 see AUTHORS file
 
@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 Method = Array (
 
-    | numberOfLocals maximumNumberOfStackElements signature holder |
+    | signature holder numberOfLocals maximumNumberOfStackElements |
     
     "Meta Information"
     signature = ( ^signature )

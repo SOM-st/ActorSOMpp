@@ -182,7 +182,7 @@ install: all
 #
 test: install
 	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME).exe -cp Smalltalk TestSuite\\TestHarness.som;)
+	./$(CSOM_NAME).exe -cp Smalltalk TestSuite/TestHarness;)
 
 #
 # bench: run the benchmarks

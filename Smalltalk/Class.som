@@ -1,6 +1,6 @@
 "
 
-$Id: Class.som 92 2007-09-06 09:23:43Z tobias.pape $
+$Id: Class.som 225 2008-04-21 12:23:00Z michael.haupt $
 
 Copyright (c) 2001-2007 see AUTHORS file
 
@@ -40,5 +40,11 @@ Class = (
     superclass = ( ^superClass )
     fields = ( ^instanceFields )
     methods = ( ^instanceInvokables )
+    
+    hasMethod: aSymbol = (
+        instanceInvokables do: [ :m |
+            m signature = aSymbol ifTrue: [ ^true ] ].
+        ^false
+    )
     
 )

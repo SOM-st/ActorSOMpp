@@ -58,9 +58,9 @@ bool VMClass::add_instance_invokable(VMObject *ptr)
             throw std::bad_typeid();//"Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
         }
 	}
-	if (instance_invokables->GetNumberOfIndexableFields() >= instance_invokables->GetArraySize())
+	//if (instance_invokables->GetNumberOfIndexableFields() >= instance_invokables->GetArraySize())
 		instance_invokables = instance_invokables->CopyAndExtendWith(ptr);
-	else instance_invokables->SetIndexableField(ptr);
+	//else instance_invokables->SetIndexableField(ptr);
 
 	return true;
 }
@@ -150,6 +150,7 @@ VMObject* VMClass::lookup_invokable(VMSymbol* name)
         if (invokable->get_signature() == name) 
             return (VMObject*)invokable;
     }
+    invokable = NULL;
     //look in super class
     if (this->has_super_class()) 
     {
@@ -331,7 +332,9 @@ pString VMClass::gen_core_loadstring(const pString& cp) {
  *
  */
 ifstream* VMClass::load_lib(const pString& path) {
+#ifdef __DEBUG
     cout << "load_lib " << path << endl;
+#endif
     //#if !defined(CSOM_WIN)
     //    #ifdef DEBUG
     //        #define    DL_LOADMODE RTLD_NOW
@@ -393,8 +396,10 @@ void VMClass::set_primitives(VMClass* cl, ifstream* handle, const pString& cname
     for(int i = 0; i < cl->get_number_of_instance_invokables(); i++) {
         
         an_invokable = (VMInvokable*)cl->get_instance_invokable(i);
+#ifdef __DEBUG
         cout << "cname: >" << cname << "<"<< endl;
         cout << an_invokable->get_signature()->GetStdString() << endl;
+#endif
         if(an_invokable->is_primitive()) {
             the_primitive = (VMPrimitive*) an_invokable;
             //

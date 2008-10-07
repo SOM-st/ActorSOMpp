@@ -2,7 +2,7 @@
 
 #include "../vm/Universe.h"
 
-#define theEntries(i) fields[this->GetNumberOfFields()+1+i]
+#define theEntries(i) fields[this->GetNumberOfFields()+i]
 
 VMArray::VMArray(int size, int nof) : VMObject(nof+2)
 {
@@ -32,17 +32,10 @@ VMArray::VMArray(int size, int nof) : VMObject(nof+2)
 
 VMArray* VMArray::CopyAndExtendWith(VMObject* item)
 {
-
-	VMArray* result = new (_HEAP, this->entries->GetEmbeddedInteger()+1) VMArray(this->entries->GetEmbeddedInteger()+1);
-	int j = 0;
-	for (int i = 0; i < this->size->GetEmbeddedInteger(); ++i)
-	{
-		if (theEntries(i) != NULL){
-			result->SetIndexableField(j, theEntries(i));
-			++j;
-		}
-	}
-	result->SetIndexableField(j, item);
+    size_t fields = this->size->GetEmbeddedInteger();
+	VMArray* result = _UNIVERSE->new_array(fields+1);
+    this->CopyIndexableFieldsTo(result);
+	result->SetIndexableField(fields, item);
 	return result;
 }
 
@@ -57,8 +50,8 @@ VMObject* VMArray::GetIndexableField(int idx)
 		}
 	}
 	return 0;*/
-    if (idx > entries->GetEmbeddedInteger() || idx < 0)  {
-        cout << "Array index out of bounds: Accessing " << idx << ", but only " << entries->GetEmbeddedInteger();
+    if (idx > size->GetEmbeddedInteger()-1 || idx < 0)  {
+        cout << "Array index out of bounds: Accessing " << idx << ", but only " << size->GetEmbeddedInteger()-1;
         cout << " entries are available\n";
         _UNIVERSE->error_exit("Array index out of bounds exception");
         //throw std::bad_exception();
@@ -66,15 +59,13 @@ VMObject* VMArray::GetIndexableField(int idx)
     return theEntries(idx);
 }
 
-void VMArray::CopyIndexableFieldsFrom(VMArray* from)
+void VMArray::CopyIndexableFieldsTo(VMArray* to)
 {
-	if (this->size < this->entries + from->GetNumberOfIndexableFields()) {
-	} else {
-		for (int i = 0; i < from->GetNumberOfIndexableFields(); ++i)
-		{
-            SetIndexableField(i, from->GetIndexableField(i));
-		}
+	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i)
+	{
+        to->SetIndexableField(i, this->GetIndexableField(i));
 	}
+	
 }
 
 int VMArray::GetNumberOfIndexableFields()
@@ -82,7 +73,7 @@ int VMArray::GetNumberOfIndexableFields()
 	return entries->GetEmbeddedInteger();
 }
 
-int VMArray::SetIndexableField(VMObject* item)
+/*int VMArray::SetIndexableField(VMObject* item)
 {
     if (size->GetEmbeddedInteger() <= entries->GetEmbeddedInteger()) {
         cout << "Array index out of bounds: Accessing " << size->GetEmbeddedInteger()+1 << ", but there is only space for " << size->GetEmbeddedInteger();
@@ -101,11 +92,11 @@ int VMArray::SetIndexableField(VMObject* item)
         }
 	}
 	return -1;
-}
+}*/
 
 void VMArray::SetIndexableField(int idx, VMObject* item)
 {
-	if (idx >= size->GetEmbeddedInteger()) {
+	if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
         cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
         cout << " entries available\n";
         _UNIVERSE->error_exit("Array index out of bounds exception");

@@ -54,7 +54,7 @@ _System* System_;
     VMObject* self = frame->Pop();
     VMObject* result = _UNIVERSE->get_global(arg);
     
-    frame->Push( result? result:nil_object);    
+    frame->Push( result ? result:nil_object);    
 }
 
 

@@ -45,7 +45,9 @@ void Interpreter::Start()
         int next_bytecode_index = bytecode_index + bytecode_length;
 
         _FRAME->SetBytecodeIndex(next_bytecode_index);
+#ifdef __DEBUG
         cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) << endl;
+#endif
 // Handle the current bytecode
         switch(bytecode) {
             case BC_HALT:             return; // handle the halt bytecode
@@ -273,14 +275,15 @@ void Interpreter::do_send( int bytecode_index )
     VMMethod* method = _METHOD;
     
     VMSymbol* signature = (VMSymbol*) method->get_constant(bytecode_index);
-    if (true)//(bytecode_index >= 13)
-    {
+#ifdef __DEBUG
         cout << "sig: " << signature->GetChars() << endl;
-    }
+#endif
     int num_of_args = Signature::GetNumberOfArguments(signature);
 
     VMObject* receiver = _FRAME->GetStackElement(num_of_args-1);
+#ifdef __DEBUG
     cout << "rec("<<num_of_args-1<<"): " << receiver->GetClass()->get_name()->GetChars() << endl;
+#endif
     this->send(signature, receiver->GetClass());
 }
 
@@ -325,7 +328,7 @@ void Interpreter::do_return_non_local()
 
     VMFrame* context = _FRAME->GetOuterContext();
 
-    if (context->HasPreviousFrame()) {
+    if (!context->HasPreviousFrame()) {
         VMBlock* block = (VMBlock*) _FRAME->GetArgument(0, 0);
         VMFrame* prev_frame = _FRAME->GetPreviousFrame();
         VMFrame* outer_context = prev_frame->GetOuterContext();

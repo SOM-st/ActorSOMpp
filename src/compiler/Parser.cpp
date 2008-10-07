@@ -154,16 +154,7 @@ void Parser::gen_push_variable(MethodGenerationContext* mgenc, const pString& va
     int index = 0;
     int context = 0;
     bool is_argument = false;
-    if(strcmp(mgenc->get_signature()->GetChars(), "print") == 0)
-        {
-            cout << "hier";
-            if (var == pString("system"))
-            {
-                cout << "hier2";
-            }
-        }
     
-	//cout << "emit push arg/local/field/global" << endl;
     if(mgenc->find_var(var, &index, &context, &is_argument)) {
 		if(is_argument) 
             bcGen->emit_PUSH_ARGUMENT(mgenc, index, context);
@@ -469,6 +460,7 @@ void Parser::blockBody(MethodGenerationContext* mgenc, bool seen_period) {
             // return the value of the last expression, regardless of whether it
             // was terminated with a . or not)
 			mgenc->dec_bp();
+            mgenc->RemoveLastBytecode();
 //            mgenc->bp--;
 //			mgenc->tp--;
 		}
