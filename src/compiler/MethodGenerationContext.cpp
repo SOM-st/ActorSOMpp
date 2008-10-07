@@ -17,7 +17,6 @@ MethodGenerationContext::MethodGenerationContext() {
 	primitive = false;
 	block_method = false;
 	finished = false;
-	bp = 0;
 }
 
 VMMethod* MethodGenerationContext::Assemble()
@@ -25,7 +24,7 @@ VMMethod* MethodGenerationContext::Assemble()
     // create a method instance with the given number of bytecodes and literals
     int num_literals = this->literals.Size();
     
-    VMMethod* meth = _UNIVERSE->new_method(this->signature, bp, num_literals);
+    VMMethod* meth = _UNIVERSE->new_method(this->signature, bytecode.size(), num_literals);
     
     // populate the fields that are immediately available
     int num_locals = this->locals.Size();
@@ -39,14 +38,14 @@ VMMethod* MethodGenerationContext::Assemble()
     // copy literals into the method
     for(int i = 0; i < num_literals; i++) {
         VMObject* l = literals.get(i);
-        meth->SetLiteral(i, l);
+        meth->SetIndexableField(i, l);
     }
 #ifdef __DEBUG
-    cout << "bp: " << bp;
+    cout << "bp: " << bytecode.size();
     cout << "bcs ";
 #endif
     // copy bytecodes into method
-    for(size_t i = 0; i < bp; i++){
+    for(size_t i = 0; i < bytecode.size(); i++){
         meth->set_bytecode(i, bytecode[i]);
 #ifdef __DEBUG
         cout << (int)bytecode[i] << " ";
@@ -98,7 +97,7 @@ uint8_t MethodGenerationContext::compute_stack_depth() {
     uint8_t max_depth = 0;
     unsigned int i = 0;
     
-    while(i < bp) {
+    while(i < bytecode.size()) {
         switch(bytecode[i]) {
             case BC_HALT             :          i++;    break;
             case BC_DUP              : depth++; i++;    break;
@@ -221,5 +220,4 @@ bool MethodGenerationContext::is_finished() {
 
 void MethodGenerationContext::add_bytecode(uint8_t bc) {
 	bytecode.push_back(bc);
-    ++bp;
 }

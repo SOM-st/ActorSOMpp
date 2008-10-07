@@ -5,6 +5,7 @@
 #include "Parser.h"
 #include <sstream>
 #include <fstream>
+#define COMPILER_DEBUG
 
 SourcecodeCompiler::SourcecodeCompiler()
 {
@@ -21,7 +22,9 @@ VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& 
     VMClass* result = system_class;
 
     pString fname = path + file_separator + file + ".som";
-    //std::cout << "compiling " << fname << endl;
+#ifdef COMPILER_DEBUG
+    std::cout << "compiling " << fname << endl;
+#endif
     ifstream* fp = new ifstream();
     fp->open(fname.c_str(), std::ios_base::in);
 	if (!fp->is_open()) {
@@ -35,6 +38,7 @@ VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& 
 
     VMSymbol* cname = result->get_name();
     pString cname_c = cname->GetStdString();
+
     if (file != cname_c) {
         
         ostringstream Str;
@@ -46,7 +50,9 @@ VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& 
     delete(parser);
     parser = NULL;
     delete(fp);
-    //std::cout << "Compilation finished" << endl;
+#ifdef COMPILER_DEBUG
+    std::cout << "Compilation finished" << endl;
+#endif
     return result;
 }
 

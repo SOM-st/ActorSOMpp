@@ -9,21 +9,15 @@
 
 #define EMIT1(BC) \
     mgenc->add_bytecode(BC)
-    //mgenc->bytecode[mgenc->bp++] = (BC)
 
 #define EMIT2(BC, IDX) \
     mgenc->add_bytecode(BC);\
 	mgenc->add_bytecode(IDX)
-    //mgenc->bytecode[mgenc->bp++] = (BC); \
-	//mgenc->bytecode[mgenc->bp++] = (IDX)
 
 #define EMIT3(BC, IDX, CTX) \
     mgenc->add_bytecode(BC);\
 	mgenc->add_bytecode(IDX);\
 	mgenc->add_bytecode(CTX)
-    /*mgenc->bytecode[mgenc->bp++] = (BC); \
-    mgenc->bytecode[mgenc->bp++] = (IDX); \
-    mgenc->bytecode[mgenc->bp++] = (CTX)*/
 
 
 void bytecode_generator::emit_HALT( MethodGenerationContext* mgenc )

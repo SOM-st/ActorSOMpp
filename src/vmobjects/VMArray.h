@@ -14,10 +14,8 @@ public:
 	//virtual ~VMArray();
 	virtual void MarkReferences();
 	void SetIndexableField(int idx, VMObject* item);
-	int SetIndexableField(VMObject* item);
 	//VMObject* GetItem(int idx);
 	VMObject* GetIndexableField(int idx);
-	int GetArraySize();
 	int GetNumberOfIndexableFields();
 	VMArray* CopyAndExtendWith(VMObject*);
 	void CopyIndexableFieldsTo(VMArray*);
@@ -25,7 +23,7 @@ public:
 
 	VMObject* operator[](int idx)
 	{
-		if (idx >= size->GetEmbeddedInteger()) {
+		if (idx > size->GetEmbeddedInteger() - 1) {
             cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
             cout << " entries available\n";
             _UNIVERSE->error_exit("Array index out of bounds exception");
@@ -36,7 +34,7 @@ public:
 
 private:
 	VMInteger* size;
-	VMInteger* entries;
+	//VMInteger* entries;
 	//VMObject** theEntries;
 	//void assertType(VMObject& vmo) const {}; //method to assert that only VMObject class is supported
 	//std::vector<T> theEntries;

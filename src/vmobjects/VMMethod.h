@@ -2,9 +2,9 @@
 #ifndef VMMETHOD_H_
 #define VMMETHOD_H_
 //#include "OOObject.h"
-#include "VMArray.h"
-#include "VMObject.h"
-#include "VMInteger.h"
+class VMArray;
+class VMObject;
+class VMInteger;
 #include "VMInvokable.h"
 #include <iostream>
 class MethodGenerationContext;
@@ -30,17 +30,22 @@ public:
     virtual uint8_t   get_bytecode(int indx); 
     virtual void      set_bytecode(int indx, uint8_t); 
 	virtual void	  invoke(VMFrame* frame);
-    virtual size_t    GetOffset();
+    //virtual size_t    GetOffset();
 	virtual void MarkReferences();
-    virtual void SetLiteral(int index, VMObject* o);
-	virtual VMObject* GetLiteral(int index);
+    /*virtual void SetLiteral(int index, VMObject* o);
+	virtual VMObject* GetLiteral(int index);*/
 
-    virtual int BytecodeLength();
-//protected:
-//    virtual uint8_t* calculateBytecodeStart();
+    //VMArray Methods....
+    void SetIndexableField(int idx, VMObject* item);
+	//VMObject* GetItem(int idx);
+	VMObject* GetIndexableField(int idx);
+	int GetNumberOfIndexableFields();
+	VMArray* CopyAndExtendWith(VMObject*);
+	void CopyIndexableFieldsTo(VMArray*);
+
 private:
-    
-    VMInteger* number_of_literals;
+    VMInteger* size;
+    //VMInteger* number_of_literals;
     VMInteger* number_of_locals;
     VMInteger* maximum_number_of_stack_elements;
     VMInteger* bc_length;

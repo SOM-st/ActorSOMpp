@@ -42,9 +42,7 @@ public:
 	bool is_primitive();
 	bool is_block_method();
 	bool is_finished();
-	void inc_bp() { ++bp; };
-	void dec_bp() { --bp; };
-    void RemoveLastBytecode() { bytecode.pop_back(); };
+	void RemoveLastBytecode() { bytecode.pop_back(); };
 	int get_number_of_arguments();
 	void add_bytecode(uint8_t bc);
 private:
@@ -57,7 +55,6 @@ private:
     ExtendedList<std::string>            locals;
     pList            literals;
     bool                       finished;
-    int32_t                   bp;
 	vector<uint8_t>            bytecode;
 };
 

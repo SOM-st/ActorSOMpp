@@ -26,14 +26,12 @@ VMFrame* VMFrame::GetPreviousFrame()
 
 void     VMFrame::SetPreviousFrame(VMObject* frm)
 {
-    this->fields[3] = frm; //HACK: 4 == previous_frame
-    //this->previous_frame = (VMFrame*)frm;
+    this->previous_frame = (VMFrame*)frm;
 }
 
 void     VMFrame::ClearPreviousFrame()
 {
-    this->fields[3] = nil_object;
-    //this->previous_frame = (VMFrame*)nil_object;
+    this->previous_frame = (VMFrame*)nil_object;
 }
 
 bool     VMFrame::HasPreviousFrame()

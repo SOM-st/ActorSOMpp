@@ -2,7 +2,7 @@
 
 #ifndef UNIVERSE_H_
 #define UNIVERSE_H_
-
+#define __DEBUG
 //#include <map>
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"

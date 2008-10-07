@@ -459,10 +459,7 @@ void Parser::blockBody(MethodGenerationContext* mgenc, bool seen_period) {
             // a POP has been generated which must be elided (blocks always
             // return the value of the last expression, regardless of whether it
             // was terminated with a . or not)
-			mgenc->dec_bp();
             mgenc->RemoveLastBytecode();
-//            mgenc->bp--;
-//			mgenc->tp--;
 		}
         bcGen->emit_RETURN_LOCAL(mgenc);
 		//cout << "emit return local" << endl;
