@@ -85,10 +85,10 @@ void GarbageCollector::Collect()
 
 void GarbageCollector::markReachableObjects()
 {
-	map<VMSymbol*, VMObject*, SymbolCompare> globals = Universe::GetUniverse()->GetGlobals();
+	map<pString, VMObject*> globals = Universe::GetUniverse()->GetGlobals();
 
 	
-	for (map<VMSymbol*, VMObject*, SymbolCompare>::iterator it = globals.begin(); it!= globals.end(); ++it)
+	for (map<pString, VMObject*>::iterator it = globals.begin(); it!= globals.end(); ++it)
 	{
 		markObject(&(*it->second));
 	}

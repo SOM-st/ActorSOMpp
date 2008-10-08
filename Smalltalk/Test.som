@@ -24,14 +24,34 @@ THE SOFTWARE.
 "
 
 Test = (
+
+    run = (
+        '11111111111111111' println.
+        "self hashTest."
+        self preliminaryTest.
+        self arrayTest.
+        self integerTest.
+        self bigIntegerTest.
+        self doubleTest.
+        self coertionTest.
+        self objectSizeTest.
+        self symbolTest.
+        self selfBlockTest.
+        "self reflectionTest."
+        "self closureTest"
+        "self hashTest"
+    )
+    
     hashTest = (
         | ht string array t | 
         'Testing Hashtable...' println.
         ht := Hashtable new.
+        '111111111111111111111111111111' println.
         ht isEmpty
             ifFalse: [ 'New Hashtable not empty!' println ].
-        
+        '22222222222222222222222222222222' println.
         ht at: 'a' put: 'b'.
+        '333333333333333333333333333333333' println.
         (ht containsValue: 'b')
             ifFalse: [ '1 not in Hashtable' println ].
         ht isEmpty
@@ -279,6 +299,7 @@ Test = (
     )
     
     objectSizeTest = (
+        'Testing Object Size...' println.
         (Object new objectSize / 4) println.
         (42 objectSize / 4) println.
         ('hello' objectSize / 4) println.
@@ -299,6 +320,7 @@ Test = (
         (Array new: 1) objectSize / 4 = 7
             ifFalse: [
                 'Array object (length 1) does not have size 5.' println ].
+        'Test over' println
     )
     
     preliminaryTest = (
@@ -313,24 +335,29 @@ Test = (
             sum := sum + i.
             i<2 ifTrue: [ sum := sum*2 ].
             i>2 ifFalse: [ sum := sum*2 ] ].
-        sum = 15 ifFalse: [ 'Preliminary failed' println ]
+        sum = 15 ifFalse: [ 'Preliminary failed' println. system exit ]
     )
     
     symbolTest = (
+        'Testing Symbol...' println.
         'gunk' asSymbol asString = 'gunk'
             ifFalse: [
-                'Conversion from string to symbol and back failed' println ].
+                'Conversion from string to symbol and back failed' println. system exit ].
         #oink asString = 'oink'
             ifFalse: [
-                'Symbol #oink does not evaluate to String oink' println ]
+                'Symbol #oink does not evaluate to String oink' println. system exit ].
+        'Test passed' println
     )
     
     selfBlockTest = (
+        'Testing access to self in block' println.
         self give42 value = 42
             ifFalse: [
-                'access to self in block failed' println ].
+                'access to self in block failed' println. system exit ].
+        'Test passed' println
     )
 
+"SelfBlockTest methods"
     give42 = (
         ^[ self giveBlock value ]
     )
@@ -348,6 +375,7 @@ Test = (
     )
     
     reflectionTest = (
+        'Testing Reflection...' println.
         (Object methods at: 1) signature = #class ifFalse: [
             'The first method in Object is not #class.' ].
         (Object hasMethod: #==) ifFalse: [
@@ -357,23 +385,9 @@ Test = (
         (23 respondsTo: #isNil) ifFalse: [
             'Any object should respond to #isNil (even 23).' println ].
         (23 respondsTo: #+) ifFalse: [
-            '23 should respond to #+.' println ]
+            '23 should respond to #+.' println ].
+        'Test over' println.
     )
     
-    run = (
-        '11111111111111111' println.
-        self preliminaryTest.
-        self arrayTest.
-        self integerTest.
-        self bigIntegerTest.
-        self doubleTest.
-        self coertionTest.
-        self objectSizeTest.
-        self symbolTest.
-        self selfBlockTest.
-        "self reflectionTest."
-        "self closureTest"
-        "self hashTest"
-    )
     
 )

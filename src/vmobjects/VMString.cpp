@@ -2,21 +2,22 @@
 #include "VMInteger.h"
 #include <string.h>
 
-VMString::VMString() : VMObject(1)//, std::string()
+VMString::VMString() : VMObject(0)//, std::string()
 {
 	chars = 0;
-    string_length = _UNIVERSE->new_integer(0);
+    objectSize += sizeof(char*);
+    //string_length = _UNIVERSE->new_integer(0);
 	//objectSize = sizeof(VMString);
 	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
 }
 
 
 
-VMString::VMString(const char* str) : VMObject(1)//, std::string()
+VMString::VMString(const char* str) : VMObject(0)//, std::string()
 {
 	chars = (char*)&chars+sizeof(char*);
-	objectSize += strlen(str) + 1; //set actual object_size
-	string_length = _UNIVERSE->new_integer(strlen(str));
+	objectSize += sizeof(char*) + strlen(str) + 1; //set actual object_size
+	//string_length = _UNIVERSE->new_integer(strlen(str));
     size_t i = 0;
 	for (; i < strlen(str); ++i) {
 		chars[i] = str[i];
@@ -24,11 +25,11 @@ VMString::VMString(const char* str) : VMObject(1)//, std::string()
 	chars[i] = '\0';
 	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
 }
-VMString::VMString( const string& s ): VMObject(1)
+VMString::VMString( const string& s ): VMObject(0)
 {
 	chars = (char*)&chars+sizeof(char*);
-	objectSize += s.length() + 1;
-	string_length = _UNIVERSE->new_integer(s.length());
+	objectSize += sizeof(char*) + s.length() + 1;
+	//string_length = _UNIVERSE->new_integer(s.length());
     size_t i = 0;
 	for (; i < s.length(); ++i) {
 		chars[i] = s[i];
@@ -38,7 +39,7 @@ VMString::VMString( const string& s ): VMObject(1)
 
 void VMString::MarkReferences(){
 	VMObject::MarkReferences();
-    string_length->MarkReferences();
+    //string_length->MarkReferences();
 }
 
 //VMString::VMString( size_type length, const char& ch ): VMObject(), std::string(length, ch)
@@ -60,7 +61,13 @@ void VMString::MarkReferences(){
 
 int VMString::GetStringLength()
 {
-    return string_length->GetEmbeddedInteger();
+    int length = 0;
+    if (chars != 0) {
+        while(chars[length++] != '\0');
+        if (length != 0)
+            --length;
+    }
+    return length;
 }
 
 std::string VMString::GetStdString()

@@ -44,7 +44,7 @@ public:
 	
 protected:
 	//vector<char, HeapAllocator<char> > chars;
-	VMInteger* string_length;
+	//VMInteger* string_length;
 	//std::string chars;
 	//char chars[0];
 	char* chars;

@@ -116,8 +116,9 @@ void Universe::start(int argc, char** argv)
 void Universe::quit(int err)
 {
     if (theUniverse) delete(theUniverse);
+    
     Core::tearDown();
-   exit(err);
+    exit(err);
 }
 
 void Universe::error_exit( const char* err)
@@ -202,7 +203,7 @@ void Universe::prepareNilObject()
 
 void Universe::initialize(int _argc, char** _argv)
 {
-    heapSize = 1000000;
+    heapSize = 10000000;
 
     int argc;
     vector<pString> argv = this->handle_arguments(&argc, _argc, _argv);
@@ -412,8 +413,16 @@ void Universe::initialize(int _argc, char** _argv)
 
 Universe::~Universe()
 {
-    // TODO
-    delete(heap);
+    if (interpreter) 
+        delete(interpreter);
+    if (compiler) 
+        delete(compiler);
+    if (heap) {
+        cout << "Heap alloc count: " << heap->allocCount << endl;
+        delete(heap);
+    }
+    if (symboltable) 
+        delete(symboltable);
 }
 
 
@@ -457,7 +466,7 @@ VMClass* Universe::get_block_class_with_args( int number_of_arguments)
 VMObject* Universe::get_global( VMSymbol* name)
 {
     if (has_global(name))
-        return (VMObject*)globals[name];
+        return (VMObject*)globals[name->GetStdString()];
 
     return NULL;
 }
@@ -465,7 +474,7 @@ VMObject* Universe::get_global( VMSymbol* name)
 
 bool Universe::has_global( VMSymbol* name)
 {
-    if (globals[name] != NULL) return true;
+    if (globals[name->GetStdString()] != NULL) return true;
     else return false;
 }
 
@@ -699,7 +708,7 @@ VMMethod* Universe::new_method( VMSymbol* signature, size_t number_of_bytecodes,
 
 VMString* Universe::new_string( const pString& str)
 {
-    VMString* result = new (heap, str.length()+1) VMString(str);
+    VMString* result = new (heap, sizeof(char*)+str.length()+1) VMString(str);
     result->SetClass(string_class);
 
     return result;
@@ -707,7 +716,7 @@ VMString* Universe::new_string( const pString& str)
 
 VMSymbol* Universe::new_symbol( const pString& str )
 {
-    VMSymbol* result = new (heap, str.length()+1) VMSymbol(str);
+    VMSymbol* result = new (heap, sizeof(char*)+str.length()+1) VMSymbol(str);
     result->SetClass(symbol_class);
 
     symboltable->insert(result);
@@ -732,7 +741,7 @@ VMSymbol* Universe::symbol_for( const pString& str)
     
     VMSymbol* result = symboltable->lookup(str);
     
-    return result ?
+    return (result != NULL) ?
            result :
            new_symbol(str);
 }
@@ -751,9 +760,11 @@ void Universe::RunGC()
 void Universe::set_global(VMSymbol* name, VMObject *val)
 {
     pString str =  name->GetStdString();
-    if (str == pString("self"))
-    {
-        cout <<  "self";
+
+    globals[str] = val;
+	//globals.insert(pair<pString, VMObject*>(name->GetStdString(), val));
+    VMObject* p = globals[str];
+    if (p == NULL){
+        cout << "Global " << str << " just added, but globals[" << str << "] == NULL" << endl;
     }
-	globals.insert(pair<VMSymbol*, VMObject*>(name, val));
 }

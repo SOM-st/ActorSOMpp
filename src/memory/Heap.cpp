@@ -6,6 +6,7 @@
 
 Heap::Heap(int object_space_size)// : globals(INT32_MAX)
 {
+    allocCount = 0;
 	object_space = (void*) malloc(object_space_size);
 	if (!object_space)
 	{
@@ -31,6 +32,7 @@ Heap::~Heap()
 
 void* Heap::Allocate(size_t size)
 {
+    ++allocCount;
 	if (size == 0) return NULL;
 #ifdef HEAPDEBUG 
     std::cout << "allocating: " << (int)size << "bytes" << std::endl;

@@ -36,9 +36,9 @@ public:
     //so every derived class must specify its number of fields in the constructor
     //and calculate the correct objectSize, by adding the bytes of additional data
     //like in VMString or VMArray to the objectSize in the constructor
-	virtual int getObjectSize() {return objectSize;}
-	bool getGCField() {return gcfield;} ;
-	void setGCField(bool value) { gcfield = value; } ;
+	virtual int getObjectSize();
+	virtual bool getGCField();
+	virtual void setGCField(bool value);
 
 	//num_bytes parameter is set by the compiler.
     //parameter additional_bytes (a_b) is used for:
@@ -48,8 +48,8 @@ public:
     //  - fields in VMMethod, a_b must be set to (number_of_bc + number_of_csts*sizeof(VMObject*))
 	void *operator new( size_t num_bytes, Heap *heap, unsigned int additional_bytes = 0)
 	{
-        void* bla =heap->Allocate(num_bytes + additional_bytes);
-		return bla;
+        void* mem =heap->Allocate(num_bytes + additional_bytes);
+		return mem;
 	}
 
 	void *operator new[](size_t num_bytes, Heap *heap)
@@ -82,12 +82,11 @@ public:
 
 	}*/
 protected:
-	int numberOfFields;
-	bool gcfield;
-//	bool		 : 0; //forces alignment
-	int32_t hash;
-	int objectSize;
-	
+	int32_t objectSize;
+    int32_t hash;
+    int numberOfFields;
+    bool gcfield;
+    
     VMObject** fields;
 	VMClass* clazz;
 };

@@ -12,10 +12,12 @@
 VMObject::VMObject( int number_of_fields )
 {
     fields = (VMObject**)&clazz;//fields + sizeof(VMObject**); 
-    this->SetNumberOfFields(number_of_fields+1); //CSOM calculates VMObject::clazz's size out here. why????
+
+    this->SetNumberOfFields(number_of_fields+1);//+1 because of the clazz field
     gcfield = 0; 
 	hash = (int32_t)this;
-	objectSize = sizeof(VMObject) + number_of_fields*sizeof(VMObject*);//sizeof(VMObject) includes the space for the clazz field
+    //cout << sizeof(VMObject) << endl;
+    objectSize = sizeof(VMObject) + number_of_fields*sizeof(VMObject*);//sizeof(VMObject) includes the space for the clazz field
 }
 
 //VMObject::~VMObject() {}
@@ -74,6 +76,21 @@ void VMObject::Send(pString selector_string, VMObject** arguments, int argc)
     VMClass* cl = this->GetClass();
     VMInvokable* invokable = dynamic_cast<VMInvokable*>(cl->lookup_invokable(selector));
     invokable->invoke(frame);
+}
+
+int VMObject::getObjectSize() 
+{
+    return objectSize;
+}
+
+bool VMObject::getGCField() 
+{
+    return gcfield;
+}
+	
+void VMObject::setGCField(bool value) 
+{ 
+    gcfield = value; 
 }
 
 void VMObject::Assert(bool value)

@@ -2,7 +2,7 @@
 
 #ifndef UNIVERSE_H_
 #define UNIVERSE_H_
-#define __DEBUG
+//#define __DEBUG
 //#include <map>
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
@@ -64,7 +64,7 @@ public:
     static void quit(int);
     static void error_exit(const char*);
 
-	map<VMSymbol*, VMObject*, SymbolCompare>  GetGlobals() {return globals;}
+	map<pString, VMObject*>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
     Interpreter* GetInterpreter() {return interpreter;}
 	void RunGC();
@@ -128,7 +128,7 @@ private:
     
 	Heap *heap;
     int heapSize;
-	map<VMSymbol*, VMObject*, SymbolCompare> globals;
+	map<pString, VMObject*> globals;
     vector<pString> class_path;
     int cp_count;
     Symboltable* symboltable;
