@@ -20,11 +20,6 @@ VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSign
 //{
 //}
 
-void VMEvaluationPrimitive::MarkReferences()
-{
-    VMPrimitive::MarkReferences();
-    numberOfArguments->MarkReferences();
-}
 
 VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc)
 {

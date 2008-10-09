@@ -5,7 +5,7 @@
 VMString::VMString() : VMObject(0)//, std::string()
 {
 	chars = 0;
-    objectSize += sizeof(char*);
+    //objectSize += sizeof(char*);
     //string_length = _UNIVERSE->new_integer(0);
 	//objectSize = sizeof(VMString);
 	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
@@ -16,7 +16,7 @@ VMString::VMString() : VMObject(0)//, std::string()
 VMString::VMString(const char* str) : VMObject(0)//, std::string()
 {
 	chars = (char*)&chars+sizeof(char*);
-	objectSize += sizeof(char*) + strlen(str) + 1; //set actual object_size
+	//objectSize += sizeof(char*) + strlen(str) + 1; //set actual object_size
 	//string_length = _UNIVERSE->new_integer(strlen(str));
     size_t i = 0;
 	for (; i < strlen(str); ++i) {
@@ -28,18 +28,13 @@ VMString::VMString(const char* str) : VMObject(0)//, std::string()
 VMString::VMString( const string& s ): VMObject(0)
 {
 	chars = (char*)&chars+sizeof(char*);
-	objectSize += sizeof(char*) + s.length() + 1;
+	//objectSize += sizeof(char*) + s.length() + 1;
 	//string_length = _UNIVERSE->new_integer(s.length());
     size_t i = 0;
 	for (; i < s.length(); ++i) {
 		chars[i] = s[i];
 	}
 	chars[i] = '\0';
-}
-
-void VMString::MarkReferences(){
-	VMObject::MarkReferences();
-    //string_length->MarkReferences();
 }
 
 //VMString::VMString( size_type length, const char& ch ): VMObject(), std::string(length, ch)
@@ -88,10 +83,6 @@ char* VMString::GetChars()
 	return "";*/
 }
 
-int VMString::getObjectSize()
-{
-	return objectSize;// + chars.size();
-}
 
 //VMString::~VMString() {}
 

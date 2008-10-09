@@ -52,33 +52,33 @@ VMClass* class_generation_context::Assemble()
     VMClass* result_class = _UNIVERSE->new_class(metaclass_class);
 
     // Initialize the class of the resulting class
-    result_class->set_instance_fields(_UNIVERSE->new_array_list(class_fields));
-    result_class->set_instance_invokables(_UNIVERSE->new_array_list(class_methods));
-    result_class->set_name(_UNIVERSE->symbol_for(ccname));
+    result_class->SetInstanceFields(_UNIVERSE->new_array_list(class_fields));
+    result_class->SetInstanceInvokables(_UNIVERSE->new_array_list(class_methods));
+    result_class->SetName(_UNIVERSE->symbol_for(ccname));
 
     VMClass* super_mclass = super_class->GetClass();
-    result_class->set_super_class(super_mclass);
+    result_class->SetSuperClass(super_mclass);
     
     // Allocate the resulting class
     VMClass* result = _UNIVERSE->new_class(result_class);
     
     // Initialize the resulting class
-    result->set_instance_fields(_UNIVERSE->new_array_list(instance_fields));
-    result->set_instance_invokables(_UNIVERSE->new_array_list(instance_methods));
-    result->set_name(this->name);
-    result->set_super_class(super_class);
+    result->SetInstanceFields(_UNIVERSE->new_array_list(instance_fields));
+    result->SetInstanceInvokables(_UNIVERSE->new_array_list(instance_methods));
+    result->SetName(this->name);
+    result->SetSuperClass(super_class);
     
     return result;
 }
 
 void class_generation_context::AssembleSystemClass( VMClass* system_class )
 {
-    system_class->set_instance_invokables(_UNIVERSE->new_array_list(instance_methods));
-    system_class->set_instance_fields(_UNIVERSE->new_array_list(instance_fields));
+    system_class->SetInstanceInvokables(_UNIVERSE->new_array_list(instance_methods));
+    system_class->SetInstanceFields(_UNIVERSE->new_array_list(instance_fields));
     // class-bound == class-instance-bound 
     VMClass* super_mclass = system_class->GetClass();
-    super_mclass->set_instance_invokables(_UNIVERSE->new_array_list(class_methods));
-    super_mclass->set_instance_fields(_UNIVERSE->new_array_list(class_fields));
+    super_mclass->SetInstanceInvokables(_UNIVERSE->new_array_list(class_methods));
+    super_mclass->SetInstanceFields(_UNIVERSE->new_array_list(class_fields));
 }
 
 

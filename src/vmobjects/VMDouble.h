@@ -11,8 +11,8 @@ public:
     VMDouble();
     VMDouble(double);
     //virtual ~VMDouble();
-    void SetEmbeddedDouble(double);
-    double GetEmbeddedDouble();
+    void    SetEmbeddedDouble(double);
+    double  GetEmbeddedDouble();
 private:
     double embeddedDouble;
 };

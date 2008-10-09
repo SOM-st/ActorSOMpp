@@ -19,42 +19,42 @@ public:
     VMClass(int number_of_fields);
 	//virtual ~VMClass() {}
 
-	virtual VMClass*  get_super_class(); 
-    virtual void      set_super_class(VMClass*); 
-    virtual bool      has_super_class(); 
-    virtual VMSymbol* get_name(); 
-    virtual void      set_name(VMSymbol*); 
-    virtual VMArray*  get_instance_fields(); 
-    virtual void      set_instance_fields(VMArray*); 
-    virtual VMArray*  get_instance_invokables(); 
-    virtual void      set_instance_invokables(VMArray*); 
-    virtual int       get_number_of_instance_invokables(); 
-    virtual VMObject* get_instance_invokable(int); 
-    virtual void      set_instance_invokable(int, VMObject*); 
-    virtual VMObject* lookup_invokable(VMSymbol*); 
-    virtual int       lookup_field_index(VMSymbol*); 
-    virtual bool      add_instance_invokable(VMObject*); 
-    virtual void      add_instance_primitive(VMPrimitive*); 
-    virtual VMSymbol* get_instance_field_name(int); 
-    virtual int       get_number_of_instance_fields(); 
-    virtual bool      has_primitives(); 
-    virtual void      load_primitives(const vector<pString>&,int);
+	virtual VMClass*  GetSuperClass(); 
+    virtual void      SetSuperClass(VMClass*); 
+    virtual bool      HasSuperClass(); 
+    virtual VMSymbol* GetName(); 
+    virtual void      SetName(VMSymbol*); 
+    virtual VMArray*  GetInstanceFields(); 
+    virtual void      SetInstanceFields(VMArray*); 
+    virtual VMArray*  GetInstanceInvokables(); 
+    virtual void      SetInstanceInvokables(VMArray*); 
+    virtual int       GetNumberOfInstanceInvokables(); 
+    virtual VMObject* GetInstanceInvokable(int); 
+    virtual void      SetInstanceInvokable(int, VMObject*); 
+    virtual VMObject* LookupInvokable(VMSymbol*); 
+    virtual int       LookupFieldIndex(VMSymbol*); 
+    virtual bool      AddInstanceInvokable(VMObject*); 
+    virtual void      AddInstancePrimitive(VMPrimitive*); 
+    virtual VMSymbol* GetInstanceFieldName(int); 
+    virtual int       GetNumberOfInstanceFields(); 
+    virtual bool      HasPrimitives(); 
+    virtual void      LoadPrimitives(const vector<pString>&,int);
 
-	virtual void MarkReferences();
+	//virtual void MarkReferences();
 	
 
 private:
 	
     
-    pString gen_loadstring(const pString& cp, 
+    pString genLoadstring(const pString& cp, 
                        const pString& cname
                        );
 
-    pString gen_core_loadstring(const pString& cp);
+    pString genCoreLoadstring(const pString& cp);
 
-    ifstream* load_lib(const pString& path);
+    ifstream* loadLib(const pString& path);
 
-    bool is_responsible(ifstream* handle, const pString& cl);
+    bool isResponsible(ifstream* handle, const pString& cl);
     static void set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
                     const char* format
                     );

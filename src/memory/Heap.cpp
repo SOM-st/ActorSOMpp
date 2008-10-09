@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
-
+#include "../vmobjects/VMObject.h"
 
 Heap::Heap(int object_space_size)// : globals(INT32_MAX)
 {
@@ -28,6 +28,13 @@ Heap::Heap(int object_space_size)// : globals(INT32_MAX)
 Heap::~Heap()
 {
 	free(object_space);
+}
+
+VMObject* Heap::AllocateObject(size_t size)
+{
+    VMObject* vmo = (VMObject*) Allocate(size);
+    vmo->SetObjectSize(size);
+    return vmo;
 }
 
 void* Heap::Allocate(size_t size)

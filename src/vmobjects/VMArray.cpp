@@ -2,12 +2,12 @@
 
 #include "../vm/Universe.h"
 
-#define theEntries(i) fields[this->GetNumberOfFields()+i]
+#define theEntries(i) FIELDS[this->GetNumberOfFields()+i]
 
 VMArray::VMArray(int size, int nof) : VMObject(nof+2)
 {
 	this->size = _UNIVERSE->new_integer(size);
-	objectSize += size * sizeof(VMObject*); //calculate actual object size including the entries
+	//objectSize += size * sizeof(VMObject*); //calculate actual object size including the entries
 }
 
 VMArray* VMArray::CopyAndExtendWith(VMObject* item)
@@ -58,11 +58,12 @@ void VMArray::SetIndexableField(int idx, VMObject* item)
 
 void VMArray::MarkReferences()
 {
-    VMObject::MarkReferences();
-    this->size->MarkReferences();
+    
+//    this->size->MarkReferences();
 	for (int i = 0 ; i < size->GetEmbeddedInteger() ; ++i)
 	{
 		if (theEntries(i) != NULL)
 			theEntries(i)->MarkReferences();
 	}
+    VMObject::MarkReferences();
 }

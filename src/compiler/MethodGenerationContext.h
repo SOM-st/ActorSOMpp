@@ -24,10 +24,10 @@ public:
 	bool find_field(const pString& field);
 	uint8_t compute_stack_depth();
 
-	void set_holder(class_generation_context* holder);
+	void SetHolder(class_generation_context* holder);
 	void set_outer(MethodGenerationContext* outer);
 	void set_is_block_method(bool is_block = true);
-	void set_signature(VMSymbol* sig);
+	void SetSignature(VMSymbol* sig);
 	void add_argument(const pString& arg);
 	void set_primitive(bool prim = true);
 	void add_local(const pString& local);
@@ -36,14 +36,14 @@ public:
 	bool add_local_if_absent(const pString& local);
 	bool add_literal_if_absent(VMObject* lit);
 	void set_finished(bool finished = true);
-	class_generation_context* get_holder();
+	class_generation_context* GetHolder();
 	MethodGenerationContext* get_outer();
-	VMSymbol* get_signature();
-	bool is_primitive();
+	VMSymbol* GetSignature();
+	bool IsPrimitive();
 	bool is_block_method();
 	bool is_finished();
 	void RemoveLastBytecode() { bytecode.pop_back(); };
-	int get_number_of_arguments();
+	int GetNumberOfArguments();
 	void add_bytecode(uint8_t bc);
 private:
 	class_generation_context*  holder_genc;

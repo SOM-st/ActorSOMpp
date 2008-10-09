@@ -5,36 +5,30 @@
 #include "Signature.h"
 #include "VMMethod.h"
 
-bool      VMInvokable::is_primitive() 
+bool      VMInvokable::IsPrimitive() 
 {
     return false;
-};
+}
 
-VMSymbol *VMInvokable::get_signature() { 
+VMSymbol *VMInvokable::GetSignature() { 
     return signature; 
 }
 
-void      VMInvokable::set_signature(VMSymbol* sig) 
+void      VMInvokable::SetSignature(VMSymbol* sig) 
 { 
     signature = sig;
     
-    if (!is_primitive()) 
-        ((VMMethod*)this)->set_number_of_arguments(Signature::GetNumberOfArguments(signature));
+    if (!IsPrimitive()) 
+        ((VMMethod*)this)->SetNumberOfArguments(Signature::GetNumberOfArguments(signature));
 }
 
-VMClass  *VMInvokable::get_holder() 
+VMClass  *VMInvokable::GetHolder() 
 {
     return holder; 
 }
 
-void      VMInvokable::set_holder(VMClass* hld) 
+void      VMInvokable::SetHolder(VMClass* hld) 
 {
     holder = hld; 
 }
 //virtual void invoke_method(VMFrame*) = 0;
-
-void VMInvokable::MarkReferences() 
-{
-	signature->MarkReferences();
-	holder->MarkReferences();
-}

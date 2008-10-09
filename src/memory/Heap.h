@@ -8,6 +8,7 @@
 #include "GarbageCollector.h"
 #include "../misc/defs.h"
 //#include "../misc/HashMap.h"
+class VMObject;
 
 struct free_list_entry {
     free_list_entry* next;
@@ -22,6 +23,7 @@ class Heap
 public:
 	Heap(int object_space_size = 1000000);
 	~Heap();
+    VMObject* AllocateObject(size_t size);
 	void* Allocate(size_t size);
     void Free(void* ptr);
 	void Free(void* ptr, int size);

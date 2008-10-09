@@ -203,7 +203,7 @@ void Universe::prepareNilObject()
 
 void Universe::initialize(int _argc, char** _argv)
 {
-    heapSize = 10000000;
+    heapSize = 1000000;
 
     int argc;
     vector<pString> argv = this->handle_arguments(&argc, _argc, _argv);
@@ -294,11 +294,11 @@ void Universe::initialize(int _argc, char** _argv)
     cout << "Creating fake bootstrap method" << endl;
     
     VMMethod* bootstrap_method = new_method(symbol_for_chars("bootstrap"), 1, 0);
-    bootstrap_method->set_bytecode(0, BC_HALT);
-    bootstrap_method->set_number_of_locals(0);
-    //bootstrap_method->set_number_of_arguments(0);
-    bootstrap_method->set_maximum_number_of_stack_elements(2);
-    bootstrap_method->set_holder(system_class);
+    bootstrap_method->SetBytecode(0, BC_HALT);
+    bootstrap_method->SetNumberOfLocals(0);
+    //bootstrap_method->SetNumberOfArguments(0);
+    bootstrap_method->SetMaximumNumberOfStackElements(2);
+    bootstrap_method->SetHolder(system_class);
     cout << "Cheer!!! We can start the Interpreter now!" << endl;
 
     if (argc == 0) {
@@ -321,8 +321,8 @@ void Universe::initialize(int _argc, char** _argv)
     bootstrap_frame->Push((VMObject*)arguments_array);
 
     VMInvokable* initialize = 
-        (VMInvokable*)system_class->lookup_invokable(this->symbol_for_chars("initialize:"));
-    initialize->invoke(bootstrap_frame);
+        (VMInvokable*)system_class->LookupInvokable(this->symbol_for_chars("initialize:"));
+    initialize->Invoke(bootstrap_frame);
     
     // reset "-d" indicator
     if(!(trace>0)) dump_bytecodes = 2 - trace;
@@ -334,10 +334,10 @@ void Universe::initialize(int _argc, char** _argv)
  //   
 	////while (1) {
 	//	VMObject *vmo = new (heap) VMObject;
-	//	cout << "vmo (VMObject) Obj size:" << vmo->getObjectSize() << endl;
+	//	cout << "vmo (VMObject) Obj size:" << vmo->GetObjectSize() << endl;
 	//	//cout << sizeof(*vmo) << endl;
 	//	VMObject *vmo2 = new (heap, 0) VMMethod(0,0);
-	//	cout << "vmo2 (VMMethod) Obj size:" << vmo2->getObjectSize() << endl;
+	//	cout << "vmo2 (VMMethod) Obj size:" << vmo2->GetObjectSize() << endl;
 	//	//cout << sizeof(*vmo2) << endl;
 	////}
 	////vector<VMObject*, HeapAllocator<VMObject*> > v = vector<VMObject*, HeapAllocator<VMObject*> >(HeapAllocator<VMObject*>(heap));
@@ -345,9 +345,9 @@ void Universe::initialize(int _argc, char** _argv)
 	////v.push_back(vmo2);
 
 	//VMString *vmstr = new (heap) VMString;
-	//cout << "vmstr Obj size:" << vmstr->getObjectSize() << endl;
+	//cout << "vmstr Obj size:" << vmstr->GetObjectSize() << endl;
 	//VMString *vmstr2 = new (heap, strlen("Stringtest")+1 ) VMString("Stringtest");
-	//cout << "vmstr2 Obj size:" << vmstr2->getObjectSize() << endl;
+	//cout << "vmstr2 Obj size:" << vmstr2->GetObjectSize() << endl;
 	//cout << vmstr2->GetChars() << endl;
 
 	//VMArray* vma = new (heap, 4*sizeof(VMObject*)) VMArray(4);
@@ -356,7 +356,7 @@ void Universe::initialize(int _argc, char** _argv)
 	//vma->SetIndexableField(2, vmstr);
 	//vma->SetIndexableField(3, vmstr2);
 	//cout << "sizeof(VMArray)" << sizeof(VMArray) << endl;
-	//cout << "vma Obj size:" << vma->getObjectSize() << endl;
+	//cout << "vma Obj size:" << vma->GetObjectSize() << endl;
 	//cout << "vma array size:" << vma->GetArraySize() << endl;
 
  //   VMInvokable* inv = dynamic_cast<VMInvokable*>(vmo2);
@@ -371,8 +371,8 @@ void Universe::initialize(int _argc, char** _argv)
  //   //cout << typeid(vmo2) << endl;
 	////vmstr->FromCString("VMString Test");
 	////cout << vmstr->ToCString() << endl;
-	////cout << vmo->getObjectSize() << endl;
-	////cout << vmo2->getObjectSize() << endl;
+	////cout << vmo->GetObjectSize() << endl;
+	////cout << vmo2->GetObjectSize() << endl;
 	//
 	////this->RunGC();
 
@@ -454,7 +454,7 @@ VMClass* Universe::get_block_class_with_args( int number_of_arguments)
 
     VMClass* result = load_class_basic(name, NULL);
 
-    result->add_instance_primitive(new (_HEAP) VMEvaluationPrimitive(number_of_arguments) );
+    result->AddInstancePrimitive(new (_HEAP) VMEvaluationPrimitive(number_of_arguments) );
 
     set_global(name, (VMObject*) result);
 
@@ -483,30 +483,30 @@ void Universe::initialize_system_class( VMClass* system_class, VMClass* super_cl
     pString s_name(name);
 
     if (super_class != NULL) {
-        system_class->set_super_class(super_class);
+        system_class->SetSuperClass(super_class);
         VMClass* sys_class_class = system_class->GetClass();
         VMClass* super_class_class = super_class->GetClass();
-        sys_class_class->set_super_class(super_class_class);
+        sys_class_class->SetSuperClass(super_class_class);
     } else {
         VMClass* sys_class_class = system_class->GetClass();
-        sys_class_class->set_super_class(class_class);
+        sys_class_class->SetSuperClass(class_class);
     }
 
     VMClass* sys_class_class = system_class->GetClass();
 
-    system_class->set_instance_fields(new_array(0));
-    sys_class_class->set_instance_fields(new_array(0));
+    system_class->SetInstanceFields(new_array(0));
+    sys_class_class->SetInstanceFields(new_array(0));
 
-    system_class->set_instance_invokables(new_array(0));
-    sys_class_class->set_instance_invokables(new_array(0));
+    system_class->SetInstanceInvokables(new_array(0));
+    sys_class_class->SetInstanceInvokables(new_array(0));
 
-    system_class->set_name(symbol_for(s_name));
+    system_class->SetName(symbol_for(s_name));
     ostringstream Str;
     Str << s_name << " class";
     pString class_class_name(Str.str());
-    sys_class_class->set_name(symbol_for(class_class_name));
+    sys_class_class->SetName(symbol_for(class_class_name));
 
-    set_global(system_class->get_name(), (VMObject*)system_class);
+    set_global(system_class->GetName(), (VMObject*)system_class);
 
 
 }
@@ -523,8 +523,8 @@ VMClass* Universe::load_class( VMSymbol* name)
        Universe::quit(ERR_FAIL);
    }
 
-   if (result->has_primitives() || result->GetClass()->has_primitives())
-       result->load_primitives(class_path, cp_count);
+   if (result->HasPrimitives() || result->GetClass()->HasPrimitives())
+       result->LoadPrimitives(class_path, cp_count);
     
    return result;
 }
@@ -561,16 +561,16 @@ VMClass* Universe::load_shell_class( pString& stmt)
 void Universe::load_system_class( VMClass* system_class)
 {
     VMClass* result =
-        load_class_basic(system_class->get_name(), system_class);
-    pString s = system_class->get_name()->GetStdString();
+        load_class_basic(system_class->GetName(), system_class);
+    pString s = system_class->GetName()->GetStdString();
 
     if (!result) {
-        cout << "Can\'t load system class: " << system_class->get_name()->GetStdString();
+        cout << "Can\'t load system class: " << system_class->GetName()->GetStdString();
         Universe::quit(ERR_FAIL);
     }
 
-    if (result->has_primitives() || result->GetClass()->has_primitives())
-        result->load_primitives(class_path, cp_count);
+    if (result->HasPrimitives() || result->GetClass()->HasPrimitives())
+        result->LoadPrimitives(class_path, cp_count);
 }
 
 VMArray* Universe::new_array( int size)
@@ -631,7 +631,7 @@ VMBlock* Universe::new_block( VMMethod* method, VMFrame* context, int arguments)
 
 VMClass* Universe::new_class( VMClass* class_of_class)
 {
-    int num_fields = class_of_class->get_number_of_instance_fields();
+    int num_fields = class_of_class->GetNumberOfInstanceFields();
     VMClass* result;
 
     if (num_fields) result = new (heap, num_fields*sizeof(VMObject)) VMClass(num_fields);
@@ -651,9 +651,9 @@ VMDouble* Universe::new_double( double value)
 
 VMFrame* Universe::new_frame( VMFrame* previous_frame, VMMethod* method)
 {
-    int length = method->get_number_of_arguments() +
-                 method->get_number_of_locals()+
-                 method->get_maximum_number_of_stack_elements();
+    int length = method->GetNumberOfArguments() +
+                 method->GetNumberOfLocals()+
+                 method->GetMaximumNumberOfStackElements();
 
 
     VMFrame* result = new (heap, length * sizeof(VMObject*)) VMFrame(length);
@@ -671,7 +671,7 @@ VMFrame* Universe::new_frame( VMFrame* previous_frame, VMMethod* method)
 
 VMObject* Universe::new_instance( VMClass*  class_of_instance)
 {
-    int num_of_fields = class_of_instance->get_number_of_instance_fields();
+    int num_of_fields = class_of_instance->GetNumberOfInstanceFields();
     VMObject* result = new (heap, num_of_fields * sizeof(VMObject*))VMObject(num_of_fields);
     result->SetClass(class_of_instance);
     return result;
@@ -701,7 +701,7 @@ VMMethod* Universe::new_method( VMSymbol* signature, size_t number_of_bytecodes,
                                   number_of_constants*sizeof(VMObject*)) VMMethod(number_of_bytecodes, number_of_constants);
     result->SetClass(method_class);
 
-    result->set_signature(signature);
+    result->SetSignature(signature);
 
     return result;
 }

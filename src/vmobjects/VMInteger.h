@@ -12,9 +12,8 @@ public:
     VMInteger();
     VMInteger(int32_t);
     //virtual ~VMInteger();
-    void SetEmbeddedInteger(int32_t);
-    int32_t GetEmbeddedInteger();
-
+    void            SetEmbeddedInteger(int32_t);
+    int32_t         GetEmbeddedInteger();
 private:
     int32_t embeddedInteger;
 };

@@ -35,7 +35,7 @@ void Interpreter::Start()
         int bytecode_index = _FRAME->GetBytecodeIndex();
 
         VMMethod* method = this->GetMethod();
-        uint8_t bytecode = method->get_bytecode(bytecode_index);
+        uint8_t bytecode = method->GetBytecode(bytecode_index);
 
         int bytecode_length = Bytecode::GetBytecodeLength(bytecode);
 
@@ -94,7 +94,7 @@ VMMethod* Interpreter::GetMethod()
    /* cout << "bytecodes: ";
       for (int i = 0; i < method->BytecodeLength(); ++i)
     {
-        cout  << (int)method->get_bytecode(i)<< " ";
+        cout  << (int)method->GetBytecode(i)<< " ";
     }
     cout << endl;*/
     return method;
@@ -121,7 +121,7 @@ void Interpreter::popFrameAndPushResult( VMObject* result )
     VMFrame* prevFrame = this->popFrame();
 
     VMMethod* method = prevFrame->GetMethod();
-    int number_of_args = method->get_number_of_arguments();
+    int number_of_args = method->GetNumberOfArguments();
 
     for (int i = 0; i < number_of_args; ++i) _FRAME->Pop();
 
@@ -130,11 +130,11 @@ void Interpreter::popFrameAndPushResult( VMObject* result )
 
 void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
 {
-    VMInvokable* invokable = (VMInvokable*) receiver_class->lookup_invokable(signature);
+    VMInvokable* invokable = (VMInvokable*) receiver_class->LookupInvokable(signature);
 
     if (invokable != NULL)
     {
-        invokable->invoke(_FRAME);
+        invokable->Invoke(_FRAME);
     } else {
         //doesNotUnderstand
         int number_of_args = Signature::GetNumberOfArguments(signature);
@@ -162,8 +162,8 @@ void Interpreter::do_dup()
 void Interpreter::do_push_local( int bytecode_index )
 {
     VMMethod* method = _METHOD;
-    uint8_t bc1 = method->get_bytecode(bytecode_index + 1);
-    uint8_t bc2 = method->get_bytecode(bytecode_index + 2);
+    uint8_t bc1 = method->GetBytecode(bytecode_index + 1);
+    uint8_t bc2 = method->GetBytecode(bytecode_index + 2);
 
     VMObject* local = _FRAME->GetLocal(bc1, bc2);
 
@@ -173,8 +173,8 @@ void Interpreter::do_push_local( int bytecode_index )
 void Interpreter::do_push_argument( int bytecode_index )
 {
     VMMethod* method = _METHOD;
-    uint8_t bc1 = method->get_bytecode(bytecode_index + 1);
-    uint8_t bc2 = method->get_bytecode(bytecode_index + 2);
+    uint8_t bc1 = method->GetBytecode(bytecode_index + 1);
+    uint8_t bc2 = method->GetBytecode(bytecode_index + 2);
 
     VMObject* argument = _FRAME->GetArgument(bc1, bc2);
 
@@ -185,7 +185,7 @@ void Interpreter::do_push_field( int bytecode_index )
 {
     VMMethod* method = _METHOD;
 
-    VMSymbol* field_name = (VMSymbol*) method->get_constant(bytecode_index);
+    VMSymbol* field_name = (VMSymbol*) method->GetConstant(bytecode_index);
 
     VMObject* self = _SELF;
     int field_index = self->GetFieldIndex(field_name);
@@ -199,9 +199,9 @@ void Interpreter::do_push_block( int bytecode_index )
 {
     VMMethod* method = _METHOD;
 
-    VMMethod* blockMethod = (VMMethod*)method->get_constant(bytecode_index);
+    VMMethod* blockMethod = (VMMethod*)method->GetConstant(bytecode_index);
 
-    int num_of_args = blockMethod->get_number_of_arguments();
+    int num_of_args = blockMethod->GetNumberOfArguments();
 
     _FRAME->Push((VMObject*) _UNIVERSE->new_block(blockMethod, _FRAME, num_of_args));
 }
@@ -210,7 +210,7 @@ void Interpreter::do_push_constant( int bytecode_index )
 {
     VMMethod* method = _METHOD;
 
-    VMObject* constant = method->get_constant(bytecode_index);
+    VMObject* constant = method->GetConstant(bytecode_index);
     _FRAME->Push(constant);
     
    // _FRAME->PrintStack();
@@ -223,7 +223,7 @@ void Interpreter::do_push_global( int bytecode_index)
 
     VMMethod* method = _METHOD;
 
-    VMSymbol* global_name = (VMSymbol*) method->get_constant(bytecode_index);
+    VMSymbol* global_name = (VMSymbol*) method->GetConstant(bytecode_index);
 
     VMObject* global = _UNIVERSE->get_global(global_name);
 
@@ -245,8 +245,8 @@ void Interpreter::do_pop_local( int bytecode_index )
 {
     VMMethod* method = _METHOD;
 
-    uint8_t bc1 = method->get_bytecode(bytecode_index +1);
-    uint8_t bc2 = method->get_bytecode(bytecode_index +2);
+    uint8_t bc1 = method->GetBytecode(bytecode_index +1);
+    uint8_t bc2 = method->GetBytecode(bytecode_index +2);
 
     VMObject* o = _FRAME->Pop();
 
@@ -257,8 +257,8 @@ void Interpreter::do_pop_argument( int bytecode_index )
 {
     VMMethod* method = _METHOD;
 
-    uint8_t bc1 = method->get_bytecode(bytecode_index +1);
-    uint8_t bc2 = method->get_bytecode(bytecode_index +2);
+    uint8_t bc1 = method->GetBytecode(bytecode_index +1);
+    uint8_t bc2 = method->GetBytecode(bytecode_index +2);
 
     VMObject* o = _FRAME->Pop();
     _FRAME->SetArgument(bc1, bc2, o);
@@ -274,7 +274,7 @@ void Interpreter::do_send( int bytecode_index )
 {
     VMMethod* method = _METHOD;
     
-    VMSymbol* signature = (VMSymbol*) method->get_constant(bytecode_index);
+    VMSymbol* signature = (VMSymbol*) method->GetConstant(bytecode_index);
 #ifdef __DEBUG
         cout << "sig: " << signature->GetChars() << endl;
 #endif
@@ -282,7 +282,7 @@ void Interpreter::do_send( int bytecode_index )
 
     VMObject* receiver = _FRAME->GetStackElement(num_of_args-1);
 #ifdef __DEBUG
-    cout << "rec("<<num_of_args-1<<"): " << receiver->GetClass()->get_name()->GetChars() << endl;
+    cout << "rec("<<num_of_args-1<<"): " << receiver->GetClass()->GetName()->GetChars() << endl;
 #endif
     this->send(signature, receiver->GetClass());
 }
@@ -290,16 +290,16 @@ void Interpreter::do_send( int bytecode_index )
 void Interpreter::do_super_send( int bytecode_index )
 {
     VMMethod* method = _METHOD;
-    VMSymbol* signature = (VMSymbol*) method->get_constant(bytecode_index);
+    VMSymbol* signature = (VMSymbol*) method->GetConstant(bytecode_index);
 
     VMFrame* ctxt = _FRAME->GetOuterContext();
     VMMethod* real_method = ctxt->GetMethod();
-    VMClass* holder = real_method->get_holder();
-    VMClass* super = holder->get_super_class();
-    VMInvokable* invokable = (VMInvokable*) super->lookup_invokable(signature);
+    VMClass* holder = real_method->GetHolder();
+    VMClass* super = holder->GetSuperClass();
+    VMInvokable* invokable = (VMInvokable*) super->LookupInvokable(signature);
 
     if (invokable != NULL)
-        invokable->invoke(_FRAME);
+        invokable->Invoke(_FRAME);
     else {
         int num_of_args = Signature::GetNumberOfArguments(signature);
         VMObject* receiver = _FRAME->GetStackElement(num_of_args - 1);

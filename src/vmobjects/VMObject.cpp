@@ -9,15 +9,18 @@
 //    VMObject::VMObject(0);
 //}
 
+
+
 VMObject::VMObject( int number_of_fields )
 {
-    fields = (VMObject**)&clazz;//fields + sizeof(VMObject**); 
+    //fields = (VMObject**)&clazz;//fields + sizeof(VMObject**); 
 
     this->SetNumberOfFields(number_of_fields+1);//+1 because of the clazz field
     gcfield = 0; 
 	hash = (int32_t)this;
     //cout << sizeof(VMObject) << endl;
-    objectSize = sizeof(VMObject) + number_of_fields*sizeof(VMObject*);//sizeof(VMObject) includes the space for the clazz field
+    //objectSize = sizeof(VMObject) + number_of_fields*sizeof(VMObject*);//sizeof(VMObject) includes the space for the clazz field
+   
 }
 
 //VMObject::~VMObject() {}
@@ -34,12 +37,12 @@ void VMObject::SetClass(VMClass* cl)
 
 VMSymbol* VMObject::GetFieldName(int index)
 {
-    return this->clazz->get_instance_field_name(index);
+    return this->clazz->GetInstanceFieldName(index);
 }
 
 int VMObject::GetFieldIndex(VMSymbol* fieldName)
 {
-    return this->clazz->lookup_field_index(fieldName);
+    return this->clazz->LookupFieldIndex(fieldName);
 }
 
 int VMObject::GetNumberOfFields()
@@ -74,21 +77,21 @@ void VMObject::Send(pString selector_string, VMObject** arguments, int argc)
     }
 
     VMClass* cl = this->GetClass();
-    VMInvokable* invokable = dynamic_cast<VMInvokable*>(cl->lookup_invokable(selector));
-    invokable->invoke(frame);
+    VMInvokable* invokable = dynamic_cast<VMInvokable*>(cl->LookupInvokable(selector));
+    invokable->Invoke(frame);
 }
 
-int VMObject::getObjectSize() 
+int VMObject::GetObjectSize() 
 {
     return objectSize;
 }
 
-bool VMObject::getGCField() 
+bool VMObject::GetGCField() 
 {
     return gcfield;
 }
 	
-void VMObject::setGCField(bool value) 
+void VMObject::SetGCField(bool value) 
 { 
     gcfield = value; 
 }
@@ -100,16 +103,21 @@ void VMObject::Assert(bool value)
 
 VMObject* VMObject::GetField(int index)
 {
-    return this->fields[index]; 
+    return FIELDS[index]; 
 }
 
 void VMObject::SetField(int index, VMObject* value)
 {
-    this->fields[index] = value;
+     FIELDS[index] = value;
 }
 
 void VMObject::MarkReferences()
 {
-	this->setGCField(1);
-	clazz->MarkReferences();
+    if (this->gcfield) return;
+	this->SetGCField(1);
+    for( int i = 0; i < this->GetNumberOfFields(); ++i)
+    {
+        FIELDS[i]->MarkReferences();
+    }
+//	clazz->MarkReferences();
 }

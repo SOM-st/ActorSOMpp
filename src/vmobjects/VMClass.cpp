@@ -27,13 +27,13 @@ VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4)
 }
 
 
-bool VMClass::has_super_class()
+bool VMClass::HasSuperClass()
 {
     return (super_class != NULL && super_class != nil_object);
 }
 
 
-bool VMClass::add_instance_invokable(VMObject *ptr)
+bool VMClass::AddInstanceInvokable(VMObject *ptr)
 {
     VMInvokable* newInvokable = dynamic_cast<VMInvokable*>(ptr);
     if (newInvokable == NULL) {
@@ -44,9 +44,9 @@ bool VMClass::add_instance_invokable(VMObject *ptr)
 	{
         VMInvokable* inv = dynamic_cast<VMInvokable*>( instance_invokables->GetIndexableField(i) );
 		if (inv != 0) {
-            if (newInvokable->get_signature() == inv->get_signature())
+            if (newInvokable->GetSignature() == inv->GetSignature())
             {
-                this->set_instance_invokable(i, ptr);
+                this->SetInstanceInvokable(i, ptr);
                 return false;
             }
 			//if (ptr->GetSignature() == ((VMInvokable*)cmp)->GetSignature()) {
@@ -65,14 +65,14 @@ bool VMClass::add_instance_invokable(VMObject *ptr)
 	return true;
 }
 
-void VMClass::add_instance_primitive(VMPrimitive *ptr)
+void VMClass::AddInstancePrimitive(VMPrimitive *ptr)
 {
-	if (add_instance_invokable((VMObject*)ptr)) {
+	if (AddInstanceInvokable((VMObject*)ptr)) {
 		//cout << "Warn: Primitive "<<ptr->GetSignature<<" is not in class definition for class " << name->GetStdString() << endl;
 	}
 }
 
-VMSymbol* VMClass::get_instance_field_name(int index)
+VMSymbol* VMClass::GetInstanceFieldName(int index)
 {
 	if (index >= numberOfSuperInstanceFields())
 	{
@@ -80,115 +80,115 @@ VMSymbol* VMClass::get_instance_field_name(int index)
 		return (VMSymbol*) instance_fields->GetIndexableField(index);
 	}
 	
-	return super_class->get_instance_field_name(index);
+	return super_class->GetInstanceFieldName(index);
 }
 
-VMClass* VMClass::get_super_class()
+VMClass* VMClass::GetSuperClass()
 {
 	return super_class;
 }
 
-void VMClass::set_super_class(VMClass* sup)
+void VMClass::SetSuperClass(VMClass* sup)
 {
 	super_class = sup;
 }
 
-VMSymbol* VMClass::get_name()
+VMSymbol* VMClass::GetName()
 {
 	return name;
 }
-void VMClass::set_name(VMSymbol* nam)
+void VMClass::SetName(VMSymbol* nam)
 {
 	name = nam;
 }
 
-VMArray* VMClass::get_instance_fields()
+VMArray* VMClass::GetInstanceFields()
 {
 	return instance_fields;
 }
 
 
-void VMClass::set_instance_fields(VMArray* inst_fields)
+void VMClass::SetInstanceFields(VMArray* inst_fields)
 {
 	instance_fields = inst_fields;
 }
 
-VMArray  *VMClass::get_instance_invokables()
+VMArray  *VMClass::GetInstanceInvokables()
 {
 	return instance_invokables;
 }
 
-void      VMClass::set_instance_invokables(VMArray* invokables)
+void      VMClass::SetInstanceInvokables(VMArray* invokables)
 {
 	instance_invokables = invokables;
 }
 
-int       VMClass::get_number_of_instance_invokables()
+int       VMClass::GetNumberOfInstanceInvokables()
 {
 	return instance_invokables->GetNumberOfIndexableFields();
 }
 
-VMObject *VMClass::get_instance_invokable(int index)
+VMObject *VMClass::GetInstanceInvokable(int index)
 {
     return instance_invokables->GetIndexableField(index);
 	//return instance_invokables[index];
 	//return NULL;
 }
 
-void      VMClass::set_instance_invokable(int index, VMObject* invokable)
+void      VMClass::SetInstanceInvokable(int index, VMObject* invokable)
 {
 	instance_invokables->SetIndexableField(index, invokable);
 	//instance_invokables[index] = invokable;
 }
 
-VMObject* VMClass::lookup_invokable(VMSymbol* name)
+VMObject* VMClass::LookupInvokable(VMSymbol* name)
 {
     VMInvokable* invokable = NULL;
-    for (int i = 0; i < get_number_of_instance_invokables(); ++i)
+    for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i)
     {
-        invokable = (VMInvokable*)(get_instance_invokable(i));
-        if (invokable->get_signature() == name) 
+        invokable = (VMInvokable*)(GetInstanceInvokable(i));
+        if (invokable->GetSignature() == name) 
             return (VMObject*)invokable;
     }
     invokable = NULL;
     //look in super class
-    if (this->has_super_class()) 
+    if (this->HasSuperClass()) 
     {
-        invokable = (VMInvokable*)this->super_class->lookup_invokable(name);
+        invokable = (VMInvokable*)this->super_class->LookupInvokable(name);
     }
 	return (VMObject*)invokable;
 }
 
-int       VMClass::lookup_field_index(VMSymbol* name)
+int       VMClass::LookupFieldIndex(VMSymbol* name)
 {
-    for (int i = 0; i <=get_number_of_instance_fields(); ++i) //even with get_number_of_instance_fields == 0 there is the class field
+    for (int i = 0; i <=GetNumberOfInstanceFields(); ++i) //even with GetNumberOfInstanceFields == 0 there is the class field
     {
-        if (name == this->get_instance_field_name(i) ||
-            name->GetStdString() == this->get_instance_field_name(i)->GetStdString()) 
+        if (name == this->GetInstanceFieldName(i) ||
+            name->GetStdString() == this->GetInstanceFieldName(i)->GetStdString()) 
                 return i;
     }
 	return -1;
 }
 
 
-int       VMClass::get_number_of_instance_fields()
+int       VMClass::GetNumberOfInstanceFields()
 {
 	return instance_fields->GetNumberOfIndexableFields()
            + this->numberOfSuperInstanceFields();
 }
 
-bool      VMClass::has_primitives()
+bool      VMClass::HasPrimitives()
 {
-	for (int i = 0; i < get_number_of_instance_invokables(); ++i)
+	for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i)
     {
-        VMInvokable* invokable = (VMInvokable*)(get_instance_invokable(i));
-        if (invokable->is_primitive()) return true;
+        VMInvokable* invokable = (VMInvokable*)(GetInstanceInvokable(i));
+        if (invokable->IsPrimitive()) return true;
     }
     return false;
 }
 
 
-void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
+void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
 {//todo do this the "right" way. for now we have a fake dll lookup in Core.h
 
     //// the library handle
@@ -206,10 +206,10 @@ void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
     //    //
     //    
     //    
-        pString loadstring = gen_core_loadstring(*i);
-        dlhandle = load_lib(loadstring);
+        pString loadstring = genCoreLoadstring(*i);
+        dlhandle = loadLib(loadstring);
         //SEND(loadstring, free);
-        if(dlhandle != NULL && dlhandle->good() && is_responsible(dlhandle, cname))
+        if(dlhandle != NULL && dlhandle->good() && isResponsible(dlhandle, cname))
     //        //
     //        // the core library is found and responsible
     //        //
@@ -227,14 +227,14 @@ void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
     //    //
     //    
     //    
-        loadstring = gen_loadstring(*i, cname);
-        dlhandle = load_lib(loadstring);
+        loadstring = genLoadstring(*i, cname);
+        dlhandle = loadLib(loadstring);
     //    SEND(loadstring, free);
         if(dlhandle != NULL && dlhandle->good()) {
     //        //
     //        // the class library was found...
     //        //
-            if(is_responsible(dlhandle, cname)) {
+            if(isResponsible(dlhandle, cname)) {
     //            //
     //            // ...and is responsible.
     //            //
@@ -279,27 +279,27 @@ void      VMClass::load_primitives(const vector<pString>& cp,int cp_count)
     set_primitives(this->GetClass(), dlhandle, cname, CLASS_METHOD_FORMAT_S);
 }
 
-
-void VMClass::MarkReferences()
-{
-	VMObject::MarkReferences();
-	super_class->MarkReferences();
-	name->MarkReferences();
-	instance_fields->MarkReferences();
-	instance_invokables->MarkReferences();
-}
+//
+//void VMClass::MarkReferences()
+//{
+//	VMObject::MarkReferences();
+//	super_class->MarkReferences();
+//	name->MarkReferences();
+//	instance_fields->MarkReferences();
+//	instance_invokables->MarkReferences();
+//}
 
 //private Methods
 
 int VMClass::numberOfSuperInstanceFields()
 {
-	if (this->has_super_class()) return this->super_class->get_number_of_instance_fields();
+	if (this->HasSuperClass()) return this->super_class->GetNumberOfInstanceFields();
 	return 0;
 }
 
-//load_primitives helper
+//LoadPrimitives helper
 #define shared_extension ".csp"
-pString VMClass::gen_loadstring(const pString& cp, 
+pString VMClass::genLoadstring(const pString& cp, 
                        const pString& cname
                        ) {
     
@@ -317,10 +317,10 @@ pString VMClass::gen_loadstring(const pString& cp,
  *  at the classpath given.
  *
  */
-pString VMClass::gen_core_loadstring(const pString& cp) {
+pString VMClass::genCoreLoadstring(const pString& cp) {
     #define S_CORE "SOMCore"
     pString corename = string(S_CORE);
-    pString result = gen_loadstring(cp, corename);
+    pString result = genLoadstring(cp, corename);
     //SEND(corename, free);
     
     return result;
@@ -331,9 +331,9 @@ pString VMClass::gen_core_loadstring(const pString& cp) {
  * load the given library, return the handle
  *
  */
-ifstream* VMClass::load_lib(const pString& path) {
+ifstream* VMClass::loadLib(const pString& path) {
 #ifdef __DEBUG
-    cout << "load_lib " << path << endl;
+    cout << "loadLib " << path << endl;
 #endif
     //#if !defined(CSOM_WIN)
     //    #ifdef DEBUG
@@ -362,7 +362,7 @@ ifstream* VMClass::load_lib(const pString& path) {
  * check, whether the lib referenced by the handle supports the class given
  *
  */
-bool VMClass::is_responsible(ifstream* handle, const pString& cl) {
+bool VMClass::isResponsible(ifstream* handle, const pString& cl) {
 
 /*    // function handler
     supports_class_fn supports_class=NULL;
@@ -393,20 +393,20 @@ void VMClass::set_primitives(VMClass* cl, ifstream* handle, const pString& cname
     PrimitiveRoutine*   routine=NULL;
     VMInvokable* an_invokable;
     // iterate invokables
-    for(int i = 0; i < cl->get_number_of_instance_invokables(); i++) {
+    for(int i = 0; i < cl->GetNumberOfInstanceInvokables(); i++) {
         
-        an_invokable = (VMInvokable*)cl->get_instance_invokable(i);
+        an_invokable = (VMInvokable*)cl->GetInstanceInvokable(i);
 #ifdef __DEBUG
         cout << "cname: >" << cname << "<"<< endl;
-        cout << an_invokable->get_signature()->GetStdString() << endl;
+        cout << an_invokable->GetSignature()->GetStdString() << endl;
 #endif
-        if(an_invokable->is_primitive()) {
+        if(an_invokable->IsPrimitive()) {
             the_primitive = (VMPrimitive*) an_invokable;
             //
             // we have a primitive to load
             // get it's selector
             //
-            VMSymbol* sig =  the_primitive->get_signature();
+            VMSymbol* sig =  the_primitive->GetSignature();
 
             pString selector = sig->GetPlainString();
             

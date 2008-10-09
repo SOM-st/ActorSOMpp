@@ -129,7 +129,7 @@ char* VMSymbol::GetChars()
 	return chars;
 }
 
-int VMSymbol::getObjectSize()
+int VMSymbol::GetObjectSize()
 {
 	return objectSize;// + chars.size();
 }

@@ -47,11 +47,11 @@ void GarbageCollector::Collect()
 		} else 
 		{ //we found a VMObject
 			VMObject* object = (VMObject*) pointer;
-			bytesToSkip = object->getObjectSize();
+			bytesToSkip = object->GetObjectSize();
 
-			if (object->getGCField() == 1) 
+			if (object->GetGCField() == 1) 
 			{
-				object->setGCField(0);
+				object->SetGCField(0);
 				std::cout << "Found alive object, keeping" << std::endl;
 			}
 			else 
@@ -101,14 +101,13 @@ void GarbageCollector::markObject(VMObject* obj)
 	if (   ((void*) obj >= (void*)  heap->object_space) 
 		&& ((void*) obj <= (void*) heap->object_space) + heap->object_space_size)
 	{
-		if (obj->getGCField() != 1)
+		if (obj->GetGCField() != 1)
 		{
 			/*num_live++;
-			spc_live += obj->getObjectSize();
+			spc_live += obj->GetObjectSize();
 
-			obj->setGCField(1);*/
+			obj->SetGCField(1);*/
 			//for now the Objects have to mark the referenced objects themselves.
-			//C++ does not allow 0-sized arrays in classes that are derived from.
 			obj->MarkReferences();
 			
 

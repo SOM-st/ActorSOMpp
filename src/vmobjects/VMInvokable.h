@@ -12,15 +12,13 @@ class VMInvokable : public VMObject
 public:
     VMInvokable(int nof = 0) : VMObject(nof+2) {};
 
-	virtual void      invoke(VMFrame*) = 0;
-	virtual bool      is_primitive();
-	virtual VMSymbol *get_signature();
-	virtual void      set_signature(VMSymbol* sig);
-	virtual VMClass  *get_holder();
-	virtual void      set_holder(VMClass* hld);
+	virtual void      Invoke(VMFrame*) = 0;
+	virtual bool      IsPrimitive();
+	virtual VMSymbol *GetSignature();
+	virtual void      SetSignature(VMSymbol* sig);
+	virtual VMClass  *GetHolder();
+	virtual void      SetHolder(VMClass* hld);
     //virtual void invoke_method(VMFrame*) = 0;
-
-	virtual void MarkReferences();
 
 protected:
 	VMSymbol* signature;

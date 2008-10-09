@@ -28,9 +28,9 @@ VMMethod* MethodGenerationContext::Assemble()
     
     // populate the fields that are immediately available
     int num_locals = this->locals.Size();
-    meth->set_number_of_locals(num_locals);
+    meth->SetNumberOfLocals(num_locals);
 
-    meth->set_maximum_number_of_stack_elements(this->compute_stack_depth());
+    meth->SetMaximumNumberOfStackElements(this->compute_stack_depth());
 #ifdef __DEBUG
     cout << "num_locals: " << num_locals << endl;
     cout << "num_literals: " << num_literals << endl;
@@ -46,7 +46,7 @@ VMMethod* MethodGenerationContext::Assemble()
 #endif
     // copy bytecodes into method
     for(size_t i = 0; i < bytecode.size(); i++){
-        meth->set_bytecode(i, bytecode[i]);
+        meth->SetBytecode(i, bytecode[i]);
 #ifdef __DEBUG
         cout << (int)bytecode[i] << " ";
 #endif
@@ -91,7 +91,7 @@ bool MethodGenerationContext::find_var(const pString& var, int* index, int* cont
 bool MethodGenerationContext::find_field(const pString& field) {
 	return holder_genc->find_field(field);
 }
-int MethodGenerationContext::get_number_of_arguments() { return arguments.Size(); };
+int MethodGenerationContext::GetNumberOfArguments() { return arguments.Size(); };
 uint8_t MethodGenerationContext::compute_stack_depth() {
 	uint8_t depth = 0;
     uint8_t max_depth = 0;
@@ -141,7 +141,7 @@ uint8_t MethodGenerationContext::compute_stack_depth() {
 }
 
 
-void MethodGenerationContext::set_holder(class_generation_context* holder) {
+void MethodGenerationContext::SetHolder(class_generation_context* holder) {
 	holder_genc = holder;
 }
 
@@ -153,7 +153,7 @@ void MethodGenerationContext::set_is_block_method(bool is_block) {
 	block_method = is_block;
 }
 
-void MethodGenerationContext::set_signature(VMSymbol* sig) {
+void MethodGenerationContext::SetSignature(VMSymbol* sig) {
 	signature = sig;
 }
 
@@ -194,7 +194,7 @@ void MethodGenerationContext::set_finished(bool finished) {
 	this->finished = finished;
 }
 
-class_generation_context* MethodGenerationContext::get_holder() {
+class_generation_context* MethodGenerationContext::GetHolder() {
 	return holder_genc;
 }
 
@@ -202,11 +202,11 @@ MethodGenerationContext* MethodGenerationContext::get_outer() {
 	return outer_genc;
 }
 
-VMSymbol* MethodGenerationContext::get_signature() {
+VMSymbol* MethodGenerationContext::GetSignature() {
 	return signature;
 }
 
-bool MethodGenerationContext::is_primitive() {
+bool MethodGenerationContext::IsPrimitive() {
 	return primitive;
 }
 

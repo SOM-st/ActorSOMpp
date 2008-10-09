@@ -18,24 +18,6 @@ public:
 	VMSymbol( const std::string& s );
 	virtual void SetString(const std::string&);
     virtual pString GetPlainString();
-    
-    
-	/*
-	virtual ~VMSymbol();
-	virtual int getObjectSize();
-	char* GetChars();
-	void SetString(const std::string&);
-	void SetChars(const char*);
-	std::string GetStdString();
-	
-	virtual void MarkReferences();
-	
-private:
-	//vector<char, HeapAllocator<char> > chars;
-	VMInteger* string_length;
-	//std::string chars;
-	//char chars[0];
-	char* chars;*/
 };
 
 

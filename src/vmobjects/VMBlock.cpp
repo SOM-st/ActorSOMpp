@@ -18,9 +18,10 @@ VMBlock::VMBlock() : VMObject(2)
 
 void VMBlock::MarkReferences()
 {
-    VMObject::MarkReferences();
+    
     if (blockMethod != NULL) blockMethod->MarkReferences();
     if (context != NULL) context->MarkReferences();
+    VMObject::MarkReferences();
 }
 
 void VMBlock::SetMethod(VMMethod* bMethod)

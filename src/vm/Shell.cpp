@@ -126,10 +126,10 @@ void Shell::Start()
         
         // Lookup the run: method
         VMInvokable* initialize = 
-            (VMInvokable*)runClass->lookup_invokable(_UNIVERSE->symbol_for("run:"));
+            (VMInvokable*)runClass->LookupInvokable(_UNIVERSE->symbol_for("run:"));
         
         // Invoke the run method
-        initialize->invoke(current_frame);
+        initialize->Invoke(current_frame);
         
         // Start the Interpreter
 

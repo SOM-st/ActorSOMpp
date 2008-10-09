@@ -10,16 +10,16 @@ VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 {
     VMPrimitive* prim = new (_HEAP) VMPrimitive(sig);
     *(prim->empty) = true;
-    prim->SetRoutine(new (_HEAP) Routine<VMPrimitive>(prim, &VMPrimitive::empty_routine));
+    prim->SetRoutine(new (_HEAP) Routine<VMPrimitive>(prim, &VMPrimitive::EmptyRoutine));
     return prim;
 }
 
-VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(4)//,VMObject()
+VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
 {
     //the only class that explicitly does this.
     this->SetClass(primitive_class);
     this->empty = (bool*)_HEAP->Allocate(sizeof(bool));
-    this->set_signature(signature);
+    this->SetSignature(signature);
     this->routine = NULL;
     *(this->empty) = false;
 }
@@ -41,7 +41,7 @@ void VMPrimitive::SetRoutine(PrimitiveRoutine* rtn)
     routine = rtn;
 }
 
-void VMPrimitive::invoke(VMFrame *frm)
+void VMPrimitive::Invoke(VMFrame *frm)
 {
     (*routine)(this, frm);
 }
@@ -49,15 +49,15 @@ void VMPrimitive::invoke(VMFrame *frm)
 void VMPrimitive::MarkReferences()
 {
     VMInvokable::MarkReferences();
-    signature->MarkReferences();
-    holder->MarkReferences();
+    //signature->MarkReferences();
+    //holder->MarkReferences();
    // routine->MarkReferences();
 }
 
-void VMPrimitive::empty_routine( VMObject* _self, VMFrame* frame )
+void VMPrimitive::EmptyRoutine( VMObject* _self, VMFrame* frame )
 {
     VMInvokable* self = (VMInvokable*) _self;
-    VMSymbol* sig = self->get_signature();
+    VMSymbol* sig = self->GetSignature();
     cout << "undefined primitive called: " << sig->GetChars() << endl;
 }
 

@@ -215,7 +215,7 @@ Symbol keywordSelectorSyms[] = { Keyword, KeywordSequence };
 
 void Parser::Classdef(class_generation_context* cgenc) {
 //    cgenc->name = Universe_symbol_for_chars(text);
-	cgenc->set_name(_UNIVERSE->symbol_for(text));
+	cgenc->SetName(_UNIVERSE->symbol_for(text));
     expect(Identifier);
     
     expect(Equal);
@@ -234,12 +234,12 @@ void Parser::Classdef(class_generation_context* cgenc) {
     ) {
 		
         MethodGenerationContext* mgenc = new MethodGenerationContext();
-		mgenc->set_holder(cgenc);
+		mgenc->SetHolder(cgenc);
 		mgenc->add_argument("self");
     
         method(mgenc);
         
-		if(mgenc->is_primitive())
+		if(mgenc->IsPrimitive())
             cgenc->add_instance_method((VMObject*)mgenc->AssemblePrimitive());
             //SEND(cgenc->instance_methods, add, VMPrimitive_assemble(&mgenc));
         else
@@ -256,7 +256,7 @@ void Parser::Classdef(class_generation_context* cgenc) {
             symIn(binaryOpSyms)
         ) {
             MethodGenerationContext* mgenc = new MethodGenerationContext();
-			mgenc->set_holder(cgenc);
+			mgenc->SetHolder(cgenc);
 			mgenc->add_argument("self");
             //method_genc_init(&mgenc);
             //mgenc.holder_genc = cgenc;
@@ -266,7 +266,7 @@ void Parser::Classdef(class_generation_context* cgenc) {
             //
             method(mgenc);
             
-			if(mgenc->is_primitive())
+			if(mgenc->IsPrimitive())
                 cgenc->add_class_method((VMObject*)mgenc->AssemblePrimitive());
                 //SEND(cgenc->class_methods, add, VMPrimitive_assemble(&mgenc));
             else
@@ -339,12 +339,12 @@ void Parser::pattern(MethodGenerationContext* mgenc) {
 
 
 void Parser::unaryPattern(MethodGenerationContext* mgenc) {
-    mgenc->set_signature(unarySelector());
+    mgenc->SetSignature(unarySelector());
 }
 
 
 void Parser::binaryPattern(MethodGenerationContext* mgenc) {
-    mgenc->set_signature(binarySelector());
+    mgenc->SetSignature(binarySelector());
 	mgenc->add_argument_if_absent(argument());
     //SEND(mgenc->arguments, addStringIfAbsent, argument());
 	//argument();
@@ -360,7 +360,7 @@ void Parser::keywordPattern(MethodGenerationContext* mgenc) {
 		//argument();
     } while(sym == Keyword);
     
-    mgenc->set_signature(_UNIVERSE->symbol_for(kw));// Universe_symbol_for(kw);
+    mgenc->SetSignature(_UNIVERSE->symbol_for(kw));// Universe_symbol_for(kw);
     //SEND(kw, free);
 }
 
@@ -574,7 +574,7 @@ void Parser::primary(MethodGenerationContext* mgenc, bool* super) {
         case NewBlock: {
             MethodGenerationContext* bgenc = new MethodGenerationContext();
 			bgenc->set_is_block_method(true);
-			bgenc->set_holder(mgenc->get_holder());
+			bgenc->SetHolder(mgenc->GetHolder());
 			bgenc->set_outer(mgenc);
             /*method_genc_init(&bgenc);
             bgenc.block_method = true;
@@ -824,12 +824,12 @@ void Parser::nestedBlock(MethodGenerationContext* mgenc) {
     
     // generate Block signature
     pString block_sig = pString(BLOCK_METHOD_S);// String_new(BLOCK_METHOD_S);
-	size_t arg_size = mgenc->get_number_of_arguments();// SEND(mgenc->arguments, size);
+	size_t arg_size = mgenc->GetNumberOfArguments();// SEND(mgenc->arguments, size);
     for(size_t i = 1; i < arg_size; i++)
 		block_sig += ":";//.append(':');
         //SEND(block_sig, concatChar, ':');
 
-    mgenc->set_signature(_UNIVERSE->symbol_for(block_sig));
+    mgenc->SetSignature(_UNIVERSE->symbol_for(block_sig));
     
     blockContents(mgenc);
     

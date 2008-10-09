@@ -18,39 +18,33 @@ public:
 	VMMethod(int bc_count, int number_of_constants, int nof = 0);
    // VMMethod(MethodGenerationContext* mgenc);
 	//virtual ~VMMethod();
-    virtual int       get_number_of_locals();
-    virtual void      set_number_of_locals(int nol);
-    virtual int       get_maximum_number_of_stack_elements();
-    virtual void      set_maximum_number_of_stack_elements(int stel);
-    virtual int       get_number_of_arguments();
-    virtual void      set_number_of_arguments(int);
-    virtual int       get_number_of_bytecodes();
-    virtual void      set_holder_all(VMClass* hld); 
-    virtual VMObject *get_constant(int indx); 
-    virtual uint8_t   get_bytecode(int indx); 
-    virtual void      set_bytecode(int indx, uint8_t); 
-	virtual void	  invoke(VMFrame* frame);
-    //virtual size_t    GetOffset();
-	virtual void MarkReferences();
-    /*virtual void SetLiteral(int index, VMObject* o);
-	virtual VMObject* GetLiteral(int index);*/
+    virtual int       GetNumberOfLocals();
+    virtual void      SetNumberOfLocals(int nol);
+    virtual int       GetMaximumNumberOfStackElements();
+    virtual void      SetMaximumNumberOfStackElements(int stel);
+    virtual int       GetNumberOfArguments();
+    virtual void      SetNumberOfArguments(int);
+    virtual int       GetNumberOfBytecodes();
+    virtual void      SetHolderAll(VMClass* hld); 
+    virtual VMObject *GetConstant(int indx); 
+    virtual uint8_t   GetBytecode(int indx); 
+    virtual void      SetBytecode(int indx, uint8_t); 
+	virtual void	  Invoke(VMFrame* frame);
+	virtual void      MarkReferences();
 
     //VMArray Methods....
-    void SetIndexableField(int idx, VMObject* item);
-	//VMObject* GetItem(int idx);
-	VMObject* GetIndexableField(int idx);
-	int GetNumberOfIndexableFields();
-	VMArray* CopyAndExtendWith(VMObject*);
-	void CopyIndexableFieldsTo(VMArray*);
+    void        SetIndexableField(int idx, VMObject* item);
+	VMObject*   GetIndexableField(int idx);
+	int         GetNumberOfIndexableFields();
+	VMArray*    CopyAndExtendWith(VMObject*);
+	void        CopyIndexableFieldsTo(VMArray*);
 
 private:
     VMInteger* size;
-    //VMInteger* number_of_literals;
     VMInteger* number_of_locals;
     VMInteger* maximum_number_of_stack_elements;
     VMInteger* bc_length;
     VMInteger* number_of_arguments;
-	//uint8_t* bc;	
 };
 
 

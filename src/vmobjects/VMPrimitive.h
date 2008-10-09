@@ -13,23 +13,20 @@ class VMPrimitive : public VMInvokable //public VMObject,
 public:
     VMPrimitive(VMSymbol* sig);
     //virtual ~VMPrimitive();
-    virtual bool is_primitive() { return true; };
-    virtual void invoke(VMFrame*);
-    virtual bool IsEmpty();
-    virtual void SetRoutine(PrimitiveRoutine* rtn);
-    virtual void MarkReferences();
-    virtual void SetEmpty(bool value) { *empty = value; };
-    static VMPrimitive* GetEmptyPrimitive(VMSymbol* sig);
+    virtual bool    IsPrimitive() { return true; };
+    virtual void    Invoke(VMFrame*);
+    virtual bool    IsEmpty();
+    virtual void    SetRoutine(PrimitiveRoutine* rtn);
+    virtual void    MarkReferences();
+    virtual void    SetEmpty(bool value) { *empty = value; };
 
-    //static void empty_routine(VMObject* self, VMFrame* frame);
-    
+    static VMPrimitive* GetEmptyPrimitive(VMSymbol* sig);
 private:
-    bool* empty;
-    //VMObject*   : 0; //for alignment inside the fields
+    void EmptyRoutine(VMObject* self, VMFrame* frame);
+
     PrimitiveRoutine* routine;
-    VMSymbol* signature;
-    VMClass* holder;
-    void empty_routine(VMObject* self, VMFrame* frame);
+    bool* empty;
+    
 };
 
 #endif

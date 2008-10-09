@@ -112,7 +112,7 @@ void VMFrame::PrintStack()
     {
         VMObject* vmo = this->GetIndexableField(i);
         if (vmo == NULL) cout << "NULL" << endl;
-        else cout << "index: " << i << " object:" << vmo->GetClass()->get_name()->GetChars() << endl;
+        else cout << "index: " << i << " object:" << vmo->GetClass()->GetName()->GetChars() << endl;
     }
 }
 
@@ -120,11 +120,11 @@ void      VMFrame::ResetStackPointer()
 {
     // arguments are stored in front of local variables
     VMMethod* meth = this->GetMethod();
-    size_t lo = meth->get_number_of_arguments();
+    size_t lo = meth->GetNumberOfArguments();
     this->local_offset->SetEmbeddedInteger(lo);
   
     // Set the stack pointer to its initial value thereby clearing the stack
-    size_t num_lo = meth->get_number_of_locals();
+    size_t num_lo = meth->GetNumberOfLocals();
     this->stack_pointer->SetEmbeddedInteger(lo + num_lo - 1);
     //cout << "lo: " << lo << ", num_lo: " << num_lo << ", sp: "<<(lo+num_lo-1)<<endl;
 }
@@ -190,7 +190,7 @@ void      VMFrame::PrintStackTrace()
 int       VMFrame::ArgumentStackIndex(int index)
 {
     VMMethod* meth = this->GetMethod();
-    return meth->get_number_of_arguments() - index - 1;
+    return meth->GetNumberOfArguments() - index - 1;
 }
 
 void      VMFrame::CopyArgumentsFrom(VMFrame* frame)
@@ -199,7 +199,7 @@ void      VMFrame::CopyArgumentsFrom(VMFrame* frame)
     // - arguments are at the top of the stack of frame.
     // - copy them into the argument area of the current frame
     VMMethod* meth = this->GetMethod();
-    int num_args = meth->get_number_of_arguments();
+    int num_args = meth->GetNumberOfArguments();
     for(int i=0; i < num_args; ++i) {
         VMObject* stackElem = frame->GetStackElement(num_args - 1 - i);
         this->SetIndexableField(i, stackElem);

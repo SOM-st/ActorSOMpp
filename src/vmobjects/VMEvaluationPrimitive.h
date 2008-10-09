@@ -14,7 +14,6 @@ class VMEvaluationPrimitive : public VMPrimitive
 public:
     VMEvaluationPrimitive(int argc);
     //virtual ~VMEvaluationPrimitive();
-    virtual void MarkReferences();
 private:
     static VMSymbol* computeSignatureString(int argc);
     void evaluationRoutine(VMObject* object, VMFrame* frame);

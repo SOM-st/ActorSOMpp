@@ -13,13 +13,12 @@ public:
     VMArray(int size, int nof = 0);
 	//virtual ~VMArray();
 	virtual void MarkReferences();
-	void SetIndexableField(int idx, VMObject* item);
-	//VMObject* GetItem(int idx);
-	VMObject* GetIndexableField(int idx);
-	int GetNumberOfIndexableFields();
-	VMArray* CopyAndExtendWith(VMObject*);
-	void CopyIndexableFieldsTo(VMArray*);
-    //virtual size_t GetOffset();
+
+	void        SetIndexableField(int idx, VMObject* item);
+	VMObject*   GetIndexableField(int idx);
+	int         GetNumberOfIndexableFields();
+	VMArray*    CopyAndExtendWith(VMObject*);
+	void        CopyIndexableFieldsTo(VMArray*);
 
 	VMObject* operator[](int idx)
 	{
@@ -34,11 +33,6 @@ public:
 
 private:
 	VMInteger* size;
-	//VMInteger* entries;
-	//VMObject** theEntries;
-	//void assertType(VMObject& vmo) const {}; //method to assert that only VMObject class is supported
-	//std::vector<T> theEntries;
-
 };
 
 #endif
