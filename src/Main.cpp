@@ -54,7 +54,9 @@ int main(int argc, char** argv) {
    // Universe::handle_arguments(&vm_argc, argc, argv);
     Universe::start(argc, argv);
 
-
+   /* Heap* heap = new Heap(1000);
+    VMObject* vmo = new (heap) VMObject();
+    cout << "sizeof(VMObject): " << sizeof(VMObject) << endl;*/
 
     Universe::quit(ERR_SUCCESS);
 }

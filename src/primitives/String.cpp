@@ -67,8 +67,9 @@ void  _String::Hashcode(VMObject* object, VMFrame* frame) {
 
 void  _String::Length(VMObject* object, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
-    pString result = self->GetStdString();
-    size_t len = result.length();
+    //pString result = self->GetStdString();
+    //size_t len = result.length();
+    size_t len = self->GetStringLength();
     frame->Push(_UNIVERSE->new_integer((int32_t)len));
 }
 

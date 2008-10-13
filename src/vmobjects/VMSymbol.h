@@ -13,10 +13,9 @@ class VMInteger;
 class VMSymbol : public VMString//, public std::string{
 {
 public:
-	VMSymbol();
 	VMSymbol( const char* str );
 	VMSymbol( const std::string& s );
-	virtual void SetString(const std::string&);
+	//virtual void SetString(const std::string&);
     virtual pString GetPlainString();
 };
 

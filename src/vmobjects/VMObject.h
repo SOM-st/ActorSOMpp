@@ -11,9 +11,10 @@
 //#include "VMClass.h"
 class VMSymbol;
 class VMClass;
-class VMObject{
 
 #define FIELDS ((VMObject**)&clazz)
+
+class VMObject{
 
 public:
     /* Constructor */
@@ -53,7 +54,10 @@ public:
      */
 	void *operator new( size_t num_bytes, Heap *heap, unsigned int additional_bytes = 0)
 	{
-        //cout << "Allocating " << num_bytes << "+" << additional_bytes << " = " << num_bytes + additional_bytes << "Bytes" <<endl;
+       /* if (num_bytes == 24) {
+            cout << "hier";
+        }
+        cout << "Allocating " << num_bytes << "+" << additional_bytes << " = " << num_bytes + additional_bytes << "Bytes" <<endl;*/
         void* mem = (void*)heap->AllocateObject(num_bytes + additional_bytes);
         return mem;
 	}
@@ -82,15 +86,31 @@ public:
 	
 protected:
     //VMObject essentials
-	int32_t     objectSize; //set by the heap at allocation time
-    int32_t     hash;
+	int32_t     hash;
+    int32_t     objectSize; //set by the heap at allocation time
     int32_t     numberOfFields;
     bool        gcfield;
 
     //Start of fields. All members beyond this point will be indexable 
+    //VMObject** FIELDS;
     //through FIELDS-macro. So clazz == FIELDS[0]
 	VMClass*    clazz;
 };
+
+/*
+ **************************VMOBJECT****************************
+ * __________________________________________________________ *
+ *| vtable*          |   0x00 - 0x03                         |*
+ *|__________________|_______________________________________|*
+ *| hash             |   0x04 - 0x07                         |*
+ *| objectSize       |   0x08 - 0x0b                         |*
+ *| numberOfFields   |   0x0c - 0x0f                         |*
+ *| gcField          |   0x10 - 0x13 (because of alignment)  |*
+ *| clazz            |   0x14 - 0x17                         |*
+ *|__________________|___0x18________________________________|*
+ *                                                            *
+ **************************************************************
+ */
 
 
 #endif

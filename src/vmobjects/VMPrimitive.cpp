@@ -8,6 +8,7 @@
 
 VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 {
+    
     VMPrimitive* prim = new (_HEAP) VMPrimitive(sig);
     *(prim->empty) = true;
     prim->SetRoutine(new (_HEAP) Routine<VMPrimitive>(prim, &VMPrimitive::EmptyRoutine));

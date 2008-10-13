@@ -1,17 +1,10 @@
 #include "VMString.h"
 #include "VMInteger.h"
 #include <string.h>
+#include <iostream>
 
-VMString::VMString() : VMObject(0)//, std::string()
-{
-	chars = 0;
-    //objectSize += sizeof(char*);
-    //string_length = _UNIVERSE->new_integer(0);
-	//objectSize = sizeof(VMString);
-	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
-}
-
-
+//this macro could replace the chars member variable
+//#define CHARS ((char*)&clazz+sizeof(VMObject*))
 
 VMString::VMString(const char* str) : VMObject(0)//, std::string()
 {
@@ -37,31 +30,31 @@ VMString::VMString( const string& s ): VMObject(0)
 	chars[i] = '\0';
 }
 
-//VMString::VMString( size_type length, const char& ch ): VMObject(), std::string(length, ch)
-//{
-//	objectSize = sizeof(VMString) + length;
-//}
-//VMString::VMString( const char* str ): VMObject(), std::string(str)
-//{
-//	objectSize = sizeof(VMString) + strlen(str);
-//}
-//VMString::VMString( const char* str, size_type length ): VMObject(), std::string(str, length)
-//{
-//	objectSize = sizeof(VMString) + length;
-//}
-//VMString::VMString( const string& str, size_type index, size_type length ): VMObject(), std::string(str, index, length)
-//{
-//	objectSize = sizeof(VMString) + length;
-//}
+void VMString::SetString(const std::string& str)
+{
+	if (str.length() > (size_t)GetStringLength()) {
+		//realloc?
+        cout << "Problem: trying to SetString of a VMSymbol that doesn't have enough mem" << endl;
+	} else {
+        //char* chars = this->GetChars();
+        int i;
+		for (i = 0; i < (size_t)str.length(); i++) {
+			chars[i] = str[i];
+		}
+		chars[i] = '\0';
+	}
+}
 
 int VMString::GetStringLength()
 {
+    //cout << objectSize << endl << sizeof(VMString) << endl;
     int length = 0;
-    if (chars != 0) {
+    //if (chars != 0) {
         while(chars[length++] != '\0');
         if (length != 0)
             --length;
-    }
+    //}
+   //cout << length << endl << endl;
     return length;
 }
 
@@ -74,15 +67,6 @@ std::string VMString::GetStdString()
 char* VMString::GetChars()
 {
 	return chars;
-	/*char* c = (char*)malloc(string_length+1);
-	int i = 0;
-	do {
-		c[i] = chars[i];
-	} while(++i < string_length + 1);
-	return c;
-	return "";*/
 }
 
-
-//VMString::~VMString() {}
 

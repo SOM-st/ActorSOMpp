@@ -17,7 +17,7 @@
 
 Interpreter::Interpreter()
 {
-    uG = pString("unknownGlobal");
+    uG = pString("unknownGlobal:");
     dnu = pString("doesNotUnderstand:arguments:");
     eB = pString("escapedBlock:");
     // TODO

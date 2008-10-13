@@ -7,7 +7,6 @@
 VMBlock::VMBlock() : VMObject(2)
 {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
-    
      blockMethod = NULL;
      context = NULL;
 }

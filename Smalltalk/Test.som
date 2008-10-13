@@ -26,8 +26,8 @@ THE SOFTWARE.
 Test = (
 
     run = (
-        '11111111111111111' println.
-        "self hashTest."
+        'Testing...' println.
+       " self hashTest."
         self preliminaryTest.
         self arrayTest.
         self integerTest.
@@ -37,21 +37,17 @@ Test = (
         self objectSizeTest.
         self symbolTest.
         self selfBlockTest.
-        "self reflectionTest."
-        "self closureTest"
-        "self hashTest"
+        self reflectionTest.
+        self closureTest.
+        'Tests over.' println
     )
     
     hashTest = (
         | ht string array t | 
-        'Testing Hashtable...' println.
         ht := Hashtable new.
-        '111111111111111111111111111111' println.
         ht isEmpty
             ifFalse: [ 'New Hashtable not empty!' println ].
-        '22222222222222222222222222222222' println.
         ht at: 'a' put: 'b'.
-        '333333333333333333333333333333333' println.
         (ht containsValue: 'b')
             ifFalse: [ '1 not in Hashtable' println ].
         ht isEmpty
@@ -90,22 +86,18 @@ Test = (
         string := (ht get: 'a').
         (string = 'b')
             ifTrue: [ 'get from Hashtable' println ].
-        'Test passed' println
     )
     
     doubleTest = (
-        'Testing Double' println.
         ((4/3) + (4/5)) asString = '1'
             ifFalse: [
                 'integer division incorrect' println. system exit ].
         ((4//3) + (4//5)) asString = '2.1333333333333333'
-            ifFalse: [ 'double division incorrect. expected: 2.1333333333333333 but was ' print. ((4//3) + (4//5)) asString println ].
-        'Test passed' println
+            ifFalse: [ 'double division incorrect.' println. system exit ].
     )
     
     bigIntegerTest = (| bi i a |
     
-        'Testing BigInteger' println.
         "bi contains 2147483648 - the smallest BigInteger value"
         "i contains 2147483647 - the largest Integer value"
         
@@ -163,7 +155,7 @@ Test = (
         a := a - 1.
         a asString = '2147483647'
             ifFalse: [
-                'subtraction into range of Integer failed' println ].
+                'subtraction into range of Integer failed' println. system exit ].
         a class asString = 'Integer'
             ifFalse: [
                 'warning: subtraction into range of Integer did not cause conversion to Integer' println ].
@@ -213,12 +205,10 @@ Test = (
         a = i ifFalse: [ 'equality check failed' println. system exit ].
         a == i ifFalse: [ 'identity check failed' println. system exit ].
         
-        'Test passed' println.
     )
     
     arrayTest = ( 
         | a |
-        'Testing array...' println.
         a := Array new: 3.
         a at: 1 put: 'hello'.
         a at: 2 put: #world.
@@ -242,13 +232,11 @@ Test = (
             'Containment check for 23 should be true.' println.
             system exit
         ].
-        'Test passed' println
         
     )
     
     integerTest = (
         | a b |
-        'Testing Integer...' println.
         a := 42.
         b := 42.
         a = b ifFalse: [
@@ -256,12 +244,10 @@ Test = (
             system exit].
         a == b ifFalse: [
             '42 and 42 are not identical' println].
-        'Test passed' println
     )
     
     closureTest = (
         | factorial result facs |
-        'Testing Closures...' println.
         facs := Array new: 10.
         facs at: 1 put: 1.
         facs at: 2 put: 2.
@@ -281,11 +267,9 @@ Test = (
         result doIndexes: [ :i |
             (result at: i) = (facs at: i) ifFalse: [
                 'incorrect result' println. system exit ] ].
-        'Test passed' println
     )
     
     coertionTest = (
-        'Coertion Test...' println.
         25 sqrt = 5 ifFalse: [
             '25 sqrt should be equal to 5.' println.
             system exit ].
@@ -295,32 +279,30 @@ Test = (
         2 * (2 // 4) = 1 ifFalse: [
             '2*(2//4) should be equal to 1.' println.
             system exit ].
-        'Test passed' println
     )
     
     objectSizeTest = (
-        'Testing Object Size...' println.
-        (Object new objectSize / 4) println.
-        (42 objectSize / 4) println.
-        ('hello' objectSize / 4) println.
-        (Array new objectSize / 4) println.
-        ((Array new: 1) objectSize / 4) println.
+        
+        (Object new objectSize) println.
+        (42 objectSize) println.
+        ('hello' objectSize) println.
+        (Array new objectSize) println.
+        ((Array new: 1) objectSize) println.
         Object new objectSize / 4 = 6
             ifFalse: [
-                'Plain object does not have size 5.' println ].
+                'Plain object does not have size 6.' println. system exit ].
         42 objectSize / 4 = 7
             ifFalse: [
-                'Integer object does not have size 6.' println ].
-        'hello' objectSize / 4 = 7
+                'Integer object does not have size 7.' println. system exit ].
+        'hello' objectSize / 4 = 8
             ifFalse: [
-                'String object does not have size 6.' println ].
-        Array new objectSize / 4 = 6
+                'String object does not have size 8.' println. system exit ].
+        Array new objectSize / 4 = 7
             ifFalse: [
-                'Empty array object does not have size 5.' println ].
-        (Array new: 1) objectSize / 4 = 7
+                'Empty array object does not have size 7.' println. system exit ].
+        (Array new: 1) objectSize / 4 = 8
             ifFalse: [
-                'Array object (length 1) does not have size 5.' println ].
-        'Test over' println
+                'Array object (length 1) does not have size 8.' println. system exit ].
     )
     
     preliminaryTest = (
@@ -339,22 +321,18 @@ Test = (
     )
     
     symbolTest = (
-        'Testing Symbol...' println.
         'gunk' asSymbol asString = 'gunk'
             ifFalse: [
                 'Conversion from string to symbol and back failed' println. system exit ].
         #oink asString = 'oink'
             ifFalse: [
                 'Symbol #oink does not evaluate to String oink' println. system exit ].
-        'Test passed' println
     )
     
     selfBlockTest = (
-        'Testing access to self in block' println.
         self give42 value = 42
             ifFalse: [
                 'access to self in block failed' println. system exit ].
-        'Test passed' println
     )
 
 "SelfBlockTest methods"
@@ -375,18 +353,16 @@ Test = (
     )
     
     reflectionTest = (
-        'Testing Reflection...' println.
         (Object methods at: 1) signature = #class ifFalse: [
-            'The first method in Object is not #class.' ].
+            'The first method in Object is not #class.' println. system exit ].
         (Object hasMethod: #==) ifFalse: [
-            'Object should have the method #==.' println ].
+            'Object should have the method #==.' println. system exit ].
         (Object new respondsTo: #isNil) ifFalse: [
-            'An Object instance should respond to #isNil.' println ].
+            'An Object instance should respond to #isNil.' println. system exit ].
         (23 respondsTo: #isNil) ifFalse: [
-            'Any object should respond to #isNil (even 23).' println ].
+            'Any object should respond to #isNil (even 23).' println. system exit ].
         (23 respondsTo: #+) ifFalse: [
-            '23 should respond to #+.' println ].
-        'Test over' println.
+            '23 should respond to #+.' println. system exit ].
     )
     
     

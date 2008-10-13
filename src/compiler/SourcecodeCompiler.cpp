@@ -5,7 +5,7 @@
 #include "Parser.h"
 #include <sstream>
 #include <fstream>
-//#define COMPILER_DEBUG
+#define COMPILER_DEBUG
 
 SourcecodeCompiler::SourcecodeCompiler()
 {

@@ -575,7 +575,8 @@ void Universe::load_system_class( VMClass* system_class)
 
 VMArray* Universe::new_array( int size)
 {
-    VMArray* result = new (heap, size*sizeof(VMObject*)) VMArray(size);
+    int additionalBytes = size*sizeof(VMObject*);
+    VMArray* result = new (heap, additionalBytes) VMArray(size);
     result->SetClass(array_class);
     return result;
 }
@@ -633,8 +634,8 @@ VMClass* Universe::new_class( VMClass* class_of_class)
 {
     int num_fields = class_of_class->GetNumberOfInstanceFields();
     VMClass* result;
-
-    if (num_fields) result = new (heap, num_fields*sizeof(VMObject)) VMClass(num_fields);
+    int additionalBytes = num_fields * sizeof(VMObject*);
+    if (num_fields) result = new (heap, additionalBytes) VMClass(num_fields);
     else result = new (heap) VMClass;
 
     result->SetClass(class_of_class);
@@ -655,8 +656,8 @@ VMFrame* Universe::new_frame( VMFrame* previous_frame, VMMethod* method)
                  method->GetNumberOfLocals()+
                  method->GetMaximumNumberOfStackElements();
 
-
-    VMFrame* result = new (heap, length * sizeof(VMObject*)) VMFrame(length);
+    int additionalBytes = length * sizeof(VMObject*);
+    VMFrame* result = new (heap, additionalBytes) VMFrame(length);
     result->SetClass(frame_class);
 
     result->SetMethod(method);
@@ -671,8 +672,12 @@ VMFrame* Universe::new_frame( VMFrame* previous_frame, VMMethod* method)
 
 VMObject* Universe::new_instance( VMClass*  class_of_instance)
 {
-    int num_of_fields = class_of_instance->GetNumberOfInstanceFields();
-    VMObject* result = new (heap, num_of_fields * sizeof(VMObject*))VMObject(num_of_fields);
+    //the number of fields for allocation. We have to calculate the clazz
+    //field out of this, because it is already taken care of by VMObject
+    int num_of_fields = class_of_instance->GetNumberOfInstanceFields() - 1;
+    //the additional space needed is calculated from the number of fields
+    int additionalBytes = num_of_fields * sizeof(VMObject*);
+    VMObject* result = new (heap, additionalBytes) VMObject(num_of_fields);
     result->SetClass(class_of_instance);
     return result;
 }
@@ -695,10 +700,14 @@ VMClass* Universe::new_metaclass_class()
     return result;
 }
 
-VMMethod* Universe::new_method( VMSymbol* signature, size_t number_of_bytecodes, size_t number_of_constants)
+VMMethod* Universe::new_method( VMSymbol* signature, 
+                    size_t number_of_bytecodes, size_t number_of_constants)
 {
-    VMMethod* result = new (heap, number_of_bytecodes+
-                                  number_of_constants*sizeof(VMObject*)) VMMethod(number_of_bytecodes, number_of_constants);
+    //Method needs space for the bytecodes and the pointers to the constants
+    int additionalBytes = number_of_bytecodes + 
+                number_of_constants*sizeof(VMObject*);
+    VMMethod* result = new (heap,additionalBytes) 
+                VMMethod(number_of_bytecodes, number_of_constants);
     result->SetClass(method_class);
 
     result->SetSignature(signature);
@@ -708,7 +717,9 @@ VMMethod* Universe::new_method( VMSymbol* signature, size_t number_of_bytecodes,
 
 VMString* Universe::new_string( const pString& str)
 {
-    VMString* result = new (heap, sizeof(char*)+str.length()+1) VMString(str);
+    //string needs space for str.length characters plus one byte for '\0'
+    int additionalBytes = str.length() + 1;
+    VMString* result = new (heap, additionalBytes) VMString(str);
     result->SetClass(string_class);
 
     return result;
@@ -716,7 +727,9 @@ VMString* Universe::new_string( const pString& str)
 
 VMSymbol* Universe::new_symbol( const pString& str )
 {
-    VMSymbol* result = new (heap, sizeof(char*)+str.length()+1) VMSymbol(str);
+    //symbol needs space for str.length characters plus one byte for '\0'
+    int additionalBytes = str.length() + 1;
+    VMSymbol* result = new (heap, additionalBytes) VMSymbol(str);
     result->SetClass(symbol_class);
 
     symboltable->insert(result);

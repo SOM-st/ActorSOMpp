@@ -1,97 +1,70 @@
 #include "VMSymbol.h"
 #include "VMInteger.h"
 #include "VMString.h"
+#include <sstream>
 
-VMSymbol::VMSymbol() : VMString()//, std::string()
-{
-	//chars = 0;
-	//objectSize = sizeof(VMSymbol);
-    /*if (sizeof(VMSymbol) == sizeof(VMString))
-        cout << "si" << endl;
-    else cout << "oh no" << endl;*/
-	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
-}
 
-VMSymbol::VMSymbol(const char* str) : VMString(str)//, std::string()
+VMSymbol::VMSymbol(const char* str) : VMString(str)
 {
-	//VMSymbol(std::string(str));
-	//chars = vector<char, HeapAllocator<char> >(HeapAllocator<char>(Universe::GetUniverse()->GetHeap()));
 }
 
 VMSymbol::VMSymbol( const std::string& s ): VMString(s)
 {
-	/*chars = (char*)&chars+sizeof(char*);
-	objectSize = sizeof(VMSymbol) + s.length() + 1;
-	string_length = _UNIVERSE->new_integer(s.length());
-	SetString(s);*/
 }
 
-void VMSymbol::SetString(const std::string& str)
-{
-	if (str.length() > (size_t)GetStringLength()) {
-		//realloc?
-        cout << "Problem: trying to SetString of a VMSymbol that doesn't have enough mem" << endl;
-	} else {
-        int i;
-		for (i = 0; i < (size_t)str.length(); i++) {
-			chars[i] = str[i];
-		}
-		chars[i] = '\0';
-	}
-}
+
 
 pString VMSymbol::GetPlainString()
 {
-    
-    pString plain_string;
-    
+    ostringstream str;
+    char* chars = this->GetChars();
     for(size_t i=0; i <= (size_t)this->GetStringLength(); i++) {
-        char c = this->GetChars()[i];
+        char c = chars[i];
         switch (c) {
             case '~':
-                plain_string += "tilde"; 
+                str << "tilde";
                 break;
             case '&':
-                plain_string += "and"; 
+                str << "and";
                 break;
             case '|':
-                plain_string += "bar";
+                str << "bar";
                 break;
             case '*':
-                plain_string += "star";
+                str << "star";
                 break;
             case '/':
-                plain_string += "slash";
+                str << "slash";
                 break;
             case '@':
-                plain_string += "at";
+                str << "at";
                 break;
             case '+':
-                plain_string += "plus";
+                str << "plus";
                 break;
             case '-':
-                plain_string += "minus";
+                str << "minus";
                 break;
             case '=':
-                plain_string += "equal";
+                str << "equal";
                 break;     
             case '>':
-                plain_string += "greaterthan";
+                str << "greaterthan" ;
                 break;
             case '<':
-                plain_string += "lowerthan";
+                str << "lowerthan";
                 break;
             case ',':
-                plain_string += "comma";
+                str << "comma";
                 break;
             case '%':
-                plain_string += "percent";
+                str << "percent";
                 break;
             case '\\':
-                plain_string += "backslash";
+                str << "backslash";
                 break;
             case ':':
-                plain_string += '_';
+                str << '_';
                 break;
         #ifdef EXPERIMENTAL
             case ' ':
@@ -99,39 +72,13 @@ pString VMSymbol::GetPlainString()
                 break;
         #endif
             default:
-                if (c != 0)
-                    plain_string += c;
+                if (c != 0) {
+                    str << c;
+                }
                 break;
         }
     }
-    return plain_string;
+    
+    return str.str();
 }
-
-
-/*
-void VMSymbol::MarkReferences(){
-	VMString::MarkReferences();
-    //string_length->MarkReferences();
-}
-
-void VMSymbol::SetChars(const char* str)
-{
-	SetString(std::string(str));
-}
-
-std::string VMSymbol::GetStdString()
-{
-	return std::string(chars);
-}
-
-char* VMSymbol::GetChars()
-{
-	return chars;
-}
-
-int VMSymbol::GetObjectSize()
-{
-	return objectSize;// + chars.size();
-}
-*/
 

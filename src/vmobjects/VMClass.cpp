@@ -120,7 +120,18 @@ VMArray  *VMClass::GetInstanceInvokables()
 
 void      VMClass::SetInstanceInvokables(VMArray* invokables)
 {
+
 	instance_invokables = invokables;
+
+    for (int i = 0; i < this->GetNumberOfInstanceInvokables(); ++i)
+    {
+        VMInvokable* inv = (VMInvokable*)instance_invokables->GetIndexableField(i);
+        if (inv != nil_object) 
+        {
+            inv->SetHolder(this);
+        }
+    }
+
 }
 
 int       VMClass::GetNumberOfInstanceInvokables()
@@ -138,6 +149,11 @@ VMObject *VMClass::GetInstanceInvokable(int index)
 void      VMClass::SetInstanceInvokable(int index, VMObject* invokable)
 {
 	instance_invokables->SetIndexableField(index, invokable);
+    if (invokable != nil_object)
+    {
+        VMInvokable* inv = (VMInvokable*) invokable;
+        inv->SetHolder(this);
+    }
 	//instance_invokables[index] = invokable;
 }
 

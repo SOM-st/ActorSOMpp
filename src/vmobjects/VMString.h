@@ -5,15 +5,9 @@
 //#include "OOObject.h"
 #include "VMObject.h"
 
-#include <iostream>
-//#include <vector>
-#include "../misc/HeapAllocator.h"
-//#include "../memory/Heap.h"
-
-class VMString : public VMObject//, public std::string{
+class VMString : public VMObject
 {
 public:
-	VMString();
 	VMString( const char* str );
 	VMString( const string& s );
 	//virtual ~VMString();
@@ -22,8 +16,11 @@ public:
 	std::string GetStdString();
     int         GetStringLength();
 
+    void        SetString(const std::string&);
 protected:
-	char* chars;
+    //this could be replaced by the CHARS macro in VMString.cpp
+    //in order to decrease the object size
+	char* chars; 
 };
 
 

@@ -136,6 +136,7 @@ void  _Double::AsString(VMObject* object, VMFrame* frame) {
     // use c99 snprintf-goodie
     double dbl = self->GetEmbeddedDouble();
     ostringstream Str;
+    Str.precision(17);
     Str << dbl;
     frame->Push( (VMObject*)_UNIVERSE->new_string( pString(Str.str()) ) );
 }

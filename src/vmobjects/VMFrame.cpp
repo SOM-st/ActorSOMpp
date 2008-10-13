@@ -111,7 +111,11 @@ void VMFrame::PrintStack()
     for (int i = 0; i < this->GetNumberOfIndexableFields()+1; ++i)
     {
         VMObject* vmo = this->GetIndexableField(i);
+        cout << i << ": ";
         if (vmo == NULL) cout << "NULL" << endl;
+        if (vmo == nil_object) cout << "NIL_OBJECT" << endl;
+        if (vmo->GetClass() == NULL) cout << "VMObject with Class == NULL" << endl;
+        if (vmo->GetClass() == nil_object) cout << "VMObject with Class == NIL_OBJECT" << endl;
         else cout << "index: " << i << " object:" << vmo->GetClass()->GetName()->GetChars() << endl;
     }
 }

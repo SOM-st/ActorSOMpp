@@ -727,14 +727,14 @@ void Parser::literalNumber(MethodGenerationContext* mgenc) {
     else
         val = literalDecimal();
     
-    VMInteger* literal = _UNIVERSE->new_integer(val);
+    VMInteger* lit = _UNIVERSE->new_integer(val);
 	/*stringstream s;
 	pString str_lit = "";
 	s << literal->GetEmbeddedInteger();
 	str_lit += s.str();*/
-	mgenc->add_literal_if_absent((VMObject*)literal);
+	mgenc->add_literal_if_absent((VMObject*)lit);
     //SEND(mgenc->literals, addIfAbsent, literal);
-    bcGen->emit_PUSH_CONSTANT(mgenc, (VMObject*)literal);
+    bcGen->emit_PUSH_CONSTANT(mgenc, (VMObject*)lit);
 	//cout << "emit push constant literal number" << endl;
 }
 
