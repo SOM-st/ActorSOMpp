@@ -106,6 +106,12 @@ void VMObject::Assert(bool value)
 
 VMObject* VMObject::GetField(int index)
 {
+    if (this->GetClass() != NULL && this->GetClass() != nil_object)
+        if (this->GetClass()->GetName() != NULL && this->GetClass()->GetName() != nil_object)
+            if (this->GetClass()->GetName()->GetStdString() == pString("Hashtable"))
+            {
+                cout << "hier";
+            }
     return FIELDS[index]; 
 }
 

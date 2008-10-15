@@ -49,7 +49,7 @@ class VMObject;
   #define INT32_MAX 0x7FFFFFFF  /*2 147 483 647*/
 #endif
 #ifndef INT32_MIN
-    #define INT32_MIN (-2147483648)
+    #define INT32_MIN (-2147483647)
 
 #endif
 //

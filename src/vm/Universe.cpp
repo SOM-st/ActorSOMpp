@@ -56,11 +56,18 @@ Universe* Universe::GetUniverse()
 	return theUniverse;
 }
 
-vector<pString> Universe::handle_arguments( int* vm_argc, int argc, char** argv )
+Universe* Universe::operator->()
+{
+    if (!theUniverse) {
+        error_exit("Trying to access uninitialized Universe, exiting.");
+    }
+	return theUniverse;
+}
+
+vector<pString> Universe::handle_arguments( int argc, char** argv )
 {
 
     vector<pString> vm_args = vector<pString>();
-    *vm_argc = 0;
     dump_bytecodes = 0;
     gc_verbosity = 0;
     for (int i = 1; i < argc ; ++i)
@@ -87,11 +94,9 @@ vector<pString> Universe::handle_arguments( int* vm_argc, int argc, char** argv 
             {
                 this->add_class_path(ext_path_tokens[0]);
                 vm_args.push_back(ext_path_tokens[1]);
-                ++(*vm_argc);
                 //delete(&ext_path_tokens);
             } else {
                 vm_args.push_back(pString(tmp_string));
-                ++(*vm_argc);
             }
             //delete(&tmp_string);
             //delete(&ext_path_tokens);
@@ -205,8 +210,7 @@ void Universe::initialize(int _argc, char** _argv)
 {
     heapSize = 1000000;
 
-    int argc;
-    vector<pString> argv = this->handle_arguments(&argc, _argc, _argv);
+    vector<pString> argv = this->handle_arguments(_argc, _argv);
 
     cout << "Setting heap Size to: " << heapSize << endl;
 	heap = new Heap(heapSize);
@@ -301,7 +305,7 @@ void Universe::initialize(int _argc, char** _argv)
     bootstrap_method->SetHolder(system_class);
     cout << "Cheer!!! We can start the Interpreter now!" << endl;
 
-    if (argc == 0) {
+    if (argv.size() == 0) {
         Shell* shell = new Shell(bootstrap_method);
         shell->Start();
         return;
@@ -311,10 +315,10 @@ void Universe::initialize(int _argc, char** _argv)
     cin.getline(g,10);*/
 
     /* only trace bootstrap if the number of cmd-line "-d"s is > 2 */
-    int trace = 2 - dump_bytecodes;
+    short trace = 2 - dump_bytecodes;
     if(!(trace > 0)) dump_bytecodes = 1;
 
-    VMArray* arguments_array = _UNIVERSE->new_array_from_argv(argc, argv);
+    VMArray* arguments_array = _UNIVERSE->new_array_from_argv(argv);
     
     VMFrame* bootstrap_frame = interpreter->PushNewFrame(bootstrap_method);
     bootstrap_frame->Push(system_object);
@@ -425,6 +429,11 @@ Universe::~Universe()
         delete(symboltable);
 }
 
+VMObject* Universe::new_tagged_integer(int32_t val)
+{
+    val += 0x80000000;
+    return (VMObject*) val;
+}
 
 void Universe::Assert( bool value)
 {
@@ -581,7 +590,7 @@ VMArray* Universe::new_array( int size)
     return result;
 }
 
-VMArray* Universe::new_array_from_argv( int size, const vector<pString>& argv)
+VMArray* Universe::new_array_from_argv( const vector<pString>& argv)
 {
     VMArray* result = new_array(argv.size());
     int j = 0;

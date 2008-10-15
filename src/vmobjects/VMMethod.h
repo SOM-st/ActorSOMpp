@@ -26,7 +26,7 @@ public:
     virtual void      SetNumberOfArguments(int);
     virtual int       GetNumberOfBytecodes();
     virtual void      SetHolderAll(VMClass* hld); 
-    virtual VMObject *GetConstant(int indx); 
+    virtual VMObject* GetConstant(int indx); 
     virtual uint8_t   GetBytecode(int indx); 
     virtual void      SetBytecode(int indx, uint8_t); 
 	virtual void	  Invoke(VMFrame* frame);

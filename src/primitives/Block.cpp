@@ -33,22 +33,22 @@ THE SOFTWARE.
 
 _Block* Block;
 
-void  _Block::Value(VMObject* object, VMFrame* frame) {
+void  _Block::Value(VMObject* /*object*/, VMFrame* /*frame*/) {
     // intentionally left blank
 }
 
 
-void  _Block::Value_(VMObject* object, VMFrame* frame) {
+void  _Block::Value_(VMObject* /*object*/, VMFrame* /*frame*/) {
     // intentionally left blank
 }
 
 
-void  _Block::Value_with_(VMObject* object, VMFrame* frame) {
+void  _Block::Value_with_(VMObject* /*object*/, VMFrame* /*frame*/) {
     // intentionally left blank
 }
 
 
-void  _Block::Restart(VMObject* object, VMFrame* frame) {
+void  _Block::Restart(VMObject* /*object*/, VMFrame* frame) {
     frame->SetBytecodeIndex(0);
     frame->ResetStackPointer();
 }

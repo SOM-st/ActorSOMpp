@@ -267,7 +267,13 @@ void Interpreter::do_pop_argument( int bytecode_index )
 void Interpreter::do_pop_field( int bytecode_index )
 {
     VMMethod* method = _METHOD;
+    VMSymbol* field_name = (VMSymbol*) method->GetConstant(bytecode_index);
 
+    VMObject* self = _SELF;
+    int field_index = self->GetFieldIndex(field_name);
+
+    VMObject* o = _FRAME->Pop();
+    self->SetField(field_index, o);
 }
 
 void Interpreter::do_send( int bytecode_index )

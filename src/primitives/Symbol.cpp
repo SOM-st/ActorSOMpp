@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 _Symbol* Symbol;
 
-void  _Symbol::AsString(VMObject* object, VMFrame* frame) {
+void  _Symbol::AsString(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* sym = (VMSymbol*) frame->Pop();
 
     pString str = sym->GetStdString();

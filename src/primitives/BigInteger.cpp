@@ -44,23 +44,24 @@ _BigInteger* BigInteger;
 
 #define CHECK_BIGINT(object, result) { \
     /* Check second parameter type: */ \
-    VMInteger* tmp;\
-    if((tmp = dynamic_cast<VMInteger*>(object)) != NULL) { \
+    VMInteger* ptr;\
+    if((ptr = dynamic_cast<VMInteger*>(object)) != NULL) { \
         /* Second operand was Integer*/ \
-        int32_t i = tmp->GetEmbeddedInteger(); \
+        int32_t i = ptr->GetEmbeddedInteger(); \
         (result) = _UNIVERSE->new_biginteger((int64_t)i); \
     } else \
         (result) = (VMBigInteger*)(object); \
 }
 
 #define PUSH_INT_OR_BIGINT(result) { \
-    if(labs((result)) > INT32_MAX) \
+    if(result > INT32_MAX ||result < INT32_MIN) \
         frame->Push((VMObject*)_UNIVERSE->new_biginteger((result))); \
     else \
         frame->Push((VMObject*)_UNIVERSE->new_integer((int32_t)(result))); \
 }
+//^^DIFFERENT THAN CSOM! Does the CSOM version work at all????????
 
-void  _BigInteger::Plus(VMObject* object, VMFrame* frame) {
+void  _BigInteger::Plus(VMObject* /*object*/, VMFrame* frame) {
     VMObject* rightObj  = frame->Pop();
     VMBigInteger* right = NULL;
     VMBigInteger* left  = (VMBigInteger*)frame->Pop();
@@ -74,7 +75,7 @@ void  _BigInteger::Plus(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Minus(VMObject* object, VMFrame* frame) {
+void  _BigInteger::Minus(VMObject* /*object*/, VMFrame* frame) {
     VMObject* rightObj  = frame->Pop();
     VMBigInteger* right = NULL;
     VMBigInteger* left  = (VMBigInteger*)frame->Pop();
@@ -88,7 +89,7 @@ void  _BigInteger::Minus(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Star(VMObject* object, VMFrame* frame) {
+void  _BigInteger::Star(VMObject* /*object*/, VMFrame* frame) {
    VMObject* rightObj  = frame->Pop();
     VMBigInteger* right = NULL;
     VMBigInteger* left  = (VMBigInteger*)frame->Pop();
@@ -102,7 +103,7 @@ void  _BigInteger::Star(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Slash(VMObject* object, VMFrame* frame) {
+void  _BigInteger::Slash(VMObject* /*object*/, VMFrame* frame) {
     VMObject* rightObj  = frame->Pop();
     VMBigInteger* right = NULL;
     VMBigInteger* left  = (VMBigInteger*)frame->Pop();
@@ -116,7 +117,7 @@ void  _BigInteger::Slash(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Percent(VMObject* object, VMFrame* frame) {
+void  _BigInteger::Percent(VMObject* /*object*/, VMFrame* frame) {
     VMObject* rightObj  = frame->Pop();
     VMBigInteger* right = NULL;
     VMBigInteger* left  = (VMBigInteger*)frame->Pop();
@@ -131,7 +132,7 @@ void  _BigInteger::Percent(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::And(VMObject* object, VMFrame* frame) {
+void  _BigInteger::And(VMObject* /*object*/, VMFrame* frame) {
     VMObject* rightObj  = frame->Pop();
     VMBigInteger* right = NULL;
     VMBigInteger* left  = (VMBigInteger*)frame->Pop();
@@ -146,7 +147,7 @@ void  _BigInteger::And(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Equal(VMObject* object, VMFrame* frame) {
+void  _BigInteger::Equal(VMObject* /*object*/, VMFrame* frame) {
     VMObject* rightObj  = frame->Pop();
     VMBigInteger* right = NULL;
     VMBigInteger* left  = (VMBigInteger*)frame->Pop();
@@ -161,7 +162,7 @@ void  _BigInteger::Equal(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Lowerthan(VMObject* object, VMFrame* frame) {
+void  _BigInteger::Lowerthan(VMObject* /*object*/, VMFrame* frame) {
     VMObject* rightObj  = frame->Pop();
     VMBigInteger* right = NULL;
     VMBigInteger* left  = (VMBigInteger*)frame->Pop();
@@ -177,7 +178,7 @@ void  _BigInteger::Lowerthan(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::AsString(VMObject* object, VMFrame* frame) {
+void  _BigInteger::AsString(VMObject* /*object*/, VMFrame* frame) {
     VMBigInteger* self = (VMBigInteger*)frame->Pop();
     // temporary storage for the number string
     // use c99 snprintf-goodie
@@ -189,7 +190,7 @@ void  _BigInteger::AsString(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Sqrt(VMObject* object, VMFrame* frame) {
+void  _BigInteger::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMBigInteger* self = (VMBigInteger*)frame->Pop();
     int64_t i = self->GetEmbeddedInteger();
     frame->Push((VMObject*)_UNIVERSE->new_double(sqrt((double)i)));

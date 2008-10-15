@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 _Class* Class;
 
-void  _Class::New(VMObject* object, VMFrame* frame) {
+void  _Class::New(VMObject* /*object*/, VMFrame* frame) {
     VMClass* self = (VMClass*)frame->Pop();
     frame->Push(_UNIVERSE->new_instance(self));
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef DEBUG_H_
 #define DEBUG_H_
 
@@ -60,6 +62,8 @@ static inline void debug_info(const char* fmt, ...) {
     #ifdef DEBUG
         debug_prefix("INFO:"); 
         debug_pass(fmt);
+    #else
+        (void)fmt;
     #endif DEBUG
 }
 
@@ -67,7 +71,9 @@ static inline void debug_info(const char* fmt, ...) {
 static inline void debug_log(const char* fmt, ...) {
     #ifdef DEBUG
         debug_prefix("LOG:"); 
-        debug_pass(fmt);    
+        debug_pass(fmt);
+    #else
+    (void)fmt;
     #endif DEBUG
 }
 

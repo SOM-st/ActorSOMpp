@@ -39,7 +39,7 @@ THE SOFTWARE.
 
 _String* String;
 
-void  _String::Concatenate_(VMObject* object, VMFrame* frame) {
+void  _String::Concatenate_(VMObject* /*object*/, VMFrame* frame) {
 
     VMString* arg = (VMString*)frame->Pop();
     VMString* self = (VMString*)frame->Pop();
@@ -52,20 +52,20 @@ void  _String::Concatenate_(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _String::AsSymbol(VMObject* object, VMFrame* frame) {
+void  _String::AsSymbol(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
     pString result = self->GetStdString();
     frame->Push((VMObject*)_UNIVERSE->symbol_for(result));
 }
 
 
-void  _String::Hashcode(VMObject* object, VMFrame* frame) {
+void  _String::Hashcode(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
     frame->Push((VMObject*)_UNIVERSE->new_integer(self->GetHash()));
 }
 
 
-void  _String::Length(VMObject* object, VMFrame* frame) {
+void  _String::Length(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
     //pString result = self->GetStdString();
     //size_t len = result.length();
@@ -74,7 +74,7 @@ void  _String::Length(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _String::Equal(VMObject* object, VMFrame* frame) {
+void  _String::Equal(VMObject* /*object*/, VMFrame* frame) {
     VMObject* op1 = frame->Pop();
     VMString* op2 = (VMString*)frame->Pop();
     
@@ -92,7 +92,7 @@ void  _String::Equal(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _String::PrimSubstringFrom_To_(VMObject* object, VMFrame* frame) {
+void  _String::PrimSubstringFrom_To_(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* end = (VMInteger*)frame->Pop();
     VMInteger* start = (VMInteger*)frame->Pop();
     

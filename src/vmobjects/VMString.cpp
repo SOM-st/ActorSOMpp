@@ -37,7 +37,7 @@ void VMString::SetString(const std::string& str)
         cout << "Problem: trying to SetString of a VMSymbol that doesn't have enough mem" << endl;
 	} else {
         //char* chars = this->GetChars();
-        int i;
+        unsigned int i;
 		for (i = 0; i < (size_t)str.length(); i++) {
 			chars[i] = str[i];
 		}

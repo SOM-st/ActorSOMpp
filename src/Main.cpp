@@ -43,6 +43,7 @@ THE SOFTWARE.
 #include "vmobjects/VMString.h"
 #include "vmobjects/VMArray.h"
 #include "misc/defs.h"
+#include "vmobjects/pVMObject.h"
 
 int main(int argc, char** argv) {
 
@@ -53,7 +54,13 @@ int main(int argc, char** argv) {
 
    // Universe::handle_arguments(&vm_argc, argc, argv);
     Universe::start(argc, argv);
+    
+    pVMObject pti;
+    pti = _UNIVERSE->new_tagged_integer(42);
+    pVMObject pti2;
+    pti2 = (VMObject*) _UNIVERSE->new_biginteger(123490123);
 
+    cout << sizeof(pVMObject) << endl;
    /* Heap* heap = new Heap(1000);
     VMObject* vmo = new (heap) VMObject();
     cout << "sizeof(VMObject): " << sizeof(VMObject) << endl;*/

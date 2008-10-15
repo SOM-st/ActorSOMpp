@@ -55,7 +55,7 @@ void VMPrimitive::MarkReferences()
    // routine->MarkReferences();
 }
 
-void VMPrimitive::EmptyRoutine( VMObject* _self, VMFrame* frame )
+void VMPrimitive::EmptyRoutine( VMObject* _self, VMFrame* /*frame*/ )
 {
     VMInvokable* self = (VMInvokable*) _self;
     VMSymbol* sig = self->GetSignature();

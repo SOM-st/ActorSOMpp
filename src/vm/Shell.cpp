@@ -60,8 +60,6 @@ void Shell::Start()
         // initialize empty strings
         pString   statement = pString("");
         pString   inp = pString("");
-        size_t    in_len = 0;
-
         
         //printf("---> ");
         cout << "---> ";

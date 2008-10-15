@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 _Object* Object;
 
-void  _Object::Equalequal(VMObject* object, VMFrame* frame) {
+void  _Object::Equalequal(VMObject* /*object*/, VMFrame* frame) {
     VMObject* op1 = frame->Pop();
     VMObject* op2 = frame->Pop();
     
@@ -42,14 +42,14 @@ void  _Object::Equalequal(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Object::ObjectSize(VMObject* object, VMFrame* frame) {
+void  _Object::ObjectSize(VMObject* /*object*/, VMFrame* frame) {
     VMObject* self = frame->Pop();
 
     frame->Push( (VMObject*)_UNIVERSE->new_integer(self->GetObjectSize()) );
 }
 
 
-void  _Object::Hashcode(VMObject* object, VMFrame* frame) {
+void  _Object::Hashcode(VMObject* /*object*/, VMFrame* frame) {
     VMObject* self = frame->Pop();
     frame->Push( (VMObject*)_UNIVERSE->new_integer(self->GetHash()) );
 }

@@ -67,7 +67,7 @@ _Integer* Integer;
 //
 
 
-void _Integer::pushResult(VMObject* object, VMFrame* frame, 
+void _Integer::pushResult(VMObject* /*object*/, VMFrame* frame, 
                               int64_t result) {
     int32_t i32min = INT32_MIN;
     // Check with integer bounds and push:
@@ -78,7 +78,7 @@ void _Integer::pushResult(VMObject* object, VMFrame* frame,
 }
 
 
-void _Integer::resendAsBigInteger(VMObject* object, 
+void _Integer::resendAsBigInteger(VMObject* /*object*/, 
                                   const char* op,
                                   VMInteger* left, VMBigInteger* right) {
     // Construct left value as BigInteger:
@@ -95,7 +95,7 @@ void _Integer::resendAsBigInteger(VMObject* object,
 }
 
 
-void _Integer::resendAsDouble(VMObject* object, const char* op,
+void _Integer::resendAsDouble(VMObject* /*object*/, const char* op,
     VMInteger* left, VMDouble* right
 ) {
     VMDouble* leftDouble =
@@ -267,7 +267,7 @@ void  _Integer::Lowerthan(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::AsString(VMObject* object, VMFrame* frame) {
+void  _Integer::AsString(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* self = (VMInteger*)frame->Pop();
     // temporary storage for the number string
     // use c99 snprintf-goodie
@@ -278,14 +278,14 @@ void  _Integer::AsString(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::Sqrt(VMObject* object, VMFrame* frame) {
+void  _Integer::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* self = (VMInteger*)frame->Pop();
     double result = sqrt((double)self->GetEmbeddedInteger());
     frame->Push((VMObject*)_UNIVERSE->new_double(result));
 }
 
 
-void  _Integer::AtRandom(VMObject* object, VMFrame* frame) {
+void  _Integer::AtRandom(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* self = (VMInteger*)frame->Pop();
     int32_t result = (self->GetEmbeddedInteger() * rand())%INT32_MAX;
     frame->Push((VMObject*) _UNIVERSE->new_integer(result));

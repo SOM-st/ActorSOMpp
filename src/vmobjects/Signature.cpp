@@ -12,7 +12,7 @@ int Signature::GetNumberOfArguments(VMSymbol *sig)
         int num_colons =0;
         
         // search the str
-        for(int i=0 ; i<=str.length(); i++) 
+        for(unsigned int i=0 ; i<=str.length(); ++i) 
             if(str[i]==':')
                 // additional colon found
                 num_colons++;

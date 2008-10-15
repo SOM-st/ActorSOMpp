@@ -339,6 +339,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\vmobjects\pVMObject.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\primitives\Routine.h"
 			>
 		</File>

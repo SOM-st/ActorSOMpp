@@ -49,32 +49,34 @@ THE SOFTWARE.
 
 _System* System_;
 
-  void  _System::Global_(VMObject* object, VMFrame* frame) {
+  void  _System::Global_(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* arg = (VMSymbol*)frame->Pop();
-    VMObject* self = frame->Pop();
+    /*VMObject* self = */
+    frame->Pop();
     VMObject* result = _UNIVERSE->get_global(arg);
     
     frame->Push( result ? result:nil_object);    
 }
 
 
-void  _System::Global_put_(VMObject* object, VMFrame* frame) {
+void  _System::Global_put_(VMObject* /*object*/, VMFrame* frame) {
     VMObject* value = frame->Pop();
     VMSymbol* arg = (VMSymbol*)frame->Pop();
     _UNIVERSE->set_global(arg, value);    
 }
 
 
-void  _System::Load_(VMObject* object, VMFrame* frame) {
+void  _System::Load_(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* arg = (VMSymbol*)frame->Pop();
-    VMObject* self = frame->Pop();
+    /*VMObject* self = */
+    frame->Pop();
     VMClass* result = _UNIVERSE->load_class(arg);
 
     frame->Push( result? (VMObject*)result: nil_object);
 }
 
 
-void  _System::Exit_(VMObject* object, VMFrame* frame) {
+void  _System::Exit_(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* err = (VMInteger*)frame->Pop();
     int32_t err_no = err->GetEmbeddedInteger();
 
@@ -84,20 +86,21 @@ void  _System::Exit_(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _System::PrintString_(VMObject* object, VMFrame* frame) {
+void  _System::PrintString_(VMObject* /*object*/, VMFrame* frame) {
     VMString* arg = (VMString*)frame->Pop();
     pString str = arg->GetStdString();
     cout << str;
 }
 
 
-void  _System::PrintNewline(VMObject* object, VMFrame* frame) {
+void  _System::PrintNewline(VMObject* /*object*/, VMFrame* /*frame*/) {
     cout << endl;   
 }
 
 
-void  _System::Time(VMObject* object, VMFrame* frame) {
-    VMObject* self = frame->Pop();
+void  _System::Time(VMObject* /*object*/, VMFrame* frame) {
+    /*VMObject* self = */
+    frame->Pop();
     timeval* now = NULL;
     gettimeofday(now, NULL);
     long long diff = 

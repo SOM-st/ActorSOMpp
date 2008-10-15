@@ -131,17 +131,17 @@ void* Heap::Allocate(size_t size)
     return result;
 }
 
-void Heap::Free(void* ptr)
+void Heap::Free(void* /*ptr*/)
 {
     //add ptr to free list
 }
 
-void Heap::Free(void* ptr, int size)
+void Heap::Free(void* /*ptr*/, int /*size*/)
 {
     //add referenced space to free list
 }
 
-void* Heap::internalAllocate(size_t size)
+void* Heap::internalAllocate(size_t /*size*/)
 {
 	return NULL;
 }

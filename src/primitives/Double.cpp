@@ -71,36 +71,36 @@ double coerce_double(VMObject* x) {
     double left = leftObj->GetEmbeddedDouble();
 
 
-void  _Double::Plus(VMObject* object, VMFrame* frame) {
+void  _Double::Plus(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     frame->Push((VMObject*)_UNIVERSE->new_double(left + right));
 }
 
 
-void  _Double::Minus(VMObject* object, VMFrame* frame) {
+void  _Double::Minus(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     frame->Push((VMObject*)_UNIVERSE->new_double(left - right));
 }
 
 
-void  _Double::Star(VMObject* object, VMFrame* frame) {
+void  _Double::Star(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     frame->Push((VMObject*)_UNIVERSE->new_double(left * right));
 }
 
 
-void  _Double::Slashslash(VMObject* object, VMFrame* frame) {
+void  _Double::Slashslash(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     frame->Push((VMObject*)_UNIVERSE->new_double(left / right));
 }
 
 
-void  _Double::Percent(VMObject* object, VMFrame* frame) {
+void  _Double::Percent(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     frame->Push(_UNIVERSE->new_double((double)((int64_t)left % 
                                               (int64_t)right)));
 }
-void  _Double::And(VMObject* object, VMFrame* frame) {
+void  _Double::And(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     frame->Push(_UNIVERSE->new_double((double)((int64_t)left & 
                                               (int64_t)right)));
@@ -112,7 +112,7 @@ void  _Double::And(VMObject* object, VMFrame* frame) {
  * This function implements strict (bit-wise) equality and is therefore
  * inaccurate.
  */
-void  _Double::Equal(VMObject* object, VMFrame* frame) {
+void  _Double::Equal(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     if(left == right)
         frame->Push(true_object);
@@ -121,7 +121,7 @@ void  _Double::Equal(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Double::Lowerthan(VMObject* object, VMFrame* frame) {
+void  _Double::Lowerthan(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     if(left < right)
         frame->Push(true_object);
@@ -130,7 +130,7 @@ void  _Double::Lowerthan(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Double::AsString(VMObject* object, VMFrame* frame) {
+void  _Double::AsString(VMObject* /*object*/, VMFrame* frame) {
     VMDouble* self = (VMDouble*)frame->Pop();
     // temporary storage for the number string
     // use c99 snprintf-goodie
@@ -142,7 +142,7 @@ void  _Double::AsString(VMObject* object, VMFrame* frame) {
 }
 
 
-void _Double::Sqrt(VMObject* object, VMFrame* frame) {
+void _Double::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMDouble* self = (VMDouble*)frame->Pop();
     VMDouble* result = _UNIVERSE->new_double( sqrt(self->GetEmbeddedDouble()) );
     frame->Push((VMObject*)result);

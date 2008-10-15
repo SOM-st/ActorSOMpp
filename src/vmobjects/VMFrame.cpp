@@ -6,7 +6,7 @@
 #include "VMSymbol.h"
 #include "../vm/Universe.h"
 
-VMFrame::VMFrame(int size, int nof) : VMArray(size, FRAME_NUMBER_OF_FIELDS)
+VMFrame::VMFrame(int size, int nof) : VMArray(size, nof + FRAME_NUMBER_OF_FIELDS)
 {
    // this->SetNumberOfFields(this->GetNumberOfFields() + 6);
     //this->objectSize = sizeof(VMFrame) + size*sizeof(VMObject*);

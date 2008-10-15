@@ -54,7 +54,7 @@ public:
      */
 	void *operator new( size_t num_bytes, Heap *heap, unsigned int additional_bytes = 0)
 	{
-       /* if (num_bytes == 24) {
+        /*if (num_bytes == 24) {
             cout << "hier";
         }
         cout << "Allocating " << num_bytes << "+" << additional_bytes << " = " << num_bytes + additional_bytes << "Bytes" <<endl;*/
@@ -67,7 +67,7 @@ public:
 		return heap->Allocate(num_bytes);
 	}
 
-	void operator delete(void* self, Heap *heap, unsigned int additional_bytes)
+	void operator delete(void* self, Heap *heap, unsigned int /*additional_bytes*/)
 	{
         int size = ((VMObject*)self)->GetObjectSize();
 		heap->Free(self, size);
@@ -82,7 +82,13 @@ public:
 	 void operator delete[]( void *self, Heap *heap ) 
 	 {
 		 heap->Free(self); 
-	 } 
+	 }
+
+     VMObject* operator->()
+     {
+         cout << "->" << endl;
+         return this;
+     }
 	
 protected:
     //VMObject essentials

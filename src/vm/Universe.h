@@ -26,6 +26,7 @@ class SourcecodeCompiler;
 #include "../memory/Heap.h"
 #include "../primitives/Core.h"
 #include "../misc/SymbolCompare.h"
+
 #define _HEAP Universe::GetUniverse()->GetHeap()
 #define _UNIVERSE Universe::GetUniverse()
 
@@ -59,6 +60,7 @@ using namespace std;
 class Universe
 {
 public:
+    Universe* operator->();
 	static Universe* GetUniverse();
     static void start(int argc, char** argv);
     static void quit(int);
@@ -79,7 +81,7 @@ public:
 
     VMArray*      new_array(int);
     VMArray*      new_array_list(pList& list);
-    VMArray*      new_array_from_argv(int, const vector<pString>&);
+    VMArray*      new_array_from_argv(const vector<pString>&);
     VMBlock*      new_block(VMMethod*, VMFrame*, int);
     VMClass*      new_class(VMClass*);
     VMFrame*      new_frame(VMFrame*, VMMethod*);
@@ -92,7 +94,8 @@ public:
     VMString*     new_string(const pString&);
     VMSymbol*     new_symbol(const pString&);
     VMClass*      new_system_class(void);
-
+    
+    VMObject*     new_tagged_integer(int32_t);
     void          initialize_system_class(VMClass*, VMClass*, const char*);
 
     VMObject*     get_global(VMSymbol*);
@@ -107,9 +110,11 @@ public:
     VMClass*      load_class_basic(VMSymbol*, VMClass*);
     VMClass*      load_shell_class(pString&);
     
+        Universe();
+	~Universe();
     //
 private:
-    vector<pString>  handle_arguments(int* vm_argc, int argc, char** argv) ;
+    vector<pString>  handle_arguments(int argc, char** argv) ;
     int get_path_class_ext(vector<pString>& tokens, const pString& arg);
     
     static Universe *theUniverse;
@@ -123,8 +128,7 @@ private:
 
     void prepareNilObject();
 
-    Universe();
-	~Universe();
+
     
 	Heap *heap;
     int heapSize;
