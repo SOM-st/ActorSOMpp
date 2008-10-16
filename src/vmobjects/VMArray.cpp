@@ -4,9 +4,14 @@
 
 #define theEntries(i) FIELDS[this->GetNumberOfFields()+i]
 
-VMArray::VMArray(int size, int nof) : VMObject(nof+2)
+VMArray::VMArray(int size, int nof) : VMObject(nof+1)
 {
 	this->size = _UNIVERSE->new_integer(size);
+
+    for (int i = 0; i < size ; ++i)
+    {
+        this->SetIndexableField(i, nil_object);
+    }
 	//objectSize += size * sizeof(VMObject*); //calculate actual object size including the entries
 }
 

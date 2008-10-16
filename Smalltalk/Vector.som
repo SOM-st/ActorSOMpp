@@ -51,10 +51,6 @@ Vector = (
     , element = ( ^self append: element )
     
     append: element = (
-        'last: ' print.
-        (last asString) println.
-        'sl: ' print.
-        (storage length) asString println.
         (last >= storage length) ifTrue: [
             "Need to expand capacity first"
             | newStorage |
@@ -103,8 +99,6 @@ Vector = (
         | newVector |
         newVector := super new.
         newVector storage: (Array new: initialSize).
-        '111111111111111111111111111111111' println.
-        newVector capacity println.
         newVector first: 1.
         newVector last: 1.
         ^newVector

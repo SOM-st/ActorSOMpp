@@ -25,30 +25,9 @@ THE SOFTWARE.
 
 Test = (
     
-    run = (| a |
-        a println.
-        a := Array new: 8.
-        a at: 1 put: 9.
-        a at: 2 put: 2345.
-        a at: 3 put: 152.
-        a at: 4 put: 347.
-        a at: 5 put: 34.
-        a at: 6 put: 5.
-        a at: 7 put: 3572.
-        a at: 8 put: 1235.
-        '1111111111111111' println.
-        (BubbleSort new) sort: a.
-        '1111111111111111' println.
-        (a at: 1) println.
-        (a at: 2) println.
-        (a at: 3) println.
-        (a at: 4) println.
-        (a at: 5) println.
-        (a at: 6) println.
-        (a at: 7) println.
-        (a at: 8) println.
+    run = (
         'Testing...' println.
-        "self hashTest."
+        self hashTest.
         self preliminaryTest.
         self arrayTest.
         self integerTest.
@@ -66,14 +45,11 @@ Test = (
     hashTest = (
         | ht string array t | 
         ht := Hashtable new.
-        '1111111111111' println.
         ht isEmpty
             ifFalse: [ 'New Hashtable not empty!' println ].
-        '2222222222222222' println.
         ht at: 'a' put: 'b'.
         (ht containsValue: 'b')
             ifFalse: [ '1 not in Hashtable' println ].
-        '333333333333333333' println.
         ht isEmpty
             ifTrue: [ 'Nonempty Hashtable empty!' println ].
         ((ht size) = 1)

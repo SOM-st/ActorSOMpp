@@ -208,7 +208,7 @@ void Universe::prepareNilObject()
 
 void Universe::initialize(int _argc, char** _argv)
 {
-    heapSize = 1000000;
+    heapSize = 1048576;
 
     vector<pString> argv = this->handle_arguments(_argc, _argv);
 
@@ -663,7 +663,7 @@ VMFrame* Universe::new_frame( VMFrame* previous_frame, VMMethod* method)
 {
     int length = method->GetNumberOfArguments() +
                  method->GetNumberOfLocals()+
-                 method->GetMaximumNumberOfStackElements();
+                 method->GetMaximumNumberOfStackElements()+1;
 
     int additionalBytes = length * sizeof(VMObject*);
     VMFrame* result = new (heap, additionalBytes) VMFrame(length);

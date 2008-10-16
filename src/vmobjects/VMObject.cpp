@@ -33,9 +33,6 @@ VMClass* VMObject::GetClass()
 void VMObject::SetClass(VMClass* cl)
 {
 	clazz = cl;
-    if (cl->GetName()->GetStdString() == pString("Hashtable")){
-        cout << "hier";
-    }
 }
 
 VMSymbol* VMObject::GetFieldName(int index)
@@ -106,23 +103,11 @@ void VMObject::Assert(bool value)
 
 VMObject* VMObject::GetField(int index)
 {
-    if (this->GetClass() != NULL && this->GetClass() != nil_object)
-        if (this->GetClass()->GetName() != NULL && this->GetClass()->GetName() != nil_object)
-            if (this->GetClass()->GetName()->GetStdString() == pString("Hashtable"))
-            {
-                cout << "hier";
-            }
     return FIELDS[index]; 
 }
 
 void VMObject::SetField(int index, VMObject* value)
 {
-    if (this->GetClass() != NULL && this->GetClass() != nil_object)
-        if (this->GetClass()->GetName() != NULL && this->GetClass()->GetName() != nil_object)
-            if (this->GetClass()->GetName()->GetStdString() == pString("Hashtable"))
-            {
-                cout << "hier";
-            }
      FIELDS[index] = value;
 }
 

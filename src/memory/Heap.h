@@ -21,7 +21,7 @@ class Heap
 	friend class GarbageCollector;
 
 public:
-	Heap(int object_space_size = 1000000);
+	Heap(int object_space_size = 1048576);
 	~Heap();
     VMObject* AllocateObject(size_t size);
 	void* Allocate(size_t size);
