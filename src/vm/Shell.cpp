@@ -37,7 +37,7 @@ void Shell::Start()
 #define QUIT_CMD_L 11 + 1
 
     if (bootstrap_method == NULL) {
-        _UNIVERSE->error_exit("Shell needs bootstrap method!");
+        _UNIVERSE->ErrorExit("Shell needs bootstrap method!");
     }
     // the statement to evaluate
     char      inbuf[INPUT_MAX_SIZE];
@@ -103,7 +103,7 @@ void Shell::Start()
         statement += SHELL_PART_2;*/
         //sprintf(stmt, "%s%d%s", SHELL_PREFIX, counter, SHELL_PART_1);
         ++counter;
-        runClass = _UNIVERSE->load_shell_class(statement);
+        runClass = _UNIVERSE->LoadShellClass(statement);
         // Compile and load the newly generated class
         if(runClass == NULL) {
             cout << "can't compile statement.";
@@ -117,14 +117,14 @@ void Shell::Start()
         current_frame->SetBytecodeIndex(bytecode_index);
         
         // Create and push a new instance of our class on the stack
-        current_frame->Push(_UNIVERSE->new_instance(runClass));
+        current_frame->Push(_UNIVERSE->NewInstance(runClass));
         
         // Push the old value of "it" on the stack
         current_frame->Push(it);
         
         // Lookup the run: method
         VMInvokable* initialize = 
-            (VMInvokable*)runClass->LookupInvokable(_UNIVERSE->symbol_for("run:"));
+            (VMInvokable*)runClass->LookupInvokable(_UNIVERSE->SymbolFor("run:"));
         
         // Invoke the run method
         initialize->Invoke(current_frame);

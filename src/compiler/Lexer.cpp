@@ -10,15 +10,15 @@ Lexer::~Lexer() {
 }
 
 
-pString Lexer::gettext(void) {
+pString Lexer::GetText(void) {
 	return pString(text);
 }
 
-pString Lexer::getnexttext(void) {
+pString Lexer::GetNextText(void) {
 	return pString(nextText);
 }
 
-pString Lexer::getrawbuffer(void) {
+pString Lexer::GetRawBuffer(void) {
 	//for debug
 	return pString(buf);
 }
@@ -26,7 +26,7 @@ pString Lexer::getrawbuffer(void) {
 #define _BC (buf[bufp])
 #define EOB (bufp >= buf.length())
 
-int Lexer::fillbuffer(void) {
+int Lexer::fillBuffer(void) {
 	if(!infile.good()) // file stream
         return 0;
     
@@ -44,7 +44,7 @@ void Lexer::skipWhiteSpace(void) {
     while(isspace(_BC)) {
         bufp++;
         if(EOB)
-            fillbuffer();
+            fillBuffer();
     }
 }
 
@@ -56,7 +56,7 @@ void Lexer::skipComment(void) {
         do {
             bufp++;
             if(EOB)
-                fillbuffer();
+                fillBuffer();
 			//cout << _BC;
         } while(_BC != '"');
         bufp++;
@@ -73,8 +73,8 @@ void Lexer::skipComment(void) {
 #define SEPARATOR std::string("----") //FIXME
 #define PRIMITIVE std::string("primitive")
 
-Symbol Lexer::getsym(void) {
-	//cout << "getsym ";
+Symbol Lexer::GetSym(void) {
+	//cout << "GetSym ";
     if(peekDone) {
         peekDone = false;
         sym = nextSym;
@@ -85,7 +85,7 @@ Symbol Lexer::getsym(void) {
 
     do {
         if(EOB)
-            fillbuffer();
+            fillBuffer();
         skipWhiteSpace();
         skipComment();
 		//cout << "ws ";
@@ -203,14 +203,14 @@ Symbol Lexer::getsym(void) {
 }
 
 
-Symbol Lexer::peek(void) {
+Symbol Lexer::Peek(void) {
     Symbol saveSym = sym;
     char saveSymc = symc;
     char saveText[256];
     strcpy(saveText, text);
     if(peekDone)
-        fprintf(stderr, "Cannot peek twice!\n");
-    getsym();
+        fprintf(stderr, "Cannot Peek twice!\n");
+    GetSym();
     nextSym = sym;
     nextSymc = symc;
     strcpy(nextText, text);

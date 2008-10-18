@@ -5,7 +5,7 @@
 #include <string>
 #include "../misc/defs.h"
 using namespace std;
-class generation_context_core {
+class GenerationContextCore {
 protected:
     /*static int index_of(const pList& haystack, const VMObject* needle) {
         pList::const_iterator i = haystack.end();

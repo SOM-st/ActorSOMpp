@@ -60,7 +60,7 @@ using namespace std;
 #define file_separator '/'
 
 //typedef int MethodGenerationContext;
-//typedef int class_generation_context;
+//typedef int ClassGenerationContext;
 //typedef string pVMSymbol;
 typedef string pString;
 

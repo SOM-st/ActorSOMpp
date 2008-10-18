@@ -67,7 +67,7 @@ int VMObject::GetDefaultNumberOfFields()
 
 void VMObject::Send(pString selector_string, VMObject** arguments, int argc)
 {
-    VMSymbol* selector = _UNIVERSE->symbol_for(selector_string);
+    VMSymbol* selector = _UNIVERSE->SymbolFor(selector_string);
     VMFrame* frame = _UNIVERSE->GetInterpreter()->GetFrame();
     frame->Push(this);
 

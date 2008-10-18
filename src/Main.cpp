@@ -52,20 +52,20 @@ int main(int argc, char** argv) {
    // int vm_argc = 0;
    // pString* vm_argv = NULL;
 
-   // Universe::handle_arguments(&vm_argc, argc, argv);
-    Universe::start(argc, argv);
+   // Universe::handleArguments(&vm_argc, argc, argv);
+    Universe::Start(argc, argv);
     
     pVMObject pti;
-    pti = _UNIVERSE->new_tagged_integer(42);
+    pti = _UNIVERSE->NewTaggedInteger(42);
     pVMObject pti2;
-    pti2 = (VMObject*) _UNIVERSE->new_biginteger(123490123);
+    pti2 = (VMObject*) _UNIVERSE->NewBigInteger(123490123);
 
     cout << sizeof(pVMObject) << endl;
    /* Heap* heap = new Heap(1000);
     VMObject* vmo = new (heap) VMObject();
     cout << "sizeof(VMObject): " << sizeof(VMObject) << endl;*/
 
-    Universe::quit(ERR_SUCCESS);
+    Universe::Quit(ERR_SUCCESS);
 }
 
 

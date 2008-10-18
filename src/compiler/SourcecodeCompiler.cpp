@@ -17,7 +17,7 @@ SourcecodeCompiler::~SourcecodeCompiler()
     if (parser != NULL) delete(parser);
 }
 
-VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& file, VMClass* system_class )
+VMClass* SourcecodeCompiler::CompileClass( const pString& path, const pString& file, VMClass* system_class )
 {
     VMClass* result = system_class;
 
@@ -44,7 +44,7 @@ VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& 
         ostringstream Str;
         Str << "Filename: " << file << " does not match class name " << cname_c;
 
-        show_compilation_error(file, Str.str().c_str());
+        showCompilationError(file, Str.str().c_str());
         return NULL;
     }
     delete(parser);
@@ -56,7 +56,7 @@ VMClass* SourcecodeCompiler::compile_class( const pString& path, const pString& 
     return result;
 }
 
-VMClass* SourcecodeCompiler::compile_class_string( const pString& stream, VMClass* system_class )
+VMClass* SourcecodeCompiler::CompileClassString( const pString& stream, VMClass* system_class )
 {
     istringstream* ss = new istringstream(stream);
     if (parser != NULL) delete(parser);
@@ -70,7 +70,7 @@ VMClass* SourcecodeCompiler::compile_class_string( const pString& stream, VMClas
     return result;
 }
 
-void SourcecodeCompiler::show_compilation_error( const pString& filename, const char* message )
+void SourcecodeCompiler::showCompilationError( const pString& filename, const char* message )
 {
     cout << "Error when compiling " << filename << ":" << endl;
     cout << message << endl;
@@ -80,9 +80,9 @@ VMClass* SourcecodeCompiler::compile( VMClass* system_class )
 {
     if (parser == NULL) {
         cout << "Parser not initiated" << endl;
-        _UNIVERSE->error_exit("Compiler error");
+        _UNIVERSE->ErrorExit("Compiler error");
     }
-    class_generation_context* cgc = new class_generation_context();
+    ClassGenerationContext* cgc = new ClassGenerationContext();
 
     VMClass* result = system_class;
 

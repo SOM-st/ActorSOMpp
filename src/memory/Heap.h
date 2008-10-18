@@ -28,11 +28,13 @@ public:
     void Free(void* ptr);
 	void Free(void* ptr, int size);
 	
-	void GCCollect() {gc->Collect();}
+    void StartUninterruptableAllocation() { ++uninterruptable_counter; } ;
+    void EndUninterruptableAllocation() { --uninterruptable_counter; } ;
+
 	//void SetGlobal(pString name, void* val);
 int allocCount;
 private:
-    
+    void internalFree(void* ptr);
 	void* internalAllocate(size_t size);
 
 	void* object_space;

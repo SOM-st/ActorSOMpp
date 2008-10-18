@@ -62,66 +62,64 @@ class Universe
 public:
     Universe* operator->();
 	static Universe* GetUniverse();
-    static void start(int argc, char** argv);
-    static void quit(int);
-    static void error_exit(const char*);
+    static void Start(int argc, char** argv);
+    static void Quit(int);
+    static void ErrorExit(const char*);
 
 	map<pString, VMObject*>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
     Interpreter* GetInterpreter() {return interpreter;}
-	void RunGC();
-	
 
     //
 
     void          Assert(bool);
 
-    VMSymbol*     symbol_for(const pString&);
-    VMSymbol*     symbol_for_chars(const char*);
+    VMSymbol*     SymbolFor(const pString&);
+    VMSymbol*     SymbolForChars(const char*);
 
-    VMArray*      new_array(int);
-    VMArray*      new_array_list(pList& list);
-    VMArray*      new_array_from_argv(const vector<pString>&);
-    VMBlock*      new_block(VMMethod*, VMFrame*, int);
-    VMClass*      new_class(VMClass*);
-    VMFrame*      new_frame(VMFrame*, VMMethod*);
-    VMMethod*     new_method(VMSymbol*, size_t, size_t);
-    VMObject*     new_instance(VMClass*);
-    VMInteger*    new_integer(int32_t);
-    VMBigInteger* new_biginteger(int64_t);
-    VMDouble*     new_double(double);
-    VMClass*      new_metaclass_class(void);
-    VMString*     new_string(const pString&);
-    VMSymbol*     new_symbol(const pString&);
-    VMClass*      new_system_class(void);
+    VMArray*      NewArray(int);
+    VMArray*      NewArrayList(pList& list);
+    VMArray*      NewArrayFromArgv(const vector<pString>&);
+    VMBlock*      NewBlock(VMMethod*, VMFrame*, int);
+    VMClass*      NewClass(VMClass*);
+    VMFrame*      NewFrame(VMFrame*, VMMethod*);
+    VMMethod*     NewMethod(VMSymbol*, size_t, size_t);
+    VMObject*     NewInstance(VMClass*);
+    VMInteger*    NewInteger(int32_t);
+    VMBigInteger* NewBigInteger(int64_t);
+    VMDouble*     NewDouble(double);
+    VMClass*      NewMetaclassClass(void);
+    VMString*     NewString(const pString&);
+    VMSymbol*     NewSymbol(const pString&);
+    VMClass*      NewSystemClass(void);
     
-    VMObject*     new_tagged_integer(int32_t);
-    void          initialize_system_class(VMClass*, VMClass*, const char*);
+    VMObject*     NewTaggedInteger(int32_t);
+    void          InitializeSystemClass(VMClass*, VMClass*, const char*);
 
-    VMObject*     get_global(VMSymbol*);
-    void          set_global(VMSymbol* name, VMObject* val);
-    bool          has_global(VMSymbol*);
+    VMObject*     GetGlobal(VMSymbol*);
+    void          SetGlobal(VMSymbol* name, VMObject* val);
+    bool          HasGlobal(VMSymbol*);
 
-    VMClass*      get_block_class(void);
-    VMClass*      get_block_class_with_args(int);
+    VMClass*      GetBlockClass(void);
+    VMClass*      GetBlockClassWithArgs(int);
 
-    VMClass*      load_class(VMSymbol*);
-    void         load_system_class(VMClass*);
-    VMClass*      load_class_basic(VMSymbol*, VMClass*);
-    VMClass*      load_shell_class(pString&);
+    VMClass*      LoadClass(VMSymbol*);
+    void         LoadSystemClass(VMClass*);
+    VMClass*      LoadClassBasic(VMSymbol*, VMClass*);
+    VMClass*      LoadShellClass(pString&);
     
         Universe();
 	~Universe();
     //
 private:
-    vector<pString>  handle_arguments(int argc, char** argv) ;
-    int get_path_class_ext(vector<pString>& tokens, const pString& arg);
+    vector<pString>  handleArguments(int argc, char** argv) ;
+    int getPathClassExt(vector<pString>& tokens, const pString& arg);
     
     static Universe *theUniverse;
     
-    int setup_class_path(const pString& cp);
-    int add_class_path(const pString& cp);
-    void print_usage_and_exit(char* executable);
+    int setupClassPath(const pString& cp);
+    int addClassPath(const pString& cp);
+    void printUsageAndExit(char* executable);
 	
 
     void initialize(int, char**);

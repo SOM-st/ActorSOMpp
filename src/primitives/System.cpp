@@ -53,7 +53,7 @@ _System* System_;
     VMSymbol* arg = (VMSymbol*)frame->Pop();
     /*VMObject* self = */
     frame->Pop();
-    VMObject* result = _UNIVERSE->get_global(arg);
+    VMObject* result = _UNIVERSE->GetGlobal(arg);
     
     frame->Push( result ? result:nil_object);    
 }
@@ -62,7 +62,7 @@ _System* System_;
 void  _System::Global_put_(VMObject* /*object*/, VMFrame* frame) {
     VMObject* value = frame->Pop();
     VMSymbol* arg = (VMSymbol*)frame->Pop();
-    _UNIVERSE->set_global(arg, value);    
+    _UNIVERSE->SetGlobal(arg, value);    
 }
 
 
@@ -70,7 +70,7 @@ void  _System::Load_(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* arg = (VMSymbol*)frame->Pop();
     /*VMObject* self = */
     frame->Pop();
-    VMClass* result = _UNIVERSE->load_class(arg);
+    VMClass* result = _UNIVERSE->LoadClass(arg);
 
     frame->Push( result? (VMObject*)result: nil_object);
 }
@@ -82,7 +82,7 @@ void  _System::Exit_(VMObject* /*object*/, VMFrame* frame) {
 
     if(err_no != ERR_SUCCESS)
         frame->PrintStackTrace();
-    _UNIVERSE->quit(err_no);
+    _UNIVERSE->Quit(err_no);
 }
 
 
@@ -106,7 +106,7 @@ void  _System::Time(VMObject* /*object*/, VMFrame* frame) {
     long long diff = 
         ((now->tv_sec - start_time->tv_sec) * 1000) + //seconds
         ((now->tv_usec - start_time->tv_usec) / 1000); // µseconds
-    frame->Push((VMObject*)_UNIVERSE->new_integer((int32_t)diff));
+    frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)diff));
     delete(now);
 }
 

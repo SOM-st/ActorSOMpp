@@ -41,14 +41,20 @@ void* Heap::Allocate(size_t size)
 {
     ++allocCount;
 	if (size == 0) return NULL;
+    if (size < sizeof(free_list_entry)) 
+    {
+        return internalAllocate(size);
+    }
 #ifdef HEAPDEBUG 
     std::cout << "allocating: " << (int)size << "bytes" << std::endl;
 #endif
 	if (size_of_free_heap <= buffersize_for_uninterruptable &&
 		uninterruptable_counter <= 0) 
 	{
+#ifdef HEAPDEBUG
         cout << "Not enough free memory, only: " << size_of_free_heap << " bytes left." <<endl;
         cout << "Starting Garbage Collection" << endl;
+#endif
 		gc->Collect();
 	}
 	
@@ -131,9 +137,13 @@ void* Heap::Allocate(size_t size)
     return result;
 }
 
-void Heap::Free(void* /*ptr*/)
+void Heap::Free(void* ptr)
 {
-    //add ptr to free list
+    if ( ((int)ptr < (int) this->object_space) &&
+        ((int)ptr > (int) this->object_space + this->object_space_size))
+    {
+        internalFree(ptr);
+    }
 }
 
 void Heap::Free(void* /*ptr*/, int /*size*/)
@@ -141,7 +151,20 @@ void Heap::Free(void* /*ptr*/, int /*size*/)
     //add referenced space to free list
 }
 
-void* Heap::internalAllocate(size_t /*size*/)
+void Heap::internalFree(void* ptr)
 {
-	return NULL;
+    free(ptr);
+}
+
+void* Heap::internalAllocate(size_t size)
+{
+    if (size == 0) return NULL;
+    void* result = malloc(size);
+    if(!result)
+    {
+        cout << "Failed to allocate " << size << " Bytes." << endl;
+        _UNIVERSE->Quit(-1);
+    }
+    memset(result, 0, size);
+    return result;
 }

@@ -10,7 +10,7 @@
 class VMSymbol;
 class VMArray;
 class VMPrimitive;
-class class_generation_context;
+class ClassGenerationContext;
 //class ifstream;
 
 class VMClass : public VMObject{

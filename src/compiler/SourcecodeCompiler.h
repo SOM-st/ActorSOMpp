@@ -11,11 +11,11 @@ public:
     SourcecodeCompiler();
     ~SourcecodeCompiler();
 
-    VMClass* compile_class(const pString& path, const pString& file,
+    VMClass* CompileClass(const pString& path, const pString& file,
                                   VMClass* system_class);
-    VMClass* compile_class_string(const pString& stream, VMClass* system_class);
+    VMClass* CompileClassString(const pString& stream, VMClass* system_class);
 private:
-    void show_compilation_error(const pString& filename, const char* message);
+    void showCompilationError(const pString& filename, const char* message);
     VMClass* compile(VMClass* system_class);
     Parser* parser;
 };

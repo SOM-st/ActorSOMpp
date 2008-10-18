@@ -17,6 +17,8 @@
 
 Interpreter::Interpreter()
 {
+    this->frame = NULL;
+    
     uG = pString("unknownGlobal:");
     dnu = pString("doesNotUnderstand:arguments:");
     eB = pString("escapedBlock:");
@@ -66,7 +68,7 @@ void Interpreter::Start()
             case BC_SUPER_SEND:       do_super_send(bytecode_index); break;
             case BC_RETURN_LOCAL:     do_return_local(); break;
             case BC_RETURN_NON_LOCAL: do_return_non_local(); break;
-            default:                  _UNIVERSE->error_exit(
+            default:                  _UNIVERSE->ErrorExit(
                                             "Interpreter: Unexpected bytecode");      
         } // switch
     } // while
@@ -74,7 +76,7 @@ void Interpreter::Start()
 
 VMFrame* Interpreter::PushNewFrame( VMMethod* method )
 {
-    _SETFRAME(_UNIVERSE->new_frame(_FRAME, method));
+    _SETFRAME(_UNIVERSE->NewFrame(_FRAME, method));
     return _FRAME;
 }
 
@@ -141,7 +143,7 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
 
         VMObject* receiver = _FRAME->GetStackElement(number_of_args-1);
 
-        VMArray* arguments_array = _UNIVERSE->new_array(number_of_args);
+        VMArray* arguments_array = _UNIVERSE->NewArray(number_of_args);
 
         for (int i = number_of_args - 1; i >= 0; --i)
         {
@@ -203,7 +205,7 @@ void Interpreter::do_push_block( int bytecode_index )
 
     int num_of_args = blockMethod->GetNumberOfArguments();
 
-    _FRAME->Push((VMObject*) _UNIVERSE->new_block(blockMethod, _FRAME, num_of_args));
+    _FRAME->Push((VMObject*) _UNIVERSE->NewBlock(blockMethod, _FRAME, num_of_args));
 }
 
 void Interpreter::do_push_constant( int bytecode_index )
@@ -225,7 +227,7 @@ void Interpreter::do_push_global( int bytecode_index)
 
     VMSymbol* global_name = (VMSymbol*) method->GetConstant(bytecode_index);
 
-    VMObject* global = _UNIVERSE->get_global(global_name);
+    VMObject* global = _UNIVERSE->GetGlobal(global_name);
 
     if(global != NULL)
         _FRAME->Push(global);
@@ -309,7 +311,7 @@ void Interpreter::do_super_send( int bytecode_index )
     else {
         int num_of_args = Signature::GetNumberOfArguments(signature);
         VMObject* receiver = _FRAME->GetStackElement(num_of_args - 1);
-        VMArray* arguments_array = _UNIVERSE->new_array(num_of_args);
+        VMArray* arguments_array = _UNIVERSE->NewArray(num_of_args);
 
         for (int i = num_of_args - 1; i >= 0; --i)
         {

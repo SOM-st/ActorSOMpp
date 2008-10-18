@@ -8,11 +8,11 @@
 
 VMFrame::VMFrame(int size, int nof) : VMArray(size, nof + FRAME_NUMBER_OF_FIELDS)
 {
-   // this->SetNumberOfFields(this->GetNumberOfFields() + 6);
-    //this->objectSize = sizeof(VMFrame) + size*sizeof(VMObject*);
+    _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
     this->local_offset = new (_HEAP) VMInteger(0);
     this->bytecode_index = new (_HEAP) VMInteger(0);
     this->stack_pointer = new (_HEAP) VMInteger(0);
+    _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }
 //
 //VMFrame::~VMFrame()
@@ -217,13 +217,14 @@ void      VMFrame::CopyArgumentsFrom(VMFrame* frame)
 
 void VMFrame::MarkReferences()
 {
+    if (gcfield) return;
      VMArray::MarkReferences();
 
-     previous_frame->MarkReferences();
+     //previous_frame->MarkReferences();
     
-     context->MarkReferences();
-     method->MarkReferences();
-     stack_pointer->MarkReferences();
-     bytecode_index->MarkReferences();
-     local_offset->MarkReferences();
+     //context->MarkReferences();
+     //method->MarkReferences();
+     //stack_pointer->MarkReferences();
+     //bytecode_index->MarkReferences();
+     //local_offset->MarkReferences();
 }

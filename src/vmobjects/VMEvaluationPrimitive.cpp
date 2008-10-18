@@ -11,14 +11,23 @@
 
 VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSignatureString(argc))
 {
+    _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
     this->SetRoutine(new (_HEAP) Routine<VMEvaluationPrimitive>(this, &VMEvaluationPrimitive::evaluationRoutine));
     this->SetEmpty(false);
-    this->numberOfArguments = _UNIVERSE->new_integer(argc);
+    this->numberOfArguments = _UNIVERSE->NewInteger(argc);
+    _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }
 
 //VMEvaluationPrimitive::~VMEvaluationPrimitive()
 //{
 //}
+void VMEvaluationPrimitive::MarkReferences()
+{
+    if (gcfield) return;
+    VMPrimitive::MarkReferences();
+    this->numberOfArguments->MarkReferences();
+}
+
 
 
 VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc)
@@ -44,7 +53,7 @@ VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc)
     }
 
     // Return the signature string
-    return _UNIVERSE->symbol_for(signature_string);
+    return _UNIVERSE->SymbolFor(signature_string);
 }
 
 void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame)
@@ -59,7 +68,7 @@ void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame)
     VMFrame* context = block->GetContext();
     
     // Push a new frame and set its context to be the one specified in the block
-    VMFrame* new_frame = _UNIVERSE->GetInterpreter()->PushNewFrame(block->GetMethod());
-    new_frame->CopyArgumentsFrom(frame);
-    new_frame->SetContext(context);
+    VMFrame* NewFrame = _UNIVERSE->GetInterpreter()->PushNewFrame(block->GetMethod());
+    NewFrame->CopyArgumentsFrom(frame);
+    NewFrame->SetContext(context);
 }

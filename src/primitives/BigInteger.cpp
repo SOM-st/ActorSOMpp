@@ -48,16 +48,16 @@ _BigInteger* BigInteger;
     if((ptr = dynamic_cast<VMInteger*>(object)) != NULL) { \
         /* Second operand was Integer*/ \
         int32_t i = ptr->GetEmbeddedInteger(); \
-        (result) = _UNIVERSE->new_biginteger((int64_t)i); \
+        (result) = _UNIVERSE->NewBigInteger((int64_t)i); \
     } else \
         (result) = (VMBigInteger*)(object); \
 }
 
 #define PUSH_INT_OR_BIGINT(result) { \
     if(result > INT32_MAX ||result < INT32_MIN) \
-        frame->Push((VMObject*)_UNIVERSE->new_biginteger((result))); \
+        frame->Push((VMObject*)_UNIVERSE->NewBigInteger((result))); \
     else \
-        frame->Push((VMObject*)_UNIVERSE->new_integer((int32_t)(result))); \
+        frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)(result))); \
 }
 //^^DIFFERENT THAN CSOM! Does the CSOM version work at all????????
 
@@ -125,7 +125,7 @@ void  _BigInteger::Percent(VMObject* /*object*/, VMFrame* frame) {
     CHECK_BIGINT(rightObj, right);   
     
     // Do operation and perform conversion to Integer if required
-    VMBigInteger* result = _UNIVERSE->new_biginteger(  left->GetEmbeddedInteger()
+    VMBigInteger* result = _UNIVERSE->NewBigInteger(  left->GetEmbeddedInteger()
                                                     % right->GetEmbeddedInteger());
     
     frame->Push((VMObject*) result);
@@ -140,7 +140,7 @@ void  _BigInteger::And(VMObject* /*object*/, VMFrame* frame) {
     CHECK_BIGINT(rightObj, right);   
     
     // Do operation and perform conversion to Integer if required
-    VMBigInteger* result = _UNIVERSE->new_biginteger(  left->GetEmbeddedInteger()
+    VMBigInteger* result = _UNIVERSE->NewBigInteger(  left->GetEmbeddedInteger()
                                                     & right->GetEmbeddedInteger());
     
     frame->Push((VMObject*) result);
@@ -185,7 +185,7 @@ void  _BigInteger::AsString(VMObject* /*object*/, VMFrame* frame) {
     int64_t bigint = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << bigint;
-    frame->Push((VMObject*)_UNIVERSE->new_string(pString(Str.str())));
+    frame->Push((VMObject*)_UNIVERSE->NewString(pString(Str.str())));
     
 }
 
@@ -193,5 +193,5 @@ void  _BigInteger::AsString(VMObject* /*object*/, VMFrame* frame) {
 void  _BigInteger::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMBigInteger* self = (VMBigInteger*)frame->Pop();
     int64_t i = self->GetEmbeddedInteger();
-    frame->Push((VMObject*)_UNIVERSE->new_double(sqrt((double)i)));
+    frame->Push((VMObject*)_UNIVERSE->NewDouble(sqrt((double)i)));
 }

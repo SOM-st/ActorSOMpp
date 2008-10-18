@@ -8,16 +8,16 @@
 //#include "../vmobjects/VMString.h"
 
 #define EMIT1(BC) \
-    mgenc->add_bytecode(BC)
+    mgenc->AddBytecode(BC)
 
 #define EMIT2(BC, IDX) \
-    mgenc->add_bytecode(BC);\
-	mgenc->add_bytecode(IDX)
+    mgenc->AddBytecode(BC);\
+	mgenc->AddBytecode(IDX)
 
 #define EMIT3(BC, IDX, CTX) \
-    mgenc->add_bytecode(BC);\
-	mgenc->add_bytecode(IDX);\
-	mgenc->add_bytecode(CTX)
+    mgenc->AddBytecode(BC);\
+	mgenc->AddBytecode(IDX);\
+	mgenc->AddBytecode(CTX)
 
 
 void bytecode_generator::emit_HALT( MethodGenerationContext* mgenc )
@@ -42,27 +42,27 @@ void bytecode_generator::emit_PUSH_ARGUMENT( MethodGenerationContext* mgenc, int
 
 void bytecode_generator::emit_PUSH_FIELD( MethodGenerationContext* mgenc, VMSymbol* field )
 {
-    EMIT2(BC_PUSH_FIELD, mgenc->find_literal_index((VMObject*)field));// SEND(mgenc->literals, indexOf, field));
+    EMIT2(BC_PUSH_FIELD, mgenc->FindLiteralIndex((VMObject*)field));// SEND(mgenc->literals, indexOf, field));
 }
 
 void bytecode_generator::emit_PUSH_BLOCK( MethodGenerationContext* mgenc, VMMethod* block )
 {
-    EMIT2(BC_PUSH_BLOCK, mgenc->find_literal_index((VMObject*)block));//SEND(mgenc->literals, indexOf, block));
+    EMIT2(BC_PUSH_BLOCK, mgenc->FindLiteralIndex((VMObject*)block));//SEND(mgenc->literals, indexOf, block));
 }
 
 void bytecode_generator::emit_PUSH_CONSTANT( MethodGenerationContext* mgenc, VMObject* cst )
 {
-    EMIT2(BC_PUSH_CONSTANT, mgenc->find_literal_index(cst));// SEND(mgenc->literals, indexOf, cst));
+    EMIT2(BC_PUSH_CONSTANT, mgenc->FindLiteralIndex(cst));// SEND(mgenc->literals, indexOf, cst));
 }
 
 void bytecode_generator::emit_PUSH_CONSTANT_String( MethodGenerationContext* mgenc, VMString* str )
 {
-   EMIT2(BC_PUSH_CONSTANT, mgenc->find_literal_index((VMObject*)str)); //SEND(mgenc->literals, indexOfString, string));
+   EMIT2(BC_PUSH_CONSTANT, mgenc->FindLiteralIndex((VMObject*)str)); //SEND(mgenc->literals, indexOfString, string));
 }
 
 void bytecode_generator::emit_PUSH_GLOBAL( MethodGenerationContext* mgenc, VMSymbol* global )
 {
-    EMIT2(BC_PUSH_GLOBAL, mgenc->find_literal_index((VMObject*)global));//SEND(mgenc->literals, indexOf, global));
+    EMIT2(BC_PUSH_GLOBAL, mgenc->FindLiteralIndex((VMObject*)global));//SEND(mgenc->literals, indexOf, global));
 }
 
 void bytecode_generator::emit_POP( MethodGenerationContext* mgenc )
@@ -82,17 +82,17 @@ void bytecode_generator::emit_POP_ARGUMENT( MethodGenerationContext* mgenc, int 
 
 void bytecode_generator::emit_POP_FIELD( MethodGenerationContext* mgenc, VMSymbol* field )
 {
-    EMIT2(BC_POP_FIELD, mgenc->find_literal_index((VMObject*)field));// SEND(mgenc->literals, indexOf, field));
+    EMIT2(BC_POP_FIELD, mgenc->FindLiteralIndex((VMObject*)field));// SEND(mgenc->literals, indexOf, field));
 }
 
 void bytecode_generator::emit_SEND( MethodGenerationContext* mgenc, VMSymbol* msg )
 {
-    EMIT2(BC_SEND, mgenc->find_literal_index((VMObject*)msg));
+    EMIT2(BC_SEND, mgenc->FindLiteralIndex((VMObject*)msg));
 }
 
 void bytecode_generator::emit_SUPER_SEND( MethodGenerationContext* mgenc, VMSymbol* msg )
 {
-    EMIT2(BC_SUPER_SEND, mgenc->find_literal_index((VMObject*)msg));
+    EMIT2(BC_SUPER_SEND, mgenc->FindLiteralIndex((VMObject*)msg));
 }
 
 void bytecode_generator::emit_RETURN_LOCAL( MethodGenerationContext* mgenc )

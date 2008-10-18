@@ -32,27 +32,27 @@ ObjectSizeTest = (
             ifFalse: [
                 harness
                     fail: self
-                    because: 'Plain object does not have size 5.' ].
+                    because: 'Plain object does not have size 6.' ].
         42 objectSize / 4 = 7
             ifFalse: [
                 harness
                     fail: self
-                    because: 'Integer object does not have size 6.' ].
-        'hello' objectSize / 4 = 7
+                    because: 'Integer object does not have size 7.' ].
+        'hello' objectSize / 4 = 8
             ifFalse: [
                 harness
                     fail: self
-                    because: 'String object does not have size 6.' ].
-        Array new objectSize / 4 = 6
+                    because: 'String object does not have size 8.' ].
+        Array new objectSize / 4 = 7
             ifFalse: [
                 harness
                     fail: self
-                    because: 'Empty array object does not have size 5.' ].
-        (Array new: 1) objectSize / 4 = 7
+                    because: 'Empty array object does not have size 7.' ].
+        (Array new: 1) objectSize / 4 = 8
             ifFalse: [
                 harness
                     fail: self
-                    because: 'Array object (length 1) does not have size 5.' ].
+                    because: 'Array object (length 1) does not have size 7.' ].
     )
     
 )

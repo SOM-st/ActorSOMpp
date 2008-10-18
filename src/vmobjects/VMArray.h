@@ -25,7 +25,7 @@ public:
 		if (idx > size->GetEmbeddedInteger() - 1) {
             cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
             cout << " entries available\n";
-            _UNIVERSE->error_exit("Array index out of bounds exception");
+            _UNIVERSE->ErrorExit("Array index out of bounds exception");
             //throw std::bad_exception();
         }
 		return GetIndexableField(idx);

@@ -51,18 +51,17 @@ public:
 	Lexer(istream& file);
     Lexer(const pString& stream);
 	~Lexer();
-	Symbol getsym(void);
-	Symbol peek(void);
-	//todo: change peek/getsym to take a string* for the text/nextText
-	pString gettext(void);
-	pString getnexttext(void);
-	pString getrawbuffer(void);
+	Symbol      GetSym(void);
+	Symbol      Peek(void);
+	pString     GetText(void);
+	pString     GetNextText(void);
+	pString     GetRawBuffer(void);
 
 
 private:
-	int fillbuffer(void);
-	void skipWhiteSpace(void);
-	void skipComment(void);	
+	int         fillBuffer(void);
+	void        skipWhiteSpace(void);
+	void        skipComment(void);	
 	
 	Lexer &operator=(const Lexer& /*src*/)
 	{

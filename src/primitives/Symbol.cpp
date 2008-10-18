@@ -40,5 +40,5 @@ void  _Symbol::AsString(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* sym = (VMSymbol*) frame->Pop();
 
     pString str = sym->GetStdString();
-    frame->Push((VMObject*)_UNIVERSE->new_string(str));
+    frame->Push((VMObject*)_UNIVERSE->NewString(str));
 }

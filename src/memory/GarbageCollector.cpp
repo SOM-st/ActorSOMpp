@@ -27,7 +27,9 @@ void GarbageCollector::Collect()
 	void* pointer = heap->object_space;
 	free_list_entry* currentEntry = heap->free_list_start;
 	long bytesToSkip = 0;
-
+#ifdef __DEBUG
+    cout << "Starting garbage collection." << endl;
+#endif
 	do
 	{
 		//see whether the currentObject is part of the free list
@@ -52,15 +54,15 @@ void GarbageCollector::Collect()
 			if (object->GetGCField() == 1) 
 			{
 				object->SetGCField(0);
-				std::cout << "Found alive object, keeping" << std::endl;
+				//std::cout << "Found alive object, keeping" << std::endl;
 			}
 			else 
 			{
-				std::cout << "Found trash, deleting" << std::endl;
-				delete(object, heap);//doesn't really do anything for managed objects
+				//std::cout << "Found trash, deleting" << std::endl;
+				//delete(object, heap);//doesn't really do anything for managed objects
 				//add freed space as a new entry of the free list
-				memset(object, 0, bytesToSkip);
-				free_list_entry* newEntry = (free_list_entry*)pointer;
+				memset(pointer, 0, bytesToSkip);
+				free_list_entry* newEntry = reinterpret_cast<free_list_entry*>(pointer);
 				++num_freed;
 				spc_freed += bytesToSkip;
 				newEntry->size = bytesToSkip;
@@ -93,7 +95,13 @@ void GarbageCollector::markReachableObjects()
 		markObject(&(*it->second));
 	}
 
-	//get frame from interpreter, recursively mark from there...
+    // Get the current frame and mark it.
+	// Since marking is done recursively, this automatically
+	// marks the whole stack
+    VMFrame* current_frame = _UNIVERSE->GetInterpreter()->GetFrame();
+    if (current_frame != NULL) {
+        markObject((VMObject*)current_frame);
+    }
 }
 
 void GarbageCollector::markObject(VMObject* obj)
@@ -103,10 +111,10 @@ void GarbageCollector::markObject(VMObject* obj)
 	{
 		if (obj->GetGCField() != 1)
 		{
-			/*num_live++;
+			num_live++;
 			spc_live += obj->GetObjectSize();
 
-			obj->SetGCField(1);*/
+			/*obj->SetGCField(1);*/
 			//for now the Objects have to mark the referenced objects themselves.
 			obj->MarkReferences();
 			
@@ -118,16 +126,19 @@ void GarbageCollector::markObject(VMObject* obj)
 
 void GarbageCollector::mergeFreeSpaces()
 {
+#ifdef __DEBUG
 	std::cout << "free heap before collecting: " << heap->size_of_free_heap << std::endl;
+#endif __DEBUG
+
 	free_list_entry* currentEntry = heap->free_list_start;
 	heap->size_of_free_heap = 0;
 	while (currentEntry->next != NULL) {
 		if((int)currentEntry + (int)currentEntry->size == (int)currentEntry->next)
 		{
-			std::cout << "merging entry at address " << currentEntry << " (size: "<< currentEntry->size << ") ";
-			std::cout << "with entry at address " << currentEntry->next << " (size: "<< currentEntry->next->size << ")" << std::endl;
+			//std::cout << "merging entry at address " << currentEntry << " (size: "<< currentEntry->size << ") ";
+			//std::cout << "with entry at address " << currentEntry->next << " (size: "<< currentEntry->next->size << ")" << std::endl;
 			currentEntry->size += currentEntry->next->size;
-			std::cout << "new entry size: " << currentEntry->size << std::endl;
+			//std::cout << "new entry size: " << currentEntry->size << std::endl;
 			currentEntry->next = currentEntry->next->next;
 		} else {
 			heap->size_of_free_heap += currentEntry->size;
@@ -135,5 +146,8 @@ void GarbageCollector::mergeFreeSpaces()
 		}
 	}
 	heap->size_of_free_heap += currentEntry->size;
+
+#ifdef __DEBUG
 	std::cout << "free heap after collecting: " << heap->size_of_free_heap << std::endl;
+#endif
 }

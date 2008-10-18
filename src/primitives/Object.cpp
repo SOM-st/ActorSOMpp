@@ -45,11 +45,11 @@ void  _Object::Equalequal(VMObject* /*object*/, VMFrame* frame) {
 void  _Object::ObjectSize(VMObject* /*object*/, VMFrame* frame) {
     VMObject* self = frame->Pop();
 
-    frame->Push( (VMObject*)_UNIVERSE->new_integer(self->GetObjectSize()) );
+    frame->Push( (VMObject*)_UNIVERSE->NewInteger(self->GetObjectSize()) );
 }
 
 
 void  _Object::Hashcode(VMObject* /*object*/, VMFrame* frame) {
     VMObject* self = frame->Pop();
-    frame->Push( (VMObject*)_UNIVERSE->new_integer(self->GetHash()) );
+    frame->Push( (VMObject*)_UNIVERSE->NewInteger(self->GetHash()) );
 }

@@ -48,20 +48,20 @@ void  _String::Concatenate_(VMObject* /*object*/, VMFrame* frame) {
     
     pString result = s + a;
 
-    frame->Push((VMObject*)_UNIVERSE->new_string(result));
+    frame->Push((VMObject*)_UNIVERSE->NewString(result));
 }
 
 
 void  _String::AsSymbol(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
     pString result = self->GetStdString();
-    frame->Push((VMObject*)_UNIVERSE->symbol_for(result));
+    frame->Push((VMObject*)_UNIVERSE->SymbolFor(result));
 }
 
 
 void  _String::Hashcode(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
-    frame->Push((VMObject*)_UNIVERSE->new_integer(self->GetHash()));
+    frame->Push((VMObject*)_UNIVERSE->NewInteger(self->GetHash()));
 }
 
 
@@ -70,7 +70,7 @@ void  _String::Length(VMObject* /*object*/, VMFrame* frame) {
     //pString result = self->GetStdString();
     //size_t len = result.length();
     size_t len = self->GetStringLength();
-    frame->Push(_UNIVERSE->new_integer((int32_t)len));
+    frame->Push(_UNIVERSE->NewInteger((int32_t)len));
 }
 
 
@@ -104,5 +104,5 @@ void  _String::PrimSubstringFrom_To_(VMObject* /*object*/, VMFrame* frame) {
     
     pString result = str.substr(s, e - s);
 
-    frame->Push((VMObject*) _UNIVERSE->new_string(result));
+    frame->Push((VMObject*) _UNIVERSE->NewString(result));
 }

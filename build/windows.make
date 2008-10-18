@@ -176,17 +176,20 @@ install: all
 	cp -Rpf $(ST_DIR) $(EX_DIR) $(TEST_DIR)  $(DEST_DIR)
 	@echo Library.
 	@echo done.
+#
+# console: start the console
+#
+console: all
+	./$(CSOM_NAME).exe -cp Smalltalk
 
 #
 # test: run the standard test suite
 #
-test: install
-	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME).exe -cp Smalltalk TestSuite/TestHarness;)
+test: all
+	./$(CSOM_NAME).exe -cp Smalltalk Testsuite/TestHarness
 
 #
 # bench: run the benchmarks
 #
-bench: install
-	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME).exe -cp Smalltalk Examples\\Benchmarks\\All.som;)
+bench: all
+	./$(CSOM_NAME).exe -cp Smalltalk Examples/Benchmarks/All

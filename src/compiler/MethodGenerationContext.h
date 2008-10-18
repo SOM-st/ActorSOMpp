@@ -11,49 +11,51 @@ class VMMethod;
 class VMArray;
 class VMPrimitive;
 
-class MethodGenerationContext : public generation_context_core {
+class MethodGenerationContext : public GenerationContextCore {
 public:
 	MethodGenerationContext();
 	~MethodGenerationContext();
     
-    VMMethod* Assemble();
-    VMPrimitive* AssemblePrimitive();
+    VMMethod*       Assemble();
+    VMPrimitive*    AssemblePrimitive();
 
-	int8_t find_literal_index(VMObject* lit);//pVMObject lit);
-	bool find_var(const pString& var, int* index, int* context, bool* is_argument);
-	bool find_field(const pString& field);
-	uint8_t compute_stack_depth();
+	int8_t          FindLiteralIndex(VMObject* lit);//pVMObject lit);
+	bool            FindVar(const pString& var, int* index, int* context, bool* is_argument);
+	bool            FindField(const pString& field);
+	uint8_t         ComputeStackDepth();
 
-	void SetHolder(class_generation_context* holder);
-	void set_outer(MethodGenerationContext* outer);
-	void set_is_block_method(bool is_block = true);
-	void SetSignature(VMSymbol* sig);
-	void add_argument(const pString& arg);
-	void set_primitive(bool prim = true);
-	void add_local(const pString& local);
-	void add_literal(VMObject* lit);
-	bool add_argument_if_absent(const pString& arg);
-	bool add_local_if_absent(const pString& local);
-	bool add_literal_if_absent(VMObject* lit);
-	void set_finished(bool finished = true);
-	class_generation_context* GetHolder();
-	MethodGenerationContext* get_outer();
-	VMSymbol* GetSignature();
-	bool IsPrimitive();
-	bool is_block_method();
-	bool is_finished();
-	void RemoveLastBytecode() { bytecode.pop_back(); };
-	int GetNumberOfArguments();
-	void add_bytecode(uint8_t bc);
+	void            SetHolder(ClassGenerationContext* holder);
+	void            SetOuter(MethodGenerationContext* outer);
+	void            SetIsBlockMethod(bool is_block = true);
+	void            SetSignature(VMSymbol* sig);
+	void            AddArgument(const pString& arg);
+	void            SetPrimitive(bool prim = true);
+	void            AddLocal(const pString& local);
+	void            AddLiteral(VMObject* lit);
+	bool            AddArgumentIfAbsent(const pString& arg);
+	bool            AddLocalIfAbsent(const pString& local);
+	bool            AddLiteralIfAbsent(VMObject* lit);
+	void            SetFinished(bool finished = true);
+
+	ClassGenerationContext*     GetHolder();
+	MethodGenerationContext*    get_outer();
+
+	VMSymbol*       GetSignature();
+	bool            IsPrimitive();
+	bool            IsBlockMethod();
+	bool            IsFinished();
+	void            RemoveLastBytecode() { bytecode.pop_back(); };
+	int             GetNumberOfArguments();
+	void            AddBytecode(uint8_t bc);
 private:
-	class_generation_context*  holder_genc;
-    MethodGenerationContext* outer_genc;
+	ClassGenerationContext*    holder_genc;
+    MethodGenerationContext*   outer_genc;
     bool                       block_method;
     VMSymbol*                  signature;
-    ExtendedList<std::string>            arguments;
+    ExtendedList<std::string>  arguments;
     bool                       primitive;
-    ExtendedList<std::string>            locals;
-    pList            literals;
+    ExtendedList<std::string>  locals;
+    pList                      literals;
     bool                       finished;
 	vector<uint8_t>            bytecode;
 };

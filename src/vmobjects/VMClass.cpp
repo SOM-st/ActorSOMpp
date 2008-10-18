@@ -262,7 +262,7 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
     //            //
                 dlhandle->close();
                 delete(dlhandle);
-                _UNIVERSE->error_exit("Library claims no resonsibility, but musn't!");
+                _UNIVERSE->ErrorExit("Library claims no resonsibility, but musn't!");
             }
             dlhandle->close();
             delete(dlhandle);
@@ -281,7 +281,7 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
     if(!(dlhandle != NULL)) {
         cout << "load failure: ";
         cout << "could not load primitive library for " << cname << endl;
-        _UNIVERSE->quit(ERR_FAIL);
+        _UNIVERSE->Quit(ERR_FAIL);
     }
 
     ///*
@@ -446,7 +446,7 @@ void VMClass::set_primitives(VMClass* cl, ifstream* handle, const pString& cname
             if(!routine) {
                 cout << "could not load primitive '"<< selector <<"' for class " << cname << endl;
                             
-                _UNIVERSE->quit(ERR_FAIL);
+                _UNIVERSE->Quit(ERR_FAIL);
             }
             
             // set routine

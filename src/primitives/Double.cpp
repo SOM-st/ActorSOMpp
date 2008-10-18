@@ -53,7 +53,7 @@ double coerce_double(VMObject* x) {
     else if(dynamic_cast<VMBigInteger*>(x) != NULL)
         return (double)((VMBigInteger*)x)->GetEmbeddedInteger();
     else
-        _UNIVERSE->error_exit("Attempt to apply Double operation to non-number.");
+        _UNIVERSE->ErrorExit("Attempt to apply Double operation to non-number.");
 
     return 0.0f;
 }
@@ -73,36 +73,36 @@ double coerce_double(VMObject* x) {
 
 void  _Double::Plus(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->new_double(left + right));
+    frame->Push((VMObject*)_UNIVERSE->NewDouble(left + right));
 }
 
 
 void  _Double::Minus(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->new_double(left - right));
+    frame->Push((VMObject*)_UNIVERSE->NewDouble(left - right));
 }
 
 
 void  _Double::Star(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->new_double(left * right));
+    frame->Push((VMObject*)_UNIVERSE->NewDouble(left * right));
 }
 
 
 void  _Double::Slashslash(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->new_double(left / right));
+    frame->Push((VMObject*)_UNIVERSE->NewDouble(left / right));
 }
 
 
 void  _Double::Percent(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push(_UNIVERSE->new_double((double)((int64_t)left % 
+    frame->Push(_UNIVERSE->NewDouble((double)((int64_t)left % 
                                               (int64_t)right)));
 }
 void  _Double::And(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push(_UNIVERSE->new_double((double)((int64_t)left & 
+    frame->Push(_UNIVERSE->NewDouble((double)((int64_t)left & 
                                               (int64_t)right)));
 }
 
@@ -138,12 +138,12 @@ void  _Double::AsString(VMObject* /*object*/, VMFrame* frame) {
     ostringstream Str;
     Str.precision(17);
     Str << dbl;
-    frame->Push( (VMObject*)_UNIVERSE->new_string( pString(Str.str()) ) );
+    frame->Push( (VMObject*)_UNIVERSE->NewString( pString(Str.str()) ) );
 }
 
 
 void _Double::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMDouble* self = (VMDouble*)frame->Pop();
-    VMDouble* result = _UNIVERSE->new_double( sqrt(self->GetEmbeddedDouble()) );
+    VMDouble* result = _UNIVERSE->NewDouble( sqrt(self->GetEmbeddedDouble()) );
     frame->Push((VMObject*)result);
 }

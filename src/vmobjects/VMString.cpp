@@ -10,7 +10,7 @@ VMString::VMString(const char* str) : VMObject(0)//, std::string()
 {
 	chars = (char*)&chars+sizeof(char*);
 	//objectSize += sizeof(char*) + strlen(str) + 1; //set actual object_size
-	//string_length = _UNIVERSE->new_integer(strlen(str));
+	//string_length = _UNIVERSE->NewInteger(strlen(str));
     size_t i = 0;
 	for (; i < strlen(str); ++i) {
 		chars[i] = str[i];
@@ -22,7 +22,7 @@ VMString::VMString( const string& s ): VMObject(0)
 {
 	chars = (char*)&chars+sizeof(char*);
 	//objectSize += sizeof(char*) + s.length() + 1;
-	//string_length = _UNIVERSE->new_integer(s.length());
+	//string_length = _UNIVERSE->NewInteger(s.length());
     size_t i = 0;
 	for (; i < s.length(); ++i) {
 		chars[i] = s[i];

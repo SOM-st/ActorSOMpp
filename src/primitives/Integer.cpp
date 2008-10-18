@@ -72,9 +72,9 @@ void _Integer::pushResult(VMObject* /*object*/, VMFrame* frame,
     int32_t i32min = INT32_MIN;
     // Check with integer bounds and push:
     if(result > INT32_MAX || result < i32min)
-        frame->Push((VMObject*)_UNIVERSE->new_biginteger(result));
+        frame->Push((VMObject*)_UNIVERSE->NewBigInteger(result));
     else
-        frame->Push((VMObject*)_UNIVERSE->new_integer((int32_t)result));
+        frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)result));
 }
 
 
@@ -83,7 +83,7 @@ void _Integer::resendAsBigInteger(VMObject* /*object*/,
                                   VMInteger* left, VMBigInteger* right) {
     // Construct left value as BigInteger:
     VMBigInteger* leftBigInteger = 
-        _UNIVERSE->new_biginteger((int64_t)left->GetEmbeddedInteger());
+        _UNIVERSE->NewBigInteger((int64_t)left->GetEmbeddedInteger());
     
     // Resend message:
     VMObject* operands[] = { (VMObject*)right };
@@ -99,7 +99,7 @@ void _Integer::resendAsDouble(VMObject* /*object*/, const char* op,
     VMInteger* left, VMDouble* right
 ) {
     VMDouble* leftDouble =
-        _UNIVERSE->new_double((double)left->GetEmbeddedInteger());
+        _UNIVERSE->NewDouble((double)left->GetEmbeddedInteger());
     VMObject* operands[] = { (VMObject*)right };
     pString ops = pString(op);
     leftDouble->Send(ops, operands, 1);
@@ -173,7 +173,7 @@ void  _Integer::Slashslash(VMObject* object, VMFrame* frame) {
     
     double result = (double)left->GetEmbeddedInteger() /
         (double)right->GetEmbeddedInteger();
-    frame->Push(_UNIVERSE->new_double(result));
+    frame->Push(_UNIVERSE->NewDouble(result));
 }
 
 
@@ -274,19 +274,19 @@ void  _Integer::AsString(VMObject* /*object*/, VMFrame* frame) {
     int32_t integer = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << integer;
-    frame->Push( (VMObject*)_UNIVERSE->new_string( pString(Str.str()) ) );   
+    frame->Push( (VMObject*)_UNIVERSE->NewString( pString(Str.str()) ) );   
 }
 
 
 void  _Integer::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* self = (VMInteger*)frame->Pop();
     double result = sqrt((double)self->GetEmbeddedInteger());
-    frame->Push((VMObject*)_UNIVERSE->new_double(result));
+    frame->Push((VMObject*)_UNIVERSE->NewDouble(result));
 }
 
 
 void  _Integer::AtRandom(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* self = (VMInteger*)frame->Pop();
     int32_t result = (self->GetEmbeddedInteger() * rand())%INT32_MAX;
-    frame->Push((VMObject*) _UNIVERSE->new_integer(result));
+    frame->Push((VMObject*) _UNIVERSE->NewInteger(result));
 }

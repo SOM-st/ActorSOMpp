@@ -17,12 +17,14 @@ VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 
 VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
 {
+    _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
     //the only class that explicitly does this.
     this->SetClass(primitive_class);
     this->empty = (bool*)_HEAP->Allocate(sizeof(bool));
     this->SetSignature(signature);
     this->routine = NULL;
     *(this->empty) = false;
+    _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }
 //TODO: this is a memory leak. The empty flag is not freed and the routine is not destroyed
 //, but G++ doesn't like the destructor of VMObject classes
@@ -49,10 +51,16 @@ void VMPrimitive::Invoke(VMFrame *frm)
 
 void VMPrimitive::MarkReferences()
 {
-    VMInvokable::MarkReferences();
-    //signature->MarkReferences();
-    //holder->MarkReferences();
-   // routine->MarkReferences();
+    if (gcfield) return;
+    //VMInvokable::MarkReferences();
+    this->SetGCField(1);
+    for( int i = 0; i < this->GetNumberOfFields(); ++i) 
+    {
+        //HACK to avoid calling MarkReferences() for the bool*
+        if ((void*)FIELDS[i] == (void*)this->empty) 
+            continue;
+        FIELDS[i]->MarkReferences();
+    }
 }
 
 void VMPrimitive::EmptyRoutine( VMObject* _self, VMFrame* /*frame*/ )

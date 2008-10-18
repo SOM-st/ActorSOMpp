@@ -335,6 +335,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\vmobjects\PrimitiveRoutine.cpp"
+			>
+		</File>
+		<File
 			RelativePath=".\src\vmobjects\PrimitiveRoutine.h"
 			>
 		</File>

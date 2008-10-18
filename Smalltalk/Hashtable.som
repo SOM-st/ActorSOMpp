@@ -84,7 +84,8 @@ Hashtable = (
     )
     
     "Clearing"
-    clear = ( table := Array new: 11. count := 0 )
+    clear = ( table := Array new: 11. 
+              count := 0 )
     
     "Private"
     indexForKey: aKey = ( ^(aKey hashcode % table length) abs + 1 )

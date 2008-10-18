@@ -7,8 +7,8 @@
 VMBlock::VMBlock() : VMObject(2)
 {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
-     blockMethod = NULL;
-     context = NULL;
+     blockMethod = (VMMethod*) nil_object;
+     context = (VMFrame*) nil_object;
 }
 
 //VMBlock::~VMBlock()
@@ -17,10 +17,11 @@ VMBlock::VMBlock() : VMObject(2)
 
 void VMBlock::MarkReferences()
 {
-    
-    if (blockMethod != NULL) blockMethod->MarkReferences();
-    if (context != NULL) context->MarkReferences();
+    if (gcfield) return;
     VMObject::MarkReferences();
+    /*if (blockMethod != NULL) blockMethod->MarkReferences();
+    if (context != NULL) context->MarkReferences();*/
+    
 }
 
 void VMBlock::SetMethod(VMMethod* bMethod)
