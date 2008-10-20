@@ -55,12 +55,12 @@ int main(int argc, char** argv) {
    // Universe::handleArguments(&vm_argc, argc, argv);
     Universe::Start(argc, argv);
     
-    pVMObject pti;
+    /*pVMObject pti;
     pti = _UNIVERSE->NewTaggedInteger(42);
     pVMObject pti2;
     pti2 = (VMObject*) _UNIVERSE->NewBigInteger(123490123);
 
-    cout << sizeof(pVMObject) << endl;
+    cout << sizeof(pVMObject) << endl;*/
    /* Heap* heap = new Heap(1000);
     VMObject* vmo = new (heap) VMObject();
     cout << "sizeof(VMObject): " << sizeof(VMObject) << endl;*/

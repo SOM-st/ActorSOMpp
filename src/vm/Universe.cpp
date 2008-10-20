@@ -136,21 +136,19 @@ int Universe::getPathClassExt(vector<pString>& tokens,const pString& arg )
 {
 #define EXT_TOKENS 2
     
-
     int fp_index = arg.find_last_of(file_separator);
-    int ssep_index = arg.find_last_of('.');
+    int ssep_index = arg.find(".som");
 
-    if (fp_index < 0) 
+    if (fp_index == pString::npos) 
     { //no new path
         return ERR_FAIL;
     } else tokens[0] = arg.substr(0, fp_index);
-
-    ssep_index = ( (ssep_index >= 0) && (ssep_index > fp_index)) ?
+    
+    //adding filename (minus ".som" if present) to second slot
+    ssep_index = ( (ssep_index != pString::npos) && (ssep_index > fp_index)) ?
                  (ssep_index - 1) :
                  arg.length();
-
-    tokens[1] = arg.substr(fp_index + 1, ssep_index);
-
+    tokens[1] = arg.substr(fp_index + 1, ssep_index - (fp_index));
     return ERR_SUCCESS;
 }
 
@@ -541,6 +539,7 @@ VMClass* Universe::LoadClass( VMSymbol* name)
 VMClass* Universe::LoadClassBasic( VMSymbol* name, VMClass* system_class)
 {
     pString s_name = name->GetStdString();
+    cout << s_name.c_str() << endl;
     VMClass* result;
 
     for (vector<pString>::iterator i = class_path.begin();

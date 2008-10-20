@@ -186,10 +186,10 @@ console: all
 # test: run the standard test suite
 #
 test: all
-	./$(CSOM_NAME).exe -cp Smalltalk Testsuite/TestHarness
+	./$(CSOM_NAME).exe -cp Smalltalk Testsuite/TestHarness.som
 
 #
 # bench: run the benchmarks
 #
 bench: all
-	./$(CSOM_NAME).exe -cp Smalltalk Examples/Benchmarks/All
+	./$(CSOM_NAME).exe -cp Smalltalk Examples/Benchmarks/All.som
