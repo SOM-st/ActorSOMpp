@@ -27,7 +27,7 @@
 # THE SOFTWARE.
 
 CC			=g++
-CFLAGS		=-Wall $(DBG_FLAGS) $(INCLUDES)
+CFLAGS		=-O3 $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
 
 INSTALL		=install
@@ -135,6 +135,8 @@ profiling: all
 .c.pic.o:
 	$(CC) $(CFLAGS) -g -c $< -o $*.pic.o
 
+.cpp.o:
+	$(CC) $(CFLAGS) -c $< -o $*.o
 
 clean:
 	rm -Rf $(CLEAN)
@@ -182,11 +184,11 @@ install: all
 #
 test: install
 	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME) -cp Smalltalk TestSuite\\TestHarness.som;)
+	./$(CSOM_NAME) -cp Smalltalk TestSuite/TestHarness;)
 
 #
 # bench: run the benchmarks
 #
 bench: install
 	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME) -cp Smalltalk Examples\\Benchmarks\\All.som;)
+	./$(CSOM_NAME) -cp Smalltalk Examples/Benchmarks/All;)
