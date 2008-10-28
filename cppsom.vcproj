@@ -111,6 +111,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="0"
+				WholeProgramOptimization="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -130,6 +132,7 @@
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				LinkTimeCodeGeneration="1"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -212,10 +215,6 @@
 		</File>
 		<File
 			RelativePath=".\src\primitives\Core.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\src\primitives\Core.h"
 			>
 		</File>
 		<File

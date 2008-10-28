@@ -102,11 +102,15 @@ void  _System::Time(VMObject* /*object*/, VMFrame* frame) {
     /*VMObject* self = */
     frame->Pop();
     timeval* now = new timeval();
+
     gettimeofday(now, NULL);
+
     long long diff = 
         ((now->tv_sec - start_time->tv_sec) * 1000) + //seconds
         ((now->tv_usec - start_time->tv_usec) / 1000); // µseconds
+
     frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)diff));
+
     delete(now);
 }
 

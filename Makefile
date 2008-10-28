@@ -27,8 +27,10 @@
 # THE SOFTWARE. 
 # 
 
-
-export ROOT_DIR	:=$(PWD)
+#HACK: Eclipse on windows doesn't like the ':' in
+#the path in $(PWD). Hardcode my own work dir
+#DO NOT SUBMIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+export ROOT_DIR	:=/home/abraxas/cppsom
 export BUILD_DIR:=$(ROOT_DIR)/build
 export SRC_DIR	:=$(ROOT_DIR)/src
 export LIB_DIR	:=$(ROOT_DIR)/lib
@@ -38,7 +40,7 @@ export EX_DIR	=$(ROOT_DIR)/Examples
 export TEST_DIR	=$(ROOT_DIR)/TestSuite
 
 ifeq ($(OS),)
-# only Windows has OS predefined. for now only windows works
+# only Windows has OS predefined.
 	UNAME		:= $(shell uname -s)
 else
 	UNAME		:=windows

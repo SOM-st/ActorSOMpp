@@ -78,9 +78,9 @@ vector<pString> Universe::handleArguments( int argc, char** argv )
                 printUsageAndExit(argv[0]);
             setupClassPath(pString(argv[++i]));
         } else if (strncmp(argv[i], "-d", 2) == 0) {
-            dump_bytecodes++;
+            ++dump_bytecodes;
         } else if (strncmp(argv[i], "-g", 2) == 0) {
-            gc_verbosity++;
+            ++gc_verbosity;
         } else if (argv[i][0] == '-' && argv[i][1] == 'H') {
             int heap_size = atoi(argv[i] + 2);
             heapSize = heap_size;
@@ -113,7 +113,7 @@ void Universe::Start(int argc, char** argv)
     /*int vm_argc = 0;
     
     vector<pString> vm_argv = handleArguments(&vm_argc, argc, argv);*/
-    Core::setup();
+   // Core::setup();
 	theUniverse = new Universe();
     theUniverse->initialize(argc, argv);
 }
@@ -122,7 +122,7 @@ void Universe::Quit(int err)
 {
     if (theUniverse) delete(theUniverse);
     
-    Core::tearDown();
+    //Core::tearDown();
     exit(err);
 }
 
@@ -662,7 +662,14 @@ VMFrame* Universe::NewFrame( VMFrame* previous_frame, VMMethod* method)
 {
     int length = method->GetNumberOfArguments() +
                  method->GetNumberOfLocals()+
-                 method->GetMaximumNumberOfStackElements()+1;
+                 method->GetMaximumNumberOfStackElements() + 1; 
+    //HACK: don't know why this +1 has to be there, but without it there is a problem
+    //when unknownGlobal: is generated.
+    //... do_push_global does not use the same amount of stack-slots every time, but
+    //this is not taken into account in MethodGenerationContext::CalculateStackDepth().
+    //If the global already exists it needs one slot for the global,
+    //but when unknownGlobal: is generated it needs two slots for sending the method.
+    //Why does it work in CSOM?
 
     int additionalBytes = length * sizeof(VMObject*);
     VMFrame* result = new (heap, additionalBytes) VMFrame(length);

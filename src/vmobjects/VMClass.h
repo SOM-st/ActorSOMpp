@@ -5,7 +5,7 @@
 #include <vector>
 #include "VMObject.h"
 #include "../misc/defs.h"
-#include "../primitives/Core.h"
+//#include "../primitives/Core.h"
 
 class VMSymbol;
 class VMArray;
@@ -52,10 +52,10 @@ private:
 
     pString genCoreLoadstring(const pString& cp);
 
-    ifstream* loadLib(const pString& path);
+    void* loadLib(const pString& path);
 
-    bool isResponsible(ifstream* handle, const pString& cl);
-    static void set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
+    bool isResponsible(void* handle, const pString& cl);
+    static void set_primitives(VMClass* cl, void* handle, const pString& cname,
                     const char* format
                     );
     int numberOfSuperInstanceFields();

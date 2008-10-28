@@ -27,7 +27,7 @@
 # THE SOFTWARE.
 
 CC			=g++
-CFLAGS		=-Wall $(DBG_FLAGS) $(INCLUDES)
+CFLAGS		=-O2 $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
 
 INSTALL		=install
@@ -81,7 +81,7 @@ MAIN_OBJ		= $(MAIN_SRC:.cpp=.o)
 
 PRIMITIVES_DIR	= $(SRC_DIR)/primitives
 PRIMITIVES_SRC	= $(wildcard $(PRIMITIVES_DIR)/*.cpp)
-PRIMITIVES_OBJ	= $(PRIMITIVES_SRC:.cpp=.o)
+PRIMITIVES_OBJ	= $(PRIMITIVES_SRC:.cpp=.pic.o)
 
 ############# include path
 
@@ -92,9 +92,9 @@ LIBRARIES		=-L$(ROOT_DIR)
 ############## Collections.
 
 CSOM_OBJ		=  $(MEMORY_OBJ) $(MISC_OBJ) $(VMOBJECTS_OBJ) \
-				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ) 
+				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) 
 
-OBJECTS			= $(CSOM_OBJ) 
+OBJECTS			= $(CSOM_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ)
 
 SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 				$(MISC_SRC) $(VM_SRC) $(VMOBJECTS_SRC)  \
@@ -118,10 +118,8 @@ CLEAN			= $(OBJECTS) \
 
 .PHONY: clean clobber test
 
-all: $(CSOM_NAME)
-#\
-#	$(CSOM_NAME).dll \
-#	CORE
+all: $(CSOM_NAME)\
+	CORE
 
 
 debug : DBG_FLAGS=-DDEBUG -g
@@ -150,23 +148,18 @@ clean:
 $(CSOM_NAME): $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) loader
 	$(CC) $(LDFLAGS) \
-		-o $(CSOM_NAME) $(CSOM_OBJ)
+		-o $(CSOM_NAME) $(CSOM_OBJ) $(CSOM_LIBS) 
+	@echo CSOM done.
 
-#$(CSOM_NAME).dll: $(CSOM_OBJ)
-#	@echo Linking $(CSOM_NAME) Dynamic Library
-#	$(CC) $(LDFLAGS) \
-#		-o $(CSOM_NAME).dll 
-#	@echo CSOM done.
-#
-#CORE: $(CSOM_NAME).dll $(PRIMITIVES_OBJ)
-#	@echo Linking SOMCore lib
-#	$(CC) $(LDFLAGS) \
-#		-o $(CORE_NAME) \
-#		$(PRIMITIVES_OBJ) \
-#		$(CORE_LIBS) -l$(CSOM_NAME)
-#	mv $(CORE_NAME) $(ST_DIR)
-#	@touch CORE
-#	@echo SOMCore done.
+CORE: $(CSOM_NAME) $(PRIMITIVES_OBJ)
+	@echo Linking SOMCore lib
+	$(CC) $(LDFLAGS) \
+		-o $(CORE_NAME) \
+		$(PRIMITIVES_OBJ) \
+		$(CORE_LIBS)
+	mv $(CORE_NAME) $(ST_DIR)
+	@touch CORE
+	@echo SOMCore done.
 
 install: all
 	@echo installing CSOM into build

@@ -24,7 +24,7 @@ class Symboltable;
 class SourcecodeCompiler;
 #include "../interpreter/Interpreter.h"
 #include "../memory/Heap.h"
-#include "../primitives/Core.h"
+//#include "../primitives/Core.h"
 #include "../misc/SymbolCompare.h"
 
 #define _HEAP Universe::GetUniverse()->GetHeap()

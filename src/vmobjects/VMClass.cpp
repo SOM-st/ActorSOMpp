@@ -3,8 +3,10 @@
 #include "VMSymbol.h"
 #include "VMInvokable.h"
 #include "VMPrimitive.h"
+#include "PrimitiveRoutine.h"
 #include <fstream>
 #include <typeinfo>
+#include <dlfcn.h>
 
 /*
  * Format definitions for Primitive naming scheme.
@@ -207,90 +209,85 @@ bool      VMClass::HasPrimitives()
 void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
 {//todo do this the "right" way. for now we have a fake dll lookup in Core.h
 
-    //// the library handle
-    ifstream* dlhandle = NULL;
-    //void* dlhandle=NULL;
+    // the library handle
+    //ifstream* dlhandle = NULL;
+    void* dlhandle=NULL;
     //
-    //// cached object properties
+    // cached object properties
     pString cname = this->name->GetStdString();
     //pString cname = this->name->GetStdString;
-/*
+
     //// iterate the classpathes
     for(vector<pString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i) {
-    //    //
-    //    // check the core library
-    //    //
-    //    
-    //    
+        
+        // check the core library
         pString loadstring = genCoreLoadstring(*i);
         dlhandle = loadLib(loadstring);
-        //SEND(loadstring, free);
-        if(dlhandle != NULL && dlhandle->good() && isResponsible(dlhandle, cname))
-    //        //
-    //        // the core library is found and responsible
-    //        //
-              break;
-        else if (dlhandle != NULL) {
-            dlhandle->close();
-            delete(dlhandle);
-            dlhandle = NULL;
+        if(dlhandle != NULL && isResponsible(dlhandle, cname)) {
+            // the core library is found and responsible
+            //initialize core (core has to make sure not to initialize twice -> Core.cpp)
+            //Where / How is this done in CSOM?????????
+            Setup* setup = (Setup*) dlsym(dlhandle, "setup");
+            const char* dlsym_error = dlerror();
+            if (dlsym_error) {
+                cerr << "Cannot load Core library: " << dlsym_error << '\n';
+                dlclose(dlhandle);
+                _UNIVERSE->ErrorExit("Core library does not define the setup() initializer.");
+            }
+            //call the setup function to intialize the class library
+            setup();
+            break;
         }
-    //    
-    //    
-    //    //
-    //    // the core library is not found or responsible, 
-    //    // continue w/ class file
-    //    //
-    //    
-    //    
+    
+        // the core library is not found or not responsible, 
+        // continue w/ class file
         loadstring = genLoadstring(*i, cname);
         dlhandle = loadLib(loadstring);
-    //    SEND(loadstring, free);
-        if(dlhandle != NULL && dlhandle->good()) {
-    //        //
-    //        // the class library was found...
-    //        //
+        if(dlhandle != NULL) {
+            //
+            // the class library was found...
+            //
             if(isResponsible(dlhandle, cname)) {
-    //            //
-    //            // ...and is responsible.
-    //            //
+                //
+                // ...and is responsible.
+                //
+                Setup* setup = (Setup*) dlsym(dlhandle, "setup");
+                const char* dlsym_error = dlerror();
+                if (dlsym_error) {
+                    cerr << "Cannot load symbol \"setup\": " << dlsym_error << '\n';
+                    dlclose(dlhandle);
+                    _UNIVERSE->ErrorExit("Library does not define the setup() initializer.");
+                }
+                //call the setup function to intialize the class library
+                setup();
                 break;
             } else {
-    //            //
-    //            // ... but says not responsible, but have to
-    //            // close it
-    //            //
-                dlhandle->close();
-                delete(dlhandle);
+                //
+                // ... but says not responsible, but we have to
+                // close it nevertheless
+                //
+                dlclose(dlhandle);
                 _UNIVERSE->ErrorExit("Library claims no resonsibility, but musn't!");
             }
-            dlhandle->close();
-            delete(dlhandle);
-            dlhandle = NULL;
+            
         }
-    //    /*
-    //     * continue checking the next class path
-    //     *
-    //     
+        /*
+         * continue checking the next class path
+         */
     }
 
-    ////
-    //// finished cycling,
-    //// check if a lib was found.
-    ////
-    if(!(dlhandle != NULL)) {
+    // finished cycling,
+    // check if a lib was found.
+    if(dlhandle == NULL) {
         cout << "load failure: ";
         cout << "could not load primitive library for " << cname << endl;
         _UNIVERSE->Quit(ERR_FAIL);
     }
-
+    
     ///*
     // * do the actual loading for both class and metaclass
     // *
     // */
-
-
-
     set_primitives(this, dlhandle, cname, INSTANCE_METHOD_FORMAT_S);
     set_primitives(this->GetClass(), dlhandle, cname, CLASS_METHOD_FORMAT_S);
 }
@@ -347,30 +344,29 @@ pString VMClass::genCoreLoadstring(const pString& cp) {
  * load the given library, return the handle
  *
  */
-ifstream* VMClass::loadLib(const pString& path) {
+void* VMClass::loadLib(const pString& path) {
 #ifdef __DEBUG
     cout << "loadLib " << path << endl;
 #endif
-    //#if !defined(CSOM_WIN)
-    //    #ifdef DEBUG
-    //        #define    DL_LOADMODE RTLD_NOW
-    //    #else
-    //        #define    DL_LOADMODE RTLD_LAZY
-    //    #endif DEBUG
-    //#endif
+    #if !defined(CSOM_WIN)
+        #ifdef DEBUG
+            #define    DL_LOADMODE RTLD_NOW
+        #else
+            #define    DL_LOADMODE RTLD_LAZY
+        #endif
+    #endif
     
     // static handle. will be returned
-    //ifstream* fs = new ifstream();
-
-    //fs->open(path.c_str(), std::ios_base::in);
+    void* handle;
     
 	// try load lib
-	/*if((handle=dlopen(SEND(path, chars), DL_LOADMODE)))
+	if((handle=dlopen(path.c_str(), DL_LOADMODE)))
 		//found.
 		return handle;
-	else
-        return NULL;*/
-    return NULL;
+    else {
+        cout << "Error loading library "<<path<<": " << dlerror() << endl;
+        return NULL;
+    }
 }
 
 
@@ -378,21 +374,19 @@ ifstream* VMClass::loadLib(const pString& path) {
  * check, whether the lib referenced by the handle supports the class given
  *
  */
-bool VMClass::isResponsible(ifstream* handle, const pString& cl) {
+bool VMClass::isResponsible(void* handle, const pString& cl) {
 
-/*    // function handler
-    supports_class_fn supports_class=NULL;
+    // function handler
+    SupportsClass* supports_class=NULL;
 
-    supports_class = (supports_class_fn)dlsym(handle, "supports_class");
+    supports_class = (SupportsClass*)dlsym(handle, "supports_class");
 
 	if(!supports_class) {
-        debug_error(dlerror());
-        Universe_error_exit("Library doesn't have expected format");
+        _UNIVERSE->ErrorExit("Library doesn't have expected format");
     }
     
     // test class responsibility
-    return (*supports_class)(SEND(class, chars));*/
-    return true;
+    return supports_class(cl.c_str());
 }
 
 
@@ -402,7 +396,7 @@ bool VMClass::isResponsible(ifstream* handle, const pString& cl) {
  * set the routines for primitive marked invokables of the given class
  *
  */
-void VMClass::set_primitives(VMClass* cl, ifstream* handle, const pString& cname,
+void VMClass::set_primitives(VMClass* cl, void* handle, const pString& cname,
                     const char* format
                     ) {    
     VMPrimitive* the_primitive;
@@ -426,22 +420,8 @@ void VMClass::set_primitives(VMClass* cl, ifstream* handle, const pString& cname
 
             pString selector = sig->GetPlainString();
             
-   //         pString symbol = pString(cname);
-   //         symbol += "
-   //         symbol += selector;
-
-			//{ //string block          
-			//	char symbol[SEND(cname, length) + SEND(selector, length)+2 + 1];
-   //                                                             //2 for 2x '_'
-			//	sprintf(symbol, format,
-			//		SEND(cname, chars),
-			//		SEND(selector, chars));
-   //              
-			//	// try loading the primitive
-			//	routine = (routine_fn)dlsym(handle, symbol);
-   //         }
-
-            routine = Core::create(cname, selector);
+            CreatePrimitive* create = (CreatePrimitive*) dlsym(handle, "create");
+            routine = create(cname, selector);
             
             if(!routine) {
                 cout << "could not load primitive '"<< selector <<"' for class " << cname << endl;
