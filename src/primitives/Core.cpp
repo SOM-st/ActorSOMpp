@@ -1,3 +1,4 @@
+#include <string.h>
 
 //#include "../misc/defs.h"
 #include "../vmobjects/VMObject.h"

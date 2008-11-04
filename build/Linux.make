@@ -92,7 +92,7 @@ LIBRARIES		=-L$(ROOT_DIR)
 ############## Collections.
 
 CSOM_OBJ		=  $(MEMORY_OBJ) $(MISC_OBJ) $(VMOBJECTS_OBJ) \
-				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) 
+				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) $(MAIN_OBJ)
 
 OBJECTS			= $(CSOM_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ)
 
@@ -150,16 +150,16 @@ clean:
 $(CSOM_NAME): $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) loader
 	$(CC) $(LDFLAGS) \
-		-o $(CSOM_NAME) $(CSOM_OBJ) $(CSOM_LIBS) 
+		-rdynamic -o $(CSOM_NAME) $(CSOM_OBJ) $(CSOM_LIBS) -ldl 
 	@echo CSOM done.
 
 CORE: $(CSOM_NAME) $(PRIMITIVES_OBJ)
 	@echo Linking SOMCore lib
 	$(CC) $(LDFLAGS) \
-		-o $(CORE_NAME) \
+		-rdynamic -o $(CORE_NAME).csp \
 		$(PRIMITIVES_OBJ) \
 		$(CORE_LIBS)
-	mv $(CORE_NAME) $(ST_DIR)
+	mv $(CORE_NAME).csp $(ST_DIR)
 	@touch CORE
 	@echo SOMCore done.
 
@@ -173,15 +173,19 @@ install: all
 	@echo done.
 
 #
+# console: start the console
+#
+console: all
+	./$(CSOM_NAME) -cp ./Smalltalk
+
+#
 # test: run the standard test suite
 #
-test: install
-	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME) -cp Smalltalk TestSuite\\TestHarness.som;)
+test: all
+	./$(CSOM_NAME) -cp ./Smalltalk ./Testsuite/TestHarness.som
 
 #
 # bench: run the benchmarks
 #
-bench: install
-	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME) -cp Smalltalk Examples\\Benchmarks\\All.som;)
+bench: all
+	./$(CSOM_NAME) -cp ./Smalltalk ./Examples/Benchmarks/All.som
