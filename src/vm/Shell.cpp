@@ -1,3 +1,4 @@
+#include "Universe.h"
 #include "Shell.h"
 
 #include "../vmobjects/VMMethod.h"
@@ -5,7 +6,7 @@
 #include "../vmobjects/VMFrame.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMInvokable.h"
-#include "Universe.h"
+
 #include <sstream>
 
 // maximal length of an input line from the shell
@@ -16,27 +17,32 @@
 #define SHELL_PART_1 " = (run: it = ( | tmp | tmp := ("
 #define SHELL_PART_2 "). 'it = ' print. ^tmp println) )"
 
+
 Shell::Shell()
 {
     bootstrap_method = NULL;
 }
+
 
 Shell::Shell(VMMethod* bsm)
 {
     this->bootstrap_method = bsm;
 }
 
+
 Shell::~Shell()
 {
     // TODO
 }
+
 
 void Shell::Start()
 {
 #define QUIT_CMD "system exit"
 #define QUIT_CMD_L 11 + 1
 
-    if (bootstrap_method == NULL) {
+    if (bootstrap_method == NULL) 
+    {
         _UNIVERSE->ErrorExit("Shell needs bootstrap method!");
     }
     // the statement to evaluate
@@ -56,7 +62,8 @@ void Shell::Start()
     /**
      * Main Shell Loop
      */
-    while(true) {
+    while(true) 
+    {
         // initialize empty strings
         pString   statement = pString("");
         pString   inp = pString("");
@@ -105,7 +112,8 @@ void Shell::Start()
         ++counter;
         runClass = _UNIVERSE->LoadShellClass(statement);
         // Compile and load the newly generated class
-        if(runClass == NULL) {
+        if(runClass == NULL)
+        {
             cout << "can't compile statement.";
             continue;            
         }

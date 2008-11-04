@@ -28,13 +28,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-//#include <stdio.h>
 #include <fstream>
 #include <string>
-//#include <vmobjects/VMMethod.h>
-//#include <vmobjects/VMSymbol.h>
-//#include <vmobjects/VMPrimitive.h>
+
 #include "../misc/defs.h"
+
 #include "Lexer.h"
 #include "ClassGenerationContext.h"
 #include "MethodGenerationContext.h"
@@ -53,10 +51,8 @@ public:
 	~Parser();
 
 	void Classdef(ClassGenerationContext* cgenc);
-private:
-	
-    //private methods
-	bool    eob(void);
+private:	
+	bool        eob(void);
 
 	bool        symIn(Symbol* ss);
 	bool        accept(Symbol s);
@@ -111,8 +107,7 @@ private:
 	void        blockArguments(MethodGenerationContext* mgenc);
 	void        genPushVariable(MethodGenerationContext* mgenc, const pString& var);
 	void        genPopVariable(MethodGenerationContext* mgenc, const pString& var);
-	
-//private fields
+
 	Lexer* lexer;
 	//ifstream& infile;
 
@@ -137,7 +132,7 @@ private:
 	/*static Symbol singleOpSyms[];
 	static Symbol binaryOpSyms[];
 	static Symbol keywordSelectorSyms[];*/
-    bytecode_generator* bcGen;
+    BytecodeGenerator* bcGen;
 };
 
 #endif

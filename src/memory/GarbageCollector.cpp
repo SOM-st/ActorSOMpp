@@ -1,24 +1,37 @@
-#include "GarbageCollector.h"
-#include "../vm/Universe.h"
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMSymbol.h"
-#include "Heap.h"
 #include <vector>
 #include <map>
-#include "../misc/SymbolCompare.h"
 #include <string.h>
+
+#include "GarbageCollector.h"
+#include "Heap.h"
+
+#include "../vm/Universe.h"
+
+#include "../vmobjects/VMObject.h"
+#include "../vmobjects/VMSymbol.h"
+
 
 GarbageCollector::GarbageCollector(Heap* h)
 {
 	heap = h;
+    num_collections = 0;
+	num_live = 0;
+	spc_live = 0;
+	num_freed = 0;
+	spc_freed = 0;
+    
 }
+
 
 GarbageCollector::~GarbageCollector()
 {
+    //Heap is deleted by Universe
 }
+
 
 void GarbageCollector::Collect()
 {
+    ++num_collections;
 	num_live = 0;
 	spc_live = 0;
 	num_freed = 0;
@@ -53,6 +66,8 @@ void GarbageCollector::Collect()
 
 			if (object->GetGCField() == 1) 
 			{
+                ++num_live;
+			    spc_live += object->GetObjectSize();
 				object->SetGCField(0);
 				//std::cout << "Found alive object, keeping" << std::endl;
 			}
@@ -66,7 +81,8 @@ void GarbageCollector::Collect()
 				++num_freed;
 				spc_freed += bytesToSkip;
 				newEntry->size = bytesToSkip;
-				if (newEntry < heap->free_list_start) {
+				if (newEntry < heap->free_list_start) 
+                {
 					newEntry->next = heap->free_list_start;
 					heap->free_list_start = newEntry;
 					currentEntry = newEntry;
@@ -83,7 +99,17 @@ void GarbageCollector::Collect()
 	} while((long)pointer < ((long)(void*)heap->object_space) + heap->object_space_size);
 
 	mergeFreeSpaces();
+
+    if(gc_verbosity > 1)
+        this->PrintCollectStat();
+    if(gc_verbosity > 2) {
+        cerr << "TODO: dump heap" << endl;
+        //cerr << "-- post-collection heap dump --" << endl;
+
+        //gc_show_memory();
+    }
 }
+
 
 void GarbageCollector::markReachableObjects()
 {
@@ -99,10 +125,12 @@ void GarbageCollector::markReachableObjects()
 	// Since marking is done recursively, this automatically
 	// marks the whole stack
     VMFrame* current_frame = _UNIVERSE->GetInterpreter()->GetFrame();
-    if (current_frame != NULL) {
+    if (current_frame != NULL) 
+    {
         markObject((VMObject*)current_frame);
     }
 }
+
 
 void GarbageCollector::markObject(VMObject* obj)
 {
@@ -111,8 +139,8 @@ void GarbageCollector::markObject(VMObject* obj)
 	{
 		if (obj->GetGCField() != 1)
 		{
-			num_live++;
-			spc_live += obj->GetObjectSize();
+			//++num_live;
+			//spc_live += obj->GetObjectSize();
 
 			/*obj->SetGCField(1);*/
 			//for now the Objects have to mark the referenced objects themselves.
@@ -124,6 +152,7 @@ void GarbageCollector::markObject(VMObject* obj)
 	}
 }
 
+
 void GarbageCollector::mergeFreeSpaces()
 {
 #ifdef __DEBUG
@@ -132,7 +161,8 @@ void GarbageCollector::mergeFreeSpaces()
 
 	free_list_entry* currentEntry = heap->free_list_start;
 	heap->size_of_free_heap = 0;
-	while (currentEntry->next != NULL) {
+	while (currentEntry->next != NULL) 
+    {
 		if((int)currentEntry + (int)currentEntry->size == (int)currentEntry->next)
 		{
 			//std::cout << "merging entry at address " << currentEntry << " (size: "<< currentEntry->size << ") ";
@@ -151,3 +181,25 @@ void GarbageCollector::mergeFreeSpaces()
 	std::cout << "free heap after collecting: " << heap->size_of_free_heap << std::endl;
 #endif
 }
+
+#define _KB(B) (B/1024)
+#define _MB(B) ((double)B/(1024.0*1024.0))
+
+void GarbageCollector::PrintGCStat()
+{
+    cerr << "-- GC statistics --" << endl;
+    cerr << "* heap size " << heap->object_space_size << " B (" << 
+        _KB(heap->object_space_size) << " kB, " << 
+        _MB(heap->object_space_size) << " MB)" << endl;
+    cerr << "* performed " << num_collections << " collections" << endl;
+}
+
+void GarbageCollector::PrintCollectStat()
+{
+    cerr << endl << "[GC " << num_collections << ", " << 
+        heap->num_alloc << " alloc (" << _KB(heap->spc_alloc) <<
+        " kB), " << num_live << " live (" << _KB(spc_live) <<
+        " kB), " << num_freed << " freed (" <<  _KB(spc_freed) <<
+        " kB)]" << endl;
+}
+

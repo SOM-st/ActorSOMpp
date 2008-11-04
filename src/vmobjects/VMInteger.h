@@ -6,6 +6,7 @@
 #include "VMObject.h"
 #include "../misc/defs.h"
 
+
 class VMInteger : public VMObject
 {
 public:

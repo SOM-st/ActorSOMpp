@@ -7,6 +7,11 @@
 #include "../misc/defs.h"
 //#include "../primitives/Core.h"
 
+#if defined(__GNUC__)
+#else   //Visual Studio
+    #   include <windows.h> 
+#endif
+
 class VMSymbol;
 class VMArray;
 class VMPrimitive;
@@ -52,12 +57,23 @@ private:
 
     pString genCoreLoadstring(const pString& cp);
 
+    //void* loadLib(const pString& path);
+#if defined(__GNUC__)
     void* loadLib(const pString& path);
-
     bool isResponsible(void* handle, const pString& cl);
     static void set_primitives(VMClass* cl, void* handle, const pString& cname,
                     const char* format
                     );
+#else
+    HMODULE loadLib(const pString& path);
+    bool isResponsible(HMODULE handle, const pString& cl);
+    static void set_primitives(VMClass* cl, HMODULE handle, const pString& cname,
+                    const char* format
+                    );
+#endif
+
+    
+    
     int numberOfSuperInstanceFields();
 
 	VMClass*  super_class; 

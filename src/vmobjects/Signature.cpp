@@ -1,6 +1,7 @@
 #include "Signature.h"
 #include "VMSymbol.h"
 
+
 int Signature::GetNumberOfArguments(VMSymbol *sig)
 {
     // check default binaries
@@ -22,6 +23,7 @@ int Signature::GetNumberOfArguments(VMSymbol *sig)
         return num_colons + 1;        
     }    
 }
+
 
 bool Signature::IsBinary(VMSymbol *sig)
 {

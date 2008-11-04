@@ -24,12 +24,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-#include "../vmobjects/VMInteger.h"
-#include "../vmobjects/VMArray.h"
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
+#include <vmobjects/VMInteger.h>
+#include <vmobjects/VMArray.h>
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
 
-#include "../vm/Universe.h"
+#include <vm/Universe.h>
 
 #include "Array.h"
 

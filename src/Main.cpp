@@ -28,26 +28,28 @@ THE SOFTWARE.
 
 //#include <vm/Universe.h>
 //#include <stdio.h>
-#include "compiler/ClassGenerationContext.h"
+
 #include <iostream>
 #include <fstream>
 
-#include <typeinfo>
-//#include "compiler/Parser.h"
+#include "compiler/ClassGenerationContext.h"
+
 #include "memory/Heap.h"
+
+#include "misc/ExtendedList.h"
+#include "misc/defs.h"
+
+#include "vm/Universe.h"
+
 #include "vmobjects/VMObject.h"
 #include "vmobjects/VMMethod.h"
-#include "misc/ExtendedList.h"
-#include "vm/Universe.h"
-#include "misc/HeapAllocator.h"
 #include "vmobjects/VMString.h"
 #include "vmobjects/VMArray.h"
-#include "misc/defs.h"
 #include "vmobjects/pVMObject.h"
 
 int main(int argc, char** argv) {
 
-    cout << "This will be CppSOM.\n" << endl;
+    cout << "This is CppSOM.\n" << endl;
 
    // int vm_argc = 0;
    // pString* vm_argv = NULL;

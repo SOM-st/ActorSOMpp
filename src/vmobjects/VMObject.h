@@ -3,10 +3,10 @@
 #define VMOBJECT_H_
 //#include "OOObject.h"
 #include "../misc/defs.h"
-#include "../misc/HeapAllocator.h"
 #include <vector>
 #include <iostream>
 #include "../memory/Heap.h"
+#include "../vm/Universe.h"
 
 //#include "VMClass.h"
 class VMSymbol;
@@ -14,7 +14,8 @@ class VMClass;
 
 #define FIELDS ((VMObject**)&clazz)
 
-class VMObject{
+class VMObject
+{
 
 public:
     /* Constructor */

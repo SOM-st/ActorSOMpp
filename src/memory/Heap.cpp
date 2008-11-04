@@ -1,12 +1,14 @@
-#include "Heap.h"
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
+
+#include "Heap.h"
+
 #include "../vmobjects/VMObject.h"
+
 
 Heap::Heap(int object_space_size)// : globals(INT32_MAX)
 {
-    allocCount = 0;
 	object_space = (void*) malloc(object_space_size);
 	if (!object_space)
 	{
@@ -17,8 +19,11 @@ Heap::Heap(int object_space_size)// : globals(INT32_MAX)
 	size_of_free_heap = object_space_size;
 	this->object_space_size = object_space_size;
 	this->buffersize_for_uninterruptable = (int) (object_space_size * 0.1);
+    
     uninterruptable_counter = 0;
-	
+	num_alloc = 0;
+    spc_alloc = 0;
+
 	free_list_start = (free_list_entry*) object_space;
 	free_list_start->size = object_space_size;
 	free_list_start->next = NULL;
@@ -27,6 +32,8 @@ Heap::Heap(int object_space_size)// : globals(INT32_MAX)
 
 Heap::~Heap()
 {
+    if (gc_verbosity > 0)
+        gc->PrintGCStat();
 	free(object_space);
 }
 
@@ -34,12 +41,13 @@ VMObject* Heap::AllocateObject(size_t size)
 {
     VMObject* vmo = (VMObject*) Allocate(size);
     vmo->SetObjectSize(size);
+    ++num_alloc;
+    spc_alloc += size;
     return vmo;
 }
 
 void* Heap::Allocate(size_t size)
 {
-    ++allocCount;
 	if (size == 0) return NULL;
     if (size < sizeof(free_list_entry)) 
     {
@@ -56,24 +64,37 @@ void* Heap::Allocate(size_t size)
         cout << "Starting Garbage Collection" << endl;
 #endif
 		gc->Collect();
+
+        //
+        //reset allocation stats
+        //
+        num_alloc = 0;
+        spc_alloc = 0;
 	}
 	
 	void* result = NULL;
 	free_list_entry* current_entry = free_list_start;
 	free_list_entry* before_entry = NULL;
 
+    //
 	//find first fit
+    //
 	while (! ((current_entry->size == size) 
                || (current_entry->next == NULL) 
-               || (current_entry->size >= (size + sizeof(free_list_entry))))) { 
+               || (current_entry->size >= (size + sizeof(free_list_entry))))) 
+    { 
         before_entry = current_entry;
         current_entry = current_entry->next;
     }
 	
+    //
 	// did we find a perfect fit?
 	// if so, we simply remove this entry from the list
-    if (current_entry->size == size) {
-        if (current_entry == free_list_start) { 
+    //
+    if (current_entry->size == size)
+    {
+        if (current_entry == free_list_start)
+        { 
 			// first one fitted - adjust the 'first-entry' pointer
             free_list_start = current_entry->next; 
 			//PROBLEM (also in CSOM?): what if last possible allocate is a perfect fit?
@@ -86,7 +107,8 @@ void* Heap::Allocate(size_t size)
     } else {
 		// did we find an entry big enough for the request and a new
 		// free_entry?
-        if (current_entry->size >= (size + sizeof(free_list_entry))) {
+        if (current_entry->size >= (size + sizeof(free_list_entry)))
+        {
             // save data from found entry
             int old_entry_size = current_entry->size;
             free_list_entry* old_next = current_entry->next;
@@ -97,7 +119,8 @@ void* Heap::Allocate(size_t size)
             
             replace_entry->size = old_entry_size - size;
             replace_entry->next = old_next;
-            if (current_entry == free_list_start) {
+            if (current_entry == free_list_start)
+            {
                 free_list_start = replace_entry;
             } else {
                 before_entry->next = replace_entry;
@@ -111,12 +134,16 @@ void* Heap::Allocate(size_t size)
 //#endif
             
 			gc->Collect();
+            num_alloc = 0;
+            spc_alloc = 0;
+
             //fulfill initial request
             result = Allocate(size);
         }
     }
            
-    if(!result) {
+    if(!result)
+    {
 		std::cout << "Failed to allocate "<< (int)size <<" bytes. Panic." << std::endl;
         //Universe_exit(-1);
 		exit(1);

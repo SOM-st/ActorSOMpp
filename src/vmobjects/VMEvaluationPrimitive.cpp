@@ -9,6 +9,7 @@
 //needed to instanciate the Routine object for the evaluation routine
 #include "../primitives/Routine.h"
 
+
 VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSignatureString(argc))
 {
     _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
@@ -17,6 +18,7 @@ VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSign
     this->numberOfArguments = _UNIVERSE->NewInteger(argc);
     _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }
+
 
 //VMEvaluationPrimitive::~VMEvaluationPrimitive()
 //{
@@ -41,7 +43,8 @@ VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc)
     pString signature_string;
     
     // Compute the signature string
-    if(argc==1) {
+    if(argc==1)
+    {
         signature_string += VALUE_S;
     } else {
         signature_string += VALUE_S ;

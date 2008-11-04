@@ -6,6 +6,7 @@
 #include "VMSymbol.h"
 #include "../vm/Universe.h"
 
+
 VMFrame::VMFrame(int size, int nof) : VMArray(size, nof + FRAME_NUMBER_OF_FIELDS)
 {
     _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
@@ -19,45 +20,54 @@ VMFrame::VMFrame(int size, int nof) : VMArray(size, nof + FRAME_NUMBER_OF_FIELDS
 //{
 //}
 
+
 VMFrame* VMFrame::GetPreviousFrame()
 {
     return (VMFrame*) this->previous_frame;
 }
+
 
 void     VMFrame::SetPreviousFrame(VMObject* frm)
 {
     this->previous_frame = (VMFrame*)frm;
 }
 
+
 void     VMFrame::ClearPreviousFrame()
 {
     this->previous_frame = (VMFrame*)nil_object;
 }
+
 
 bool     VMFrame::HasPreviousFrame()
 {
     return this->previous_frame != nil_object;
 }
 
+
 bool     VMFrame::IsBootstrapFrame()
 {
     return !HasPreviousFrame();
 }
+
 
 VMFrame* VMFrame::GetContext()
 {
     return this->context;
 }
 
+
 void     VMFrame::SetContext(VMFrame* frm)
 {
     this->context = frm;
 }
 
+
 bool     VMFrame::HasContext()
 {
     return this->context !=  nil_object; //nil_object;
 }
+
 
 VMFrame* VMFrame::GetContextLevel(int lvl)
 {
@@ -70,6 +80,7 @@ VMFrame* VMFrame::GetContextLevel(int lvl)
     return current;
 }
 
+
 VMFrame* VMFrame::GetOuterContext()
 {
     VMFrame* current = this;
@@ -80,16 +91,19 @@ VMFrame* VMFrame::GetOuterContext()
     return current;
 }
 
+
 VMMethod* VMFrame::GetMethod()
 {
   
     return this->method;
 }
 
+
 void      VMFrame::SetMethod(VMMethod* method)
 {
     this->method = method;
 }
+
 
 VMObject* VMFrame::Pop()
 {
@@ -98,12 +112,14 @@ VMObject* VMFrame::Pop()
     return this->GetIndexableField(sp);
 }
 
+
 void      VMFrame::Push(VMObject* obj)
 {
     int32_t sp = this->stack_pointer->GetEmbeddedInteger() + 1;
     this->stack_pointer->SetEmbeddedInteger(sp);
     this->SetIndexableField(sp, obj);
 }
+
 
 void VMFrame::PrintStack()
 {
@@ -120,6 +136,7 @@ void VMFrame::PrintStack()
     }
 }
 
+
 void      VMFrame::ResetStackPointer()
 {
     // arguments are stored in front of local variables
@@ -133,15 +150,18 @@ void      VMFrame::ResetStackPointer()
     //cout << "lo: " << lo << ", num_lo: " << num_lo << ", sp: "<<(lo+num_lo-1)<<endl;
 }
 
+
 int       VMFrame::GetBytecodeIndex()
 {
     return this->bytecode_index->GetEmbeddedInteger();
 }
 
+
 void      VMFrame::SetBytecodeIndex(int index)
 {
     this->bytecode_index->SetEmbeddedInteger(index);
 }
+
 
 VMObject* VMFrame::GetStackElement(int index)
 {
@@ -149,11 +169,13 @@ VMObject* VMFrame::GetStackElement(int index)
     return this->GetIndexableField(sp-index);
 }
 
+
 void      VMFrame::SetStackElement(int index, VMObject* obj)
 {
     int sp = this->stack_pointer->GetEmbeddedInteger();
     this->SetIndexableField(sp-index, obj);
 }
+
 
 VMObject* VMFrame::GetLocal(int index, int contextLevel)
 {
@@ -162,6 +184,7 @@ VMObject* VMFrame::GetLocal(int index, int contextLevel)
     return context->GetIndexableField(lo + index);
 }
 
+
 void      VMFrame::SetLocal(int index, int contextLevel, VMObject* value)
 {
     VMFrame* context = this->GetContextLevel(contextLevel);
@@ -169,10 +192,12 @@ void      VMFrame::SetLocal(int index, int contextLevel, VMObject* value)
     context->SetIndexableField(lo+index, value);
 }
 
+
 VMInteger* VMFrame::GetStackPointer()
 {
     return stack_pointer;
 }
+
 
 VMObject* VMFrame::GetArgument(int index, int contextLevel)
 {
@@ -181,11 +206,13 @@ VMObject* VMFrame::GetArgument(int index, int contextLevel)
     return context->GetIndexableField(index);
 }
 
+
 void      VMFrame::SetArgument(int index, int contextLevel, VMObject* value)
 {
     VMFrame* context = this->GetContextLevel(contextLevel);
     context->SetIndexableField(index, value);
 }
+
 
 void      VMFrame::PrintStackTrace()
 {
@@ -197,6 +224,7 @@ int       VMFrame::ArgumentStackIndex(int index)
     return meth->GetNumberOfArguments() - index - 1;
 }
 
+
 void      VMFrame::CopyArgumentsFrom(VMFrame* frame)
 {
     // copy arguments from frame:
@@ -204,16 +232,19 @@ void      VMFrame::CopyArgumentsFrom(VMFrame* frame)
     // - copy them into the argument area of the current frame
     VMMethod* meth = this->GetMethod();
     int num_args = meth->GetNumberOfArguments();
-    for(int i=0; i < num_args; ++i) {
+    for(int i=0; i < num_args; ++i) 
+    {
         VMObject* stackElem = frame->GetStackElement(num_args - 1 - i);
         this->SetIndexableField(i, stackElem);
     }
 }
+
 //
 //size_t VMFrame::GetOffset()
 //{
 //    return VMArray::GetOffset() + sizeof(VMFrame*)*2 + sizeof(VMMethod*) + sizeof(VMInteger*)*3;
 //}
+
 
 void VMFrame::MarkReferences()
 {

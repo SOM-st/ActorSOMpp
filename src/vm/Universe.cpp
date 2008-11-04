@@ -1,5 +1,10 @@
+#include <sstream> 
+#include <string.h>
+#include <stdlib.h>
+
 #include "Universe.h"
 #include "Shell.h"
+
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMMethod.h"
@@ -12,13 +17,13 @@
 #include "../vmobjects/VMString.h"
 #include "../vmobjects/VMBigInteger.h"
 #include "../vmobjects/VMEvaluationPrimitive.h"
-#include "../compiler/SourcecodeCompiler.h"
 #include "../vmobjects/Symboltable.h"
+
 #include "../interpreter/bytecodes.h"
-#include <sstream> 
-#include <string.h>
-#include <stdlib.h>
+
 #include "../compiler/Disassembler.h"
+#include "../compiler/SourcecodeCompiler.h"
+
 // Here we go:
 // externally refenced variables:
 VMObject* nil_object = NULL;
@@ -45,24 +50,30 @@ VMClass* double_class = NULL;
 short dump_bytecodes;
 short gc_verbosity;
 
+
 Universe* Universe::theUniverse = NULL;
+
 
 //Singleton accessor
 Universe* Universe::GetUniverse()
 {
-    if (!theUniverse) {
+    if (!theUniverse)
+    {
         ErrorExit("Trying to access uninitialized Universe, exiting.");
     }
 	return theUniverse;
 }
 
+
 Universe* Universe::operator->()
 {
-    if (!theUniverse) {
+    if (!theUniverse) 
+    {
         ErrorExit("Trying to access uninitialized Universe, exiting.");
     }
 	return theUniverse;
 }
+
 
 vector<pString> Universe::handleArguments( int argc, char** argv )
 {
@@ -118,6 +129,7 @@ void Universe::Start(int argc, char** argv)
     theUniverse->initialize(argc, argv);
 }
 
+
 void Universe::Quit(int err)
 {
     if (theUniverse) delete(theUniverse);
@@ -126,11 +138,13 @@ void Universe::Quit(int err)
     exit(err);
 }
 
+
 void Universe::ErrorExit( const char* err)
 {
     cout << "Runtime error: " << err << endl;
     Quit(ERR_FAIL);
 }
+
 
 int Universe::getPathClassExt(vector<pString>& tokens,const pString& arg )
 {
@@ -152,6 +166,7 @@ int Universe::getPathClassExt(vector<pString>& tokens,const pString& arg )
     return ERR_SUCCESS;
 }
 
+
 int Universe::setupClassPath( const pString& cp )
 {
     try{
@@ -172,12 +187,14 @@ int Universe::setupClassPath( const pString& cp )
     }
 }
 
+
 int Universe::addClassPath( const pString& cp )
 {
     class_path.push_back(cp);
     ++cp_count;
     return ERR_SUCCESS;
 }
+
 
 void Universe::printUsageAndExit( char* executable )
 {
@@ -197,12 +214,15 @@ void Universe::printUsageAndExit( char* executable )
     Quit(ERR_SUCCESS);
 }
 
+
 Universe::Universe(){};
+
 
 void Universe::prepareNilObject()
 {
     nil_object->SetField(0, nil_object);
 }
+
 
 void Universe::initialize(int _argc, char** _argv)
 {
@@ -303,7 +323,8 @@ void Universe::initialize(int _argc, char** _argv)
     bootstrap_method->SetHolder(system_class);
     cout << "Cheer!!! We can start the Interpreter now!" << endl;
 
-    if (argv.size() == 0) {
+    if (argv.size() == 0) 
+    {
         Shell* shell = new Shell(bootstrap_method);
         shell->Start();
         return;
@@ -329,89 +350,15 @@ void Universe::initialize(int _argc, char** _argv)
     // reset "-d" indicator
     if(!(trace>0)) dump_bytecodes = 2 - trace;
 
+    VMObject* r = new(this->heap)VMObject(0);
+    VMObject& ref = *arguments_array;
+    VMArray& aref = reinterpret_cast<VMArray&>(ref);
+    VMString* f = (VMString*)aref[0];
+    cout << "aref[0]: " << f->GetChars() << endl;
+
     interpreter->Start();
-
-    //-----------------
-
- //   
-	////while (1) {
-	//	VMObject *vmo = new (heap) VMObject;
-	//	cout << "vmo (VMObject) Obj size:" << vmo->GetObjectSize() << endl;
-	//	//cout << sizeof(*vmo) << endl;
-	//	VMObject *vmo2 = new (heap, 0) VMMethod(0,0);
-	//	cout << "vmo2 (VMMethod) Obj size:" << vmo2->GetObjectSize() << endl;
-	//	//cout << sizeof(*vmo2) << endl;
-	////}
-	////vector<VMObject*, HeapAllocator<VMObject*> > v = vector<VMObject*, HeapAllocator<VMObject*> >(HeapAllocator<VMObject*>(heap));
-	////v.push_back(vmo);
-	////v.push_back(vmo2);
-
-	//VMString *vmstr = new (heap) VMString;
-	//cout << "vmstr Obj size:" << vmstr->GetObjectSize() << endl;
-	//VMString *vmstr2 = new (heap, strlen("Stringtest")+1 ) VMString("Stringtest");
-	//cout << "vmstr2 Obj size:" << vmstr2->GetObjectSize() << endl;
-	//cout << vmstr2->GetChars() << endl;
-
-	//VMArray* vma = new (heap, 4*sizeof(VMObject*)) VMArray(4);
-	//vma->SetIndexableField(0, vmo);
-	//vma->SetIndexableField(1, vmo2);
-	//vma->SetIndexableField(2, vmstr);
-	//vma->SetIndexableField(3, vmstr2);
-	//cout << "sizeof(VMArray)" << sizeof(VMArray) << endl;
-	//cout << "vma Obj size:" << vma->GetObjectSize() << endl;
-	//cout << "vma array size:" << vma->GetArraySize() << endl;
-
- //   VMInvokable* inv = dynamic_cast<VMInvokable*>(vmo2);
-
- //   if (inv != NULL) cout << "inv is invokable" << endl;
-
- //   inv = dynamic_cast<VMInvokable*>(vmo);
- //   if (inv == NULL) cout << "inv is not invokable" << endl;
-
- //   //if (typeid(vmo2).name() == VMObject) cout << "yeah" << endl;
- //   //cout << typeid(vmo2).name() << endl;
- //   //cout << typeid(vmo2) << endl;
-	////vmstr->FromCString("VMString Test");
-	////cout << vmstr->ToCString() << endl;
-	////cout << vmo->GetObjectSize() << endl;
-	////cout << vmo2->GetObjectSize() << endl;
-	//
-	////this->RunGC();
-
-	///*ExtendedList *list = new ExtendedList();
-	//list->Add(vmo);
-	//list->Add(vmo2);
-	//cout << "List-size:" << list->Size() << endl;*/
-	//
-	////if (argc < 2) {
-	////	cout << "Please specify the file(s) you'd like to parse" << endl;
-	////	cout << "Usage: cppsom [files]" << endl;
-	////	return -1;
-	////}
-	////
-	////for (int i = 1; i < argc; i++) { 
-	////	ifstream fp;
-	////	fp.open(argv[i], std::ios_base::in);
-	////	if (!fp.is_open()) {
-	////		cout << "error opening " << argv[i] <<endl;
-	////		continue;
-	////	}
-	////	//int cdc = 1;
-	////	ClassGenerationContext cdc;
-	////	cout << "starting " << argv[i] << endl;
-	////	Parser* p = new Parser(fp);
-	////	p->Classdef(&cdc);
-
-	////	//clean up
-	////	fp.close();
-	////	delete(p);
-	////	
-	////	cout << "finished " << argv[i] << endl;
-
-	////}
- //   
- //   //---------------------
 }
+
 
 Universe::~Universe()
 {
@@ -419,13 +366,12 @@ Universe::~Universe()
         delete(interpreter);
     if (compiler) 
         delete(compiler);
-    if (heap) {
-        cout << "Heap alloc count: " << heap->allocCount << endl;
+    if (heap) 
         delete(heap);
-    }
     if (symboltable) 
         delete(symboltable);
 }
+
 
 VMObject* Universe::NewTaggedInteger(int32_t val)
 {
@@ -433,9 +379,11 @@ VMObject* Universe::NewTaggedInteger(int32_t val)
     return (VMObject*) val;
 }
 
+
 void Universe::Assert( bool value)
 {
-    if (!value) {
+    if (!value) 
+    {
         cout << "Assertion failed" << endl;
     }
 
@@ -446,6 +394,7 @@ VMClass* Universe::GetBlockClass()
 {
     return block_class;
 }
+
 
 VMClass* Universe::GetBlockClassWithArgs( int number_of_arguments)
 {
@@ -485,11 +434,13 @@ bool Universe::HasGlobal( VMSymbol* name)
     else return false;
 }
 
+
 void Universe::InitializeSystemClass( VMClass* system_class, VMClass* super_class, const char* name)
 {
     pString s_name(name);
 
-    if (super_class != NULL) {
+    if (super_class != NULL) 
+    {
         system_class->SetSuperClass(super_class);
         VMClass* sys_class_class = system_class->GetClass();
         VMClass* super_class_class = super_class->GetClass();
@@ -518,6 +469,7 @@ void Universe::InitializeSystemClass( VMClass* system_class, VMClass* super_clas
 
 }
 
+
 VMClass* Universe::LoadClass( VMSymbol* name)
 {
    if (HasGlobal(name))
@@ -525,7 +477,8 @@ VMClass* Universe::LoadClass( VMSymbol* name)
 
    VMClass* result = LoadClassBasic(name, NULL);
 
-   if (!result) {
+   if (!result) 
+   {
        cout << "can\'t load class " << name->GetStdString() << endl;
        Universe::Quit(ERR_FAIL);
    }
@@ -535,6 +488,7 @@ VMClass* Universe::LoadClass( VMSymbol* name)
     
    return result;
 }
+
 
 VMClass* Universe::LoadClassBasic( VMSymbol* name, VMClass* system_class)
 {
@@ -558,6 +512,7 @@ VMClass* Universe::LoadClassBasic( VMSymbol* name, VMClass* system_class)
     return NULL;
 }
 
+
 VMClass* Universe::LoadShellClass( pString& stmt)
 {
     VMClass* result = compiler->CompileClassString(stmt, NULL);
@@ -565,6 +520,7 @@ VMClass* Universe::LoadShellClass( pString& stmt)
          Disassembler::Dump(result);
     return result;
 }
+
 
 void Universe::LoadSystemClass( VMClass* system_class)
 {
@@ -581,6 +537,7 @@ void Universe::LoadSystemClass( VMClass* system_class)
         result->LoadPrimitives(class_path, cp_count);
 }
 
+
 VMArray* Universe::NewArray( int size)
 {
     int additionalBytes = size*sizeof(VMObject*);
@@ -588,6 +545,7 @@ VMArray* Universe::NewArray( int size)
     result->SetClass(array_class);
     return result;
 }
+
 
 VMArray* Universe::NewArrayFromArgv( const vector<pString>& argv)
 {
@@ -602,6 +560,7 @@ VMArray* Universe::NewArrayFromArgv( const vector<pString>& argv)
 
     return result;
 }
+
 
 VMArray* Universe::NewArrayList(pList& list )
 {
@@ -619,6 +578,7 @@ VMArray* Universe::NewArrayList(pList& list )
     return result;
 }
 
+
 VMBigInteger* Universe::NewBigInteger( int64_t value)
 {
     VMBigInteger* result = new (heap) VMBigInteger(value);
@@ -626,6 +586,7 @@ VMBigInteger* Universe::NewBigInteger( int64_t value)
 
     return result;
 }
+
 
 VMBlock* Universe::NewBlock( VMMethod* method, VMFrame* context, int arguments)
 {
@@ -637,6 +598,7 @@ VMBlock* Universe::NewBlock( VMMethod* method, VMFrame* context, int arguments)
 
     return result;
 }
+
 
 VMClass* Universe::NewClass( VMClass* class_of_class)
 {
@@ -651,12 +613,14 @@ VMClass* Universe::NewClass( VMClass* class_of_class)
     return result;
 }
 
+
 VMDouble* Universe::NewDouble( double value)
 {
     VMDouble* result = new (heap) VMDouble(value);
     result->SetClass(double_class);
     return result;
 }
+
 
 VMFrame* Universe::NewFrame( VMFrame* previous_frame, VMMethod* method)
 {
@@ -685,6 +649,7 @@ VMFrame* Universe::NewFrame( VMFrame* previous_frame, VMMethod* method)
 
     return result;
 }
+
 
 VMObject* Universe::NewInstance( VMClass*  class_of_instance)
 {
@@ -716,6 +681,7 @@ VMClass* Universe::NewMetaclassClass()
     return result;
 }
 
+
 VMMethod* Universe::NewMethod( VMSymbol* signature, 
                     size_t number_of_bytecodes, size_t number_of_constants)
 {
@@ -731,6 +697,7 @@ VMMethod* Universe::NewMethod( VMSymbol* signature,
     return result;
 }
 
+
 VMString* Universe::NewString( const pString& str)
 {
     //string needs space for str.length characters plus one byte for '\0'
@@ -740,6 +707,7 @@ VMString* Universe::NewString( const pString& str)
 
     return result;
 }
+
 
 VMSymbol* Universe::NewSymbol( const pString& str )
 {
@@ -753,6 +721,7 @@ VMSymbol* Universe::NewSymbol( const pString& str )
     return result;
 }
 
+
 VMClass* Universe::NewSystemClass()
 {
     VMClass* system_class = new (heap) VMClass();
@@ -765,6 +734,7 @@ VMClass* Universe::NewSystemClass()
     return system_class;
 }
 
+
 VMSymbol* Universe::SymbolFor( const pString& str)
 {
     
@@ -775,11 +745,11 @@ VMSymbol* Universe::SymbolFor( const pString& str)
            NewSymbol(str);
 }
 
+
 VMSymbol* Universe::SymbolForChars( const char* str)
 {
     return SymbolFor(std::string(str));
 }
-
 
 
 void Universe::SetGlobal(VMSymbol* name, VMObject *val)
@@ -789,7 +759,8 @@ void Universe::SetGlobal(VMSymbol* name, VMObject *val)
     globals[str] = val;
 	//globals.insert(pair<pString, VMObject*>(name->GetStdString(), val));
     VMObject* p = globals[str];
-    if (p == NULL){
+    if (p == NULL)
+    {
         cout << "Global " << str << " just added, but globals[" << str << "] == NULL" << endl;
     }
 }

@@ -5,7 +5,8 @@
 #include <iterator>
 
 template <class T>
-class ExtendedVector{
+class ExtendedVector
+{
 public:
 	ExtendedVector();
 	void Add(const T& ptr);

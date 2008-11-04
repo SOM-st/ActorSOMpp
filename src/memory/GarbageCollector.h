@@ -14,7 +14,8 @@ public:
 	GarbageCollector(Heap* h);
 	~GarbageCollector();
 	void Collect();
-
+    void PrintGCStat();
+    void PrintCollectStat();
 	
 
 private:
@@ -22,10 +23,16 @@ private:
 	void markObject(VMObject* obj);
 	void mergeFreeSpaces();
 	Heap* heap;
+
+    //
+    // values for GC statistics
+    //
+    uint32_t num_collections;
 	uint32_t num_live;
 	uint32_t spc_live;
 	uint32_t num_freed;
 	uint32_t spc_freed;
+
 	
 
 };

@@ -6,7 +6,23 @@
 #include "PrimitiveRoutine.h"
 #include <fstream>
 #include <typeinfo>
-#include <dlfcn.h>
+
+
+#if defined(__GNUC__)
+#   include <dlfcn.h>
+#else   //Visual Studio
+/**
+ * Emualting the dl-interface with win32 means
+ */
+#   define WIN32_LEAN_AND_MEAN
+#   define dlerror()   "Load Error"
+#   define dlsym       GetProcAddress
+#   define DL_LOADMODE NULL, LOAD_WITH_ALTERED_SEARCH_PATH
+#   define dlopen      LoadLibraryEx
+#   define dlclose     CloseHandle
+//#   include <windows.h> //included in VMClass.h if necessary
+#endif
+
 
 /*
  * Format definitions for Primitive naming scheme.
@@ -23,6 +39,7 @@ VMClass::VMClass() : VMObject(4)
     //this->objectSize = sizeof(VMClass);
 }
 
+
 VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4)
 {
     //this->objectSize = sizeof(VMClass) + number_of_fields*sizeof(VMObject*);
@@ -38,14 +55,16 @@ bool VMClass::HasSuperClass()
 bool VMClass::AddInstanceInvokable(VMObject *ptr)
 {
     VMInvokable* newInvokable = dynamic_cast<VMInvokable*>(ptr);
-    if (newInvokable == NULL) {
+    if (newInvokable == NULL)
+    {
         cout << "Error: trying to add non-invokable to invokables array" << endl;
         throw std::bad_typeid();//("Trying to add non-invokable to invokables array");
     }
 	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i)
 	{
         VMInvokable* inv = dynamic_cast<VMInvokable*>( instance_invokables->GetIndexableField(i) );
-		if (inv != 0) {
+		if (inv != 0)
+        {
             if (newInvokable->GetSignature() == inv->GetSignature())
             {
                 this->SetInstanceInvokable(i, ptr);
@@ -67,12 +86,15 @@ bool VMClass::AddInstanceInvokable(VMObject *ptr)
 	return true;
 }
 
+
 void VMClass::AddInstancePrimitive(VMPrimitive *ptr)
 {
-	if (AddInstanceInvokable((VMObject*)ptr)) {
+	if (AddInstanceInvokable((VMObject*)ptr))
+    {
 		//cout << "Warn: Primitive "<<ptr->GetSignature<<" is not in class definition for class " << name->GetStdString() << endl;
 	}
 }
+
 
 VMSymbol* VMClass::GetInstanceFieldName(int index)
 {
@@ -85,24 +107,30 @@ VMSymbol* VMClass::GetInstanceFieldName(int index)
 	return super_class->GetInstanceFieldName(index);
 }
 
+
 VMClass* VMClass::GetSuperClass()
 {
 	return super_class;
 }
+
 
 void VMClass::SetSuperClass(VMClass* sup)
 {
 	super_class = sup;
 }
 
+
 VMSymbol* VMClass::GetName()
 {
 	return name;
 }
+
+
 void VMClass::SetName(VMSymbol* nam)
 {
 	name = nam;
 }
+
 
 VMArray* VMClass::GetInstanceFields()
 {
@@ -115,10 +143,12 @@ void VMClass::SetInstanceFields(VMArray* inst_fields)
 	instance_fields = inst_fields;
 }
 
+
 VMArray  *VMClass::GetInstanceInvokables()
 {
 	return instance_invokables;
 }
+
 
 void      VMClass::SetInstanceInvokables(VMArray* invokables)
 {
@@ -136,10 +166,12 @@ void      VMClass::SetInstanceInvokables(VMArray* invokables)
 
 }
 
+
 int       VMClass::GetNumberOfInstanceInvokables()
 {
 	return instance_invokables->GetNumberOfIndexableFields();
 }
+
 
 VMObject *VMClass::GetInstanceInvokable(int index)
 {
@@ -147,6 +179,7 @@ VMObject *VMClass::GetInstanceInvokable(int index)
 	//return instance_invokables[index];
 	//return NULL;
 }
+
 
 void      VMClass::SetInstanceInvokable(int index, VMObject* invokable)
 {
@@ -158,6 +191,7 @@ void      VMClass::SetInstanceInvokable(int index, VMObject* invokable)
     }
 	//instance_invokables[index] = invokable;
 }
+
 
 VMObject* VMClass::LookupInvokable(VMSymbol* name)
 {
@@ -177,6 +211,7 @@ VMObject* VMClass::LookupInvokable(VMSymbol* name)
 	return (VMObject*)invokable;
 }
 
+
 int       VMClass::LookupFieldIndex(VMSymbol* name)
 {
     for (int i = 0; i <=GetNumberOfInstanceFields(); ++i) //even with GetNumberOfInstanceFields == 0 there is the class field
@@ -195,6 +230,7 @@ int       VMClass::GetNumberOfInstanceFields()
            + this->numberOfSuperInstanceFields();
 }
 
+
 bool      VMClass::HasPrimitives()
 {
 	for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i)
@@ -211,19 +247,24 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
 
     // the library handle
     //ifstream* dlhandle = NULL;
+#if defined(__GNUC__)
     void* dlhandle=NULL;
+#else
+    HMODULE dlhandle = NULL;
+#endif
     //
     // cached object properties
     pString cname = this->name->GetStdString();
     //pString cname = this->name->GetStdString;
 
     //// iterate the classpathes
-    for(vector<pString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i) {
-        
+    for(vector<pString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i)
+    {
         // check the core library
         pString loadstring = genCoreLoadstring(*i);
         dlhandle = loadLib(loadstring);
-        if(dlhandle != NULL && isResponsible(dlhandle, cname)) {
+        if(dlhandle != NULL && isResponsible(dlhandle, cname))
+        {
             // the core library is found and responsible
             //initialize core (core has to make sure not to initialize twice -> Core.cpp)
             //Where / How is this done in CSOM?????????
@@ -243,17 +284,20 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
         // continue w/ class file
         loadstring = genLoadstring(*i, cname);
         dlhandle = loadLib(loadstring);
-        if(dlhandle != NULL) {
+        if(dlhandle != NULL)
+        {
             //
             // the class library was found...
             //
-            if(isResponsible(dlhandle, cname)) {
+            if(isResponsible(dlhandle, cname))
+            {
                 //
                 // ...and is responsible.
                 //
                 Setup* setup = (Setup*) dlsym(dlhandle, "setup");
                 const char* dlsym_error = dlerror();
-                if (dlsym_error) {
+                if (dlsym_error)
+                {
                     cerr << "Cannot load symbol \"setup\": " << dlsym_error << '\n';
                     dlclose(dlhandle);
                     _UNIVERSE->ErrorExit("Library does not define the setup() initializer.");
@@ -278,7 +322,8 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
 
     // finished cycling,
     // check if a lib was found.
-    if(dlhandle == NULL) {
+    if(dlhandle == NULL)
+    {
         cout << "load failure: ";
         cout << "could not load primitive library for " << cname << endl;
         _UNIVERSE->Quit(ERR_FAIL);
@@ -314,7 +359,8 @@ int VMClass::numberOfSuperInstanceFields()
 #define shared_extension ".csp"
 pString VMClass::genLoadstring(const pString& cp, 
                        const pString& cname
-                       ) {
+                       ) 
+{
     
     pString loadstring = string(cp);
     loadstring += file_separator;
@@ -330,7 +376,8 @@ pString VMClass::genLoadstring(const pString& cp,
  *  at the classpath given.
  *
  */
-pString VMClass::genCoreLoadstring(const pString& cp) {
+pString VMClass::genCoreLoadstring(const pString& cp)
+{
     #define S_CORE "SOMCore"
     pString corename = string(S_CORE);
     pString result = genLoadstring(cp, corename);
@@ -344,11 +391,21 @@ pString VMClass::genCoreLoadstring(const pString& cp) {
  * load the given library, return the handle
  *
  */
+#if defined(__GNUC__)
+
 void* VMClass::loadLib(const pString& path) {
+
+#else
+
+HMODULE VMClass::loadLib(const pString& path)
+{
+
+#endif
+
 #ifdef __DEBUG
     cout << "loadLib " << path << endl;
 #endif
-    #if !defined(CSOM_WIN)
+    #if defined(__GNUC__)
         #ifdef DEBUG
             #define    DL_LOADMODE RTLD_NOW
         #else
@@ -357,13 +414,29 @@ void* VMClass::loadLib(const pString& path) {
     #endif
     
     // static handle. will be returned
-    void* handle;
+#if defined(__GNUC__)
+    void* dlhandle;
+    // try load lib
+    if((dlhandle=dlopen(path.c_str(), DL_LOADMODE)))
+    {
+#else
+    HMODULE dlhandle;
+    // try load lib
+    const char* filename = path.c_str();
     
-	// try load lib
-	if((handle=dlopen(path.c_str(), DL_LOADMODE)))
+
+    int length = MultiByteToWideChar(CP_ACP,0,filename ,strlen(filename)+1,NULL,0);
+    LPWSTR buffer = (LPWSTR)malloc(sizeof(WCHAR)*length);
+    MultiByteToWideChar(CP_ACP,0,filename ,strlen(filename)+1,buffer,length);
+    if((dlhandle=dlopen(buffer, DL_LOADMODE)))
+    {
+        free(buffer);
+#endif
+    
+	
 		//found.
-		return handle;
-    else {
+		return dlhandle;
+    } else {
         cout << "Error loading library "<<path<<": " << dlerror() << endl;
         return NULL;
     }
@@ -374,14 +447,25 @@ void* VMClass::loadLib(const pString& path) {
  * check, whether the lib referenced by the handle supports the class given
  *
  */
-bool VMClass::isResponsible(void* handle, const pString& cl) {
+#if defined(__GNUC__)
+
+bool VMClass::isResponsible(void* dlhandle, const pString& cl)
+{
+
+#else
+
+bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl) 
+{
+
+#endif
 
     // function handler
     SupportsClass* supports_class=NULL;
 
-    supports_class = (SupportsClass*)dlsym(handle, "supports_class");
+    supports_class = (SupportsClass*)dlsym(dlhandle, "supports_class");
 
-	if(!supports_class) {
+	if(!supports_class)
+    {
         _UNIVERSE->ErrorExit("Library doesn't have expected format");
     }
     
@@ -396,21 +480,31 @@ bool VMClass::isResponsible(void* handle, const pString& cl) {
  * set the routines for primitive marked invokables of the given class
  *
  */
-void VMClass::set_primitives(VMClass* cl, void* handle, const pString& cname,
+#if defined(__GNUC__)
+void VMClass::set_primitives(VMClass* cl, void* dlhandle, const pString& cname,
                     const char* format
-                    ) {    
+                    ) 
+{    
+#else
+void VMClass::set_primitives(VMClass* cl, HMODULE dlhandle, const pString& cname,
+                    const char* format
+                    ) 
+{    
+#endif
     VMPrimitive* the_primitive;
     PrimitiveRoutine*   routine=NULL;
     VMInvokable* an_invokable;
     // iterate invokables
-    for(int i = 0; i < cl->GetNumberOfInstanceInvokables(); i++) {
+    for(int i = 0; i < cl->GetNumberOfInstanceInvokables(); i++) 
+    {
         
         an_invokable = (VMInvokable*)cl->GetInstanceInvokable(i);
 #ifdef __DEBUG
         cout << "cname: >" << cname << "<"<< endl;
         cout << an_invokable->GetSignature()->GetStdString() << endl;
 #endif
-        if(an_invokable->IsPrimitive()) {
+        if(an_invokable->IsPrimitive())
+        {
             the_primitive = (VMPrimitive*) an_invokable;
             //
             // we have a primitive to load
@@ -420,10 +514,11 @@ void VMClass::set_primitives(VMClass* cl, void* handle, const pString& cname,
 
             pString selector = sig->GetPlainString();
             
-            CreatePrimitive* create = (CreatePrimitive*) dlsym(handle, "create");
+            CreatePrimitive* create = (CreatePrimitive*) dlsym(dlhandle, "create");
             routine = create(cname, selector);
             
-            if(!routine) {
+            if(!routine) 
+            {
                 cout << "could not load primitive '"<< selector <<"' for class " << cname << endl;
                             
                 _UNIVERSE->Quit(ERR_FAIL);

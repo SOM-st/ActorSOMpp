@@ -5,6 +5,7 @@
 #include "../misc/defs.h"
 #include "VMObject.h"
 
+
 class VMBigInteger : public VMObject
 {
 public:

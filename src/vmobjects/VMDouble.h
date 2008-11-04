@@ -5,6 +5,7 @@
 
 #include "VMObject.h"
 
+
 class VMDouble : public VMObject
 {
 public:

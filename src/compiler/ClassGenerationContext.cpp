@@ -3,7 +3,8 @@
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMClass.h"
 
-ClassGenerationContext::ClassGenerationContext() {
+ClassGenerationContext::ClassGenerationContext() 
+{
 	name = NULL;
 	super_name = NULL;
     class_side = false;
@@ -13,35 +14,50 @@ ClassGenerationContext::ClassGenerationContext() {
     class_methods.Clear();
 }
 
-ClassGenerationContext::~ClassGenerationContext()
+
+ClassGenerationContext::~ClassGenerationContext() 
 {
 }
 
-void ClassGenerationContext::add_class_field(VMObject* field) {
+
+void ClassGenerationContext::AddClassField(VMObject* field) 
+{
 	this->class_fields.Add(field);
 }
-void ClassGenerationContext::add_instance_field(VMObject* field) {
+
+
+void ClassGenerationContext::AddInstanceField(VMObject* field) 
+{
 	this->instance_fields.Add(field);
 }
-bool ClassGenerationContext::FindField(const pString& field) {
 
-	pList fields = is_class_side() ?
+
+bool ClassGenerationContext::FindField(const pString& field) 
+{
+
+	pList fields = IsClassSide() ?
         class_fields :
         instance_fields;
-    return fields.IndexOf( (VMObject*)_UNIVERSE->SymbolFor(field)) != -1;//fields.IndexOf(field);//SEND(fields, IndexOf, Universe_symbol_for(field)) != -1;
+    return fields.IndexOf( (VMObject*)_UNIVERSE->SymbolFor(field)) != -1;
 
 }
 
-void ClassGenerationContext::add_instance_method(VMObject* method) {
+
+
+void ClassGenerationContext::AddInstanceMethod(VMObject* method) 
+{
 	this->instance_methods.Add(method);
 }
 
-void ClassGenerationContext::add_class_method(VMObject* method) {
+
+
+void ClassGenerationContext::AddClassMethod(VMObject* method) 
+{
 	this->class_methods.Add(method);
 }
 
-VMClass* ClassGenerationContext::Assemble()
-{
+
+VMClass* ClassGenerationContext::Assemble() {
     // build class class name
     pString ccname = string(name->GetStdString()) + " class";
     
@@ -71,7 +87,9 @@ VMClass* ClassGenerationContext::Assemble()
     return result;
 }
 
-void ClassGenerationContext::AssembleSystemClass( VMClass* system_class )
+
+
+void ClassGenerationContext::AssembleSystemClass( VMClass* system_class ) 
 {
     system_class->SetInstanceInvokables(_UNIVERSE->NewArrayList(instance_methods));
     system_class->SetInstanceFields(_UNIVERSE->NewArrayList(instance_fields));

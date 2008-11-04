@@ -6,16 +6,9 @@ class VMObject;
 class VMClass;
 
 #include "../misc/defs.h"
-#include "GenerationContextCore.h"
-class ClassGenerationContext : public GenerationContextCore 
+class ClassGenerationContext
 {
-	VMSymbol* name;
-    VMSymbol* super_name;
-    bool      class_side;
-    pList     instance_fields;
-    pList     instance_methods;
-    pList     class_fields;
-    pList     class_methods;
+	
 public:
 	ClassGenerationContext();
 	~ClassGenerationContext();
@@ -23,17 +16,25 @@ public:
     void AssembleSystemClass(VMClass* system_class);
 
 	bool FindField(const pString&);
-	void add_instance_field(VMObject*);
-	void add_class_field(VMObject*);
-	void add_instance_method(VMObject*);
-	void add_class_method(VMObject*);
+	void AddInstanceField(VMObject*);
+	void AddClassField(VMObject*);
+	void AddInstanceMethod(VMObject*);
+	void AddClassMethod(VMObject*);
 	void SetName(VMSymbol* n) { name = n; }
-	void set_super_name(VMSymbol* sn) { super_name = sn; }
-	void set_class_side(bool cs) { class_side = cs; }
+	void SetSuperName(VMSymbol* sn) { super_name = sn; }
+	void SetClassSide(bool cs) { class_side = cs; }
 	VMSymbol* GetName(void) { return name; };
-	VMSymbol* get_super_name(void) { return super_name; };
-	bool is_class_side(void) { return class_side;};
+	VMSymbol* GetSuperName(void) { return super_name; };
+	bool IsClassSide(void) { return class_side;};
 
+private:
+    VMSymbol* name;
+    VMSymbol* super_name;
+    bool      class_side;
+    pList     instance_fields;
+    pList     instance_methods;
+    pList     class_fields;
+    pList     class_methods;
 
 };
 

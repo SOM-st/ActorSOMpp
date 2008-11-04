@@ -2,13 +2,16 @@
 
 #ifndef UNIVERSE_H_
 #define UNIVERSE_H_
+
 //#define __DEBUG
-//#include <map>
+#include <map>
+
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
-#include <map>
-//#include "../vmobjects/VMObject.h"
-//#include "../vmobjects/VMSymbol.h"
+
+#include "../interpreter/Interpreter.h"
+#include "../memory/Heap.h"
+
 class VMObject;
 class VMSymbol;
 class VMClass;
@@ -22,13 +25,12 @@ class VMString;
 class VMBigInteger;
 class Symboltable;
 class SourcecodeCompiler;
-#include "../interpreter/Interpreter.h"
-#include "../memory/Heap.h"
-//#include "../primitives/Core.h"
-#include "../misc/SymbolCompare.h"
 
-#define _HEAP Universe::GetUniverse()->GetHeap()
+//Convenience macro for Singleton access
 #define _UNIVERSE Universe::GetUniverse()
+//macro to access the heap
+#define _HEAP Universe::GetUniverse()->GetHeap()
+
 
 //global objects
 extern VMObject* nil_object;
@@ -55,6 +57,7 @@ extern VMClass* double_class;
 // for runtime debug
 extern short dump_bytecodes;
 extern short gc_verbosity;
+
 
 using namespace std;
 class Universe
@@ -136,35 +139,7 @@ private:
     Symboltable* symboltable;
     SourcecodeCompiler* compiler;
     Interpreter* interpreter;
-};/*
-/*  Global objects  
-extern pVMObject nil_object;
-extern pVMObject true_object;
-extern pVMObject false_object;
-  
-extern pVMClass object_class;
-extern pVMClass class_class;
-extern pVMClass metaclass_class;
-  
-extern pVMClass nil_class;
-extern pVMClass integer_class;
-extern pVMClass biginteger_class;
-extern pVMClass array_class;
-extern pVMClass method_class;
-extern pVMClass symbol_class;
-extern pVMClass frame_class;
-extern pVMClass primitive_class;
-extern pVMClass string_class;
-extern pVMClass system_class;
-extern pVMClass block_class;
-extern pVMClass double_class;
+};
 
-// for runtime debug
-extern short dump_bytecodes;
-
-// config
-extern int universe_use_threaded_interpretation;
-extern int universe_super_inst_config_mask; 
-*/
 
 #endif

@@ -130,9 +130,11 @@ profiling : LDFLAGS+=-pg
 profiling: all
 
 
-.c.pic.o:
+.cpp.pic.o:
 	$(CC) $(CFLAGS) -g -c $< -o $*.pic.o
 
+.cpp.o:
+	$(CC) $(CFLAGS) -c $< -o $*.o
 
 clean:
 	rm -Rf $(CLEAN)

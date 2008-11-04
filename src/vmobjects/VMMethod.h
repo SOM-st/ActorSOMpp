@@ -12,7 +12,8 @@ class MethodGenerationContext;
 
 class VMFrame;
 
-class VMMethod :  public VMInvokable{//public VMArray,
+class VMMethod :  public VMInvokable //public VMArray,
+{
 
 public:
 	VMMethod(int bc_count, int number_of_constants, int nof = 0);

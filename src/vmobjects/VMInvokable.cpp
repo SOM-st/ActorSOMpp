@@ -5,14 +5,17 @@
 #include "Signature.h"
 #include "VMMethod.h"
 
+
 bool      VMInvokable::IsPrimitive() 
 {
     return false;
 }
 
+
 VMSymbol *VMInvokable::GetSignature() { 
     return signature; 
 }
+
 
 void      VMInvokable::SetSignature(VMSymbol* sig) 
 { 
@@ -22,10 +25,12 @@ void      VMInvokable::SetSignature(VMSymbol* sig)
         ((VMMethod*)this)->SetNumberOfArguments(Signature::GetNumberOfArguments(signature));
 }
 
+
 VMClass  *VMInvokable::GetHolder() 
 {
     return holder; 
 }
+
 
 void      VMInvokable::SetHolder(VMClass* hld) 
 {

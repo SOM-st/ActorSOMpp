@@ -3,10 +3,12 @@
 #ifndef VMFRAME_H_
 #define VMFRAME_H_
 
+
 #include "VMArray.h"
 class VMMethod;
 class VMObject;
 class VMInteger;
+
 
 class VMFrame : public VMArray
 {

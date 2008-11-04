@@ -23,32 +23,39 @@ VMObject::VMObject( int number_of_fields )
    
 }
 
+
 //VMObject::~VMObject() {}
+
 
 VMClass* VMObject::GetClass()
 {
 	return clazz;
 }
 
+
 void VMObject::SetClass(VMClass* cl)
 {
 	clazz = cl;
 }
+
 
 VMSymbol* VMObject::GetFieldName(int index)
 {
     return this->clazz->GetInstanceFieldName(index);
 }
 
+
 int VMObject::GetFieldIndex(VMSymbol* fieldName)
 {
     return this->clazz->LookupFieldIndex(fieldName);
 }
 
+
 int VMObject::GetNumberOfFields()
 {
     return this->numberOfFields;
 }
+
 
 void VMObject::SetNumberOfFields(int nof)
 {
@@ -60,10 +67,12 @@ void VMObject::SetNumberOfFields(int nof)
     }
 }
 
+
 int VMObject::GetDefaultNumberOfFields()
 {
 	return this->numberOfFields - 1; 
 }
+
 
 void VMObject::Send(pString selector_string, VMObject** arguments, int argc)
 {
@@ -81,35 +90,42 @@ void VMObject::Send(pString selector_string, VMObject** arguments, int argc)
     invokable->Invoke(frame);
 }
 
+
 int VMObject::GetObjectSize() 
 {
     return objectSize;
 }
 
+
 bool VMObject::GetGCField() 
 {
     return gcfield;
 }
+
 	
 void VMObject::SetGCField(bool value) 
 { 
     gcfield = value; 
 }
 
+
 void VMObject::Assert(bool value)
 {
     _UNIVERSE->Assert(value);
 }
+
 
 VMObject* VMObject::GetField(int index)
 {
     return FIELDS[index]; 
 }
 
+
 void VMObject::SetField(int index, VMObject* value)
 {
      FIELDS[index] = value;
 }
+
 
 void VMObject::MarkReferences()
 {

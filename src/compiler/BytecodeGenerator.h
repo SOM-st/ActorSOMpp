@@ -12,7 +12,7 @@ class VMSymbol;
 class VMObject;
 class VMString;
 
-class bytecode_generator {
+class BytecodeGenerator {
 public:
 	void emit_HALT(MethodGenerationContext* mgenc);
 	void emit_DUP(MethodGenerationContext* mgenc);
@@ -22,9 +22,7 @@ public:
 	void emit_PUSH_BLOCK(MethodGenerationContext* mgenc, VMMethod* block);
 	void emit_PUSH_CONSTANT(MethodGenerationContext* mgenc, VMObject* cst);
 	void emit_PUSH_CONSTANT_String(
-		MethodGenerationContext* mgenc,
-		VMString* str
-	);
+        MethodGenerationContext* mgenc, VMString* str);
 	void emit_PUSH_GLOBAL(MethodGenerationContext* mgenc, VMSymbol* global);
 	void emit_POP(MethodGenerationContext* mgenc);
 	void emit_POP_LOCAL(MethodGenerationContext* mgenc, int idx, int ctx);

@@ -2,7 +2,9 @@
 
 #include "../vm/Universe.h"
 
+
 #define theEntries(i) FIELDS[this->GetNumberOfFields()+i]
+
 
 VMArray::VMArray(int size, int nof) : VMObject(nof+1)
 {
@@ -17,6 +19,7 @@ VMArray::VMArray(int size, int nof) : VMObject(nof+1)
 	//objectSize += size * sizeof(VMObject*); //calculate actual object size including the entries
 }
 
+
 VMArray* VMArray::CopyAndExtendWith(VMObject* item)
 {
     size_t fields = this->size->GetEmbeddedInteger();
@@ -26,9 +29,11 @@ VMArray* VMArray::CopyAndExtendWith(VMObject* item)
 	return result;
 }
 
+
 VMObject* VMArray::GetIndexableField(int idx)
 {
-    if (idx > size->GetEmbeddedInteger()-1 || idx < 0)  {
+    if (idx > size->GetEmbeddedInteger()-1 || idx < 0)  
+    {
         cout << "Array index out of bounds: Accessing " << idx << ", but only " << size->GetEmbeddedInteger()-1;
         cout << " entries are available\n";
         _UNIVERSE->ErrorExit("Array index out of bounds exception");
@@ -36,6 +41,7 @@ VMObject* VMArray::GetIndexableField(int idx)
     }
     return theEntries(idx);
 }
+
 
 void VMArray::CopyIndexableFieldsTo(VMArray* to)
 {
@@ -46,6 +52,7 @@ void VMArray::CopyIndexableFieldsTo(VMArray* to)
 	
 }
 
+
 int VMArray::GetNumberOfIndexableFields()
 {
     return size->GetEmbeddedInteger();
@@ -54,7 +61,8 @@ int VMArray::GetNumberOfIndexableFields()
 
 void VMArray::SetIndexableField(int idx, VMObject* item)
 {
-	if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
+	if (idx > size->GetEmbeddedInteger()-1 || idx < 0)
+    {
         cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
         cout << " entries available\n";
         _UNIVERSE->ErrorExit("Array index out of bounds exception");
@@ -62,6 +70,7 @@ void VMArray::SetIndexableField(int idx, VMObject* item)
     }
    	theEntries(idx) = item;
 }
+
 
 void VMArray::MarkReferences()
 {

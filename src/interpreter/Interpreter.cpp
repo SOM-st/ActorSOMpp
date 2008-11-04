@@ -1,5 +1,6 @@
 #include "Interpreter.h"
 #include "bytecodes.h"
+
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMFrame.h"
 #include "../vmobjects/VMMethod.h"
@@ -8,12 +9,16 @@
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMInvokable.h"
 #include "../vmobjects/Signature.h"
+
 #include "../compiler/Disassembler.h"
+
+
 // convenience macros for frequently used function invocations
 #define _FRAME this->GetFrame()
 #define _SETFRAME(f) this->SetFrame(f)
 #define _METHOD this->GetMethod()
 #define _SELF this->GetSelf()
+
 
 Interpreter::Interpreter()
 {
@@ -25,10 +30,12 @@ Interpreter::Interpreter()
     // TODO
 }
 
+
 Interpreter::~Interpreter()
 {
     // TODO
 }
+
 
 void Interpreter::Start()
 {
@@ -51,7 +58,8 @@ void Interpreter::Start()
         cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) << endl;
 #endif
 // Handle the current bytecode
-        switch(bytecode) {
+        switch(bytecode) 
+        {
             case BC_HALT:             return; // handle the halt bytecode
             case BC_DUP:              do_dup();  break;
             case BC_PUSH_LOCAL:       do_push_local(bytecode_index); break;
@@ -74,21 +82,25 @@ void Interpreter::Start()
     } // while
 }
 
+
 VMFrame* Interpreter::PushNewFrame( VMMethod* method )
 {
     _SETFRAME(_UNIVERSE->NewFrame(_FRAME, method));
     return _FRAME;
 }
 
+
 void Interpreter::SetFrame( VMFrame* frame )
 {
     this->frame = frame;   
 }
 
+
 VMFrame* Interpreter::GetFrame()
 {
     return this->frame;
 }
+
 
 VMMethod* Interpreter::GetMethod()
 {
@@ -102,11 +114,13 @@ VMMethod* Interpreter::GetMethod()
     return method;
 }
 
+
 VMObject* Interpreter::GetSelf()
 {
     VMFrame* context = _FRAME->GetOuterContext();//ups...
     return context->GetArgument(0,0);
 }
+
 
 VMFrame* Interpreter::popFrame()
 {
@@ -117,6 +131,7 @@ VMFrame* Interpreter::popFrame()
 
     return result;
 }
+
 
 void Interpreter::popFrameAndPushResult( VMObject* result )
 {
@@ -129,6 +144,7 @@ void Interpreter::popFrameAndPushResult( VMObject* result )
 
     _FRAME->Push(result);
 }
+
 
 void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
 {
@@ -155,11 +171,13 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
     }
 }
 
+
 void Interpreter::do_dup()
 {
     VMObject* elem = _FRAME->GetStackElement(0);
     _FRAME->Push(elem);
 }
+
 
 void Interpreter::do_push_local( int bytecode_index )
 {
@@ -172,6 +190,7 @@ void Interpreter::do_push_local( int bytecode_index )
     _FRAME->Push(local);
 }
 
+
 void Interpreter::do_push_argument( int bytecode_index )
 {
     VMMethod* method = _METHOD;
@@ -182,6 +201,7 @@ void Interpreter::do_push_argument( int bytecode_index )
 
     _FRAME->Push(argument);
 }
+
 
 void Interpreter::do_push_field( int bytecode_index )
 {
@@ -197,6 +217,7 @@ void Interpreter::do_push_field( int bytecode_index )
     _FRAME->Push(o);
 }
 
+
 void Interpreter::do_push_block( int bytecode_index )
 {
     VMMethod* method = _METHOD;
@@ -208,6 +229,7 @@ void Interpreter::do_push_block( int bytecode_index )
     _FRAME->Push((VMObject*) _UNIVERSE->NewBlock(blockMethod, _FRAME, num_of_args));
 }
 
+
 void Interpreter::do_push_constant( int bytecode_index )
 {
     VMMethod* method = _METHOD;
@@ -218,6 +240,7 @@ void Interpreter::do_push_constant( int bytecode_index )
    // _FRAME->PrintStack();
 
 }
+
 
 void Interpreter::do_push_global( int bytecode_index)
 {
@@ -238,10 +261,12 @@ void Interpreter::do_push_global( int bytecode_index)
     }
 }
 
+
 void Interpreter::do_pop()
 {
     _FRAME->Pop();
 }
+
 
 void Interpreter::do_pop_local( int bytecode_index )
 {
@@ -255,6 +280,7 @@ void Interpreter::do_pop_local( int bytecode_index )
     _FRAME->SetLocal(bc1, bc2, o);
 }
 
+
 void Interpreter::do_pop_argument( int bytecode_index )
 {
     VMMethod* method = _METHOD;
@@ -265,6 +291,7 @@ void Interpreter::do_pop_argument( int bytecode_index )
     VMObject* o = _FRAME->Pop();
     _FRAME->SetArgument(bc1, bc2, o);
 }
+
 
 void Interpreter::do_pop_field( int bytecode_index )
 {
@@ -277,6 +304,7 @@ void Interpreter::do_pop_field( int bytecode_index )
     VMObject* o = _FRAME->Pop();
     self->SetField(field_index, o);
 }
+
 
 void Interpreter::do_send( int bytecode_index )
 {
@@ -294,6 +322,7 @@ void Interpreter::do_send( int bytecode_index )
 #endif
     this->send(signature, receiver->GetClass());
 }
+
 
 void Interpreter::do_super_send( int bytecode_index )
 {
@@ -323,6 +352,7 @@ void Interpreter::do_super_send( int bytecode_index )
     }
 }
 
+
 void Interpreter::do_return_local()
 {
     VMObject* result = _FRAME->Pop();
@@ -330,13 +360,15 @@ void Interpreter::do_return_local()
     this->popFrameAndPushResult(result);
 }
 
+
 void Interpreter::do_return_non_local()
 {
     VMObject* result = _FRAME->Pop();
 
     VMFrame* context = _FRAME->GetOuterContext();
 
-    if (!context->HasPreviousFrame()) {
+    if (!context->HasPreviousFrame())
+    {
         VMBlock* block = (VMBlock*) _FRAME->GetArgument(0, 0);
         VMFrame* prev_frame = _FRAME->GetPreviousFrame();
         VMFrame* outer_context = prev_frame->GetOuterContext();

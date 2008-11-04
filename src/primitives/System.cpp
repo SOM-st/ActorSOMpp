@@ -28,22 +28,22 @@ THE SOFTWARE.
 
 #include <time.h>
 
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
-#include "../vmobjects/VMString.h"
-#include "../vmobjects/VMInteger.h"
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
+#include <vmobjects/VMString.h>
+#include <vmobjects/VMInteger.h>
 
-#include "../vm/Universe.h"
+#include <vm/Universe.h>
 
 #include "System.h"
 
-#ifdef __GNUC__
+#if defined(__GNUC__)
 
     #include <sys/time.h>
 
 #else
 
-    #include "../misc/gettimeofday.h"
+    #include <misc/gettimeofday.h>
 
 #endif
 

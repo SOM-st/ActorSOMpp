@@ -10,7 +10,8 @@
 //#include "../misc/HashMap.h"
 class VMObject;
 
-struct free_list_entry {
+struct free_list_entry 
+{
     free_list_entry* next;
     size_t size;
 } ;
@@ -32,7 +33,7 @@ public:
     void EndUninterruptableAllocation() { --uninterruptable_counter; } ;
 
 	//void SetGlobal(pString name, void* val);
-int allocCount;
+    
 private:
     void internalFree(void* ptr);
 	void* internalAllocate(size_t size);
@@ -50,6 +51,8 @@ private:
 
 	GarbageCollector *gc;
 
+    uint32_t num_alloc;
+    uint32_t spc_alloc;
 	//HashMap<pString, void*, OOObject> globals;
 };
 

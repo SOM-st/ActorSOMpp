@@ -2,9 +2,11 @@
 
 #ifndef VMARRAY_H_
 #define VMARRAY_H_
+
 //#include <vector>
 #include "VMObject.h"
 #include "VMInteger.h"
+
 
 //template <class T>
 class VMArray : public VMObject
@@ -22,7 +24,8 @@ public:
 
 	VMObject* operator[](int idx)
 	{
-		if (idx > size->GetEmbeddedInteger() - 1) {
+		if (idx > size->GetEmbeddedInteger() - 1) 
+        {
             cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
             cout << " entries available\n";
             _UNIVERSE->ErrorExit("Array index out of bounds exception");

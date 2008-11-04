@@ -5,13 +5,12 @@
 #include "../misc/defs.h"
 #include "ClassGenerationContext.h"
 #include "../misc/ExtendedVector.h"
-#include "GenerationContextCore.h"
 #include "../misc/ExtendedList.h"
 class VMMethod;
 class VMArray;
 class VMPrimitive;
 
-class MethodGenerationContext : public GenerationContextCore {
+class MethodGenerationContext {
 public:
 	MethodGenerationContext();
 	~MethodGenerationContext();

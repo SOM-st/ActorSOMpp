@@ -4,6 +4,7 @@
 #include "VMEvaluationPrimitive.h"
 #include "../vm/Universe.h"
 
+
 VMBlock::VMBlock() : VMObject(2)
 {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
@@ -11,9 +12,11 @@ VMBlock::VMBlock() : VMObject(2)
      context = (VMFrame*) nil_object;
 }
 
+
 //VMBlock::~VMBlock()
 //{
 //}
+
 
 void VMBlock::MarkReferences()
 {
@@ -24,25 +27,30 @@ void VMBlock::MarkReferences()
     
 }
 
+
 void VMBlock::SetMethod(VMMethod* bMethod)
 {
     blockMethod = bMethod;
 }
+
 
 VMMethod* VMBlock::GetMethod()
 {
     return blockMethod;
 }
 
+
 void VMBlock::SetContext(VMFrame* contxt)
 {
     context = contxt;
 }
 
+
 VMFrame* VMBlock::GetContext()
 {
     return context;
 }
+
 
 VMEvaluationPrimitive* VMBlock::GetEvaluationPrimitive(int numberOfArguments)
 {

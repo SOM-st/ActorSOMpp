@@ -8,9 +8,12 @@
 #include "VMObject.h"
 #include "VMInteger.h"
 
+//this method's bytecodes
 #define _BC ((uint8_t*)&FIELDS[this->GetNumberOfFields() + this->GetNumberOfIndexableFields()])
 
+//this method's literals (-> VMArray)
 #define theEntries(i) FIELDS[this->GetNumberOfFields()+i]
+
 
 VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokable(nof + 5)//VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ),
 {
@@ -28,6 +31,7 @@ VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokabl
     _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }
 
+
 void VMMethod::MarkReferences()
 {
     if (gcfield) return;
@@ -44,46 +48,55 @@ void VMMethod::MarkReferences()
     bc_length->MarkReferences();*/
 }
 
+
 int VMMethod::GetNumberOfLocals() 
 {
     return number_of_locals->GetEmbeddedInteger(); 
 }
+
 
 void VMMethod::SetNumberOfLocals(int nol) 
 {
     number_of_locals->SetEmbeddedInteger(nol); 
 }
 
+
 int VMMethod::GetMaximumNumberOfStackElements()
 {
     return maximum_number_of_stack_elements->GetEmbeddedInteger(); 
 }
+
 
 void VMMethod::SetMaximumNumberOfStackElements(int stel) 
 {
     maximum_number_of_stack_elements->SetEmbeddedInteger(stel); 
 }
 
+
 int VMMethod::GetNumberOfArguments() 
 {
     return number_of_arguments->GetEmbeddedInteger(); 
 }
+
 
 void VMMethod::SetNumberOfArguments(int noa) 
 {
     number_of_arguments->SetEmbeddedInteger(noa); 
 }
 
+
 int VMMethod::GetNumberOfBytecodes() 
 {
     return bc_length->GetEmbeddedInteger();
 }
+
 
 void VMMethod::Invoke(VMFrame* frame)
 {
     VMFrame* frm = _UNIVERSE->GetInterpreter()->PushNewFrame(this);
     frm->CopyArgumentsFrom(frame);
 }
+
 
 void VMMethod::SetHolderAll(VMClass* hld)
 {
@@ -97,15 +110,18 @@ void VMMethod::SetHolderAll(VMClass* hld)
     }
 }
 
+
 VMObject* VMMethod::GetConstant(int indx)
 {
     uint8_t bc = _BC[indx+1];
-    if (bc >= this->GetNumberOfIndexableFields()) {
+    if (bc >= this->GetNumberOfIndexableFields()) 
+    {
         cout << "Error: Constant index out of range" << endl;
         return NULL;
     }
     return this->GetIndexableField(bc);
 }
+
 
 uint8_t VMMethod::GetBytecode(int indx)
 {
@@ -118,6 +134,7 @@ void VMMethod::SetBytecode(int indx, uint8_t val)
     _BC[indx] = val;
 }
 
+
 //VMArray Methods
 VMArray* VMMethod::CopyAndExtendWith(VMObject* item)
 {
@@ -128,9 +145,11 @@ VMArray* VMMethod::CopyAndExtendWith(VMObject* item)
 	return result;
 }
 
+
 VMObject* VMMethod::GetIndexableField(int idx)
 {
-    if (idx > size->GetEmbeddedInteger()-1 || idx < 0)  {
+    if (idx > size->GetEmbeddedInteger()-1 || idx < 0) 
+    {
         cout << "Array index out of bounds: Accessing " << idx << ", but only " << size->GetEmbeddedInteger()-1;
         cout << " entries are available\n";
         _UNIVERSE->ErrorExit("Array index out of bounds exception");
@@ -138,6 +157,7 @@ VMObject* VMMethod::GetIndexableField(int idx)
     }
     return theEntries(idx);
 }
+
 
 void VMMethod::CopyIndexableFieldsTo(VMArray* to)
 {
@@ -148,6 +168,7 @@ void VMMethod::CopyIndexableFieldsTo(VMArray* to)
 	
 }
 
+
 int VMMethod::GetNumberOfIndexableFields()
 {
     return size->GetEmbeddedInteger();
@@ -156,7 +177,8 @@ int VMMethod::GetNumberOfIndexableFields()
 
 void VMMethod::SetIndexableField(int idx, VMObject* item)
 {
-	if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
+    if (idx > size->GetEmbeddedInteger()-1 || idx < 0) 
+    {
         cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
         cout << " entries available\n";
         _UNIVERSE->ErrorExit("Array index out of bounds exception");

@@ -1,10 +1,12 @@
 #include "VMPrimitive.h"
 #include "VMSymbol.h"
 #include "VMClass.h"
+
 #include "../vm/Universe.h"
 
 //needed to instanciate the Routine object for the  empty routine
 #include "../primitives/Routine.h"
+
 
 VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 {
@@ -14,6 +16,7 @@ VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
     prim->SetRoutine(new (_HEAP) Routine<VMPrimitive>(prim, &VMPrimitive::EmptyRoutine));
     return prim;
 }
+
 
 VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
 {
@@ -26,6 +29,8 @@ VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
     *(this->empty) = false;
     _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }
+
+
 //TODO: this is a memory leak. The empty flag is not freed and the routine is not destroyed
 //, but G++ doesn't like the destructor of VMObject classes
 //VMPrimitive::~VMPrimitive(Heap* heap)
@@ -34,20 +39,24 @@ VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
 //    if (routine != NULL) Core::destroy(routine);
 //}
 
+
 bool VMPrimitive::IsEmpty()
 {
     return *empty;
 }
+
 
 void VMPrimitive::SetRoutine(PrimitiveRoutine* rtn)
 {
     routine = rtn;
 }
 
+
 void VMPrimitive::Invoke(VMFrame *frm)
 {
     (*routine)(this, frm);
 }
+
 
 void VMPrimitive::MarkReferences()
 {
@@ -62,6 +71,7 @@ void VMPrimitive::MarkReferences()
         FIELDS[i]->MarkReferences();
     }
 }
+
 
 void VMPrimitive::EmptyRoutine( VMObject* _self, VMFrame* /*frame*/ )
 {

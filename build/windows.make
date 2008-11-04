@@ -27,8 +27,8 @@
 # THE SOFTWARE.
 
 CC			=g++
-CFLAGS		=-O2 $(DBG_FLAGS) $(INCLUDES)
-LDFLAGS		=$(LIBRARIES)
+CFLAGS		=-Wno-endif-labels -O2 $(DBG_FLAGS) $(INCLUDES)
+LDFLAGS		=--enable-auto-import $(LIBRARIES)
 
 INSTALL		=install
 
@@ -153,6 +153,7 @@ $(CSOM_NAME).exe: $(CSOM_NAME).dll $(MAIN_OBJ)
 	@echo Linking $(CSOM_NAME) loader
 	$(CC) $(LDFLAGS) \
 		-o $(CSOM_NAME).exe $(MAIN_OBJ) -l$(CSOM_NAME)
+	@echo loader done.
 
 $(CSOM_NAME).dll: $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) Dynamic Library
