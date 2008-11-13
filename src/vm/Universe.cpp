@@ -75,50 +75,6 @@ Universe* Universe::operator->()
 }
 
 
-vector<pString> Universe::handleArguments( int argc, char** argv )
-{
-
-    vector<pString> vm_args = vector<pString>();
-    dump_bytecodes = 0;
-    gc_verbosity = 0;
-    for (int i = 1; i < argc ; ++i)
-    {
-        if (strncmp(argv[i], "-cp", 3) == 0) 
-        {
-            if ((argc == i + 1) || class_path.size() > 0)
-                printUsageAndExit(argv[0]);
-            setupClassPath(pString(argv[++i]));
-        } else if (strncmp(argv[i], "-d", 2) == 0) {
-            ++dump_bytecodes;
-        } else if (strncmp(argv[i], "-g", 2) == 0) {
-            ++gc_verbosity;
-        } else if (argv[i][0] == '-' && argv[i][1] == 'H') {
-            int heap_size = atoi(argv[i] + 2);
-            heapSize = heap_size;
-        } else if ((strncmp(argv[i], "-h", 2) == 0) ||
-            (strncmp(argv[i], "--help", 6) == 0)) {
-                printUsageAndExit(argv[0]);
-        } else {
-            vector<pString> ext_path_tokens = vector<pString>(2);
-            pString tmp_string = pString(argv[i]);
-            if (this->getPathClassExt(ext_path_tokens, tmp_string) == ERR_SUCCESS)
-            {
-                this->addClassPath(ext_path_tokens[0]);
-                vm_args.push_back(ext_path_tokens[1]);
-                //delete(&ext_path_tokens);
-            } else {
-                vm_args.push_back(pString(tmp_string));
-            }
-            //delete(&tmp_string);
-            //delete(&ext_path_tokens);
-        }
-    }
-    addClassPath(pString("."));
-
-    return vm_args;
-}
-
-
 void Universe::Start(int argc, char** argv)
 {
     /*int vm_argc = 0;
@@ -145,17 +101,70 @@ void Universe::ErrorExit( const char* err)
     Quit(ERR_FAIL);
 }
 
+vector<pString> Universe::handleArguments( int argc, char** argv )
+{
+
+    vector<pString> vm_args = vector<pString>();
+    dump_bytecodes = 0;
+    gc_verbosity = 0;
+    for (int i = 1; i < argc ; ++i)
+    {
+        cout << argv[i] << endl;
+        if (strncmp(argv[i], "-cp", 3) == 0) 
+        {
+            if ((argc == i + 1) || class_path.size() > 0)
+                printUsageAndExit(argv[0]);
+            setupClassPath(pString(argv[++i]));
+        } else if (strncmp(argv[i], "-d", 2) == 0) {
+            ++dump_bytecodes;
+        } else if (strncmp(argv[i], "-g", 2) == 0) {
+            ++gc_verbosity;
+        } else if (argv[i][0] == '-' && argv[i][1] == 'H') {
+            int heap_size = atoi(argv[i] + 2);
+            heapSize = heap_size;
+        } else if ((strncmp(argv[i], "-h", 2) == 0) ||
+            (strncmp(argv[i], "--help", 6) == 0)) {
+                printUsageAndExit(argv[0]);
+        } else {
+            vector<pString> ext_path_tokens = vector<pString>(2);
+            pString tmp_string = pString(argv[i]);
+            if (this->getPathClassExt(ext_path_tokens, tmp_string) == ERR_SUCCESS)
+            {
+                this->addClassPath(ext_path_tokens[0]);
+                
+                //delete(&ext_path_tokens);
+            }
+            //Different from CSOM!!!:
+            //In CSOM there is an else, where the original filename is pushed into the vm_args.
+            //But unlike the class name in ext_path_tokens (ext_path_tokens[1]) that could
+            //still have the .som suffix though.
+            //So in CPPSOM getPathClassExt will strip the suffix and add it to ext_path_tokens
+            //even if there is no new class path present. So we can in any case do the following:
+            vm_args.push_back(ext_path_tokens[1]);
+        }
+    }
+    addClassPath(pString("."));
+
+    return vm_args;
+}
 
 int Universe::getPathClassExt(vector<pString>& tokens,const pString& arg )
 {
 #define EXT_TOKENS 2
-    
+    int result = ERR_SUCCESS;
     int fp_index = arg.find_last_of(file_separator);
     int ssep_index = arg.find(".som");
-
+    cout << "fp: " << fp_index << " ssep: " << ssep_index << endl;
     if (fp_index == pString::npos) 
     { //no new path
-        return ERR_FAIL;
+        //different from CSOM (see also HandleArguments):
+        //we still want to strip the suffix from the filename, so
+        //we set the start to -1, in order to start the substring
+        //from character 0. npos is -1 too, but this is to make sure
+        fp_index = -1;
+        //instead of returning here directly, we have to remember that
+        //there is no new class path and return it later
+        result = ERR_FAIL;
     } else tokens[0] = arg.substr(0, fp_index);
     
     //adding filename (minus ".som" if present) to second slot
@@ -163,7 +172,7 @@ int Universe::getPathClassExt(vector<pString>& tokens,const pString& arg )
                  (ssep_index - 1) :
                  arg.length();
     tokens[1] = arg.substr(fp_index + 1, ssep_index - (fp_index));
-    return ERR_SUCCESS;
+    return result;
 }
 
 

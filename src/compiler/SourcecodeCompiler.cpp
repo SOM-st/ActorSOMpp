@@ -35,7 +35,6 @@ VMClass* SourcecodeCompiler::CompileClass( const pString& path, const pString& f
     fp->open(fname.c_str(), std::ios_base::in);
 	if (!fp->is_open()) 
     {
-		cout << "error opening " << fname <<endl;
 		return NULL;
 	}
 

@@ -4,6 +4,9 @@
 #include "../vmobjects/VMClass.h"
 #include "Universe.h"
 
+//
+//the static global objects
+//
 VMObject* Globals::nilObject;
 VMObject* Globals::trueObject;
 VMObject* Globals::falseObject;
@@ -25,16 +28,26 @@ VMClass* Globals::systemClass;
 VMClass* Globals::blockClass;
 VMClass* Globals::doubleClass;
 
-void Globals::InitializeGlobals()
-{
+///
+//Call this method before using any of the globals or it will crash!
+//
+void Globals::InitializeGlobals() {
+    //
+    //allocate nil object
+    //
     nilObject = new (_HEAP) VMObject;
     nilObject->SetField(0, nilObject);
-    
+
+#ifdef __DEBUG
     cout << "We have a Nil object" << endl;
-    /*VMArray* vmo = new (heap, 4*sizeof(VMObject*)) VMArray(4);
-    VMMethod*/
+#endif __DEBUG
+
     metaClassClass = _UNIVERSE->NewMetaclassClass();
+
+#ifdef __DEBUG
     cout << "Metaclass Class created, creating System classes" << endl;
+#endif __DEBUG
+
     objectClass    = _UNIVERSE->NewSystemClass();
     nilClass       = _UNIVERSE->NewSystemClass();
     classClass     = _UNIVERSE->NewSystemClass();
@@ -47,11 +60,17 @@ void Globals::InitializeGlobals()
     primitiveClass = _UNIVERSE->NewSystemClass();
     stringClass    = _UNIVERSE->NewSystemClass();
     doubleClass    = _UNIVERSE->NewSystemClass();
+
+#ifdef __DEBUG
     cout << "System classes created" << endl;
+#endif __DEBUG
     
     nilObject->SetClass(nilClass);
 
+#ifdef __DEBUG
     cout << "Initialize System Classes" << endl;
+#endif __DEBUG
+
     _UNIVERSE->InitializeSystemClass(objectClass, NULL, "Object");
     _UNIVERSE->InitializeSystemClass(classClass, objectClass, "Class");
     _UNIVERSE->InitializeSystemClass(metaClassClass, classClass, "Metaclass");
@@ -68,8 +87,10 @@ void Globals::InitializeGlobals()
     _UNIVERSE->InitializeSystemClass(stringClass, objectClass, "String");
     _UNIVERSE->InitializeSystemClass(doubleClass, objectClass, "Double");
 
+#ifdef __DEBUG
     cout << "System classes initialized, now let's load them!"
             << endl;
+#endif __DEBUG
 
     _UNIVERSE->LoadSystemClass(objectClass);
     _UNIVERSE->LoadSystemClass(classClass);
@@ -85,16 +106,24 @@ void Globals::InitializeGlobals()
     _UNIVERSE->LoadSystemClass(stringClass);
     _UNIVERSE->LoadSystemClass(doubleClass);
 
+#ifdef __DEBUG
     cout << "YAY, the system classes are loaded" << endl;
-    
     cout << "loading block class" << endl;
+#endif __DEBUG
+
     blockClass = _UNIVERSE->LoadClass(_UNIVERSE->SymbolForChars("Block"));
-    
+
+#ifdef __DEBUG
     cout << "setting up true and false" << endl;
+#endif __DEBUG
+
     trueObject = _UNIVERSE->NewInstance(_UNIVERSE->LoadClass(_UNIVERSE->SymbolForChars("True")));
     falseObject = _UNIVERSE->NewInstance(_UNIVERSE->LoadClass(_UNIVERSE->SymbolForChars("False")));
 
+#ifdef __DEBUG
     cout << "load System" << endl;
+#endif __DEBUG
+
     systemClass = _UNIVERSE->LoadClass(_UNIVERSE->SymbolForChars("System"));
 }
 
