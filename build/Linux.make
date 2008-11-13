@@ -27,7 +27,7 @@
 # THE SOFTWARE.
 
 CC			=g++
-CFLAGS		=-O2 $(DBG_FLAGS) $(INCLUDES)
+CFLAGS		=-Wno-endif-labels -O2 $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
 
 INSTALL		=install
@@ -150,15 +150,15 @@ clean:
 $(CSOM_NAME): $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) loader
 	$(CC) $(LDFLAGS) \
-		-rdynamic -o $(CSOM_NAME) $(CSOM_OBJ) $(CSOM_LIBS) -ldl 
+		-o $(CSOM_NAME) $(CSOM_OBJ) $(CSOM_LIBS) -ldl
 	@echo CSOM done.
 
 CORE: $(CSOM_NAME) $(PRIMITIVES_OBJ)
 	@echo Linking SOMCore lib
-	$(CC) $(LDFLAGS) \
-		-rdynamic -o $(CORE_NAME).csp \
+	$(CC) $(LDFLAGS)  \
+		-shared -o $(CORE_NAME).csp \
 		$(PRIMITIVES_OBJ) \
-		$(CORE_LIBS)
+		$(CORE_LIBS) 
 	mv $(CORE_NAME).csp $(ST_DIR)
 	@touch CORE
 	@echo SOMCore done.
