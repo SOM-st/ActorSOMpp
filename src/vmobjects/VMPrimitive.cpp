@@ -22,7 +22,7 @@ VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
 {
     _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
     //the only class that explicitly does this.
-    this->SetClass(primitive_class);
+    this->SetClass(Globals::PrimitiveClass());
     this->empty = (bool*)_HEAP->Allocate(sizeof(bool));
     this->SetSignature(signature);
     this->routine = NULL;

@@ -26,26 +26,26 @@
 
 // Here we go:
 // externally refenced variables:
-VMObject* nil_object = NULL;
-VMObject* true_object = NULL;
-VMObject* false_object = NULL;
-
-VMClass* object_class = NULL;
-VMClass* class_class = NULL;
-VMClass* metaclass_class = NULL;
-
-VMClass* nil_class = NULL;
-VMClass* integer_class = NULL;
-VMClass* biginteger_class = NULL;
-VMClass* array_class = NULL;
-VMClass* method_class = NULL;
-VMClass* symbol_class = NULL;
-VMClass* frame_class = NULL;
-VMClass* primitive_class = NULL;
-VMClass* string_class = NULL;
-VMClass* system_class = NULL;
-VMClass* block_class = NULL;
-VMClass* double_class = NULL;
+//VMObject* Globals::NilObject() = NULL;
+//VMObject* Globals::TrueObject() = NULL;
+//VMObject* Globals::FalseObject() = NULL;
+//
+//VMClass* Globals::ObjectClass() = NULL;
+//VMClass* Globals::ClassClass() = NULL;
+//VMClass* Globals::MetaClassClass() = NULL;
+//
+//VMClass* Globals::NilClass() = NULL;
+//VMClass* Globals::IntegerClass() = NULL;
+//VMClass* Globals::BigIntegerClass() = NULL;
+//VMClass* Globals::ArrayClass() = NULL;
+//VMClass* Globals::MethodClass() = NULL;
+//VMClass* Globals::SymbolClass() = NULL;
+//VMClass* Globals::FrameClass() = NULL;
+//VMClass* Globals::PrimitiveClass()() = NULL;
+//VMClass* Globals::StringClass() = NULL;
+//VMClass* Globals::SystemClass() = NULL;
+//VMClass* Globals::BlockClass() = NULL;
+//VMClass* Globals::DoubleClass() = NULL;
 
 short dump_bytecodes;
 short gc_verbosity;
@@ -218,10 +218,10 @@ void Universe::printUsageAndExit( char* executable )
 Universe::Universe(){};
 
 
-void Universe::prepareNilObject()
-{
-    nil_object->SetField(0, nil_object);
-}
+//void Universe::prepareNilObject()
+//{
+//    Globals::NilObject().SetField(0, Globals::NilObject());
+//}
 
 
 void Universe::initialize(int _argc, char** _argv)
@@ -231,87 +231,25 @@ void Universe::initialize(int _argc, char** _argv)
     vector<pString> argv = this->handleArguments(_argc, _argv);
 
     cout << "Setting heap Size to: " << heapSize << endl;
-	heap = new Heap(heapSize);
+    Heap::InitializeHeap(heapSize);
+    heap = _HEAP;
+	//heap = new Heap(heapSize);
     symboltable = new Symboltable();
     compiler = new SourcecodeCompiler();
     interpreter = new Interpreter();
-	nil_object = new (heap) VMObject;
-    prepareNilObject();
-    cout << "We have a nil_object" << endl;
-    /*VMArray* vmo = new (heap, 4*sizeof(VMObject*)) VMArray(4);
-    VMMethod*/
-    metaclass_class = this->NewMetaclassClass();
-    cout << "Metaclass Class created, creating System classes" << endl;
-    object_class    = this->NewSystemClass();
-    nil_class       = this->NewSystemClass();
-    class_class     = this->NewSystemClass();
-    array_class     = this->NewSystemClass();
-    symbol_class    = this->NewSystemClass();
-    method_class    = this->NewSystemClass();
-    integer_class   = this->NewSystemClass();
-    biginteger_class= this->NewSystemClass();
-    frame_class     = this->NewSystemClass();
-    primitive_class = this->NewSystemClass();
-    string_class    = this->NewSystemClass();
-    double_class    = this->NewSystemClass();
-    cout << "System classes created" << endl;
     
-    nil_object->SetClass(nil_class);
+    //Allocate and initialize the global objects
+    Globals::InitializeGlobals();
 
-    cout << "Initialize System Classes" << endl;
-    this->InitializeSystemClass(object_class, NULL, "Object");
-    this->InitializeSystemClass(class_class, object_class, "Class");
-    this->InitializeSystemClass(metaclass_class, class_class, "Metaclass");
-    this->InitializeSystemClass(nil_class, object_class, "Nil");
-    this->InitializeSystemClass(array_class, object_class, "Array");
-    this->InitializeSystemClass(method_class, array_class, "Method");
-    this->InitializeSystemClass(symbol_class, object_class, "Symbol");
-    this->InitializeSystemClass(integer_class, object_class, "Integer");
-    this->InitializeSystemClass(biginteger_class, object_class,
-                                     "BigInteger");
-    this->InitializeSystemClass(frame_class, array_class, "Frame");
-    this->InitializeSystemClass(primitive_class, object_class,
-                                     "Primitive");
-    this->InitializeSystemClass(string_class, object_class, "String");
-    this->InitializeSystemClass(double_class, object_class, "Double");
-
-    cout << "System classes initialized, now let's load them!"
-            << endl;
-
-    this->LoadSystemClass(object_class);
-    this->LoadSystemClass(class_class);
-    this->LoadSystemClass(metaclass_class);
-    this->LoadSystemClass(nil_class);
-    this->LoadSystemClass(array_class);
-    this->LoadSystemClass(method_class);
-    this->LoadSystemClass(symbol_class);
-    this->LoadSystemClass(integer_class);
-    this->LoadSystemClass(biginteger_class);
-    this->LoadSystemClass(frame_class);
-    this->LoadSystemClass(primitive_class);
-    this->LoadSystemClass(string_class);
-    this->LoadSystemClass(double_class);
-
-    cout << "YAY, the system classes are loaded" << endl;
-    
-    cout << "loading block class" << endl;
-    block_class = LoadClass(SymbolForChars("Block"));
-    
-    cout << "setting up true and false" << endl;
-    true_object = NewInstance(LoadClass(SymbolForChars("True")));
-    false_object = NewInstance(LoadClass(SymbolForChars("False")));
-
-    cout << "load System" << endl;
-    system_class = LoadClass(SymbolForChars("System"));
-    VMObject* system_object = NewInstance(system_class);
+    VMObject* system_object = NewInstance(Globals::SystemClass());
 
     cout << "Set globals" << endl;
-    this->SetGlobal(SymbolForChars("nil"), nil_object);
-    this->SetGlobal(SymbolForChars("true"), true_object);
-    this->SetGlobal(SymbolForChars("false"), false_object);
+    this->SetGlobal(SymbolForChars("nil"), Globals::NilObject());
+    this->SetGlobal(SymbolForChars("true"), Globals::TrueObject());
+    this->SetGlobal(SymbolForChars("false"), Globals::FalseObject());
     this->SetGlobal(SymbolForChars("system"), system_object);
-    this->SetGlobal(SymbolForChars("System"), system_class);
-    this->SetGlobal(SymbolForChars("Block"), block_class);
+    this->SetGlobal(SymbolForChars("System"), Globals::SystemClass());
+    this->SetGlobal(SymbolForChars("Block"), Globals::BlockClass());
 
     cout << "Creating fake bootstrap method" << endl;
     
@@ -320,7 +258,7 @@ void Universe::initialize(int _argc, char** _argv)
     bootstrap_method->SetNumberOfLocals(0);
     //bootstrap_method->SetNumberOfArguments(0);
     bootstrap_method->SetMaximumNumberOfStackElements(2);
-    bootstrap_method->SetHolder(system_class);
+    bootstrap_method->SetHolder(Globals::SystemClass());
     cout << "Cheer!!! We can start the Interpreter now!" << endl;
 
     if (argv.size() == 0) 
@@ -344,7 +282,7 @@ void Universe::initialize(int _argc, char** _argv)
     bootstrap_frame->Push((VMObject*)arguments_array);
 
     VMInvokable* initialize = 
-        (VMInvokable*)system_class->LookupInvokable(this->SymbolForChars("initialize:"));
+        (VMInvokable*)Globals::SystemClass()->LookupInvokable(this->SymbolForChars("initialize:"));
     initialize->Invoke(bootstrap_frame);
     
     // reset "-d" indicator
@@ -367,7 +305,7 @@ Universe::~Universe()
     if (compiler) 
         delete(compiler);
     if (heap) 
-        delete(heap);
+        Heap::DestroyHeap();
     if (symboltable) 
         delete(symboltable);
 }
@@ -392,7 +330,7 @@ void Universe::Assert( bool value)
 
 VMClass* Universe::GetBlockClass()
 {
-    return block_class;
+    return Globals::BlockClass();
 }
 
 
@@ -447,7 +385,7 @@ void Universe::InitializeSystemClass( VMClass* system_class, VMClass* super_clas
         sys_class_class->SetSuperClass(super_class_class);
     } else {
         VMClass* sys_class_class = system_class->GetClass();
-        sys_class_class->SetSuperClass(class_class);
+        sys_class_class->SetSuperClass(Globals::ClassClass());
     }
 
     VMClass* sys_class_class = system_class->GetClass();
@@ -542,7 +480,7 @@ VMArray* Universe::NewArray( int size)
 {
     int additionalBytes = size*sizeof(VMObject*);
     VMArray* result = new (heap, additionalBytes) VMArray(size);
-    result->SetClass(array_class);
+    result->SetClass(Globals::ArrayClass());
     return result;
 }
 
@@ -582,7 +520,7 @@ VMArray* Universe::NewArrayList(pList& list )
 VMBigInteger* Universe::NewBigInteger( int64_t value)
 {
     VMBigInteger* result = new (heap) VMBigInteger(value);
-    result->SetClass(biginteger_class);
+    result->SetClass(Globals::BigIntegerClass());
 
     return result;
 }
@@ -617,7 +555,7 @@ VMClass* Universe::NewClass( VMClass* class_of_class)
 VMDouble* Universe::NewDouble( double value)
 {
     VMDouble* result = new (heap) VMDouble(value);
-    result->SetClass(double_class);
+    result->SetClass(Globals::DoubleClass());
     return result;
 }
 
@@ -630,7 +568,7 @@ VMFrame* Universe::NewFrame( VMFrame* previous_frame, VMMethod* method)
    
     int additionalBytes = length * sizeof(VMObject*);
     VMFrame* result = new (heap, additionalBytes) VMFrame(length);
-    result->SetClass(frame_class);
+    result->SetClass(Globals::FrameClass());
 
     result->SetMethod(method);
 
@@ -659,7 +597,7 @@ VMObject* Universe::NewInstance( VMClass*  class_of_instance)
 VMInteger* Universe::NewInteger( int32_t value)
 {
     VMInteger* result = new (heap) VMInteger(value);
-    result->SetClass(integer_class);
+    result->SetClass(Globals::IntegerClass());
     return result;
 }
 
@@ -683,7 +621,7 @@ VMMethod* Universe::NewMethod( VMSymbol* signature,
                 number_of_constants*sizeof(VMObject*);
     VMMethod* result = new (heap,additionalBytes) 
                 VMMethod(number_of_bytecodes, number_of_constants);
-    result->SetClass(method_class);
+    result->SetClass(Globals::MethodClass());
 
     result->SetSignature(signature);
 
@@ -696,7 +634,7 @@ VMString* Universe::NewString( const pString& str)
     //string needs space for str.length characters plus one byte for '\0'
     int additionalBytes = str.length() + 1;
     VMString* result = new (heap, additionalBytes) VMString(str);
-    result->SetClass(string_class);
+    result->SetClass(Globals::StringClass());
 
     return result;
 }
@@ -707,7 +645,7 @@ VMSymbol* Universe::NewSymbol( const pString& str )
     //symbol needs space for str.length characters plus one byte for '\0'
     int additionalBytes = str.length() + 1;
     VMSymbol* result = new (heap, additionalBytes) VMSymbol(str);
-    result->SetClass(symbol_class);
+    result->SetClass(Globals::SymbolClass());
 
     symboltable->insert(result);
 
@@ -722,7 +660,7 @@ VMClass* Universe::NewSystemClass()
     system_class->SetClass(new (heap) VMClass());
     VMClass* mclass = system_class->GetClass();
     
-    mclass->SetClass(metaclass_class);
+    mclass->SetClass(Globals::MetaClassClass());
 
     return system_class;
 }

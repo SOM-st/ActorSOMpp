@@ -11,6 +11,7 @@
 
 #include "../interpreter/Interpreter.h"
 #include "../memory/Heap.h"
+#include "Globals.h"
 
 class VMObject;
 class VMSymbol;
@@ -29,35 +30,13 @@ class SourcecodeCompiler;
 //Convenience macro for Singleton access
 #define _UNIVERSE Universe::GetUniverse()
 //macro to access the heap
-#define _HEAP Universe::GetUniverse()->GetHeap()
+#define _HEAP Heap::GetHeap()
 
 
-//global objects
-extern VMObject* nil_object;
-extern VMObject* true_object;
-extern VMObject* false_object;
-  
-extern VMClass* object_class;
-extern VMClass* class_class;
-extern VMClass* metaclass_class;
-  
-extern VMClass* nil_class;
-extern VMClass* integer_class;
-extern VMClass* biginteger_class;
-extern VMClass* array_class;
-extern VMClass* method_class;
-extern VMClass* symbol_class;
-extern VMClass* frame_class;
-extern VMClass* primitive_class;
-extern VMClass* string_class;
-extern VMClass* system_class;
-extern VMClass* block_class;
-extern VMClass* double_class;
 
 // for runtime debug
 extern short dump_bytecodes;
 extern short gc_verbosity;
-
 
 using namespace std;
 class Universe
@@ -127,7 +106,7 @@ private:
 
     void initialize(int, char**);
 
-    void prepareNilObject();
+    //void prepareNilObject();
 
 
     

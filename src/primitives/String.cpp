@@ -78,17 +78,17 @@ void  _String::Equal(VMObject* /*object*/, VMFrame* frame) {
     VMObject* op1 = frame->Pop();
     VMString* op2 = (VMString*)frame->Pop();
     
-    if(op1->GetClass() == string_class) {
+    if(op1->GetClass() == Globals::StringClass()) {
         
         pString s1 = ((VMString*)op1)->GetStdString();
         pString s2 = op2->GetStdString();
 
         if(s1 == s2) {
-            frame->Push(true_object);
+            frame->Push(Globals::TrueObject());
             return;
         }
     }
-    frame->Push(false_object);
+    frame->Push(Globals::FalseObject());
 }
 
 

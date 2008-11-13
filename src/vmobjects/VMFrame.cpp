@@ -56,13 +56,13 @@ void     VMFrame::SetPreviousFrame(VMObject* frm)
 
 void     VMFrame::ClearPreviousFrame()
 {
-    this->previous_frame = (VMFrame*)nil_object;
+    this->previous_frame = (VMFrame*)Globals::NilObject();
 }
 
 
 bool     VMFrame::HasPreviousFrame()
 {
-    return this->previous_frame != nil_object;
+    return this->previous_frame != Globals::NilObject();
 }
 
 
@@ -86,7 +86,7 @@ void     VMFrame::SetContext(VMFrame* frm)
 
 bool     VMFrame::HasContext()
 {
-    return this->context !=  nil_object; //nil_object;
+    return this->context !=  Globals::NilObject(); //Globals::NilObject();
 }
 
 
@@ -136,7 +136,7 @@ VMObject* VMFrame::Pop()
 {
     int32_t sp = this->stack_pointer->GetEmbeddedInteger();
     this->stack_pointer->SetEmbeddedInteger(sp-1);
-    return this->GetIndexableField(sp);
+    return (*this)[sp];
 }
 
 
@@ -153,12 +153,12 @@ void VMFrame::PrintStack()
     cout << "SP: " << this->stack_pointer->GetEmbeddedInteger() << endl;
     for (int i = 0; i < this->GetNumberOfIndexableFields()+1; ++i)
     {
-        VMObject* vmo = this->GetIndexableField(i);
+        VMObject* vmo = (*this)[i];
         cout << i << ": ";
         if (vmo == NULL) cout << "NULL" << endl;
-        if (vmo == nil_object) cout << "NIL_OBJECT" << endl;
+        if (vmo == Globals::NilObject()) cout << "NIL_OBJECT" << endl;
         if (vmo->GetClass() == NULL) cout << "VMObject with Class == NULL" << endl;
-        if (vmo->GetClass() == nil_object) cout << "VMObject with Class == NIL_OBJECT" << endl;
+        if (vmo->GetClass() == Globals::NilObject()) cout << "VMObject with Class == NIL_OBJECT" << endl;
         else cout << "index: " << i << " object:" << vmo->GetClass()->GetName()->GetChars() << endl;
     }
 }
@@ -193,7 +193,7 @@ void      VMFrame::SetBytecodeIndex(int index)
 VMObject* VMFrame::GetStackElement(int index)
 {
     int sp = this->stack_pointer->GetEmbeddedInteger();
-    return this->GetIndexableField(sp-index);
+    return (*this)[sp-index];
 }
 
 
@@ -208,7 +208,7 @@ VMObject* VMFrame::GetLocal(int index, int contextLevel)
 {
     VMFrame* context = this->GetContextLevel(contextLevel);
     int32_t lo = context->local_offset->GetEmbeddedInteger();
-    return context->GetIndexableField(lo + index);
+    return (*context)[lo+index];
 }
 
 
@@ -230,7 +230,7 @@ VMObject* VMFrame::GetArgument(int index, int contextLevel)
 {
     // get the context
     VMFrame* context = this->GetContextLevel(contextLevel);
-    return context->GetIndexableField(index);
+    return (*context)[index];
 }
 
 

@@ -39,7 +39,7 @@ void _Array::At_(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* index = (VMInteger*) frame->Pop();
     VMArray* self = (VMArray*) frame->Pop();
     int i = index->GetEmbeddedInteger();
-    VMObject* elem = self->GetIndexableField(i-1);
+    VMObject* elem = (*self)[i-1];//->GetIndexableField(i-1);
     frame->Push(elem);
 }
 

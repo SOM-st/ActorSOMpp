@@ -156,9 +156,9 @@ void  _BigInteger::Equal(VMObject* /*object*/, VMFrame* frame) {
     
     // Do operation:
     if(left->GetEmbeddedInteger() == right->GetEmbeddedInteger())
-        frame->Push(true_object);
+        frame->Push(Globals::TrueObject());
     else
-        frame->Push(false_object);
+        frame->Push(Globals::FalseObject());
 }
 
 
@@ -171,9 +171,9 @@ void  _BigInteger::Lowerthan(VMObject* /*object*/, VMFrame* frame) {
     
     // Do operation:
     if(left->GetEmbeddedInteger() < right->GetEmbeddedInteger())
-        frame->Push(true_object);
+        frame->Push(Globals::TrueObject());
     else
-        frame->Push(false_object);
+        frame->Push(Globals::FalseObject());
      
 }
 

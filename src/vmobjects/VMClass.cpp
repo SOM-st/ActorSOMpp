@@ -48,7 +48,7 @@ VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4)
 
 bool VMClass::HasSuperClass()
 {
-    return (super_class != NULL && super_class != nil_object);
+    return (super_class != NULL && super_class != Globals::NilObject());
 }
 
 
@@ -62,7 +62,7 @@ bool VMClass::AddInstanceInvokable(VMObject *ptr)
     }
 	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i)
 	{
-        VMInvokable* inv = dynamic_cast<VMInvokable*>( instance_invokables->GetIndexableField(i) );
+        VMInvokable* inv = dynamic_cast<VMInvokable*>( (*instance_invokables)[i] );
 		if (inv != 0)
         {
             if (newInvokable->GetSignature() == inv->GetSignature())
@@ -101,7 +101,7 @@ VMSymbol* VMClass::GetInstanceFieldName(int index)
 	if (index >= numberOfSuperInstanceFields())
 	{
 		index -= numberOfSuperInstanceFields();
-		return (VMSymbol*) instance_fields->GetIndexableField(index);
+		return (VMSymbol*) (*instance_fields)[index];
 	}
 	
 	return super_class->GetInstanceFieldName(index);
@@ -157,8 +157,8 @@ void      VMClass::SetInstanceInvokables(VMArray* invokables)
 
     for (int i = 0; i < this->GetNumberOfInstanceInvokables(); ++i)
     {
-        VMInvokable* inv = (VMInvokable*)instance_invokables->GetIndexableField(i);
-        if (inv != nil_object) 
+        VMInvokable* inv = (VMInvokable*)(*instance_invokables)[i];
+        if (inv != Globals::NilObject()) 
         {
             inv->SetHolder(this);
         }
@@ -175,7 +175,7 @@ int       VMClass::GetNumberOfInstanceInvokables()
 
 VMObject *VMClass::GetInstanceInvokable(int index)
 {
-    return instance_invokables->GetIndexableField(index);
+    return (*instance_invokables)[index];
 	//return instance_invokables[index];
 	//return NULL;
 }
@@ -184,7 +184,7 @@ VMObject *VMClass::GetInstanceInvokable(int index)
 void      VMClass::SetInstanceInvokable(int index, VMObject* invokable)
 {
 	instance_invokables->SetIndexableField(index, invokable);
-    if (invokable != nil_object)
+    if (invokable != Globals::NilObject())
     {
         VMInvokable* inv = (VMInvokable*) invokable;
         inv->SetHolder(this);

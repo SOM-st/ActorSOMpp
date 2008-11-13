@@ -63,7 +63,7 @@ void VMObject::SetNumberOfFields(int nof)
 
     for (int i = 0; i < nof ; ++i)
     {
-        this->SetField(i, nil_object);
+        this->SetField(i, Globals::NilObject());
     }
 }
 

@@ -65,7 +65,7 @@ VMClass* ClassGenerationContext::Assemble() {
     VMClass* super_class = _UNIVERSE->LoadClass(super_name);
     
     // Allocate the class of the resulting class
-    VMClass* result_class = _UNIVERSE->NewClass(metaclass_class);
+    VMClass* result_class = _UNIVERSE->NewClass(Globals::MetaClassClass());
 
     // Initialize the class of the resulting class
     result_class->SetInstanceFields(_UNIVERSE->NewArrayList(class_fields));

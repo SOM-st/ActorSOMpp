@@ -7,8 +7,6 @@
 #include "VMObject.h"
 #include "VMInteger.h"
 
-
-//template <class T>
 class VMArray : public VMObject
 {
 public:
@@ -17,24 +15,19 @@ public:
 	virtual void MarkReferences();
 
 	void        SetIndexableField(int idx, VMObject* item);
-	VMObject*   GetIndexableField(int idx);
+	
 	int         GetNumberOfIndexableFields();
 	VMArray*    CopyAndExtendWith(VMObject*);
 	void        CopyIndexableFieldsTo(VMArray*);
 
 	VMObject* operator[](int idx)
 	{
-		if (idx > size->GetEmbeddedInteger() - 1) 
-        {
-            cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
-            cout << " entries available\n";
-            _UNIVERSE->ErrorExit("Array index out of bounds exception");
-            //throw std::bad_exception();
-        }
 		return GetIndexableField(idx);
 	}
 
 private:
+    VMObject*   GetIndexableField(int idx);
+
 	VMInteger* size;
 };
 

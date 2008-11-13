@@ -5,6 +5,33 @@
 #include "Heap.h"
 
 #include "../vmobjects/VMObject.h"
+#include "../vm/Universe.h"
+
+Heap* Heap::theHeap = NULL;
+
+Heap* Heap::GetHeap()
+{
+    if (!theHeap) {
+        _UNIVERSE->ErrorExit("Trying to access uninitialized Heap");
+    }
+    return theHeap;
+}
+
+void Heap::InitializeHeap( int objectSpaceSize )
+{
+    if (theHeap)
+    {
+        cout << "Warning, reinitializing already initialized Heap, all data will be lost!" << endl;
+        delete theHeap;
+    }
+    theHeap = new Heap(objectSpaceSize);
+}
+
+void Heap::DestroyHeap()
+{
+    if (theHeap) delete theHeap;
+}
+
 
 
 Heap::Heap(int object_space_size)// : globals(INT32_MAX)

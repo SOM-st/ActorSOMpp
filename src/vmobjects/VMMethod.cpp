@@ -27,7 +27,7 @@ VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokabl
     size = _UNIVERSE->NewInteger(number_of_constants);
     for (int i = 0; i < number_of_constants ; ++i)
     {
-        this->SetIndexableField(i, nil_object);
+        this->SetIndexableField(i, Globals::NilObject());
     }
     _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }

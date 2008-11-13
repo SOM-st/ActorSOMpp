@@ -55,7 +55,7 @@ _System* System_;
     frame->Pop();
     VMObject* result = _UNIVERSE->GetGlobal(arg);
     
-    frame->Push( result ? result:nil_object);    
+    frame->Push( result ? result : Globals::NilObject());    
 }
 
 
@@ -72,7 +72,7 @@ void  _System::Load_(VMObject* /*object*/, VMFrame* frame) {
     frame->Pop();
     VMClass* result = _UNIVERSE->LoadClass(arg);
 
-    frame->Push( result? (VMObject*)result: nil_object);
+    frame->Push( result? (VMObject*)result : Globals::NilObject());
 }
 
 

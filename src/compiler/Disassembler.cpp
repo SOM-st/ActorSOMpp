@@ -33,30 +33,30 @@ void Disassembler::dispatch(VMObject* o) {
     //dispatch
     // can't switch() objects, so:
     if(!o) return; // NULL isn't interesting.
-    else if(o == nil_object)
+    else if(o == Globals::NilObject())
         debug_print("{Nil}");
-    else if(o == true_object)
+    else if(o == Globals::TrueObject())
         debug_print("{True}");
-    else if(o == false_object)
+    else if(o == Globals::FalseObject())
         debug_print("{False}"); 
-    else if((VMClass*)o == system_class)
+    else if((VMClass*)o == Globals::SystemClass())
         debug_print("{System Class object}");
-    else if((VMClass*)o == block_class)
+    else if((VMClass*)o == Globals::BlockClass())
         debug_print("{Block Class object}");
     else if(o == _UNIVERSE->GetGlobal(_UNIVERSE->SymbolForChars("system")))
         debug_print("{System}");
     else {
         VMClass* c = o->GetClass();
-        if(c == string_class) {
+        if(c == Globals::StringClass()) {
             //pString s = ((VMString*)o)->GetStdString();
             debug_print("\"%s\"", ((VMString*)o)->GetChars());
-        } else if(c == double_class)
+        } else if(c == Globals::DoubleClass())
             debug_print("%g", ((VMDouble*)o)->GetEmbeddedDouble());
-        else if(c == biginteger_class)
+        else if(c == Globals::BigIntegerClass())
             debug_print("%lld", ((VMBigInteger*)o)->GetEmbeddedInteger());
-        else if(c == integer_class)
+        else if(c == Globals::IntegerClass())
             debug_print("%d", ((VMInteger*)o)->GetEmbeddedInteger());
-        else if(c == symbol_class) {
+        else if(c == Globals::SymbolClass()) {
             debug_print("#%s", ((VMSymbol*)o)->GetChars());
         } else
             debug_print("address: %p", (void*)o);
@@ -88,9 +88,9 @@ void Disassembler::Dump(VMClass* cl) {
 /**
  * Bytecode Index Accessor macros
  */
-#define BC_0 method->GetBytecode(bc_idx)
-#define BC_1 method->GetBytecode(bc_idx+1)
-#define BC_2 method->GetBytecode(bc_idx+2)
+#define BC_0 (*method)[bc_idx]
+#define BC_1 (*method)[bc_idx+1]
+#define BC_2 (*method)[bc_idx+2]
 
 
 /**
@@ -107,14 +107,14 @@ void Disassembler::DumpMethod(VMMethod* method, const char* indent) {
     cout << "bytecodes: ";
       for (int i = 0; i < method->GetNumberOfBytecodes(); ++i)
     {
-        cout  << (int)method->GetBytecode(i)<< " ";
+        cout  << (int)(*method)[i] << " ";
     }
     cout << endl;
 #endif
     // output bytecodes
     for(int bc_idx = 0; 
         bc_idx < method->GetNumberOfBytecodes(); 
-        bc_idx += Bytecode::GetBytecodeLength(method->GetBytecode(bc_idx))
+        bc_idx += Bytecode::GetBytecodeLength((*method)[bc_idx])
     ) {
         // the bytecode.
         uint8_t bytecode = BC_0;
@@ -350,7 +350,7 @@ void Disassembler::DumpBytecode(VMFrame* frame, VMMethod* method, int bc_idx) {
         }
         case BC_POP: {
             size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
-            VMObject* o = ((VMArray*)frame)->GetIndexableField(sp);
+            VMObject* o = (*(VMArray*)frame)[sp];//->GetIndexableField(sp);
             VMClass* c = o->GetClass();
             VMSymbol* cname = c->GetName();
             //pString s_cname = SEND(cname, get_string);
@@ -362,7 +362,7 @@ void Disassembler::DumpBytecode(VMFrame* frame, VMMethod* method, int bc_idx) {
         }            
         case BC_POP_LOCAL: {
             size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
-            VMObject* o = ((VMArray*)frame)->GetIndexableField(sp);
+            VMObject* o = (*(VMArray*)frame)[sp];//->GetIndexableField(sp);
             VMClass* c = o->GetClass();
             VMSymbol* cname = c->GetName();
             //pString s_cname = SEND(cname, get_string);
@@ -375,7 +375,7 @@ void Disassembler::DumpBytecode(VMFrame* frame, VMMethod* method, int bc_idx) {
         }
         case BC_POP_ARGUMENT: {
             size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
-            VMObject* o = ((VMArray*)frame)->GetIndexableField(sp);
+            VMObject* o = (*(VMArray*)frame)[sp];//->GetIndexableField(sp);
             VMClass* c = o->GetClass();
             VMSymbol* cname = c->GetName();
             debug_print("argument: %d, context: %d <(%s) ", BC_1, BC_2,
@@ -387,7 +387,7 @@ void Disassembler::DumpBytecode(VMFrame* frame, VMMethod* method, int bc_idx) {
         }
         case BC_POP_FIELD: {
             size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
-            VMObject* o = ((VMArray*)frame)->GetIndexableField(sp);
+            VMObject* o = (*(VMArray*)frame)[sp];//->GetIndexableField(sp);
             VMSymbol* name = (VMSymbol*)(method->GetConstant(bc_idx));
             VMClass* c = o->GetClass();
             VMSymbol* cname = c->GetName();

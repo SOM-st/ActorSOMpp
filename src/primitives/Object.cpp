@@ -38,7 +38,7 @@ void  _Object::Equalequal(VMObject* /*object*/, VMFrame* frame) {
     VMObject* op1 = frame->Pop();
     VMObject* op2 = frame->Pop();
     
-    frame->Push( op1 == op2 ? true_object : false_object );
+    frame->Push( op1 == op2 ? Globals::TrueObject() : Globals::FalseObject() );
 }
 
 

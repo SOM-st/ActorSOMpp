@@ -234,21 +234,21 @@ void  _Integer::Equal(VMObject* object, VMFrame* frame) {
         
         if(left->GetEmbeddedInteger()
             == right->GetEmbeddedInteger())
-            frame->Push(true_object);
+            frame->Push(Globals::TrueObject());
         else
-            frame->Push(false_object);
+            frame->Push(Globals::FalseObject());
     } else if(dynamic_cast<VMDouble*>(rightObj) != NULL) {
         // Second operand was Double:
         VMDouble* right = (VMDouble*)rightObj;
         
         if((double)left->GetEmbeddedInteger()
             == right->GetEmbeddedDouble())
-            frame->Push(true_object);
+            frame->Push(Globals::TrueObject());
         else
-            frame->Push(false_object);
+            frame->Push(Globals::FalseObject());
     }
     else
-        frame->Push(false_object);
+        frame->Push(Globals::FalseObject());
 }
 
 
@@ -261,9 +261,9 @@ void  _Integer::Lowerthan(VMObject* object, VMFrame* frame) {
     VMInteger* right = (VMInteger*)rightObj;
     
     if(left->GetEmbeddedInteger() < right->GetEmbeddedInteger())
-        frame->Push(true_object);
+        frame->Push(Globals::TrueObject());
     else
-        frame->Push(false_object);
+        frame->Push(Globals::FalseObject());
 }
 
 

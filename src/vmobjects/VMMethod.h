@@ -36,12 +36,21 @@ public:
 
     //VMArray Methods....
     void        SetIndexableField(int idx, VMObject* item);
-	VMObject*   GetIndexableField(int idx);
+	
 	int         GetNumberOfIndexableFields();
 	VMArray*    CopyAndExtendWith(VMObject*);
 	void        CopyIndexableFieldsTo(VMArray*);
 
+    /// Methods are considered byte arrays with meta data.
+    // So the index operator returns the bytecode at the index.
+    uint8_t operator[](int idx)
+	{
+		return GetBytecode(idx);
+	}
+
 private:
+    VMObject*   GetIndexableField(int idx);
+
     VMInteger* size;
     VMInteger* number_of_locals;
     VMInteger* maximum_number_of_stack_elements;

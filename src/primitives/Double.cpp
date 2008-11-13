@@ -115,18 +115,18 @@ void  _Double::And(VMObject* /*object*/, VMFrame* frame) {
 void  _Double::Equal(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     if(left == right)
-        frame->Push(true_object);
+        frame->Push(Globals::TrueObject());
     else
-        frame->Push(false_object);
+        frame->Push(Globals::FalseObject());
 }
 
 
 void  _Double::Lowerthan(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
     if(left < right)
-        frame->Push(true_object);
+        frame->Push(Globals::TrueObject());
     else
-        frame->Push(false_object);
+        frame->Push(Globals::FalseObject());
 }
 
 

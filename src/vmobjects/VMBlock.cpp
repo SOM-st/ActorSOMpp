@@ -8,8 +8,8 @@
 VMBlock::VMBlock() : VMObject(2)
 {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
-     blockMethod = (VMMethod*) nil_object;
-     context = (VMFrame*) nil_object;
+     blockMethod = (VMMethod*) Globals::NilObject();
+     context = (VMFrame*) Globals::NilObject();
 }
 
 

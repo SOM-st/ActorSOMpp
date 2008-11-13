@@ -44,7 +44,7 @@ void Interpreter::Start()
         int bytecode_index = _FRAME->GetBytecodeIndex();
 
         VMMethod* method = this->GetMethod();
-        uint8_t bytecode = method->GetBytecode(bytecode_index);
+        uint8_t bytecode = (*method)[bytecode_index];
 
         int bytecode_length = Bytecode::GetBytecodeLength(bytecode);
 
@@ -108,7 +108,7 @@ VMMethod* Interpreter::GetMethod()
    /* cout << "bytecodes: ";
       for (int i = 0; i < method->BytecodeLength(); ++i)
     {
-        cout  << (int)method->GetBytecode(i)<< " ";
+        cout  << (int)(*method)[i] << " ";
     }
     cout << endl;*/
     return method;
@@ -194,8 +194,8 @@ void Interpreter::do_dup()
 void Interpreter::do_push_local( int bytecode_index )
 {
     VMMethod* method = _METHOD;
-    uint8_t bc1 = method->GetBytecode(bytecode_index + 1);
-    uint8_t bc2 = method->GetBytecode(bytecode_index + 2);
+    uint8_t bc1 = (*method)[bytecode_index + 1];
+    uint8_t bc2 = (*method)[bytecode_index + 2];
 
     VMObject* local = _FRAME->GetLocal(bc1, bc2);
 
@@ -206,8 +206,8 @@ void Interpreter::do_push_local( int bytecode_index )
 void Interpreter::do_push_argument( int bytecode_index )
 {
     VMMethod* method = _METHOD;
-    uint8_t bc1 = method->GetBytecode(bytecode_index + 1);
-    uint8_t bc2 = method->GetBytecode(bytecode_index + 2);
+    uint8_t bc1 = (*method)[bytecode_index + 1];
+    uint8_t bc2 = (*method)[bytecode_index + 2];
 
     VMObject* argument = _FRAME->GetArgument(bc1, bc2);
 
@@ -295,8 +295,8 @@ void Interpreter::do_pop_local( int bytecode_index )
 {
     VMMethod* method = _METHOD;
 
-    uint8_t bc1 = method->GetBytecode(bytecode_index +1);
-    uint8_t bc2 = method->GetBytecode(bytecode_index +2);
+    uint8_t bc1 = (*method)[bytecode_index + 1];
+    uint8_t bc2 = (*method)[bytecode_index + 2];
 
     VMObject* o = _FRAME->Pop();
 
@@ -308,8 +308,8 @@ void Interpreter::do_pop_argument( int bytecode_index )
 {
     VMMethod* method = _METHOD;
 
-    uint8_t bc1 = method->GetBytecode(bytecode_index +1);
-    uint8_t bc2 = method->GetBytecode(bytecode_index +2);
+    uint8_t bc1 = (*method)[bytecode_index + 1];
+    uint8_t bc2 = (*method)[bytecode_index + 2];
 
     VMObject* o = _FRAME->Pop();
     _FRAME->SetArgument(bc1, bc2, o);

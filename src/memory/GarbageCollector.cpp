@@ -115,12 +115,10 @@ void GarbageCollector::markReachableObjects()
 {
 	map<pString, VMObject*> globals = Universe::GetUniverse()->GetGlobals();
 
-	
 	for (map<pString, VMObject*>::iterator it = globals.begin(); it!= globals.end(); ++it)
 	{
 		markObject(&(*it->second));
 	}
-
     // Get the current frame and mark it.
 	// Since marking is done recursively, this automatically
 	// marks the whole stack

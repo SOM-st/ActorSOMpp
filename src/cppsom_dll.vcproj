@@ -188,6 +188,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\vm\Globals.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\memory\Heap.cpp"
 				>
 			</File>
@@ -331,6 +335,10 @@
 			</File>
 			<File
 				RelativePath=".\misc\gettimeofday.h"
+				>
+			</File>
+			<File
+				RelativePath=".\vm\Globals.h"
 				>
 			</File>
 			<File

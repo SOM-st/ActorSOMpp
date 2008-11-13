@@ -13,7 +13,7 @@ VMArray::VMArray(int size, int nof) : VMObject(nof+1)
 
     for (int i = 0; i < size ; ++i)
     {
-        this->SetIndexableField(i, nil_object);
+        this->SetIndexableField(i, Globals::NilObject());
     }
     _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 	//objectSize += size * sizeof(VMObject*); //calculate actual object size including the entries
@@ -47,7 +47,7 @@ void VMArray::CopyIndexableFieldsTo(VMArray* to)
 {
 	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i)
 	{
-        to->SetIndexableField(i, this->GetIndexableField(i));
+        to->SetIndexableField(i, (*this)[i]);
 	}
 	
 }

@@ -22,6 +22,9 @@ class Heap
 	friend class GarbageCollector;
 
 public:
+    static Heap* GetHeap();
+    static void InitializeHeap(int objectSpaceSize = 1048576);
+    static void DestroyHeap();
 	Heap(int object_space_size = 1048576);
 	~Heap();
     VMObject* AllocateObject(size_t size);
@@ -35,6 +38,8 @@ public:
 	//void SetGlobal(pString name, void* val);
     
 private:
+    static Heap* theHeap;
+
     void internalFree(void* ptr);
 	void* internalAllocate(size_t size);
 
