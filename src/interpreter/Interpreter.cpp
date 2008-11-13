@@ -167,6 +167,18 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
             arguments_array->SetIndexableField(i, o);
         }
         VMObject* arguments[] = { (VMObject*)signature, (VMObject*) arguments_array };
+
+        //check if current frame is big enough for this unplanned Send
+        //doesNotUnderstand: needs 3 slots, one for this, one for method name, one for args
+        int additionalStackSlots = 3 - _FRAME->RemainingStackSize();       
+        if (additionalStackSlots > 0) {
+            cout << "Creating emergeny frame for doesNotUnderstand:arguments: with " 
+                 << additionalStackSlots << " additional stack slots to prevent stack overflow" 
+                 << endl;
+            //copy current frame into a bigger one and replace the current frame
+            this->SetFrame(VMFrame::EmergencyFrameFrom(_FRAME, additionalStackSlots));
+        }
+
         receiver->Send(dnu, arguments, 2);
     }
 }
@@ -257,6 +269,17 @@ void Interpreter::do_push_global( int bytecode_index)
     else {
         VMObject* arguments[] = { (VMObject*) global_name };
         VMObject* self = _SELF;
+
+        //check if there is enough space on the stack for this unplanned Send
+        //unknowGlobal: needs 2 slots, one for "this" and one for the argument
+        int additionalStackSlots = 2 - _FRAME->RemainingStackSize();       
+        if (additionalStackSlots > 0) {
+            cout << "Creating emergeny frame for unknownGlobal: with " << additionalStackSlots
+                 << " additional stack slots to prevent stack overflow" << endl;
+            //copy current frame into a bigger one and replace the current frame
+            this->SetFrame(VMFrame::EmergencyFrameFrom(_FRAME, additionalStackSlots));
+        }
+
         self->Send(uG, arguments, 1);
     }
 }

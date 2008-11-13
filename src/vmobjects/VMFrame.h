@@ -13,6 +13,8 @@ class VMInteger;
 class VMFrame : public VMArray
 {
 public:
+    static VMFrame* EmergencyFrameFrom(VMFrame* from, int extraLength);
+
     VMFrame(int size, int nof = 0);
     //virtual ~VMFrame();
 
@@ -46,6 +48,7 @@ public:
     virtual void       MarkReferences();
     virtual void       PrintStack();
     virtual VMInteger* GetStackPointer();
+    virtual int        RemainingStackSize();
 private:
 #define FRAME_NUMBER_OF_FIELDS 6
     VMFrame*   previous_frame;

@@ -32,6 +32,7 @@ public:
     virtual void      SetBytecode(int indx, uint8_t); 
 	virtual void	  Invoke(VMFrame* frame);
 	virtual void      MarkReferences();
+	virtual void      SetSignature(VMSymbol* sig);
 
     //VMArray Methods....
     void        SetIndexableField(int idx, VMObject* item);

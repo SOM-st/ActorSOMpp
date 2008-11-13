@@ -7,6 +7,7 @@
 #include "VMArray.h"
 #include "VMObject.h"
 #include "VMInteger.h"
+#include "Signature.h"
 
 //this method's bytecodes
 #define _BC ((uint8_t*)&FIELDS[this->GetNumberOfFields() + this->GetNumberOfIndexableFields()])
@@ -31,6 +32,12 @@ VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokabl
     _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }
 
+void      VMMethod::SetSignature(VMSymbol* sig) 
+{ 
+    VMInvokable::SetSignature(sig);
+    
+    SetNumberOfArguments(Signature::GetNumberOfArguments(signature));
+}
 
 void VMMethod::MarkReferences()
 {

@@ -2,7 +2,7 @@
 
 #include "VMSymbol.h"
 #include "VMClass.h"
-#include "Signature.h"
+
 #include "VMMethod.h"
 
 
@@ -20,9 +20,6 @@ VMSymbol *VMInvokable::GetSignature() {
 void      VMInvokable::SetSignature(VMSymbol* sig) 
 { 
     signature = sig;
-    
-    if (!IsPrimitive()) 
-        ((VMMethod*)this)->SetNumberOfArguments(Signature::GetNumberOfArguments(signature));
 }
 
 

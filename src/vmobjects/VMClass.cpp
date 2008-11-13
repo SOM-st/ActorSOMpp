@@ -18,8 +18,8 @@
 #   define dlerror()   "Load Error"
 #   define dlsym       GetProcAddress
 #   define DL_LOADMODE NULL, LOAD_WITH_ALTERED_SEARCH_PATH
-#   define dlopen      LoadLibraryEx
-#   define dlclose     CloseHandle
+#   define dlopen      LoadLibrary
+#   define dlclose     FreeLibrary
 //#   include <windows.h> //included in VMClass.h if necessary
 #endif
 
@@ -270,7 +270,7 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
             //Where / How is this done in CSOM?????????
             Setup* setup = (Setup*) dlsym(dlhandle, "setup");
             const char* dlsym_error = dlerror();
-            if (dlsym_error) {
+            if (!setup) {
                 cerr << "Cannot load Core library: " << dlsym_error << '\n';
                 dlclose(dlhandle);
                 _UNIVERSE->ErrorExit("Core library does not define the setup() initializer.");
@@ -296,7 +296,7 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
                 //
                 Setup* setup = (Setup*) dlsym(dlhandle, "setup");
                 const char* dlsym_error = dlerror();
-                if (dlsym_error)
+                if (!setup)
                 {
                     cerr << "Cannot load symbol \"setup\": " << dlsym_error << '\n';
                     dlclose(dlhandle);
@@ -428,7 +428,7 @@ HMODULE VMClass::loadLib(const pString& path)
     int length = MultiByteToWideChar(CP_ACP,0,filename ,strlen(filename)+1,NULL,0);
     LPWSTR buffer = (LPWSTR)malloc(sizeof(WCHAR)*length);
     MultiByteToWideChar(CP_ACP,0,filename ,strlen(filename)+1,buffer,length);
-    if((dlhandle=dlopen(buffer, DL_LOADMODE)))
+    if((dlhandle=dlopen(buffer)))
     {
         free(buffer);
 #endif
@@ -466,6 +466,23 @@ bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl)
 
 	if(!supports_class)
     {
+        /*LPTSTR pszMessage;
+        DWORD dwLastError = GetLastError(); 
+
+        FormatMessage(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+            FORMAT_MESSAGE_FROM_SYSTEM |
+            FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            dwLastError,
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+            (LPTSTR)&pszMessage,
+            0, NULL );
+
+        wprintf(L"failed with error %d: %s\n", dwLastError, pszMessage);
+
+        LocalFree(pszMessage);*/
+    
         _UNIVERSE->ErrorExit("Library doesn't have expected format");
     }
     

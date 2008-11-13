@@ -1,0 +1,8 @@
+LIBRARY	"SOMCore"
+
+EXPORTS
+    supports_class
+    setup
+    tearDown
+    create
+    destroy

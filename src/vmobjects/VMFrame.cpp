@@ -6,13 +6,34 @@
 #include "VMSymbol.h"
 #include "../vm/Universe.h"
 
+VMFrame* VMFrame::EmergencyFrameFrom( VMFrame* from, int extraLength )
+{
+    int length = from->GetNumberOfIndexableFields() + extraLength;
+    int additionalBytes = length * sizeof(VMObject*);
+    VMFrame* result = new (_HEAP, additionalBytes) VMFrame(length);
+    
+    result->SetClass(from->GetClass());
+    //copy arguments, locals and the stack
+    from->CopyIndexableFieldsTo(result);
+
+    //set Frame members
+    result->SetPreviousFrame(from->GetPreviousFrame());
+    result->SetMethod(from->GetMethod());
+    result->SetContext(from->GetContext());
+    result->stack_pointer = from->GetStackPointer();
+    result->bytecode_index = from->bytecode_index;
+    result->local_offset = from->local_offset;
+
+    return result;
+}
+
 
 VMFrame::VMFrame(int size, int nof) : VMArray(size, nof + FRAME_NUMBER_OF_FIELDS)
 {
     _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
-    this->local_offset = new (_HEAP) VMInteger(0);
-    this->bytecode_index = new (_HEAP) VMInteger(0);
-    this->stack_pointer = new (_HEAP) VMInteger(0);
+    this->local_offset = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
+    this->bytecode_index = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
+    this->stack_pointer = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
     _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
 }
 //
@@ -104,6 +125,12 @@ void      VMFrame::SetMethod(VMMethod* method)
     this->method = method;
 }
 
+int VMFrame::RemainingStackSize()
+{
+    // - 1 because the stack pointer points at the top entry,
+    // so the next entry would be put at stack_pointer+1
+    return this->GetNumberOfIndexableFields() - stack_pointer->GetEmbeddedInteger() - 1;
+}
 
 VMObject* VMFrame::Pop()
 {

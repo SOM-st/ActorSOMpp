@@ -626,15 +626,8 @@ VMFrame* Universe::NewFrame( VMFrame* previous_frame, VMMethod* method)
 {
     int length = method->GetNumberOfArguments() +
                  method->GetNumberOfLocals()+
-                 method->GetMaximumNumberOfStackElements() + 1; 
-    //HACK: don't know why this +1 has to be there, but without it there is a problem
-    //when unknownGlobal: is generated.
-    //... do_push_global does not use the same amount of stack-slots every time, but
-    //this is not taken into account in MethodGenerationContext::CalculateStackDepth().
-    //If the global already exists it needs one slot for the global,
-    //but when unknownGlobal: is generated it needs two slots for sending the method.
-    //Why does it work in CSOM?
-
+                 method->GetMaximumNumberOfStackElements(); 
+   
     int additionalBytes = length * sizeof(VMObject*);
     VMFrame* result = new (heap, additionalBytes) VMFrame(length);
     result->SetClass(frame_class);
