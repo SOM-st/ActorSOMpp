@@ -34,9 +34,10 @@ class VMFrame;
 
 #include "Primitive.h"
 
-class _BigInteger : Primitive
+class _BigInteger : public Primitive
 {
 public:
+    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
     void  Plus(VMObject* object, VMFrame* frame);
     void  Minus(VMObject* object, VMFrame* frame);
     void  Star(VMObject* object, VMFrame* frame);

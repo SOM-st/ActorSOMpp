@@ -258,6 +258,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Double.h"
 				>
 			</File>

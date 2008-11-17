@@ -31,14 +31,27 @@ THE SOFTWARE.
 #include "../vmobjects/VMSymbol.h"
 
 #include "../vm/Universe.h"
-
+#include "Routine.h"
 #include "Symbol.h"
-
+#include "Core.h"
 _Symbol* Symbol;
 
 void  _Symbol::AsString(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* sym = (VMSymbol*) frame->Pop();
 
     pString str = sym->GetStdString();
-    frame->Push((VMObject*)_UNIVERSE->NewString(str));
+    frame->Push((VMObject*)universe->NewString(str));
 }
+
+PrimitiveRoutine* _Symbol::GetRoutine( const pString& routineName )
+{
+    PrimitiveRoutine* result;
+    if (routineName == pString("AsString"))
+        result = new (heap) Routine<_Symbol>(Symbol, &_Symbol::AsString);
+   else {
+        cout << "method " << routineName << "not found in class Symbol" << endl;
+        return NULL;
+    }
+   return result;
+}
+

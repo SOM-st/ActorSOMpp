@@ -28,8 +28,8 @@ THE SOFTWARE.
 #include "../vmobjects/VMFrame.h"
 
 #include "../vm/Universe.h"
-
-
+#include "Core.h"
+#include "Routine.h"
 #include "Object.h"
 
 _Object* Object;
@@ -45,11 +45,28 @@ void  _Object::Equalequal(VMObject* /*object*/, VMFrame* frame) {
 void  _Object::ObjectSize(VMObject* /*object*/, VMFrame* frame) {
     VMObject* self = frame->Pop();
 
-    frame->Push( (VMObject*)_UNIVERSE->NewInteger(self->GetObjectSize()) );
+    frame->Push( (VMObject*)universe->NewInteger(self->GetObjectSize()) );
 }
 
 
 void  _Object::Hashcode(VMObject* /*object*/, VMFrame* frame) {
     VMObject* self = frame->Pop();
-    frame->Push( (VMObject*)_UNIVERSE->NewInteger(self->GetHash()) );
+    frame->Push( (VMObject*)universe->NewInteger(self->GetHash()) );
 }
+
+PrimitiveRoutine* _Object::GetRoutine( const pString& routineName )
+{
+    PrimitiveRoutine* result;
+    if (routineName == pString("Equalequal"))
+        result = new (heap) Routine<_Object>(Object, &_Object::Equalequal);
+    else if (routineName == pString("ObjectSize"))
+        result = new (heap) Routine<_Object>(Object, &_Object::ObjectSize);
+    else if (routineName == pString("Hashcode"))
+        result = new (heap) Routine<_Object>(Object, &_Object::Hashcode);
+    else {
+        cout << "method " << routineName << " not found in class Object" << endl;
+        return NULL;
+    }
+    return result;
+}
+

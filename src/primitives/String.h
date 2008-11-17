@@ -32,9 +32,11 @@ THE SOFTWARE.
 class VMObject;
 class VMFrame;
 #include "Primitive.h"
-class _String : Primitive
+ 
+class _String : public Primitive
 {
 public:
+    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
     void  Concatenate_(VMObject* object, VMFrame* frame);
     void  AsSymbol(VMObject* object, VMFrame* frame);
     void  Hashcode(VMObject* object, VMFrame* frame);

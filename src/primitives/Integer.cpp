@@ -38,9 +38,9 @@ THE SOFTWARE.
 #include "../vmobjects/VMBigInteger.h"
 
 #include "../vm/Universe.h"
-
+#include "Core.h"
 #include "Integer.h"
-
+#include "Routine.h"
 _Integer* Integer;
 
 /*
@@ -72,9 +72,9 @@ void _Integer::pushResult(VMObject* /*object*/, VMFrame* frame,
     int32_t i32min = INT32_MIN;
     // Check with integer bounds and push:
     if(result > INT32_MAX || result < i32min)
-        frame->Push((VMObject*)_UNIVERSE->NewBigInteger(result));
+        frame->Push((VMObject*)universe->NewBigInteger(result));
     else
-        frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)result));
+        frame->Push((VMObject*)universe->NewInteger((int32_t)result));
 }
 
 
@@ -83,7 +83,7 @@ void _Integer::resendAsBigInteger(VMObject* /*object*/,
                                   VMInteger* left, VMBigInteger* right) {
     // Construct left value as BigInteger:
     VMBigInteger* leftBigInteger = 
-        _UNIVERSE->NewBigInteger((int64_t)left->GetEmbeddedInteger());
+        universe->NewBigInteger((int64_t)left->GetEmbeddedInteger());
     
     // Resend message:
     VMObject* operands[] = { (VMObject*)right };
@@ -99,7 +99,7 @@ void _Integer::resendAsDouble(VMObject* /*object*/, const char* op,
     VMInteger* left, VMDouble* right
 ) {
     VMDouble* leftDouble =
-        _UNIVERSE->NewDouble((double)left->GetEmbeddedInteger());
+        universe->NewDouble((double)left->GetEmbeddedInteger());
     VMObject* operands[] = { (VMObject*)right };
     pString ops = pString(op);
     leftDouble->Send(ops, operands, 1);
@@ -173,7 +173,7 @@ void  _Integer::Slashslash(VMObject* object, VMFrame* frame) {
     
     double result = (double)left->GetEmbeddedInteger() /
         (double)right->GetEmbeddedInteger();
-    frame->Push(_UNIVERSE->NewDouble(result));
+    frame->Push(universe->NewDouble(result));
 }
 
 
@@ -274,19 +274,54 @@ void  _Integer::AsString(VMObject* /*object*/, VMFrame* frame) {
     int32_t integer = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << integer;
-    frame->Push( (VMObject*)_UNIVERSE->NewString( pString(Str.str()) ) );   
+    frame->Push( (VMObject*)universe->NewString( pString(Str.str()) ) );   
 }
 
 
 void  _Integer::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* self = (VMInteger*)frame->Pop();
     double result = sqrt((double)self->GetEmbeddedInteger());
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(result));
+    frame->Push((VMObject*)universe->NewDouble(result));
 }
 
 
 void  _Integer::AtRandom(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* self = (VMInteger*)frame->Pop();
     int32_t result = (self->GetEmbeddedInteger() * rand())%INT32_MAX;
-    frame->Push((VMObject*) _UNIVERSE->NewInteger(result));
+    frame->Push((VMObject*) universe->NewInteger(result));
 }
+
+PrimitiveRoutine* _Integer::GetRoutine( const pString& routineName )
+{
+    PrimitiveRoutine* result;
+    if (routineName == pString("Plus"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Plus);
+    else if (routineName == pString("Minus"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Minus);
+    else if (routineName == pString("Star"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Star);
+    else if (routineName == pString("Slash"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Slash);
+    else if (routineName == pString("Slashslash"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Slashslash);
+    else if (routineName == pString("Percent"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Percent);
+    else if (routineName == pString("And"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::And);
+    else if (routineName == pString("Equal"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Equal);
+    else if (routineName == pString("Lowerthan"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Lowerthan);
+    else if (routineName == pString("AsString"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::AsString);
+    else if (routineName == pString("Sqrt"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::Sqrt);
+    else if (routineName == pString("AtRandom"))
+        result = new (heap) Routine<_Integer>(Integer, &_Integer::AtRandom);
+    else {
+        cout << "method " << routineName << "not found in class Integer" << endl;
+        return NULL;
+    }
+    return result;
+}
+

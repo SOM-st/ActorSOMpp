@@ -33,7 +33,7 @@ public:
 typedef PrimitiveRoutine* CreatePrimitive(const pString&,const pString&);
 typedef void DestroyPrimitive(PrimitiveRoutine*);
 typedef bool SupportsClass(const char*);
-typedef void Setup();
+typedef void Setup(Universe* uni, Heap* h);
 typedef void TearDown();
 
 

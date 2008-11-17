@@ -34,8 +34,9 @@ THE SOFTWARE.
 #include <vmobjects/VMInteger.h>
 
 #include <vm/Universe.h>
-
+#include "Core.h"
 #include "System.h"
+#include "Routine.h"
 
 #if defined(__GNUC__)
 
@@ -49,11 +50,11 @@ THE SOFTWARE.
 
 _System* System_;
 
-  void  _System::Global_(VMObject* /*object*/, VMFrame* frame) {
+void  _System::Global_(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* arg = (VMSymbol*)frame->Pop();
     /*VMObject* self = */
     frame->Pop();
-    VMObject* result = _UNIVERSE->GetGlobal(arg);
+    VMObject* result = universe->GetGlobal(arg);
     
     frame->Push( result ? result : Globals::NilObject());    
 }
@@ -62,7 +63,7 @@ _System* System_;
 void  _System::Global_put_(VMObject* /*object*/, VMFrame* frame) {
     VMObject* value = frame->Pop();
     VMSymbol* arg = (VMSymbol*)frame->Pop();
-    _UNIVERSE->SetGlobal(arg, value);    
+    universe->SetGlobal(arg, value);    
 }
 
 
@@ -70,7 +71,7 @@ void  _System::Load_(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* arg = (VMSymbol*)frame->Pop();
     /*VMObject* self = */
     frame->Pop();
-    VMClass* result = _UNIVERSE->LoadClass(arg);
+    VMClass* result = universe->LoadClass(arg);
 
     frame->Push( result? (VMObject*)result : Globals::NilObject());
 }
@@ -82,7 +83,7 @@ void  _System::Exit_(VMObject* /*object*/, VMFrame* frame) {
 
     if(err_no != ERR_SUCCESS)
         frame->PrintStackTrace();
-    _UNIVERSE->Quit(err_no);
+    universe->Quit(err_no);
 }
 
 
@@ -109,7 +110,7 @@ void  _System::Time(VMObject* /*object*/, VMFrame* frame) {
         ((now->tv_sec - start_time->tv_sec) * 1000) + //seconds
         ((now->tv_usec - start_time->tv_usec) / 1000); // µseconds
 
-    frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)diff));
+    frame->Push((VMObject*)universe->NewInteger((int32_t)diff));
 
     delete(now);
 }
@@ -123,5 +124,29 @@ _System::_System(void) {
 _System::~_System()
 {
     delete(start_time);
+}
+
+PrimitiveRoutine* _System::GetRoutine( const pString& routineName )
+{
+    PrimitiveRoutine* result;
+    if (routineName == pString("Global_"))
+        result = new (heap) Routine<_System>(System_, &_System::Global_);
+    else if (routineName == pString("Global_put_"))
+        result = new (heap) Routine<_System>(System_, &_System::Global_put_);
+    else if (routineName == pString("Load_"))
+        result = new (heap) Routine<_System>(System_, &_System::Load_);
+    else if (routineName == pString("Exit_"))
+        result = new (heap) Routine<_System>(System_, &_System::Exit_);
+    else if (routineName == pString("PrintString_"))
+        result = new (heap) Routine<_System>(System_, &_System::PrintString_);
+    else if (routineName == pString("PrintNewline"))
+        result = new (heap) Routine<_System>(System_, &_System::PrintNewline);
+    else if (routineName == pString("Time"))
+        result = new (heap) Routine<_System>(System_, &_System::Time);
+    else {
+        cout << "method " << routineName << "not found in class System" << endl;
+        return NULL;
+    }
+    return result;
 }
 

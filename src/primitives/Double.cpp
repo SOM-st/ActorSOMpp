@@ -37,9 +37,9 @@ THE SOFTWARE.
 #include "../vmobjects/VMBigInteger.h"
 
 #include "../vm/Universe.h"
-
+#include "Core.h"
 #include "Double.h"
-
+#include "Routine.h"
 _Double* Double;
 /*
  * This function coerces any right-hand parameter to a double, regardless of its
@@ -53,7 +53,7 @@ double coerce_double(VMObject* x) {
     else if(dynamic_cast<VMBigInteger*>(x) != NULL)
         return (double)((VMBigInteger*)x)->GetEmbeddedInteger();
     else
-        _UNIVERSE->ErrorExit("Attempt to apply Double operation to non-number.");
+        universe->ErrorExit("Attempt to apply Double operation to non-number.");
 
     return 0.0f;
 }
@@ -73,36 +73,36 @@ double coerce_double(VMObject* x) {
 
 void  _Double::Plus(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(left + right));
+    frame->Push((VMObject*)universe->NewDouble(left + right));
 }
 
 
 void  _Double::Minus(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(left - right));
+    frame->Push((VMObject*)universe->NewDouble(left - right));
 }
 
 
 void  _Double::Star(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(left * right));
+    frame->Push((VMObject*)universe->NewDouble(left * right));
 }
 
 
 void  _Double::Slashslash(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(left / right));
+    frame->Push((VMObject*)universe->NewDouble(left / right));
 }
 
 
 void  _Double::Percent(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push(_UNIVERSE->NewDouble((double)((int64_t)left % 
+    frame->Push(universe->NewDouble((double)((int64_t)left % 
                                               (int64_t)right)));
 }
 void  _Double::And(VMObject* /*object*/, VMFrame* frame) {
     PREPARE_OPERANDS;
-    frame->Push(_UNIVERSE->NewDouble((double)((int64_t)left & 
+    frame->Push(universe->NewDouble((double)((int64_t)left & 
                                               (int64_t)right)));
 }
 
@@ -138,12 +138,43 @@ void  _Double::AsString(VMObject* /*object*/, VMFrame* frame) {
     ostringstream Str;
     Str.precision(17);
     Str << dbl;
-    frame->Push( (VMObject*)_UNIVERSE->NewString( pString(Str.str()) ) );
+    frame->Push( (VMObject*)universe->NewString( pString(Str.str()) ) );
 }
 
 
 void _Double::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMDouble* self = (VMDouble*)frame->Pop();
-    VMDouble* result = _UNIVERSE->NewDouble( sqrt(self->GetEmbeddedDouble()) );
+    VMDouble* result = universe->NewDouble( sqrt(self->GetEmbeddedDouble()) );
     frame->Push((VMObject*)result);
 }
+
+PrimitiveRoutine* _Double::GetRoutine( const pString& routineName )
+{
+    PrimitiveRoutine* result;
+    if (routineName == pString("Plus"))
+        result = new (heap) Routine<_Double>(Double, &_Double::Plus);
+    else if (routineName == pString("Minus"))
+        result = new (heap) Routine<_Double>(Double, &_Double::Minus);
+    else if (routineName == pString("Star"))
+        result = new (heap) Routine<_Double>(Double, &_Double::Star);
+    else if (routineName == pString("Slashslash"))
+        result = new (heap) Routine<_Double>(Double, &_Double::Slashslash);
+    else if (routineName == pString("Percent"))
+        result = new (heap) Routine<_Double>(Double, &_Double::Percent);
+    else if (routineName == pString("And"))
+        result = new (heap) Routine<_Double>(Double, &_Double::And);
+    else if (routineName == pString("Equal"))
+        result = new (heap) Routine<_Double>(Double, &_Double::Equal);
+    else if (routineName == pString("Lowerthan"))
+        result = new (heap) Routine<_Double>(Double, &_Double::Lowerthan);
+    else if (routineName == pString("AsString"))
+        result = new (heap) Routine<_Double>(Double, &_Double::AsString);
+    else if (routineName == pString("Sqrt"))
+        result = new (heap) Routine<_Double>(Double, &_Double::Sqrt);
+    else {
+        cout << "method " << routineName << "not found in class Double" << endl;
+        return NULL;
+    }
+    return result;
+}
+

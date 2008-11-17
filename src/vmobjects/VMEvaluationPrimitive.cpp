@@ -12,11 +12,11 @@
 
 VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSignatureString(argc))
 {
-    _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
+    _HEAP->StartUninterruptableAllocation();
     this->SetRoutine(new (_HEAP) Routine<VMEvaluationPrimitive>(this, &VMEvaluationPrimitive::evaluationRoutine));
     this->SetEmpty(false);
     this->numberOfArguments = _UNIVERSE->NewInteger(argc);
-    _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
+    _HEAP->EndUninterruptableAllocation();
 }
 
 

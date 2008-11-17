@@ -18,7 +18,7 @@
 
 VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokable(nof + 5)//VMArray((bc_count/sizeof(VMObject*)) + number_of_constants ),
 {
-    _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
+    _HEAP->StartUninterruptableAllocation();
     //objectSize += bc_count + number_of_constants*sizeof(VMObject*);
     bc_length = _UNIVERSE->NewInteger( bc_count );
     number_of_locals = _UNIVERSE->NewInteger(0);
@@ -29,7 +29,7 @@ VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) :  VMInvokabl
     {
         this->SetIndexableField(i, Globals::NilObject());
     }
-    _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
+    _HEAP->EndUninterruptableAllocation();
 }
 
 void      VMMethod::SetSignature(VMSymbol* sig) 

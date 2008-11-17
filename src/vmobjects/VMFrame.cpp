@@ -30,11 +30,11 @@ VMFrame* VMFrame::EmergencyFrameFrom( VMFrame* from, int extraLength )
 
 VMFrame::VMFrame(int size, int nof) : VMArray(size, nof + FRAME_NUMBER_OF_FIELDS)
 {
-    _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
+    _HEAP->StartUninterruptableAllocation();
     this->local_offset = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
     this->bytecode_index = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
     this->stack_pointer = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
-    _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
+    _HEAP->EndUninterruptableAllocation();
 }
 //
 //VMFrame::~VMFrame()

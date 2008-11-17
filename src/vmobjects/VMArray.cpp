@@ -8,14 +8,14 @@
 
 VMArray::VMArray(int size, int nof) : VMObject(nof+1)
 {
-    _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
+    _HEAP->StartUninterruptableAllocation();
 	this->size = _UNIVERSE->NewInteger(size);
 
     for (int i = 0; i < size ; ++i)
     {
         this->SetIndexableField(i, Globals::NilObject());
     }
-    _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
+    _HEAP->EndUninterruptableAllocation();
 	//objectSize += size * sizeof(VMObject*); //calculate actual object size including the entries
 }
 

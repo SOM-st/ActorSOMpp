@@ -32,22 +32,24 @@ THE SOFTWARE.
 class VMObject;
 class VMFrame;
 #include "Primitive.h"
+ 
 
 struct timeval;
 
-class _System : Primitive
+class _System : public Primitive
 {
 public:
-void Global_(VMObject* object, VMFrame* frame);
-void Global_put_(VMObject* object, VMFrame* frame);
-void Load_(VMObject* object, VMFrame* frame);
-void Exit_(VMObject* object, VMFrame* frame);
-void PrintString_(VMObject* object, VMFrame* frame);
-void PrintNewline(VMObject* object, VMFrame* frame);
-void Time(VMObject* object, VMFrame* frame);
+    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
+    void Global_(VMObject* object, VMFrame* frame);
+    void Global_put_(VMObject* object, VMFrame* frame);
+    void Load_(VMObject* object, VMFrame* frame);
+    void Exit_(VMObject* object, VMFrame* frame);
+    void PrintString_(VMObject* object, VMFrame* frame);
+    void PrintNewline(VMObject* object, VMFrame* frame);
+    void Time(VMObject* object, VMFrame* frame);
 
-_System(void);
-~_System();
+    _System(void);
+    ~_System();
 private:
     timeval* start_time;
 };

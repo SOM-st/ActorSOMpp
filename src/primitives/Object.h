@@ -32,12 +32,14 @@ THE SOFTWARE.
 class VMObject;
 class VMFrame;
 #include "Primitive.h"
-class _Object : Primitive
+ 
+class _Object : public Primitive
 {
 public:
-void  Equalequal(VMObject* object, VMFrame* frame);
-void  ObjectSize(VMObject* object, VMFrame* frame);
-void  Hashcode(VMObject* object, VMFrame* frame);
+    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
+    void  Equalequal(VMObject* object, VMFrame* frame);
+    void  ObjectSize(VMObject* object, VMFrame* frame);
+    void  Hashcode(VMObject* object, VMFrame* frame);
 };
 
 extern _Object* Object;

@@ -12,7 +12,7 @@ VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 {
     
     VMPrimitive* prim = new (_HEAP) VMPrimitive(sig);
-    *(prim->empty) = true;
+    prim->empty = (bool*)1;
     prim->SetRoutine(new (_HEAP) Routine<VMPrimitive>(prim, &VMPrimitive::EmptyRoutine));
     return prim;
 }
@@ -20,14 +20,14 @@ VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 
 VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
 {
-    _UNIVERSE->GetHeap()->StartUninterruptableAllocation();
+    _HEAP->StartUninterruptableAllocation();
     //the only class that explicitly does this.
     this->SetClass(Globals::PrimitiveClass());
-    this->empty = (bool*)_HEAP->Allocate(sizeof(bool));
+    //this->empty = (bool*)_HEAP->Allocate(sizeof(bool));
     this->SetSignature(signature);
     this->routine = NULL;
-    *(this->empty) = false;
-    _UNIVERSE->GetHeap()->EndUninterruptableAllocation();
+    this->empty = (bool*)0;
+    _HEAP->EndUninterruptableAllocation();
 }
 
 
@@ -42,7 +42,7 @@ VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
 
 bool VMPrimitive::IsEmpty()
 {
-    return *empty;
+    return (bool)empty;
 }
 
 

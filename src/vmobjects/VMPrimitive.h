@@ -18,7 +18,7 @@ public:
     virtual bool    IsEmpty();
     virtual void    SetRoutine(PrimitiveRoutine* rtn);
     virtual void    MarkReferences();
-    virtual void    SetEmpty(bool value) { *empty = value; };
+    virtual void    SetEmpty(bool value) { empty = (bool*)value; };
 
     static VMPrimitive* GetEmptyPrimitive(VMSymbol* sig);
 private:

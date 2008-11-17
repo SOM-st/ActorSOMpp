@@ -48,18 +48,18 @@ void Globals::InitializeGlobals() {
     cout << "Metaclass Class created, creating System classes" << endl;
 #endif __DEBUG
 
-    objectClass    = _UNIVERSE->NewSystemClass();
-    nilClass       = _UNIVERSE->NewSystemClass();
-    classClass     = _UNIVERSE->NewSystemClass();
-    arrayClass     = _UNIVERSE->NewSystemClass();
-    symbolClass    = _UNIVERSE->NewSystemClass();
-    methodClass    = _UNIVERSE->NewSystemClass();
-    integerClass   = _UNIVERSE->NewSystemClass();
-    bigIntegerClass= _UNIVERSE->NewSystemClass();
-    frameClass     = _UNIVERSE->NewSystemClass();
-    primitiveClass = _UNIVERSE->NewSystemClass();
-    stringClass    = _UNIVERSE->NewSystemClass();
-    doubleClass    = _UNIVERSE->NewSystemClass();
+    objectClass     = _UNIVERSE->NewSystemClass();
+    nilClass        = _UNIVERSE->NewSystemClass();
+    classClass      = _UNIVERSE->NewSystemClass();
+    arrayClass      = _UNIVERSE->NewSystemClass();
+    symbolClass     = _UNIVERSE->NewSystemClass();
+    methodClass     = _UNIVERSE->NewSystemClass();
+    integerClass    = _UNIVERSE->NewSystemClass();
+    bigIntegerClass = _UNIVERSE->NewSystemClass();
+    frameClass      = _UNIVERSE->NewSystemClass();
+    primitiveClass  = _UNIVERSE->NewSystemClass();
+    stringClass     = _UNIVERSE->NewSystemClass();
+    doubleClass     = _UNIVERSE->NewSystemClass();
 
 #ifdef __DEBUG
     cout << "System classes created" << endl;

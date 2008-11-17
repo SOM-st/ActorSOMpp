@@ -30,9 +30,9 @@ THE SOFTWARE.
 #include <vmobjects/VMFrame.h>
 
 #include <vm/Universe.h>
-
+#include "Core.h"
 #include "Array.h"
-
+#include "Routine.h"
 _Array* Array;
 
 void _Array::At_(VMObject* /*object*/, VMFrame* frame) {
@@ -44,7 +44,7 @@ void _Array::At_(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void _Array::AtPut_(VMObject* /*object*/, VMFrame* frame) {
+void _Array::At_Put_(VMObject* /*object*/, VMFrame* frame) {
     VMObject* value = frame->Pop();
     VMInteger* index = (VMInteger*)frame->Pop();
     VMArray* self = (VMArray*)frame->GetStackElement(0);
@@ -55,8 +55,8 @@ void _Array::AtPut_(VMObject* /*object*/, VMFrame* frame) {
 
 void _Array::Length(VMObject* /*object*/, VMFrame* frame) {
     VMArray* self = (VMArray*) frame->Pop();
-    VMInteger* new_int= 
-        _UNIVERSE->NewInteger(self->GetNumberOfIndexableFields());
+    VMInteger* new_int =
+        universe->NewInteger(self->GetNumberOfIndexableFields());
     frame->Push((VMObject*)new_int);
 }
 
@@ -66,5 +66,24 @@ void _Array::New_(VMObject* /*object*/, VMFrame* frame) {
     /*VMClass* self = (VMClass*)*/
     frame->Pop();        
     int size = length->GetEmbeddedInteger();
-    frame->Push((VMObject*) _UNIVERSE->NewArray(size));
+    frame->Push((VMObject*) universe->NewArray(size));
 }
+
+PrimitiveRoutine* _Array::GetRoutine( const pString& routineName )
+{
+    PrimitiveRoutine* result;
+    if (routineName == pString("New_"))
+        result = new (heap) Routine<_Array>(Array, &_Array::New_);
+    else if (routineName == pString("At_"))
+        result = new (heap) Routine<_Array>(Array, &_Array::At_);
+    else if (routineName == pString("At_put_"))
+        result = new (heap) Routine<_Array>(Array, &_Array::At_Put_);
+    else if (routineName == pString("Length"))
+        result = new (heap) Routine<_Array>(Array, &_Array::Length);
+    else {
+        cout << "method " << routineName << " not found in class Array" << endl;
+        return NULL;
+    }
+    return result;
+}
+

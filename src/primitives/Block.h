@@ -31,10 +31,13 @@ THE SOFTWARE.
 
 class VMObject;
 class VMFrame;
+
 #include "Primitive.h"
-class _Block : Primitive
+
+class _Block : public Primitive
 {
 public:
+    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
     void  Value(VMObject* object, VMFrame* frame);
     void  Restart(VMObject* object, VMFrame* frame);
     void  Value_(VMObject* object, VMFrame* frame);

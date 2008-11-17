@@ -172,9 +172,11 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
         //doesNotUnderstand: needs 3 slots, one for this, one for method name, one for args
         int additionalStackSlots = 3 - _FRAME->RemainingStackSize();       
         if (additionalStackSlots > 0) {
+#ifdef __DEBUG
             cout << "Creating emergeny frame for doesNotUnderstand:arguments: with " 
                  << additionalStackSlots << " additional stack slots to prevent stack overflow" 
                  << endl;
+#endif __DEBUG
             //copy current frame into a bigger one and replace the current frame
             this->SetFrame(VMFrame::EmergencyFrameFrom(_FRAME, additionalStackSlots));
         }
@@ -274,8 +276,10 @@ void Interpreter::do_push_global( int bytecode_index)
         //unknowGlobal: needs 2 slots, one for "this" and one for the argument
         int additionalStackSlots = 2 - _FRAME->RemainingStackSize();       
         if (additionalStackSlots > 0) {
+#ifdef __DEBUG
             cout << "Creating emergeny frame for unknownGlobal: with " << additionalStackSlots
                  << " additional stack slots to prevent stack overflow" << endl;
+#endif __DEBUG
             //copy current frame into a bigger one and replace the current frame
             this->SetFrame(VMFrame::EmergencyFrameFrom(_FRAME, additionalStackSlots));
         }

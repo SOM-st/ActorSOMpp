@@ -95,7 +95,7 @@ public:
     //
 private:
     vector<pString>  handleArguments(int argc, char** argv) ;
-    int getPathClassExt(vector<pString>& tokens, const pString& arg);
+    int getClassPathExt(vector<pString>& tokens, const pString& arg);
     
     static Universe *theUniverse;
     

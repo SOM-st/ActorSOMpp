@@ -31,10 +31,12 @@ THE SOFTWARE.
 
 class VMObject;
 class VMFrame;
+ 
 #include "Primitive.h"
-class _Class : Primitive
+class _Class : public Primitive
 {
 public:
+    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
     void  New(VMObject* object, VMFrame* frame);
 };
 

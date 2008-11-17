@@ -31,6 +31,9 @@ THE SOFTWARE.
 
 #include "../vm/Universe.h"
 
+#include "Routine.h"
+#include "Core.h"
+
 _Block* Block;
 
 void  _Block::Value(VMObject* /*object*/, VMFrame* /*frame*/) {
@@ -53,4 +56,22 @@ void  _Block::Restart(VMObject* /*object*/, VMFrame* frame) {
     frame->ResetStackPointer();
 }
 
+
+PrimitiveRoutine* _Block::GetRoutine( const pString& routineName )
+{
+    PrimitiveRoutine* result;
+    if (routineName == pString("Value"))
+        result = new (heap) Routine<_Block>(Block, &_Block::Value);
+    else if (routineName == pString("Restart"))
+        result = new (heap) Routine<_Block>(Block, &_Block::Restart);
+    else if (routineName == pString("Value_"))
+        result = new (heap) Routine<_Block>(Block, &_Block::Value_);
+    else if (routineName == pString("Value_with_"))
+        result = new (heap) Routine<_Block>(Block, &_Block::Value_with_);
+    else {
+        cout << "method " << routineName << "not found in class Block" << endl;
+        return NULL;
+    }
+    return result;
+}
 

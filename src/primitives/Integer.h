@@ -35,24 +35,26 @@ class VMInteger;
 class VMBigInteger;
 class VMDouble;
 #include "Primitive.h"
-class _Integer : Primitive
+ 
+class _Integer : public Primitive
 {
 
 public:
-void  Plus(VMObject* object, VMFrame* frame);
-void  Minus(VMObject* object, VMFrame* frame);
-void  Star(VMObject* object, VMFrame* frame);
-void  Slash(VMObject* object, VMFrame* frame);
-void  Slashslash(VMObject* object, VMFrame* frame);
-void  Percent(VMObject* object, VMFrame* frame);
-void  And(VMObject* object, VMFrame* frame);
-void  Equal(VMObject* object, VMFrame* frame);
-void  Lowerthan(VMObject* object, VMFrame* frame);
-void  AsString(VMObject* object, VMFrame* frame);
-void  Sqrt(VMObject* object, VMFrame* frame);
-void  AtRandom(VMObject* object, VMFrame* frame);
+    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
+    void  Plus(VMObject* object, VMFrame* frame);
+    void  Minus(VMObject* object, VMFrame* frame);
+    void  Star(VMObject* object, VMFrame* frame);
+    void  Slash(VMObject* object, VMFrame* frame);
+    void  Slashslash(VMObject* object, VMFrame* frame);
+    void  Percent(VMObject* object, VMFrame* frame);
+    void  And(VMObject* object, VMFrame* frame);
+    void  Equal(VMObject* object, VMFrame* frame);
+    void  Lowerthan(VMObject* object, VMFrame* frame);
+    void  AsString(VMObject* object, VMFrame* frame);
+    void  Sqrt(VMObject* object, VMFrame* frame);
+    void  AtRandom(VMObject* object, VMFrame* frame);
 
-_Integer(void);
+    _Integer(void);
 
 private:
     void pushResult(VMObject* object, VMFrame* frame, int64_t result);

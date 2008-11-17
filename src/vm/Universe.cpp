@@ -109,7 +109,7 @@ vector<pString> Universe::handleArguments( int argc, char** argv )
     gc_verbosity = 0;
     for (int i = 1; i < argc ; ++i)
     {
-        cout << argv[i] << endl;
+        //cout << argv[i] << endl;
         if (strncmp(argv[i], "-cp", 3) == 0) 
         {
             if ((argc == i + 1) || class_path.size() > 0)
@@ -128,7 +128,7 @@ vector<pString> Universe::handleArguments( int argc, char** argv )
         } else {
             vector<pString> ext_path_tokens = vector<pString>(2);
             pString tmp_string = pString(argv[i]);
-            if (this->getPathClassExt(ext_path_tokens, tmp_string) == ERR_SUCCESS)
+            if (this->getClassPathExt(ext_path_tokens, tmp_string) == ERR_SUCCESS)
             {
                 this->addClassPath(ext_path_tokens[0]);
                 
@@ -138,7 +138,7 @@ vector<pString> Universe::handleArguments( int argc, char** argv )
             //In CSOM there is an else, where the original filename is pushed into the vm_args.
             //But unlike the class name in ext_path_tokens (ext_path_tokens[1]) that could
             //still have the .som suffix though.
-            //So in CPPSOM getPathClassExt will strip the suffix and add it to ext_path_tokens
+            //So in CPPSOM getClassPathExt will strip the suffix and add it to ext_path_tokens
             //even if there is no new class path present. So we can in any case do the following:
             vm_args.push_back(ext_path_tokens[1]);
         }
@@ -148,13 +148,13 @@ vector<pString> Universe::handleArguments( int argc, char** argv )
     return vm_args;
 }
 
-int Universe::getPathClassExt(vector<pString>& tokens,const pString& arg )
+int Universe::getClassPathExt(vector<pString>& tokens,const pString& arg )
 {
 #define EXT_TOKENS 2
     int result = ERR_SUCCESS;
     int fp_index = arg.find_last_of(file_separator);
     int ssep_index = arg.find(".som");
-    cout << "fp: " << fp_index << " ssep: " << ssep_index << endl;
+    //cout << "fp: " << fp_index << " ssep: " << ssep_index << endl;
     if (fp_index == pString::npos) 
     { //no new path
         //different from CSOM (see also HandleArguments):
@@ -248,6 +248,7 @@ void Universe::initialize(int _argc, char** _argv)
     interpreter = new Interpreter();
     
     //Allocate and initialize the global objects
+    cout << "Initializing the global objects" << endl;
     Globals::InitializeGlobals();
 
     VMObject* system_object = NewInstance(Globals::SystemClass());
@@ -276,9 +277,6 @@ void Universe::initialize(int _argc, char** _argv)
         shell->Start();
         return;
     }
-    /*char g[10];
-    cout << "Press a key, to start Interpreter" << endl;
-    cin.getline(g,10);*/
 
     /* only trace bootstrap if the number of cmd-line "-d"s is > 2 */
     short trace = 2 - dump_bytecodes;
@@ -296,12 +294,6 @@ void Universe::initialize(int _argc, char** _argv)
     
     // reset "-d" indicator
     if(!(trace>0)) dump_bytecodes = 2 - trace;
-
-    VMObject* r = new(this->heap)VMObject(0);
-    VMObject& ref = *arguments_array;
-    VMArray& aref = reinterpret_cast<VMArray&>(ref);
-    VMString* f = (VMString*)aref[0];
-    cout << "aref[0]: " << f->GetChars() << endl;
 
     interpreter->Start();
 }
@@ -440,7 +432,7 @@ VMClass* Universe::LoadClass( VMSymbol* name)
 VMClass* Universe::LoadClassBasic( VMSymbol* name, VMClass* system_class)
 {
     pString s_name = name->GetStdString();
-    cout << s_name.c_str() << endl;
+    //cout << s_name.c_str() << endl;
     VMClass* result;
 
     for (vector<pString>::iterator i = class_path.begin();

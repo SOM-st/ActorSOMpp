@@ -31,15 +31,16 @@ THE SOFTWARE.
 
 class VMObject;
 class VMFrame;
+ 
 #include "Primitive.h"
 
-
-class _Array : Primitive
+class _Array : public Primitive
 {
 public:
+    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
     void New_(VMObject* object, VMFrame* frame);
     void At_(VMObject* object, VMFrame* frame);
-    void AtPut_(VMObject* object, VMFrame* frame);
+    void At_Put_(VMObject* object, VMFrame* frame);
     void Length(VMObject* object, VMFrame* frame);
 };
 extern _Array* Array;

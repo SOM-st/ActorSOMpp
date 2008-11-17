@@ -276,7 +276,7 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
                 _UNIVERSE->ErrorExit("Core library does not define the setup() initializer.");
             }
             //call the setup function to intialize the class library
-            setup();
+            setup(_UNIVERSE, _HEAP);
             break;
         }
     
@@ -303,7 +303,7 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
                     _UNIVERSE->ErrorExit("Library does not define the setup() initializer.");
                 }
                 //call the setup function to intialize the class library
-                setup();
+                setup(_UNIVERSE, _HEAP);
                 break;
             } else {
                 //

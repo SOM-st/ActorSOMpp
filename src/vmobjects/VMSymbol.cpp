@@ -81,7 +81,8 @@ pString VMSymbol::GetPlainString()
                 break;
         }
     }
-    
-    return str.str();
+    pString st = str.str();
+    st[0] = toupper(st[0]);
+    return st;
 }
 

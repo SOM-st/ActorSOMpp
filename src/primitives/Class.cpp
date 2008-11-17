@@ -31,10 +31,24 @@ THE SOFTWARE.
 #include "../vm/Universe.h"
 
 #include "Class.h"
-
+#include "Core.h"
+#include "Routine.h"
 _Class* Class;
 
 void  _Class::New(VMObject* /*object*/, VMFrame* frame) {
     VMClass* self = (VMClass*)frame->Pop();
-    frame->Push(_UNIVERSE->NewInstance(self));
+    frame->Push(universe->NewInstance(self));
 }
+
+PrimitiveRoutine* _Class::GetRoutine( const pString& routineName )
+{
+    PrimitiveRoutine* result;
+    if (routineName == pString("New"))
+            result = new (heap) Routine<_Class>(Class, &_Class::New);
+        else {
+            cout << "method " << routineName << "not found in class Class" << endl;
+            return NULL;
+        }
+    return result;
+}
+
