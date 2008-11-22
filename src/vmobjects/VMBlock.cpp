@@ -5,8 +5,7 @@
 #include "../vm/Universe.h"
 
 
-VMBlock::VMBlock() : VMObject(2)
-{
+VMBlock::VMBlock() : VMObject(2) {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
      blockMethod = (VMMethod*) Globals::NilObject();
      context = (VMFrame*) Globals::NilObject();
@@ -18,8 +17,7 @@ VMBlock::VMBlock() : VMObject(2)
 //}
 
 
-void VMBlock::MarkReferences()
-{
+void VMBlock::MarkReferences() {
     if (gcfield) return;
     VMObject::MarkReferences();
     /*if (blockMethod != NULL) blockMethod->MarkReferences();
@@ -28,31 +26,26 @@ void VMBlock::MarkReferences()
 }
 
 
-void VMBlock::SetMethod(VMMethod* bMethod)
-{
+void VMBlock::SetMethod(VMMethod* bMethod) {
     blockMethod = bMethod;
 }
 
 
-VMMethod* VMBlock::GetMethod()
-{
+VMMethod* VMBlock::GetMethod() {
     return blockMethod;
 }
 
 
-void VMBlock::SetContext(VMFrame* contxt)
-{
+void VMBlock::SetContext(VMFrame* contxt) {
     context = contxt;
 }
 
 
-VMFrame* VMBlock::GetContext()
-{
+VMFrame* VMBlock::GetContext() {
     return context;
 }
 
 
-VMEvaluationPrimitive* VMBlock::GetEvaluationPrimitive(int numberOfArguments)
-{
+VMEvaluationPrimitive* VMBlock::GetEvaluationPrimitive(int numberOfArguments) {
     return new (_HEAP) VMEvaluationPrimitive(numberOfArguments);
 }

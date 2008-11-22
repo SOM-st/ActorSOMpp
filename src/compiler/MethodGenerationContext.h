@@ -19,7 +19,8 @@ public:
     VMPrimitive*    AssemblePrimitive();
 
 	int8_t          FindLiteralIndex(VMObject* lit);//pVMObject lit);
-	bool            FindVar(const pString& var, int* index, int* context, bool* is_argument);
+	bool            FindVar(const pString& var, int* index, 
+                            int* context, bool* is_argument);
 	bool            FindField(const pString& field);
 	uint8_t         ComputeStackDepth();
 

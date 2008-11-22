@@ -18,31 +18,26 @@
 #define SHELL_PART_2 "). 'it = ' print. ^tmp println) )"
 
 
-Shell::Shell()
-{
+Shell::Shell() {
     bootstrap_method = NULL;
 }
 
 
-Shell::Shell(VMMethod* bsm)
-{
+Shell::Shell(VMMethod* bsm) {
     this->bootstrap_method = bsm;
 }
 
 
-Shell::~Shell()
-{
+Shell::~Shell() {
     // TODO
 }
 
 
-void Shell::Start()
-{
+void Shell::Start() {
 #define QUIT_CMD "system exit"
 #define QUIT_CMD_L 11 + 1
 
-    if (bootstrap_method == NULL) 
-    {
+    if (bootstrap_method == NULL) {
         _UNIVERSE->ErrorExit("Shell needs bootstrap method!");
     }
     // the statement to evaluate
@@ -62,8 +57,7 @@ void Shell::Start()
     /**
      * Main Shell Loop
      */
-    while(true) 
-    {
+    while(true) {
         // initialize empty strings
         pString   statement = pString("");
         pString   inp = pString("");
@@ -112,8 +106,7 @@ void Shell::Start()
         ++counter;
         runClass = _UNIVERSE->LoadShellClass(statement);
         // Compile and load the newly generated class
-        if(runClass == NULL)
-        {
+        if(runClass == NULL) {
             cout << "can't compile statement.";
             continue;            
         }
@@ -132,7 +125,8 @@ void Shell::Start()
         
         // Lookup the run: method
         VMInvokable* initialize = 
-            (VMInvokable*)runClass->LookupInvokable(_UNIVERSE->SymbolFor("run:"));
+            (VMInvokable*)runClass->LookupInvokable(
+                                    _UNIVERSE->SymbolFor("run:"));
         
         // Invoke the run method
         initialize->Invoke(current_frame);

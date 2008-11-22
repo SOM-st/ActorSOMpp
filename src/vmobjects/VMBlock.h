@@ -8,8 +8,7 @@ class VMFrame;
 class VMEvaluationPrimitive;
 #include "VMObject.h"
 
-class VMBlock : public VMObject
-{
+class VMBlock : public VMObject {
 public:
     VMBlock();
     //virtual ~VMBlock();

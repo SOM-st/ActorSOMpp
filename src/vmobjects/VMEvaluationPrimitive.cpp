@@ -7,13 +7,14 @@
 #include "../vm/Universe.h"
 
 //needed to instanciate the Routine object for the evaluation routine
-#include "../primitives/Routine.h"
+#include "../primitivesCore/Routine.h"
 
 
-VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSignatureString(argc))
-{
+VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : 
+                       VMPrimitive(computeSignatureString(argc)) {
     _HEAP->StartUninterruptableAllocation();
-    this->SetRoutine(new (_HEAP) Routine<VMEvaluationPrimitive>(this, &VMEvaluationPrimitive::evaluationRoutine));
+    this->SetRoutine(new (_HEAP) Routine<VMEvaluationPrimitive>(this, 
+                               &VMEvaluationPrimitive::evaluationRoutine));
     this->SetEmpty(false);
     this->numberOfArguments = _UNIVERSE->NewInteger(argc);
     _HEAP->EndUninterruptableAllocation();
@@ -23,8 +24,7 @@ VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : VMPrimitive(computeSign
 //VMEvaluationPrimitive::~VMEvaluationPrimitive()
 //{
 //}
-void VMEvaluationPrimitive::MarkReferences()
-{
+void VMEvaluationPrimitive::MarkReferences() {
     if (gcfield) return;
     VMPrimitive::MarkReferences();
     this->numberOfArguments->MarkReferences();
@@ -32,8 +32,7 @@ void VMEvaluationPrimitive::MarkReferences()
 
 
 
-VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc)
-{
+VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc) {
 #define VALUE_S "value"
 #define VALUE_LEN 5
 #define WITH_S    "with:"
@@ -43,8 +42,7 @@ VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc)
     pString signature_string;
     
     // Compute the signature string
-    if(argc==1)
-    {
+    if(argc==1) {
         signature_string += VALUE_S;
     } else {
         signature_string += VALUE_S ;
@@ -59,8 +57,7 @@ VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc)
     return _UNIVERSE->SymbolFor(signature_string);
 }
 
-void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame)
-{
+void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame) {
     VMEvaluationPrimitive* self = (VMEvaluationPrimitive*) object;
 
      // Get the block (the receiver) from the stack
@@ -71,7 +68,8 @@ void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame)
     VMFrame* context = block->GetContext();
     
     // Push a new frame and set its context to be the one specified in the block
-    VMFrame* NewFrame = _UNIVERSE->GetInterpreter()->PushNewFrame(block->GetMethod());
+    VMFrame* NewFrame = _UNIVERSE->GetInterpreter()->PushNewFrame(
+                                                        block->GetMethod());
     NewFrame->CopyArgumentsFrom(frame);
     NewFrame->SetContext(context);
 }

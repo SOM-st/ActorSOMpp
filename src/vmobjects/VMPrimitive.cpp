@@ -5,11 +5,10 @@
 #include "../vm/Universe.h"
 
 //needed to instanciate the Routine object for the  empty routine
-#include "../primitives/Routine.h"
+#include "../primitivesCore/Routine.h"
 
 
-VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
-{
+VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig ) {
     
     VMPrimitive* prim = new (_HEAP) VMPrimitive(sig);
     prim->empty = (bool*)1;
@@ -18,8 +17,7 @@ VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig )
 }
 
 
-VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
-{
+VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2) {//,VMObject()
     _HEAP->StartUninterruptableAllocation();
     //the only class that explicitly does this.
     this->SetClass(Globals::PrimitiveClass());
@@ -40,31 +38,26 @@ VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2)//,VMObject()
 //}
 
 
-bool VMPrimitive::IsEmpty()
-{
+bool VMPrimitive::IsEmpty() {
     return (bool)empty;
 }
 
 
-void VMPrimitive::SetRoutine(PrimitiveRoutine* rtn)
-{
+void VMPrimitive::SetRoutine(PrimitiveRoutine* rtn) {
     routine = rtn;
 }
 
 
-void VMPrimitive::Invoke(VMFrame *frm)
-{
+void VMPrimitive::Invoke(VMFrame *frm) {
     (*routine)(this, frm);
 }
 
 
-void VMPrimitive::MarkReferences()
-{
+void VMPrimitive::MarkReferences() {
     if (gcfield) return;
     //VMInvokable::MarkReferences();
     this->SetGCField(1);
-    for( int i = 0; i < this->GetNumberOfFields(); ++i) 
-    {
+    for( int i = 0; i < this->GetNumberOfFields(); ++i) {
         //HACK to avoid calling MarkReferences() for the bool*
         if ((void*)FIELDS[i] == (void*)this->empty) 
             continue;
@@ -73,8 +66,7 @@ void VMPrimitive::MarkReferences()
 }
 
 
-void VMPrimitive::EmptyRoutine( VMObject* _self, VMFrame* /*frame*/ )
-{
+void VMPrimitive::EmptyRoutine( VMObject* _self, VMFrame* /*frame*/ ) {
     VMInvokable* self = (VMInvokable*) _self;
     VMSymbol* sig = self->GetSignature();
     cout << "undefined primitive called: " << sig->GetChars() << endl;

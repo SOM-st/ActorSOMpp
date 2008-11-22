@@ -35,8 +35,10 @@ INSTALL		=install
 CSOM_LIBS	=
 CORE_LIBS	=-lm
 
-CSOM_NAME	=CPPSOM
-CORE_NAME	=SOMCore
+CSOM_NAME	        =CPPSOM
+CORE_NAME	        =SOMCore
+PRIMITIVECORE_NAME  =PrimitiveCore
+SHARED_EXTENSION    =dll
 
 ############ global stuff -- overridden by ../Makefile
 
@@ -77,6 +79,12 @@ MAIN_SRC		= $(wildcard $(SRC_DIR)/*.cpp)
 MAIN_OBJ		= $(MAIN_SRC:.cpp=.o)
 #$(SRC_DIR)/main.o
 
+############# primitives loading
+
+PRIMITIVESCORE_DIR = $(SRC_DIR)/primitivesCore
+PRIMITIVESCORE_SRC = $(wildcard $(PRIMITIVESCORE_DIR)/*.cpp)
+PRIMITIVESCORE_OBJ = $(PRIMITIVESCORE_SRC:.cpp=.pic.o)
+
 ############# primitives location etc.
 
 PRIMITIVES_DIR	= $(SRC_DIR)/primitives
@@ -94,11 +102,11 @@ LIBRARIES		=-L$(ROOT_DIR)
 CSOM_OBJ		=  $(MEMORY_OBJ) $(MISC_OBJ) $(VMOBJECTS_OBJ) \
 				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) 
 
-OBJECTS			= $(CSOM_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ)
+OBJECTS			= $(CSOM_OBJ) $(PRIMITIVES_OBJ) $(PRIMITIVESCORE_OBJ) $(MAIN_OBJ)
 
 SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 				$(MISC_SRC) $(VM_SRC) $(VMOBJECTS_SRC)  \
-				$(PRIMITIVES_SRC) $(MAIN_SRC)
+				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(MAIN_SRC)
 
 ############# Things to clean
 
@@ -114,12 +122,13 @@ CLEAN			= $(OBJECTS) \
 #  metarules
 #
 
-.SUFFIXES: .pic.o
+.SUFFIXES: .pic.o .fpic.o
 
 .PHONY: clean clobber test
 
 all: $(CSOM_NAME).exe \
-	$(CSOM_NAME).dll \
+	$(CSOM_NAME).$(SHARED_EXTENSION) \
+	$(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
 	CORE
 
 
@@ -129,8 +138,7 @@ debug: all
 profiling : DBG_FLAGS=-g -pg
 profiling : LDFLAGS+=-pg
 profiling: all
-
-
+	
 .cpp.pic.o:
 	$(CC) $(CFLAGS) -g -c $< -o $*.pic.o
 
@@ -149,24 +157,32 @@ clean:
 # product rules
 #
 
-$(CSOM_NAME).exe: $(CSOM_NAME).dll $(MAIN_OBJ)
+$(CSOM_NAME).exe: $(CSOM_NAME).$(SHARED_EXTENSION) $(MAIN_OBJ)
 	@echo Linking $(CSOM_NAME) loader
 	$(CC) $(LDFLAGS) \
 		-o $(CSOM_NAME).exe $(MAIN_OBJ) -l$(CSOM_NAME)
 	@echo loader done.
 
-$(CSOM_NAME).dll: $(CSOM_OBJ)
+$(CSOM_NAME).$(SHARED_EXTENSION): $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) Dynamic Library
 	$(CC) $(LDFLAGS) -shared \
-		-o $(CSOM_NAME).dll $(CSOM_OBJ) $(CSOM_LIBS)
+		-o $(CSOM_NAME).$(SHARED_EXTENSION) $(CSOM_OBJ) $(CSOM_LIBS)
 	@echo CSOM done.
 
-CORE: $(CSOM_NAME).dll $(PRIMITIVES_OBJ)
+$(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME).$(SHARED_EXTENSION) $(PRIMITIVESCORE_OBJ)
+	@echo Linking PrimitivesCore lib
+	$(CC) $(LDFLAGS) -shared \
+		-o $(PRIMITIVECORE_NAME).$(SHARED_EXTENSION) \
+		$(PRIMITIVESCORE_OBJ) \
+		-l$(CSOM_NAME)
+	@echo PrimitivesCore done.
+
+CORE: $(PRIMITIVESCORE_NAME).dll $(CSOM_NAME).$(SHARED_EXTENSION) $(PRIMITIVES_OBJ)
 	@echo Linking SOMCore lib
 	$(CC) $(LDFLAGS) -shared \
 		-o $(CORE_NAME).csp \
 		$(PRIMITIVES_OBJ) \
-		$(CORE_LIBS) -l$(CSOM_NAME)
+		$(CORE_LIBS) -l$(CSOM_NAME) -l$(PRIMITIVECORE_NAME)
 	mv $(CORE_NAME).csp $(ST_DIR)
 	@touch CORE
 	@echo SOMCore done.

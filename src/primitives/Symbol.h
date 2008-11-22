@@ -31,16 +31,14 @@ THE SOFTWARE.
 
 class VMObject;
 class VMFrame;
-#include "Primitive.h"
+#include "../primitivesCore/Primitive.h"
  
 class _Symbol : public Primitive
 {
 public:
-    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
+    _Symbol();
     void  AsString(VMObject* object, VMFrame* frame);
 };
-
-extern _Symbol* Symbol;
 
 #endif
 

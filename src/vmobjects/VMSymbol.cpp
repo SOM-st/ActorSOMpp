@@ -4,25 +4,20 @@
 #include <sstream>
 
 
-VMSymbol::VMSymbol(const char* str) : VMString(str)
-{
+VMSymbol::VMSymbol(const char* str) : VMString(str) {
 }
 
 
-VMSymbol::VMSymbol( const std::string& s ): VMString(s)
-{
+VMSymbol::VMSymbol( const std::string& s ): VMString(s) {
 }
 
 
-pString VMSymbol::GetPlainString()
-{
+pString VMSymbol::GetPlainString() {
     ostringstream str;
     char* chars = this->GetChars();
-    for(size_t i=0; i <= (size_t)this->GetStringLength(); i++) 
-    {
+    for(size_t i=0; i <= (size_t)this->GetStringLength(); i++) {
         char c = chars[i];
-        switch (c)
-        {
+        switch (c) {
             case '~':
                 str << "tilde";
                 break;
@@ -74,15 +69,14 @@ pString VMSymbol::GetPlainString()
                 break;
         #endif
             default:
-                if (c != 0)
-                {
+                if (c != 0) {
                     str << c;
                 }
                 break;
         }
     }
     pString st = str.str();
-    st[0] = toupper(st[0]);
+    //st[0] = toupper(st[0]);
     return st;
 }
 

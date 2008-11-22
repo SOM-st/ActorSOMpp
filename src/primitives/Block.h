@@ -32,18 +32,16 @@ THE SOFTWARE.
 class VMObject;
 class VMFrame;
 
-#include "Primitive.h"
+#include "../primitivesCore/Primitive.h"
 
 class _Block : public Primitive
 {
 public:
-    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
+    _Block();
     void  Value(VMObject* object, VMFrame* frame);
     void  Restart(VMObject* object, VMFrame* frame);
     void  Value_(VMObject* object, VMFrame* frame);
     void  Value_with_(VMObject* object, VMFrame* frame);
 };
-
-extern _Block* Block;
 
 #endif

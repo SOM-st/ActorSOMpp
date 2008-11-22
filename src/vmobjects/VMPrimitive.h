@@ -8,8 +8,7 @@
 #include "VMInvokable.h"
 class VMSymbol;
 
-class VMPrimitive : public VMInvokable //public VMObject, 
-{
+class VMPrimitive : public VMInvokable { //public VMObject, 
 public:
     VMPrimitive(VMSymbol* sig);
     //virtual ~VMPrimitive();

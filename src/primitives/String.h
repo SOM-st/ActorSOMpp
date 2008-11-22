@@ -31,12 +31,12 @@ THE SOFTWARE.
 
 class VMObject;
 class VMFrame;
-#include "Primitive.h"
+#include "../primitivesCore/Primitive.h"
  
 class _String : public Primitive
 {
 public:
-    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
+    _String();
     void  Concatenate_(VMObject* object, VMFrame* frame);
     void  AsSymbol(VMObject* object, VMFrame* frame);
     void  Hashcode(VMObject* object, VMFrame* frame);
@@ -46,7 +46,6 @@ public:
 };
 
 
-extern _String* String;
 
 #endif
 

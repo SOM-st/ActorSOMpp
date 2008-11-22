@@ -129,93 +129,75 @@ void Globals::InitializeGlobals() {
 
 
 
-VMObject* Globals::NilObject()
-{
+VMObject* Globals::NilObject() {
     return nilObject;
 }
 
-VMObject* Globals::TrueObject()
-{
+VMObject* Globals::TrueObject() {
     return trueObject;
 }
 
-VMObject* Globals::FalseObject()
-{
+VMObject* Globals::FalseObject() {
     return falseObject;
 }
 
-VMClass* Globals::ObjectClass()
-{
+VMClass* Globals::ObjectClass() {
     return objectClass;
 }
 
-VMClass* Globals::ClassClass()
-{
+VMClass* Globals::ClassClass() {
     return classClass;
 }
 
-VMClass* Globals::MetaClassClass()
-{
+VMClass* Globals::MetaClassClass() {
     return metaClassClass;
 }
 
-VMClass* Globals::NilClass()
-{
+VMClass* Globals::NilClass() {
     return nilClass;
 }
 
-VMClass* Globals::IntegerClass()
-{
+VMClass* Globals::IntegerClass() {
     return integerClass;
 }
 
-VMClass* Globals::BigIntegerClass()
-{
+VMClass* Globals::BigIntegerClass() {
     return bigIntegerClass;
 }
 
-VMClass* Globals::ArrayClass()
-{
+VMClass* Globals::ArrayClass() {
     return arrayClass;
 }
 
-VMClass* Globals::MethodClass()
-{
+VMClass* Globals::MethodClass() {
     return methodClass;
 }
 
-VMClass* Globals::SymbolClass()
-{
+VMClass* Globals::SymbolClass() {
     return symbolClass;
 }
 
-VMClass* Globals::FrameClass()
-{
+VMClass* Globals::FrameClass() {
     return frameClass;
 }
 
-VMClass* Globals::PrimitiveClass()
-{
+VMClass* Globals::PrimitiveClass() {
     return primitiveClass;
 }
 
-VMClass* Globals::StringClass()
-{
+VMClass* Globals::StringClass() {
     return stringClass;
 }
 
-VMClass* Globals::SystemClass()
-{
+VMClass* Globals::SystemClass() {
     return systemClass;
 }
 
-VMClass* Globals::BlockClass()
-{
+VMClass* Globals::BlockClass() {
     return blockClass;
 }
 
-VMClass* Globals::DoubleClass()
-{
+VMClass* Globals::DoubleClass() {
     return doubleClass;
 }
 

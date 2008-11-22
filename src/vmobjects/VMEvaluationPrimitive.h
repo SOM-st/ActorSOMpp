@@ -9,8 +9,7 @@ class VMObject;
 class VMFrame;
 
 
-class VMEvaluationPrimitive : public VMPrimitive
-{
+class VMEvaluationPrimitive : public VMPrimitive {
 public:
     VMEvaluationPrimitive(int argc);
     //virtual ~VMEvaluationPrimitive();

@@ -29,12 +29,11 @@ THE SOFTWARE.
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMFrame.h"
 
-#include "../vm/Universe.h"
+#include "../vm/universe.h"
 
-#include "Routine.h"
-#include "Core.h"
+#include "../primitivesCore/Routine.h"
+ 
 
-_Block* Block;
 
 void  _Block::Value(VMObject* /*object*/, VMFrame* /*frame*/) {
     // intentionally left blank
@@ -56,22 +55,18 @@ void  _Block::Restart(VMObject* /*object*/, VMFrame* frame) {
     frame->ResetStackPointer();
 }
 
+_Block::_Block( ) : Primitive() {
+    this->SetRoutine("value", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_Block>(this, &_Block::Value)));
 
-PrimitiveRoutine* _Block::GetRoutine( const pString& routineName )
-{
-    PrimitiveRoutine* result;
-    if (routineName == pString("Value"))
-        result = new (heap) Routine<_Block>(Block, &_Block::Value);
-    else if (routineName == pString("Restart"))
-        result = new (heap) Routine<_Block>(Block, &_Block::Restart);
-    else if (routineName == pString("Value_"))
-        result = new (heap) Routine<_Block>(Block, &_Block::Value_);
-    else if (routineName == pString("Value_with_"))
-        result = new (heap) Routine<_Block>(Block, &_Block::Value_with_);
-    else {
-        cout << "method " << routineName << "not found in class Block" << endl;
-        return NULL;
-    }
-    return result;
+    this->SetRoutine("restart", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_Block>(this, &_Block::Restart)));
+
+    this->SetRoutine("value_", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_Block>(this, &_Block::Value_)));
+
+    this->SetRoutine("value_with_", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_Block>(this, &_Block::Value_with_)));
 }
+
 

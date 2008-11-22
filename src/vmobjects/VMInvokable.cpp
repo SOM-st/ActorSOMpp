@@ -6,8 +6,7 @@
 #include "VMMethod.h"
 
 
-bool      VMInvokable::IsPrimitive() 
-{
+bool      VMInvokable::IsPrimitive()  {
     return false;
 }
 
@@ -17,20 +16,17 @@ VMSymbol *VMInvokable::GetSignature() {
 }
 
 
-void      VMInvokable::SetSignature(VMSymbol* sig) 
-{ 
+void      VMInvokable::SetSignature(VMSymbol* sig)  { 
     signature = sig;
 }
 
 
-VMClass  *VMInvokable::GetHolder() 
-{
+VMClass  *VMInvokable::GetHolder()  {
     return holder; 
 }
 
 
-void      VMInvokable::SetHolder(VMClass* hld) 
-{
+void      VMInvokable::SetHolder(VMClass* hld) {
     holder = hld; 
 }
 //virtual void invoke_method(VMFrame*) = 0;

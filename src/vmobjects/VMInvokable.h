@@ -7,8 +7,7 @@ class VMSymbol;
 class VMClass;
 class VMFrame;
 
-class VMInvokable : public VMObject
-{
+class VMInvokable : public VMObject {
 public:
     VMInvokable(int nof = 0) : VMObject(nof+2) {};
 

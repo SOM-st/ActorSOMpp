@@ -11,8 +11,7 @@ class VMSymbol;
 class VMClass;
 #include "../misc/defs.h"
 
-class Interpreter
-{
+class Interpreter {
 public:
     Interpreter();
     ~Interpreter();

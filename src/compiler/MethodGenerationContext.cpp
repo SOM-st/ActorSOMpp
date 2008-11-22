@@ -19,12 +19,12 @@ MethodGenerationContext::MethodGenerationContext() {
 	finished = false;
 }
 
-VMMethod* MethodGenerationContext::Assemble()
-{
+VMMethod* MethodGenerationContext::Assemble() {
     // create a method instance with the given number of bytecodes and literals
     int num_literals = this->literals.Size();
     
-    VMMethod* meth = _UNIVERSE->NewMethod(this->signature, bytecode.size(), num_literals);
+    VMMethod* meth = _UNIVERSE->NewMethod(this->signature, bytecode.size(),
+                                                                num_literals);
     
     // populate the fields that are immediately available
     int num_locals = this->locals.Size();
@@ -58,21 +58,21 @@ VMMethod* MethodGenerationContext::Assemble()
     return meth;
 }
 
-VMPrimitive* MethodGenerationContext::AssemblePrimitive()
-{
+VMPrimitive* MethodGenerationContext::AssemblePrimitive() {
     return VMPrimitive::GetEmptyPrimitive(this->signature);
 }
 
 MethodGenerationContext::~MethodGenerationContext() {
 }
 
-int8_t MethodGenerationContext::FindLiteralIndex(VMObject* lit) {//pVMObject lit) {
+int8_t MethodGenerationContext::FindLiteralIndex(VMObject* lit) {
 	return (int8_t)literals.IndexOf(lit);//literals.IndexOf(lit);
 
 }
 
-bool MethodGenerationContext::FindVar(const pString& var, int* index, int* context, bool* is_argument) {
-	if((*index = locals.IndexOf( var)) == -1) {//SEND(mgenc->locals, IndexOfString, var)) == -1) {
+bool MethodGenerationContext::FindVar(const pString& var, int* index, 
+                                        int* context, bool* is_argument) {
+	if((*index = locals.IndexOf( var)) == -1) {
         if((*index = arguments.IndexOf( var)) == -1) {
             if(!outer_genc)
                 return false;
@@ -91,7 +91,11 @@ bool MethodGenerationContext::FindVar(const pString& var, int* index, int* conte
 bool MethodGenerationContext::FindField(const pString& field) {
 	return holder_genc->FindField(field);
 }
-int MethodGenerationContext::GetNumberOfArguments() { return arguments.Size(); };
+
+int MethodGenerationContext::GetNumberOfArguments() { 
+    return arguments.Size(); 
+}
+
 uint8_t MethodGenerationContext::ComputeStackDepth() {
 	uint8_t depth = 0;
     uint8_t max_depth = 0;

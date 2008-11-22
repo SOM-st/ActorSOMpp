@@ -12,8 +12,7 @@ class MethodGenerationContext;
 
 class VMFrame;
 
-class VMMethod :  public VMInvokable //public VMArray,
-{
+class VMMethod :  public VMInvokable { //public VMArray,
 
 public:
 	VMMethod(int bc_count, int number_of_constants, int nof = 0);
@@ -43,8 +42,7 @@ public:
 
     /// Methods are considered byte arrays with meta data.
     // So the index operator returns the bytecode at the index.
-    uint8_t operator[](int idx)
-	{
+    uint8_t operator[](int idx) {
 		return GetBytecode(idx);
 	}
 

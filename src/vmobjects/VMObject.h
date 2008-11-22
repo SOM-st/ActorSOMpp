@@ -14,8 +14,7 @@ class VMClass;
 
 #define FIELDS ((VMObject**)&clazz)
 
-class VMObject
-{
+class VMObject {
 
 public:
     /* Constructor */
@@ -53,8 +52,8 @@ public:
      *   - array size in VMArray; a_b must be set to (size_of_array*sizeof(VMObect*))
      *   - fields in VMMethod, a_b must be set to (number_of_bc + number_of_csts*sizeof(VMObject*))
      */
-	void *operator new( size_t num_bytes, Heap *heap, unsigned int additional_bytes = 0)
-	{
+	void *operator new( size_t num_bytes, Heap *heap, 
+                        unsigned int additional_bytes = 0) {
         /*if (num_bytes == 24) {
             cout << "hier";
         }
@@ -63,30 +62,26 @@ public:
         return mem;
 	}
 
-	void *operator new[](size_t num_bytes, Heap *heap)
-	{
+	void *operator new[](size_t num_bytes, Heap *heap) {
 		return heap->Allocate(num_bytes);
 	}
 
-	void operator delete(void* self, Heap *heap, unsigned int /*additional_bytes*/)
-	{
+	void operator delete(void* self, Heap *heap, 
+                         unsigned int /*additional_bytes*/) {
         int size = ((VMObject*)self)->GetObjectSize();
 		heap->Free(self, size);
 	}
 
-	 void operator delete( void *self, Heap *heap) 
-	 {
+	 void operator delete( void *self, Heap *heap) {
          int size = ((VMObject*)self)->GetObjectSize();
 		 heap->Free(self, size); 
 	 } 
 
-	 void operator delete[]( void *self, Heap *heap ) 
-	 {
+	 void operator delete[]( void *self, Heap *heap ) {
 		 heap->Free(self); 
 	 }
 
-     VMObject* operator->()
-     {
+     VMObject* operator->() {
          cout << "->" << endl;
          return this;
      }

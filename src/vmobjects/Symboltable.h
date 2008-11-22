@@ -6,8 +6,7 @@
 #include "VMSymbol.h"
 #include "../misc/defs.h"
 
-class Symboltable
-{
+class Symboltable {
 public:
     VMSymbol* lookup(const char* restrict);
     VMSymbol* lookup(const pString& restrict);

@@ -10,8 +10,9 @@
 //#include "../memory/Heap.h"
 class VMInteger;
 #include "VMString.h"
-class VMSymbol : public VMString//, public std::string{
-{
+
+class VMSymbol : public VMString { //, public std::string{
+
 public:
 	VMSymbol( const char* str );
 	VMSymbol( const std::string& s );

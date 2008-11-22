@@ -6,8 +6,7 @@
 #include "VMObject.h"
 
 
-class VMBigInteger : public VMObject
-{
+class VMBigInteger : public VMObject {
 public:
     VMBigInteger();
     VMBigInteger(int64_t);

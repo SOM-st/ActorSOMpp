@@ -6,8 +6,13 @@
 class VMObject;
 class VMClass;
 
+#if defined(__GNUC__)
+#define DLL_EXPORT
+#else
+#define DLL_EXPORT __declspec(dllexport)
+#endif
 
-class Globals {
+class DLL_EXPORT Globals {
 public:
     static void InitializeGlobals();
 

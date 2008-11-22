@@ -8,8 +8,7 @@
 
 
 // abstract base class
-class PrimitiveRoutine : public VMObject
-{
+class PrimitiveRoutine : public VMObject {
 public:
     PrimitiveRoutine(int nof = 0) : VMObject(nof){  };
   // two possible functions to call member function. virtual cause derived
@@ -19,8 +18,7 @@ public:
   virtual void Call(VMObject*, VMFrame*)=0;        // call using function
 
   
-  virtual void MarkReferences()
-  {
+  virtual void MarkReferences() {
       if (gcfield) return;
       //PrimitiveRoutine is a VMObject so it is allocated on the heap
       //but it doesn't have any fields not even a clazz, so no need 
@@ -31,9 +29,8 @@ public:
 
 // Typedefs for Primitive loading
 typedef PrimitiveRoutine* CreatePrimitive(const pString&,const pString&);
-typedef void DestroyPrimitive(PrimitiveRoutine*);
 typedef bool SupportsClass(const char*);
-typedef void Setup(Universe* uni, Heap* h);
+typedef void Setup();
 typedef void TearDown();
 
 

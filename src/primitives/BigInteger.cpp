@@ -35,12 +35,12 @@ THE SOFTWARE.
 #include "../vmobjects/VMInteger.h"
 #include "../vmobjects/VMBigInteger.h"
 
-#include "../vm/Universe.h"
+#include "../vm/universe.h"
 
-#include "Core.h"
+#include "../primitivesCore/Routine.h"
+ 
 #include "BigInteger.h"
-#include "Routine.h"
-_BigInteger* BigInteger;
+
 
 #define CHECK_BIGINT(object, result) { \
     /* Check second parameter type: */ \
@@ -48,18 +48,53 @@ _BigInteger* BigInteger;
     if((ptr = dynamic_cast<VMInteger*>(object)) != NULL) { \
         /* Second operand was Integer*/ \
         int32_t i = ptr->GetEmbeddedInteger(); \
-        (result) = universe->NewBigInteger((int64_t)i); \
+        (result) = _UNIVERSE->NewBigInteger((int64_t)i); \
     } else \
         (result) = (VMBigInteger*)(object); \
 }
 
 #define PUSH_INT_OR_BIGINT(result) { \
     if(result > INT32_MAX ||result < INT32_MIN) \
-        frame->Push((VMObject*)universe->NewBigInteger((result))); \
+        frame->Push((VMObject*)_UNIVERSE->NewBigInteger((result))); \
     else \
-        frame->Push((VMObject*)universe->NewInteger((int32_t)(result))); \
+        frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)(result))); \
 }
 //^^DIFFERENT THAN CSOM! Does the CSOM version work at all????????
+
+
+_BigInteger::_BigInteger( ) : Primitive(){
+    this->SetRoutine("plus", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Plus)));
+
+    this->SetRoutine("minus", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Minus)));
+
+    this->SetRoutine("star", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Star)));
+
+    this->SetRoutine("slash", static_cast<PrimitiveRoutine*>( 
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Slash)));
+
+    this->SetRoutine("percent", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Percent)));
+
+    this->SetRoutine("and", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::And)));
+
+    this->SetRoutine("equal", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Equal)));
+
+    this->SetRoutine("lowerthan", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Lowerthan)));
+
+    this->SetRoutine("asString", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::AsString)));
+
+    this->SetRoutine("sqrt", static_cast<PrimitiveRoutine*>(
+        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Sqrt)));
+
+}
+
 
 void  _BigInteger::Plus(VMObject* /*object*/, VMFrame* frame) {
     VMObject* rightObj  = frame->Pop();
@@ -125,7 +160,7 @@ void  _BigInteger::Percent(VMObject* /*object*/, VMFrame* frame) {
     CHECK_BIGINT(rightObj, right);   
     
     // Do operation and perform conversion to Integer if required
-    VMBigInteger* result = universe->NewBigInteger(  left->GetEmbeddedInteger()
+    VMBigInteger* result = _UNIVERSE->NewBigInteger(  left->GetEmbeddedInteger()
                                                     % right->GetEmbeddedInteger());
     
     frame->Push((VMObject*) result);
@@ -140,7 +175,7 @@ void  _BigInteger::And(VMObject* /*object*/, VMFrame* frame) {
     CHECK_BIGINT(rightObj, right);   
     
     // Do operation and perform conversion to Integer if required
-    VMBigInteger* result = universe->NewBigInteger(  left->GetEmbeddedInteger()
+    VMBigInteger* result = _UNIVERSE->NewBigInteger(  left->GetEmbeddedInteger()
                                                     & right->GetEmbeddedInteger());
     
     frame->Push((VMObject*) result);
@@ -185,7 +220,7 @@ void  _BigInteger::AsString(VMObject* /*object*/, VMFrame* frame) {
     int64_t bigint = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << bigint;
-    frame->Push((VMObject*)universe->NewString(pString(Str.str())));
+    frame->Push((VMObject*)_UNIVERSE->NewString(pString(Str.str())));
     
 }
 
@@ -193,36 +228,7 @@ void  _BigInteger::AsString(VMObject* /*object*/, VMFrame* frame) {
 void  _BigInteger::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     VMBigInteger* self = (VMBigInteger*)frame->Pop();
     int64_t i = self->GetEmbeddedInteger();
-    frame->Push((VMObject*)universe->NewDouble(sqrt((double)i)));
+    frame->Push((VMObject*)_UNIVERSE->NewDouble(sqrt((double)i)));
 }
 
-PrimitiveRoutine* _BigInteger::GetRoutine( const pString& routineName )
-{
-    PrimitiveRoutine* result;
-    if (routineName == pString("Plus"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::Plus);
-        else if (routineName == pString("Minus"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::Minus);
-        else if (routineName == pString("Star"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::Star);
-        else if (routineName == pString("Slash"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::Slash);
-        else if (routineName == pString("Percent"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::Percent);
-        else if (routineName == pString("And"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::And);
-        else if (routineName == pString("Equal"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::Equal);
-        else if (routineName == pString("Lowerthan"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::Lowerthan);
-        else if (routineName == pString("AsString"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::AsString);
-        else if (routineName == pString("Sqrt"))
-            result = new (heap) Routine<_BigInteger>(BigInteger, &_BigInteger::Sqrt);
-        else {
-            cout << "method " << routineName << "not found in class BigInteger" << endl;
-            return NULL;
-        }
-        return result;
-}
 

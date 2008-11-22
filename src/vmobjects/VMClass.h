@@ -18,7 +18,7 @@ class VMPrimitive;
 class ClassGenerationContext;
 //class ifstream;
 
-class VMClass : public VMObject{
+class VMClass : public VMObject {
 public:
 	VMClass();
     VMClass(int number_of_fields);
@@ -67,9 +67,9 @@ private:
 #else
     HMODULE loadLib(const pString& path);
     bool isResponsible(HMODULE handle, const pString& cl);
-    static void set_primitives(VMClass* cl, HMODULE handle, const pString& cname,
-                    const char* format
-                    );
+    static void set_primitives(VMClass* cl, HMODULE handle, 
+                               const pString& cname,
+                               const char* format);
 #endif
 
     

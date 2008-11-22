@@ -8,8 +8,7 @@ class Heap;
 class VMObject;
 #include "../misc/defs.h"
 
-class GarbageCollector
-{
+class GarbageCollector {
 public:
 	GarbageCollector(Heap* h);
 	~GarbageCollector();

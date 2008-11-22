@@ -32,11 +32,11 @@ THE SOFTWARE.
 class VMObject;
 class VMFrame;
  
-#include "Primitive.h"
+#include "../primitivesCore/Primitive.h"
 class _Double : public Primitive
 {
 public:
-    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
+    _Double();
     void  Plus(VMObject* object, VMFrame* frame);
     void  Minus(VMObject* object, VMFrame* frame);
     void  Star(VMObject* object, VMFrame* frame);
@@ -49,6 +49,5 @@ public:
     void  Sqrt(VMObject* object, VMFrame* frame);
 };
 
-extern _Double* Double;
 
 #endif

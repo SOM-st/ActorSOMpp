@@ -28,27 +28,17 @@ THE SOFTWARE.
 #include "../vmobjects/VMFrame.h"
 #include "../vmobjects/VMClass.h"
 
-#include "../vm/Universe.h"
+#include "../vm/universe.h"
 
 #include "Class.h"
-#include "Core.h"
-#include "Routine.h"
-_Class* Class;
+ 
+#include "../primitivesCore/Routine.h"
+
+_Class::_Class( ) : Primitive() {
+    this->SetRoutine("new", new (_HEAP) Routine<_Class>(this, &_Class::New));
+}
 
 void  _Class::New(VMObject* /*object*/, VMFrame* frame) {
     VMClass* self = (VMClass*)frame->Pop();
-    frame->Push(universe->NewInstance(self));
+    frame->Push(_UNIVERSE->NewInstance(self));
 }
-
-PrimitiveRoutine* _Class::GetRoutine( const pString& routineName )
-{
-    PrimitiveRoutine* result;
-    if (routineName == pString("New"))
-            result = new (heap) Routine<_Class>(Class, &_Class::New);
-        else {
-            cout << "method " << routineName << "not found in class Class" << endl;
-            return NULL;
-        }
-    return result;
-}
-

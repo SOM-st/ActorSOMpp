@@ -5,8 +5,7 @@
 //#include "OOObject.h"
 #include "VMObject.h"
 
-class VMString : public VMObject
-{
+class VMString : public VMObject {
 public:
 	VMString( const char* str );
 	VMString( const string& s );

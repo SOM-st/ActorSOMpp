@@ -10,8 +10,7 @@ class VMObject;
 class VMInteger;
 
 
-class VMFrame : public VMArray
-{
+class VMFrame : public VMArray {
 public:
     static VMFrame* EmergencyFrameFrom(VMFrame* from, int extraLength);
 

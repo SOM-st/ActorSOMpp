@@ -6,8 +6,7 @@ class VMObject;
 class VMClass;
 
 #include "../misc/defs.h"
-class ClassGenerationContext
-{
+class ClassGenerationContext {
 	
 public:
 	ClassGenerationContext();

@@ -44,8 +44,7 @@ THE SOFTWARE.
 
 
 
-class Parser
-{
+class Parser {
 public:
 	Parser(istream& file);
 	~Parser();
@@ -105,8 +104,8 @@ private:
 	void        nestedBlock(MethodGenerationContext* mgenc);
 	void        blockPattern(MethodGenerationContext* mgenc);
 	void        blockArguments(MethodGenerationContext* mgenc);
-	void        genPushVariable(MethodGenerationContext* mgenc, const pString& var);
-	void        genPopVariable(MethodGenerationContext* mgenc, const pString& var);
+	void        genPushVariable(MethodGenerationContext*, const pString&);
+	void        genPopVariable(MethodGenerationContext*, const pString&);
 
 	Lexer* lexer;
 	//ifstream& infile;

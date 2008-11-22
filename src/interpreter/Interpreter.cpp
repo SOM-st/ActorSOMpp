@@ -20,8 +20,7 @@
 #define _SELF this->GetSelf()
 
 
-Interpreter::Interpreter()
-{
+Interpreter::Interpreter() {
     this->frame = NULL;
     
     uG = pString("unknownGlobal:");
@@ -31,16 +30,13 @@ Interpreter::Interpreter()
 }
 
 
-Interpreter::~Interpreter()
-{
+Interpreter::~Interpreter() {
     // TODO
 }
 
 
-void Interpreter::Start()
-{
-    while (true)
-    {
+void Interpreter::Start() {
+    while (true) {
         int bytecode_index = _FRAME->GetBytecodeIndex();
 
         VMMethod* method = this->GetMethod();
@@ -55,11 +51,11 @@ void Interpreter::Start()
 
         _FRAME->SetBytecodeIndex(next_bytecode_index);
 #ifdef __DEBUG
-        cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) << endl;
+        cout << "Current Bytecode: " << Bytecode::GetBytecodeName(bytecode) 
+             << endl;
 #endif
 // Handle the current bytecode
-        switch(bytecode) 
-        {
+        switch(bytecode) {
             case BC_HALT:             return; // handle the halt bytecode
             case BC_DUP:              do_dup();  break;
             case BC_PUSH_LOCAL:       do_push_local(bytecode_index); break;
@@ -77,33 +73,29 @@ void Interpreter::Start()
             case BC_RETURN_LOCAL:     do_return_local(); break;
             case BC_RETURN_NON_LOCAL: do_return_non_local(); break;
             default:                  _UNIVERSE->ErrorExit(
-                                            "Interpreter: Unexpected bytecode");      
+                                           "Interpreter: Unexpected bytecode"); 
         } // switch
     } // while
 }
 
 
-VMFrame* Interpreter::PushNewFrame( VMMethod* method )
-{
+VMFrame* Interpreter::PushNewFrame( VMMethod* method ) {
     _SETFRAME(_UNIVERSE->NewFrame(_FRAME, method));
     return _FRAME;
 }
 
 
-void Interpreter::SetFrame( VMFrame* frame )
-{
+void Interpreter::SetFrame( VMFrame* frame ) {
     this->frame = frame;   
 }
 
 
-VMFrame* Interpreter::GetFrame()
-{
+VMFrame* Interpreter::GetFrame() {
     return this->frame;
 }
 
 
-VMMethod* Interpreter::GetMethod()
-{
+VMMethod* Interpreter::GetMethod() {
     VMMethod* method = _FRAME->GetMethod();
    /* cout << "bytecodes: ";
       for (int i = 0; i < method->BytecodeLength(); ++i)
@@ -115,15 +107,13 @@ VMMethod* Interpreter::GetMethod()
 }
 
 
-VMObject* Interpreter::GetSelf()
-{
+VMObject* Interpreter::GetSelf() {
     VMFrame* context = _FRAME->GetOuterContext();//ups...
     return context->GetArgument(0,0);
 }
 
 
-VMFrame* Interpreter::popFrame()
-{
+VMFrame* Interpreter::popFrame() {
     VMFrame* result = _FRAME;
     this->SetFrame(_FRAME->GetPreviousFrame());
 
@@ -133,8 +123,7 @@ VMFrame* Interpreter::popFrame()
 }
 
 
-void Interpreter::popFrameAndPushResult( VMObject* result )
-{
+void Interpreter::popFrameAndPushResult( VMObject* result ) {
     VMFrame* prevFrame = this->popFrame();
 
     VMMethod* method = prevFrame->GetMethod();
@@ -146,12 +135,11 @@ void Interpreter::popFrameAndPushResult( VMObject* result )
 }
 
 
-void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
-{
-    VMInvokable* invokable = (VMInvokable*) receiver_class->LookupInvokable(signature);
+void Interpreter::send( VMSymbol* signature, VMClass* receiver_class) {
+    VMInvokable* invokable = 
+                (VMInvokable*) receiver_class->LookupInvokable(signature);
 
-    if (invokable != NULL)
-    {
+    if (invokable != NULL) {
         invokable->Invoke(_FRAME);
     } else {
         //doesNotUnderstand
@@ -161,12 +149,12 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
 
         VMArray* arguments_array = _UNIVERSE->NewArray(number_of_args);
 
-        for (int i = number_of_args - 1; i >= 0; --i)
-        {
+        for (int i = number_of_args - 1; i >= 0; --i) {
             VMObject* o = _FRAME->Pop();
             arguments_array->SetIndexableField(i, o);
         }
-        VMObject* arguments[] = { (VMObject*)signature, (VMObject*) arguments_array };
+        VMObject* arguments[] = { (VMObject*)signature, 
+                                  (VMObject*) arguments_array };
 
         //check if current frame is big enough for this unplanned Send
         //doesNotUnderstand: needs 3 slots, one for this, one for method name, one for args
@@ -186,15 +174,13 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class)
 }
 
 
-void Interpreter::do_dup()
-{
+void Interpreter::do_dup() {
     VMObject* elem = _FRAME->GetStackElement(0);
     _FRAME->Push(elem);
 }
 
 
-void Interpreter::do_push_local( int bytecode_index )
-{
+void Interpreter::do_push_local( int bytecode_index ) {
     VMMethod* method = _METHOD;
     uint8_t bc1 = (*method)[bytecode_index + 1];
     uint8_t bc2 = (*method)[bytecode_index + 2];
@@ -205,8 +191,7 @@ void Interpreter::do_push_local( int bytecode_index )
 }
 
 
-void Interpreter::do_push_argument( int bytecode_index )
-{
+void Interpreter::do_push_argument( int bytecode_index ) {
     VMMethod* method = _METHOD;
     uint8_t bc1 = (*method)[bytecode_index + 1];
     uint8_t bc2 = (*method)[bytecode_index + 2];
@@ -217,8 +202,7 @@ void Interpreter::do_push_argument( int bytecode_index )
 }
 
 
-void Interpreter::do_push_field( int bytecode_index )
-{
+void Interpreter::do_push_field( int bytecode_index ) {
     VMMethod* method = _METHOD;
 
     VMSymbol* field_name = (VMSymbol*) method->GetConstant(bytecode_index);
@@ -232,20 +216,19 @@ void Interpreter::do_push_field( int bytecode_index )
 }
 
 
-void Interpreter::do_push_block( int bytecode_index )
-{
+void Interpreter::do_push_block( int bytecode_index ) {
     VMMethod* method = _METHOD;
 
     VMMethod* blockMethod = (VMMethod*)method->GetConstant(bytecode_index);
 
     int num_of_args = blockMethod->GetNumberOfArguments();
 
-    _FRAME->Push((VMObject*) _UNIVERSE->NewBlock(blockMethod, _FRAME, num_of_args));
+    _FRAME->Push((VMObject*) _UNIVERSE->NewBlock(blockMethod, _FRAME,
+                                                 num_of_args));
 }
 
 
-void Interpreter::do_push_constant( int bytecode_index )
-{
+void Interpreter::do_push_constant( int bytecode_index ) {
     VMMethod* method = _METHOD;
 
     VMObject* constant = method->GetConstant(bytecode_index);
@@ -256,8 +239,7 @@ void Interpreter::do_push_constant( int bytecode_index )
 }
 
 
-void Interpreter::do_push_global( int bytecode_index)
-{
+void Interpreter::do_push_global( int bytecode_index) {
     
 
     VMMethod* method = _METHOD;
@@ -277,11 +259,13 @@ void Interpreter::do_push_global( int bytecode_index)
         int additionalStackSlots = 2 - _FRAME->RemainingStackSize();       
         if (additionalStackSlots > 0) {
 #ifdef __DEBUG
-            cout << "Creating emergeny frame for unknownGlobal: with " << additionalStackSlots
+            cout << "Creating emergeny frame for unknownGlobal: with " 
+                 << additionalStackSlots
                  << " additional stack slots to prevent stack overflow" << endl;
 #endif __DEBUG
             //copy current frame into a bigger one and replace the current frame
-            this->SetFrame(VMFrame::EmergencyFrameFrom(_FRAME, additionalStackSlots));
+            this->SetFrame(VMFrame::EmergencyFrameFrom(_FRAME,
+                           additionalStackSlots));
         }
 
         self->Send(uG, arguments, 1);
@@ -289,14 +273,12 @@ void Interpreter::do_push_global( int bytecode_index)
 }
 
 
-void Interpreter::do_pop()
-{
+void Interpreter::do_pop() {
     _FRAME->Pop();
 }
 
 
-void Interpreter::do_pop_local( int bytecode_index )
-{
+void Interpreter::do_pop_local( int bytecode_index ) {
     VMMethod* method = _METHOD;
 
     uint8_t bc1 = (*method)[bytecode_index + 1];
@@ -308,8 +290,7 @@ void Interpreter::do_pop_local( int bytecode_index )
 }
 
 
-void Interpreter::do_pop_argument( int bytecode_index )
-{
+void Interpreter::do_pop_argument( int bytecode_index ) {
     VMMethod* method = _METHOD;
 
     uint8_t bc1 = (*method)[bytecode_index + 1];
@@ -320,8 +301,7 @@ void Interpreter::do_pop_argument( int bytecode_index )
 }
 
 
-void Interpreter::do_pop_field( int bytecode_index )
-{
+void Interpreter::do_pop_field( int bytecode_index ) {
     VMMethod* method = _METHOD;
     VMSymbol* field_name = (VMSymbol*) method->GetConstant(bytecode_index);
 
@@ -333,8 +313,7 @@ void Interpreter::do_pop_field( int bytecode_index )
 }
 
 
-void Interpreter::do_send( int bytecode_index )
-{
+void Interpreter::do_send( int bytecode_index ) {
     VMMethod* method = _METHOD;
     
     VMSymbol* signature = (VMSymbol*) method->GetConstant(bytecode_index);
@@ -345,14 +324,14 @@ void Interpreter::do_send( int bytecode_index )
 
     VMObject* receiver = _FRAME->GetStackElement(num_of_args-1);
 #ifdef __DEBUG
-    cout << "rec("<<num_of_args-1<<"): " << receiver->GetClass()->GetName()->GetChars() << endl;
+    cout << "rec("<<num_of_args-1<<"): " << 
+            receiver->GetClass()->GetName()->GetChars() << endl;
 #endif
     this->send(signature, receiver->GetClass());
 }
 
 
-void Interpreter::do_super_send( int bytecode_index )
-{
+void Interpreter::do_super_send( int bytecode_index ) {
     VMMethod* method = _METHOD;
     VMSymbol* signature = (VMSymbol*) method->GetConstant(bytecode_index);
 
@@ -369,33 +348,30 @@ void Interpreter::do_super_send( int bytecode_index )
         VMObject* receiver = _FRAME->GetStackElement(num_of_args - 1);
         VMArray* arguments_array = _UNIVERSE->NewArray(num_of_args);
 
-        for (int i = num_of_args - 1; i >= 0; --i)
-        {
+        for (int i = num_of_args - 1; i >= 0; --i) {
             VMObject* o = _FRAME->Pop();
             arguments_array->SetIndexableField(i ,o);
         }
-        VMObject* arguments[] = { (VMObject*)signature, (VMObject*) arguments_array };
+        VMObject* arguments[] = { (VMObject*)signature, 
+                                  (VMObject*) arguments_array };
         receiver->Send(dnu, arguments, 2);
     }
 }
 
 
-void Interpreter::do_return_local()
-{
+void Interpreter::do_return_local() {
     VMObject* result = _FRAME->Pop();
 
     this->popFrameAndPushResult(result);
 }
 
 
-void Interpreter::do_return_non_local()
-{
+void Interpreter::do_return_non_local() {
     VMObject* result = _FRAME->Pop();
 
     VMFrame* context = _FRAME->GetOuterContext();
 
-    if (!context->HasPreviousFrame())
-    {
+    if (!context->HasPreviousFrame()) {
         VMBlock* block = (VMBlock*) _FRAME->GetArgument(0, 0);
         VMFrame* prev_frame = _FRAME->GetPreviousFrame();
         VMFrame* outer_context = prev_frame->GetOuterContext();

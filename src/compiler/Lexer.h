@@ -63,8 +63,7 @@ private:
 	void        skipWhiteSpace(void);
 	void        skipComment(void);	
 	
-	Lexer &operator=(const Lexer& /*src*/)
-	{
+	Lexer &operator=(const Lexer& /*src*/) {
 	}
 
 	istream& infile;

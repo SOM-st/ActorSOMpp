@@ -7,8 +7,7 @@
 #include "VMObject.h"
 #include "VMInteger.h"
 
-class VMArray : public VMObject
-{
+class VMArray : public VMObject {
 public:
     VMArray(int size, int nof = 0);
 	//virtual ~VMArray();
@@ -20,8 +19,7 @@ public:
 	VMArray*    CopyAndExtendWith(VMObject*);
 	void        CopyIndexableFieldsTo(VMArray*);
 
-	VMObject* operator[](int idx)
-	{
+	VMObject* operator[](int idx) {
 		return GetIndexableField(idx);
 	}
 

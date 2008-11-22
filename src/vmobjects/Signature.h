@@ -5,8 +5,7 @@
 
 class VMSymbol;
 
-class Signature
-{
+class Signature {
 public:
     static int GetNumberOfArguments(VMSymbol* sig);
     static bool IsBinary(VMSymbol* sig);

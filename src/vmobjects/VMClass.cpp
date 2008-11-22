@@ -34,39 +34,31 @@
 // as in AClass::anInstanceMethod_
 
 
-VMClass::VMClass() : VMObject(4)
-{
+VMClass::VMClass() : VMObject(4) {
     //this->objectSize = sizeof(VMClass);
 }
 
 
-VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4)
-{
+VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4) {
     //this->objectSize = sizeof(VMClass) + number_of_fields*sizeof(VMObject*);
 }
 
 
-bool VMClass::HasSuperClass()
-{
+bool VMClass::HasSuperClass() {
     return (super_class != NULL && super_class != Globals::NilObject());
 }
 
 
-bool VMClass::AddInstanceInvokable(VMObject *ptr)
-{
+bool VMClass::AddInstanceInvokable(VMObject *ptr) {
     VMInvokable* newInvokable = dynamic_cast<VMInvokable*>(ptr);
-    if (newInvokable == NULL)
-    {
+    if (newInvokable == NULL) {
         cout << "Error: trying to add non-invokable to invokables array" << endl;
         throw std::bad_typeid();//("Trying to add non-invokable to invokables array");
     }
-	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i)
-	{
+	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i) {
         VMInvokable* inv = dynamic_cast<VMInvokable*>( (*instance_invokables)[i] );
-		if (inv != 0)
-        {
-            if (newInvokable->GetSignature() == inv->GetSignature())
-            {
+		if (inv != 0) {
+            if (newInvokable->GetSignature() == inv->GetSignature()) {
                 this->SetInstanceInvokable(i, ptr);
                 return false;
             }
@@ -87,19 +79,15 @@ bool VMClass::AddInstanceInvokable(VMObject *ptr)
 }
 
 
-void VMClass::AddInstancePrimitive(VMPrimitive *ptr)
-{
-	if (AddInstanceInvokable((VMObject*)ptr))
-    {
+void VMClass::AddInstancePrimitive(VMPrimitive *ptr) {
+	if (AddInstanceInvokable((VMObject*)ptr)) {
 		//cout << "Warn: Primitive "<<ptr->GetSignature<<" is not in class definition for class " << name->GetStdString() << endl;
 	}
 }
 
 
-VMSymbol* VMClass::GetInstanceFieldName(int index)
-{
-	if (index >= numberOfSuperInstanceFields())
-	{
+VMSymbol* VMClass::GetInstanceFieldName(int index) {
+	if (index >= numberOfSuperInstanceFields()) {
 		index -= numberOfSuperInstanceFields();
 		return (VMSymbol*) (*instance_fields)[index];
 	}
@@ -108,58 +96,48 @@ VMSymbol* VMClass::GetInstanceFieldName(int index)
 }
 
 
-VMClass* VMClass::GetSuperClass()
-{
+VMClass* VMClass::GetSuperClass() {
 	return super_class;
 }
 
 
-void VMClass::SetSuperClass(VMClass* sup)
-{
+void VMClass::SetSuperClass(VMClass* sup) {
 	super_class = sup;
 }
 
 
-VMSymbol* VMClass::GetName()
-{
+VMSymbol* VMClass::GetName() {
 	return name;
 }
 
 
-void VMClass::SetName(VMSymbol* nam)
-{
+void VMClass::SetName(VMSymbol* nam) {
 	name = nam;
 }
 
 
-VMArray* VMClass::GetInstanceFields()
-{
+VMArray* VMClass::GetInstanceFields() {
 	return instance_fields;
 }
 
 
-void VMClass::SetInstanceFields(VMArray* inst_fields)
-{
+void VMClass::SetInstanceFields(VMArray* inst_fields) {
 	instance_fields = inst_fields;
 }
 
 
-VMArray  *VMClass::GetInstanceInvokables()
-{
+VMArray  *VMClass::GetInstanceInvokables() {
 	return instance_invokables;
 }
 
 
-void      VMClass::SetInstanceInvokables(VMArray* invokables)
-{
+void      VMClass::SetInstanceInvokables(VMArray* invokables) {
 
 	instance_invokables = invokables;
 
-    for (int i = 0; i < this->GetNumberOfInstanceInvokables(); ++i)
-    {
+    for (int i = 0; i < this->GetNumberOfInstanceInvokables(); ++i) {
         VMInvokable* inv = (VMInvokable*)(*instance_invokables)[i];
-        if (inv != Globals::NilObject()) 
-        {
+        if (inv != Globals::NilObject()) {
             inv->SetHolder(this);
         }
     }
@@ -167,25 +145,21 @@ void      VMClass::SetInstanceInvokables(VMArray* invokables)
 }
 
 
-int       VMClass::GetNumberOfInstanceInvokables()
-{
+int       VMClass::GetNumberOfInstanceInvokables() {
 	return instance_invokables->GetNumberOfIndexableFields();
 }
 
 
-VMObject *VMClass::GetInstanceInvokable(int index)
-{
+VMObject *VMClass::GetInstanceInvokable(int index) {
     return (*instance_invokables)[index];
 	//return instance_invokables[index];
 	//return NULL;
 }
 
 
-void      VMClass::SetInstanceInvokable(int index, VMObject* invokable)
-{
+void      VMClass::SetInstanceInvokable(int index, VMObject* invokable) {
 	instance_invokables->SetIndexableField(index, invokable);
-    if (invokable != Globals::NilObject())
-    {
+    if (invokable != Globals::NilObject()) {
         VMInvokable* inv = (VMInvokable*) invokable;
         inv->SetHolder(this);
     }
@@ -193,29 +167,25 @@ void      VMClass::SetInstanceInvokable(int index, VMObject* invokable)
 }
 
 
-VMObject* VMClass::LookupInvokable(VMSymbol* name)
-{
+VMObject* VMClass::LookupInvokable(VMSymbol* name) {
     VMInvokable* invokable = NULL;
-    for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i)
-    {
+    for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
         invokable = (VMInvokable*)(GetInstanceInvokable(i));
         if (invokable->GetSignature() == name) 
             return (VMObject*)invokable;
     }
     invokable = NULL;
     //look in super class
-    if (this->HasSuperClass()) 
-    {
+    if (this->HasSuperClass())  {
         invokable = (VMInvokable*)this->super_class->LookupInvokable(name);
     }
 	return (VMObject*)invokable;
 }
 
 
-int       VMClass::LookupFieldIndex(VMSymbol* name)
-{
-    for (int i = 0; i <=GetNumberOfInstanceFields(); ++i) //even with GetNumberOfInstanceFields == 0 there is the class field
-    {
+int       VMClass::LookupFieldIndex(VMSymbol* name) {
+    for (int i = 0; i <=GetNumberOfInstanceFields(); ++i) { 
+        //even with GetNumberOfInstanceFields == 0 there is the class field 
         if (name == this->GetInstanceFieldName(i) ||
             name->GetStdString() == this->GetInstanceFieldName(i)->GetStdString()) 
                 return i;
@@ -224,17 +194,14 @@ int       VMClass::LookupFieldIndex(VMSymbol* name)
 }
 
 
-int       VMClass::GetNumberOfInstanceFields()
-{
+int       VMClass::GetNumberOfInstanceFields() {
 	return instance_fields->GetNumberOfIndexableFields()
            + this->numberOfSuperInstanceFields();
 }
 
 
-bool      VMClass::HasPrimitives()
-{
-	for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i)
-    {
+bool      VMClass::HasPrimitives() {
+	for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
         VMInvokable* invokable = (VMInvokable*)(GetInstanceInvokable(i));
         if (invokable->IsPrimitive()) return true;
     }
@@ -242,8 +209,7 @@ bool      VMClass::HasPrimitives()
 }
 
 
-void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
-{//todo do this the "right" way. for now we have a fake dll lookup in Core.h
+void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count) {
 
     // the library handle
     //ifstream* dlhandle = NULL;
@@ -258,52 +224,47 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
     //pString cname = this->name->GetStdString;
 
     //// iterate the classpathes
-    for(vector<pString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i)
-    {
+    for(vector<pString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i) {
         // check the core library
         pString loadstring = genCoreLoadstring(*i);
         dlhandle = loadLib(loadstring);
-        if(dlhandle != NULL && isResponsible(dlhandle, cname))
-        {
+        if(dlhandle != NULL && isResponsible(dlhandle, cname)) {
             // the core library is found and responsible
             //initialize core (core has to make sure not to initialize twice -> Core.cpp)
             //Where / How is this done in CSOM?????????
-            Setup* setup = (Setup*) dlsym(dlhandle, "setup");
-            const char* dlsym_error = dlerror();
-            if (!setup) {
-                cerr << "Cannot load Core library: " << dlsym_error << '\n';
-                dlclose(dlhandle);
-                _UNIVERSE->ErrorExit("Core library does not define the setup() initializer.");
-            }
-            //call the setup function to intialize the class library
-            setup(_UNIVERSE, _HEAP);
+            //Setup* setup = (Setup*) dlsym(dlhandle, "setup");
+            //const char* dlsym_error = dlerror();
+            //if (!setup) {
+            //    cerr << "Cannot load Core library: " << dlsym_error << '\n';
+            //    dlclose(dlhandle);
+            //    _UNIVERSE->ErrorExit("Core library does not define the setup() initializer.");
+            //}
+            ////call the setup function to intialize the class library
+            //setup();
             break;
         }
-    
+    cout << "2222222222222222" << endl;
         // the core library is not found or not responsible, 
         // continue w/ class file
         loadstring = genLoadstring(*i, cname);
         dlhandle = loadLib(loadstring);
-        if(dlhandle != NULL)
-        {
+        if(dlhandle != NULL) {
             //
             // the class library was found...
             //
-            if(isResponsible(dlhandle, cname))
-            {
+            if(isResponsible(dlhandle, cname)) {
                 //
                 // ...and is responsible.
                 //
-                Setup* setup = (Setup*) dlsym(dlhandle, "setup");
-                const char* dlsym_error = dlerror();
-                if (!setup)
-                {
-                    cerr << "Cannot load symbol \"setup\": " << dlsym_error << '\n';
-                    dlclose(dlhandle);
-                    _UNIVERSE->ErrorExit("Library does not define the setup() initializer.");
-                }
-                //call the setup function to intialize the class library
-                setup(_UNIVERSE, _HEAP);
+                //Setup* setup = (Setup*) dlsym(dlhandle, "setup");
+                //const char* dlsym_error = dlerror();
+                //if (!setup) {
+                //    cerr << "Cannot load symbol \"setup\": " << dlsym_error << '\n';
+                //    dlclose(dlhandle);
+                //    _UNIVERSE->ErrorExit("Library does not define the setup() initializer.");
+                //}
+                ////call the setup function to intialize the class library
+                //setup();
                 break;
             } else {
                 //
@@ -322,8 +283,7 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
 
     // finished cycling,
     // check if a lib was found.
-    if(dlhandle == NULL)
-    {
+    if(dlhandle == NULL) {
         cout << "load failure: ";
         cout << "could not load primitive library for " << cname << endl;
         _UNIVERSE->Quit(ERR_FAIL);
@@ -349,9 +309,9 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count)
 
 //private Methods
 
-int VMClass::numberOfSuperInstanceFields()
-{
-	if (this->HasSuperClass()) return this->super_class->GetNumberOfInstanceFields();
+int VMClass::numberOfSuperInstanceFields() {
+	if (this->HasSuperClass()) 
+        return this->super_class->GetNumberOfInstanceFields();
 	return 0;
 }
 
@@ -359,8 +319,7 @@ int VMClass::numberOfSuperInstanceFields()
 #define shared_extension ".csp"
 pString VMClass::genLoadstring(const pString& cp, 
                        const pString& cname
-                       ) 
-{
+                       ) {
     
     pString loadstring = string(cp);
     loadstring += file_separator;
@@ -376,8 +335,7 @@ pString VMClass::genLoadstring(const pString& cp,
  *  at the classpath given.
  *
  */
-pString VMClass::genCoreLoadstring(const pString& cp)
-{
+pString VMClass::genCoreLoadstring(const pString& cp) {
     #define S_CORE "SOMCore"
     pString corename = string(S_CORE);
     pString result = genLoadstring(cp, corename);
@@ -397,8 +355,7 @@ void* VMClass::loadLib(const pString& path) {
 
 #else
 
-HMODULE VMClass::loadLib(const pString& path)
-{
+HMODULE VMClass::loadLib(const pString& path) {
 
 #endif
 
@@ -417,8 +374,7 @@ HMODULE VMClass::loadLib(const pString& path)
 #if defined(__GNUC__)
     void* dlhandle;
     // try load lib
-    if((dlhandle=dlopen(path.c_str(), DL_LOADMODE)))
-    {
+    if((dlhandle=dlopen(path.c_str(), DL_LOADMODE))) {
 #else
     HMODULE dlhandle;
     // try load lib
@@ -428,8 +384,7 @@ HMODULE VMClass::loadLib(const pString& path)
     int length = MultiByteToWideChar(CP_ACP,0,filename ,strlen(filename)+1,NULL,0);
     LPWSTR buffer = (LPWSTR)malloc(sizeof(WCHAR)*length);
     MultiByteToWideChar(CP_ACP,0,filename ,strlen(filename)+1,buffer,length);
-    if((dlhandle=dlopen(buffer)))
-    {
+    if((dlhandle=dlopen(buffer))) {
         free(buffer);
 #endif
     
@@ -449,13 +404,11 @@ HMODULE VMClass::loadLib(const pString& path)
  */
 #if defined(__GNUC__)
 
-bool VMClass::isResponsible(void* dlhandle, const pString& cl)
-{
+bool VMClass::isResponsible(void* dlhandle, const pString& cl) {
 
 #else
 
-bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl) 
-{
+bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl) {
 
 #endif
 
@@ -463,9 +416,8 @@ bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl)
     SupportsClass* supports_class=NULL;
 
     supports_class = (SupportsClass*)dlsym(dlhandle, "supports_class");
-
-	if(!supports_class)
-    {
+    cout << "11111111111111" << endl;
+	if(!supports_class) {
         /*LPTSTR pszMessage;
         DWORD dwLastError = GetLastError(); 
 
@@ -500,28 +452,24 @@ bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl)
 #if defined(__GNUC__)
 void VMClass::set_primitives(VMClass* cl, void* dlhandle, const pString& cname,
                     const char* format
-                    ) 
-{    
+                    ) {    
 #else
-void VMClass::set_primitives(VMClass* cl, HMODULE dlhandle, const pString& cname,
-                    const char* format
-                    ) 
-{    
+void VMClass::set_primitives(VMClass* cl, HMODULE dlhandle, 
+                             const pString& cname,
+                             const char* format) {    
 #endif
     VMPrimitive* the_primitive;
     PrimitiveRoutine*   routine=NULL;
     VMInvokable* an_invokable;
     // iterate invokables
-    for(int i = 0; i < cl->GetNumberOfInstanceInvokables(); i++) 
-    {
+    for(int i = 0; i < cl->GetNumberOfInstanceInvokables(); i++)  {
         
         an_invokable = (VMInvokable*)cl->GetInstanceInvokable(i);
 #ifdef __DEBUG
         cout << "cname: >" << cname << "<"<< endl;
         cout << an_invokable->GetSignature()->GetStdString() << endl;
 #endif
-        if(an_invokable->IsPrimitive())
-        {
+        if(an_invokable->IsPrimitive()) {
             the_primitive = (VMPrimitive*) an_invokable;
             //
             // we have a primitive to load
@@ -531,12 +479,13 @@ void VMClass::set_primitives(VMClass* cl, HMODULE dlhandle, const pString& cname
 
             pString selector = sig->GetPlainString();
             
-            CreatePrimitive* create = (CreatePrimitive*) dlsym(dlhandle, "create");
+            CreatePrimitive* create = 
+                                (CreatePrimitive*) dlsym(dlhandle, "create");
             routine = create(cname, selector);
             
-            if(!routine) 
-            {
-                cout << "could not load primitive '"<< selector <<"' for class " << cname << endl;
+            if(!routine) {
+                cout << "could not load primitive '"<< selector 
+                     <<"' for class " << cname << endl;
                             
                 _UNIVERSE->Quit(ERR_FAIL);
             }

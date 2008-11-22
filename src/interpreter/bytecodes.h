@@ -98,8 +98,8 @@ static const char* bytecode_names[] = {
     "RETURN_NON_LOCAL"
 };
 
-class Bytecode
-{
+class Bytecode {
+
 public:
     static char* GetBytecodeName(uint8_t bc) {
         return (char*)bytecode_names[bc];

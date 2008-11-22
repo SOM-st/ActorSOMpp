@@ -3,8 +3,7 @@
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMClass.h"
 
-ClassGenerationContext::ClassGenerationContext() 
-{
+ClassGenerationContext::ClassGenerationContext() {
 	name = NULL;
 	super_name = NULL;
     class_side = false;
@@ -15,25 +14,21 @@ ClassGenerationContext::ClassGenerationContext()
 }
 
 
-ClassGenerationContext::~ClassGenerationContext() 
-{
+ClassGenerationContext::~ClassGenerationContext() {
 }
 
 
-void ClassGenerationContext::AddClassField(VMObject* field) 
-{
+void ClassGenerationContext::AddClassField(VMObject* field) {
 	this->class_fields.Add(field);
 }
 
 
-void ClassGenerationContext::AddInstanceField(VMObject* field) 
-{
+void ClassGenerationContext::AddInstanceField(VMObject* field) {
 	this->instance_fields.Add(field);
 }
 
 
-bool ClassGenerationContext::FindField(const pString& field) 
-{
+bool ClassGenerationContext::FindField(const pString& field) {
 
 	pList fields = IsClassSide() ?
         class_fields :
@@ -44,15 +39,13 @@ bool ClassGenerationContext::FindField(const pString& field)
 
 
 
-void ClassGenerationContext::AddInstanceMethod(VMObject* method) 
-{
+void ClassGenerationContext::AddInstanceMethod(VMObject* method) {
 	this->instance_methods.Add(method);
 }
 
 
 
-void ClassGenerationContext::AddClassMethod(VMObject* method) 
-{
+void ClassGenerationContext::AddClassMethod(VMObject* method) {
 	this->class_methods.Add(method);
 }
 
@@ -89,9 +82,9 @@ VMClass* ClassGenerationContext::Assemble() {
 
 
 
-void ClassGenerationContext::AssembleSystemClass( VMClass* system_class ) 
-{
-    system_class->SetInstanceInvokables(_UNIVERSE->NewArrayList(instance_methods));
+void ClassGenerationContext::AssembleSystemClass( VMClass* system_class ) {
+    system_class->SetInstanceInvokables(_UNIVERSE->NewArrayList
+                                                        (instance_methods));
     system_class->SetInstanceFields(_UNIVERSE->NewArrayList(instance_fields));
     // class-bound == class-instance-bound 
     VMClass* super_mclass = system_class->GetClass();

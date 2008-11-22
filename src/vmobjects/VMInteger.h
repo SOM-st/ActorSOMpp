@@ -7,8 +7,7 @@
 #include "../misc/defs.h"
 
 
-class VMInteger : public VMObject
-{
+class VMInteger : public VMObject {
 public:
     VMInteger();
     VMInteger(int32_t);

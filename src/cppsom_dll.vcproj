@@ -366,10 +366,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\vmobjects\pVMObject.h"
-				>
-			</File>
-			<File
 				RelativePath=".\vm\Shell.h"
 				>
 			</File>

@@ -124,7 +124,7 @@ Symbol Lexer::GetSym(void) {
     else _MATCH('^', Exit)
     else _MATCH('.', Period)
     else if(_BC == '-') {
-		if(!buf.substr(bufp, SEPARATOR.length()).compare(SEPARATOR)) {// !strncmp(buf + bufp, SEPARATOR, strlen(SEPARATOR))) {
+		if(!buf.substr(bufp, SEPARATOR.length()).compare(SEPARATOR)) {
             char* t = text;
             while(_BC == '-')
                 *t++ = buf[bufp++];

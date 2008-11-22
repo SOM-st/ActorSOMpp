@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="SOMCore"
-	ProjectGUID="{41B17196-BA46-414B-82BA-7CCF213BA77E}"
-	RootNamespace="SOMCore"
+	Name="primitivesCore"
+	ProjectGUID="{0D3B827C-96D7-40C0-8319-B3A3EA492D96}"
+	RootNamespace="primitivesCore"
 	Keyword="ManagedCProj"
 	TargetFrameworkVersion="196613"
 	>
@@ -18,11 +18,11 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)/Smalltalk"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)"
-			ConfigurationType="2"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
 			CharacterSet="1"
-			ManagedExtensions="0"
+			ManagedExtensions="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -42,7 +42,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\Users\abraxas\hpi\CPPSOM\trunk\src"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -59,22 +58,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="$(NOINHERIT)"
-				OutputFile="$(OutDir)\$(ProjectName).csp"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories=""
-				ModuleDefinitionFile="SOMCore.def"
-				GenerateDebugInformation="true"
-				AssemblyDebug="1"
-				TurnOffAssemblyGeneration="false"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -84,9 +71,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -120,7 +104,7 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -137,7 +121,6 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit)"
 				LinkIncremental="1"
-				ModuleDefinitionFile="SOMCore.def"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -188,51 +171,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Array.cpp"
+				RelativePath=".\Primitive.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\BigInteger.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Block.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Class.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Core.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Double.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Integer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Object.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SOMCore.def"
-				>
-			</File>
-			<File
-				RelativePath=".\String.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Symbol.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\System.cpp"
+				RelativePath=".\PrimitiveLoader.cpp"
 				>
 			</File>
 		</Filter>
@@ -242,31 +185,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Array.h"
+				RelativePath=".\Primitive.h"
 				>
 			</File>
 			<File
-				RelativePath=".\BigInteger.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Block.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Class.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Double.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Integer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Object.h"
+				RelativePath=".\PrimitiveLoader.h"
 				>
 			</File>
 			<File
@@ -274,22 +197,20 @@
 				>
 			</File>
 			<File
-				RelativePath=".\String.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Symbol.h"
-				>
-			</File>
-			<File
-				RelativePath=".\System.h"
+				RelativePath=".\Routine.h"
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\SOMCore.rc"
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-		</File>
+			<File
+				RelativePath=".\app.rc"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

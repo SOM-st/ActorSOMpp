@@ -32,12 +32,12 @@ THE SOFTWARE.
 class VMObject;
 class VMFrame;
 
-#include "Primitive.h"
+#include "../primitivesCore/Primitive.h"
 
 class _BigInteger : public Primitive
 {
 public:
-    virtual PrimitiveRoutine* GetRoutine(const pString& routineName);
+    _BigInteger();
     void  Plus(VMObject* object, VMFrame* frame);
     void  Minus(VMObject* object, VMFrame* frame);
     void  Star(VMObject* object, VMFrame* frame);
@@ -51,7 +51,6 @@ public:
 
 };
 
-extern _BigInteger* BigInteger;
 #endif
 
 

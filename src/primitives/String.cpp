@@ -31,13 +31,32 @@ THE SOFTWARE.
 #include "../vmobjects/VMString.h"
 #include "../vmobjects/VMInteger.h"
 
-#include "../vm/Universe.h"
+#include "../vm/universe.h"
 
 #include "../misc/defs.h"
-#include "Core.h"
+ 
 #include "String.h"
-#include "Routine.h"
-_String* String;
+#include "../primitivesCore/Routine.h"
+
+_String::_String( ) : Primitive() {
+    this->SetRoutine("concatenate_", new (_HEAP) 
+        Routine<_String>(this, &_String::Concatenate_));
+
+    this->SetRoutine("asSymbol", new (_HEAP) 
+        Routine<_String>(this, &_String::AsSymbol));
+
+    this->SetRoutine("hashcode", new (_HEAP) 
+        Routine<_String>(this, &_String::Hashcode));
+
+    this->SetRoutine("length", new (_HEAP) 
+        Routine<_String>(this, &_String::Length));
+
+    this->SetRoutine("equal", new (_HEAP) 
+        Routine<_String>(this, &_String::Equal));
+
+    this->SetRoutine("primSubstringFrom_To_", new (_HEAP)
+        Routine<_String>(this, &_String::PrimSubstringFrom_To_));
+}
 
 void  _String::Concatenate_(VMObject* /*object*/, VMFrame* frame) {
 
@@ -48,20 +67,20 @@ void  _String::Concatenate_(VMObject* /*object*/, VMFrame* frame) {
     
     pString result = s + a;
 
-    frame->Push((VMObject*)universe->NewString(result));
+    frame->Push((VMObject*)_UNIVERSE->NewString(result));
 }
 
 
 void  _String::AsSymbol(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
     pString result = self->GetStdString();
-    frame->Push((VMObject*)universe->SymbolFor(result));
+    frame->Push((VMObject*)_UNIVERSE->SymbolFor(result));
 }
 
 
 void  _String::Hashcode(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
-    frame->Push((VMObject*)universe->NewInteger(self->GetHash()));
+    frame->Push((VMObject*)_UNIVERSE->NewInteger(self->GetHash()));
 }
 
 
@@ -70,7 +89,7 @@ void  _String::Length(VMObject* /*object*/, VMFrame* frame) {
     //pString result = self->GetStdString();
     //size_t len = result.length();
     size_t len = self->GetStringLength();
-    frame->Push(universe->NewInteger((int32_t)len));
+    frame->Push(_UNIVERSE->NewInteger((int32_t)len));
 }
 
 
@@ -104,28 +123,7 @@ void  _String::PrimSubstringFrom_To_(VMObject* /*object*/, VMFrame* frame) {
     
     pString result = str.substr(s, e - s);
 
-    frame->Push((VMObject*) universe->NewString(result));
+    frame->Push((VMObject*) _UNIVERSE->NewString(result));
 }
 
-PrimitiveRoutine* _String::GetRoutine( const pString& routineName )
-{
-    PrimitiveRoutine* result;
-    if (routineName == pString("Concatenate_"))
-        result = new (heap) Routine<_String>(String, &_String::Concatenate_);
-    else if (routineName == pString("AsSymbol"))
-        result = new (heap) Routine<_String>(String, &_String::AsSymbol);
-    else if (routineName == pString("Hashcode"))
-        result = new (heap) Routine<_String>(String, &_String::Hashcode);
-    else if (routineName == pString("Length"))
-        result = new (heap) Routine<_String>(String, &_String::Length);
-    else if (routineName == pString("Equal"))
-        result = new (heap) Routine<_String>(String, &_String::Equal);
-    else if (routineName == pString("PrimSubstringFrom_To_"))
-        result = new (heap) Routine<_String>(String, &_String::PrimSubstringFrom_To_);
-    else {
-        cout << "method " << routineName << "not found in class String" << endl;
-        return NULL;
-    }
-    return result;
-}
 

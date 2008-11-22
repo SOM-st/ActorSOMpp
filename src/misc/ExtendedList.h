@@ -12,8 +12,7 @@ using namespace std;
 
 
 template <class T>
-class ExtendedList
-{
+class ExtendedList {
 public:
 	explicit ExtendedList();
 	//~ExtendedList();
@@ -28,8 +27,7 @@ public:
 	int IndexOf(const T& needle);
     typedef typename list<T>::iterator iterator_t;
     typedef typename list<T>::const_iterator const_iterator_t;
-    iterator_t begin() // changed return type to above typedefs
-    {
+    iterator_t begin() {
         return theList.begin();
     }
     // implement for const objects...
@@ -41,8 +39,7 @@ private:
 
 
 template <class T>
-ExtendedList<T>::ExtendedList()
-{
+ExtendedList<T>::ExtendedList() {
 	theList.clear();
 }
 
@@ -53,36 +50,31 @@ ExtendedList<T>::ExtendedList()
 
 
 template <class T>
-void ExtendedList<T>::Add(const T& ptr)
-{
+void ExtendedList<T>::Add(const T& ptr) {
 	theList.push_back(ptr);
 }
 
 
 template <class T>
-void ExtendedList<T>::AddAll(const ExtendedList<T>* list)
-{
+void ExtendedList<T>::AddAll(const ExtendedList<T>* list) {
 	theList.merge(list->theList);
 }
 
 
 template <class T>
-void ExtendedList<T>::AddIfAbsent(const T& ptr)
-{
+void ExtendedList<T>::AddIfAbsent(const T& ptr) {
 	if (IndexOf(ptr) == -1) Add(ptr);
 }
 
 
 template <class T>
-void ExtendedList<T>::Clear()
-{
+void ExtendedList<T>::Clear() {
 	theList.clear();
 }
 
 
 template <class T>
-T ExtendedList<T>::get(int index)
-{
+T ExtendedList<T>::get(int index) {
     for (iterator_t it = theList.begin(); it!=theList.end(); ++it){
 		if (index == 0) return *it;
 		--index;
@@ -92,8 +84,7 @@ T ExtendedList<T>::get(int index)
 
 
 template <class T>
-int ExtendedList<T>::Size()
-{
+int ExtendedList<T>::Size() {
 	return theList.size();
 }
 
@@ -110,8 +101,7 @@ int ExtendedList<T>::IndexOf(const T& needle) {
 
 
 template < class T >
-void ExtendedList<T>::push_back( const T& ptr )
-{
+void ExtendedList<T>::push_back( const T& ptr ) {
     theList.push_back(ptr);
 }
 

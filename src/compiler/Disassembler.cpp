@@ -101,12 +101,12 @@ void Disassembler::DumpMethod(VMMethod* method, const char* indent) {
     {   // output stack information
         int locals = method->GetNumberOfLocals(); 
         int max_stack = method->GetMaximumNumberOfStackElements();  
-        debug_dump("%s<%d locals, %d stack, %d bc_count>\n", indent, locals, max_stack, method->GetNumberOfBytecodes());
+        debug_dump("%s<%d locals, %d stack, %d bc_count>\n", indent, locals,
+                                max_stack, method->GetNumberOfBytecodes());
     }
 #ifdef _DEBUG
     cout << "bytecodes: ";
-      for (int i = 0; i < method->GetNumberOfBytecodes(); ++i)
-    {
+      for (int i = 0; i < method->GetNumberOfBytecodes(); ++i) {
         cout  << (int)(*method)[i] << " ";
     }
     cout << endl;
@@ -114,8 +114,7 @@ void Disassembler::DumpMethod(VMMethod* method, const char* indent) {
     // output bytecodes
     for(int bc_idx = 0; 
         bc_idx < method->GetNumberOfBytecodes(); 
-        bc_idx += Bytecode::GetBytecodeLength((*method)[bc_idx])
-    ) {
+        bc_idx += Bytecode::GetBytecodeLength((*method)[bc_idx]) ) {
         // the bytecode.
         uint8_t bytecode = BC_0;
         // indent, bytecode index, bytecode mnemonic
@@ -138,7 +137,8 @@ void Disassembler::DumpMethod(VMMethod* method, const char* indent) {
                 if (cst != NULL) {
                     VMSymbol* name = dynamic_cast<VMSymbol*>(cst);
                     if (name != NULL) {
-                        debug_print("(index: %d) field: %s\n", BC_1, name->GetChars());
+                        debug_print("(index: %d) field: %s\n", BC_1, 
+                                                            name->GetChars());
                         break;
                     }
                 } else
@@ -171,7 +171,8 @@ void Disassembler::DumpMethod(VMMethod* method, const char* indent) {
                 if (cst != NULL) {
                     VMSymbol* name = dynamic_cast<VMSymbol*>(cst);
                     if (name != NULL) {
-                        debug_print("(index: %d) value: %s\n", BC_1, name->GetChars());
+                        debug_print("(index: %d) value: %s\n", BC_1, 
+                                                            name->GetChars());
                         break;
                     }
                 } else
@@ -408,10 +409,12 @@ void Disassembler::DumpBytecode(VMFrame* frame, VMMethod* method, int bc_idx) {
             debug_print("(index: %d) signature: %s (", BC_1,
                         sel->GetChars());
             //handle primitives, they don't increase call-depth
-            VMObject* elem = _UNIVERSE->GetInterpreter()->GetFrame()->GetStackElement(
-                                                Signature::GetNumberOfArguments(sel)-1);
+            VMObject* elem = _UNIVERSE->GetInterpreter()->GetFrame()->
+                                   GetStackElement(
+                                       Signature::GetNumberOfArguments(sel)-1);
             VMClass* elemClass = elem->GetClass();
-            VMInvokable* inv =  dynamic_cast<VMInvokable*>(elemClass->LookupInvokable(sel));
+            VMInvokable* inv =  dynamic_cast<VMInvokable*>(
+                                            elemClass->LookupInvokable(sel));
             
             if(inv != NULL && inv->IsPrimitive()) 
                 debug_print("*)\n");

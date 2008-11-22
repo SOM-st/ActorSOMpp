@@ -5,8 +5,7 @@
 
 class VMMethod;
 
-class Shell
-{
+class Shell {
 public:
     Shell();
     Shell(VMMethod*);
