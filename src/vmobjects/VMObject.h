@@ -14,30 +14,47 @@ class VMClass;
 
 #define FIELDS ((VMObject**)&clazz)
 
+/*
+ **************************VMOBJECT****************************
+ * __________________________________________________________ *
+ *| vtable*          |   0x00 - 0x03                         |*
+ *|__________________|_______________________________________|*
+ *| hash             |   0x04 - 0x07                         |*
+ *| objectSize       |   0x08 - 0x0b                         |*
+ *| numberOfFields   |   0x0c - 0x0f                         |*
+ *| gcField          |   0x10 - 0x13 (because of alignment)  |*
+ *| clazz            |   0x14 - 0x17                         |*
+ *|__________________|___0x18________________________________|*
+ *                                                            *
+ **************************************************************
+ */
+
 class VMObject {
 
 public:
     /* Constructor */
-    VMObject(int number_of_fields = 0);
+    VMObject(int numberOfFields = 0);
     
     /* Virtual member functions */
-	virtual VMClass*    GetClass();
+	virtual VMClass*    GetClass() const;
 	virtual void        SetClass(VMClass* cl);
-	virtual VMSymbol*   GetFieldName(int index); 
-	virtual int         GetFieldIndex(VMSymbol* fieldName);
-	virtual int         GetNumberOfFields();
+	virtual VMSymbol*   GetFieldName(int index) const; 
+	virtual int         GetFieldIndex(VMSymbol* fieldName) const;
+	virtual int         GetNumberOfFields() const;
 	virtual void        SetNumberOfFields(int nof);
-	virtual int         GetDefaultNumberOfFields();
-	virtual void        Send(pString, VMObject**, int);
-	virtual VMObject*   GetField(int index);
-    virtual void        Assert(bool value);
+	virtual int         GetDefaultNumberOfFields() const;
+	virtual void        Send(StdString, VMObject**, int);
+	virtual VMObject*   GetField(int index) const;
+    virtual void        Assert(bool value) const;
 	virtual void        SetField(int index, VMObject* value);
 	virtual void        MarkReferences();
 
-    /* Non-virtual member functions */
-    int32_t     GetHash() { return hash; };
-    int         GetObjectSize();
-	bool        GetGCField();
+    virtual void        IncreaseGCCount() {};
+    virtual void        DecreaseGCCount() {};
+
+    int32_t     GetHash() const { return hash; };
+    int         GetObjectSize() const;
+	bool        GetGCField() const;
 	void        SetGCField(bool value);
     void        SetObjectSize(size_t size) {objectSize = size; } ;
 	
@@ -93,26 +110,15 @@ protected:
     int32_t     numberOfFields;
     bool        gcfield;
 
-    //Start of fields. All members beyond this point will be indexable 
     //VMObject** FIELDS;
-    //through FIELDS-macro. So clazz == FIELDS[0]
+    //Start of fields. All members beyond this point are indexable 
+    //through FIELDS-macro instead of the member above. 
+    //So clazz == FIELDS[0]
 	VMClass*    clazz;
+private:
+    static const int VMObjectNumberOfFields;
 };
 
-/*
- **************************VMOBJECT****************************
- * __________________________________________________________ *
- *| vtable*          |   0x00 - 0x03                         |*
- *|__________________|_______________________________________|*
- *| hash             |   0x04 - 0x07                         |*
- *| objectSize       |   0x08 - 0x0b                         |*
- *| numberOfFields   |   0x0c - 0x0f                         |*
- *| gcField          |   0x10 - 0x13 (because of alignment)  |*
- *| clazz            |   0x14 - 0x17                         |*
- *|__________________|___0x18________________________________|*
- *                                                            *
- **************************************************************
- */
 
 
 #endif

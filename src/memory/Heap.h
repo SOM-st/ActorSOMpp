@@ -35,7 +35,7 @@ public:
     void StartUninterruptableAllocation() { ++uninterruptable_counter; } ;
     void EndUninterruptableAllocation() { --uninterruptable_counter; } ;
 
-	//void SetGlobal(pString name, void* val);
+	//void SetGlobal(StdString name, void* val);
     
 private:
     static Heap* theHeap;
@@ -58,7 +58,8 @@ private:
 
     uint32_t num_alloc;
     uint32_t spc_alloc;
-	//HashMap<pString, void*, OOObject> globals;
+    uint32_t num_alloc_total;
+	//HashMap<StdString, void*, OOObject> globals;
 };
 
 #endif

@@ -37,7 +37,7 @@ void Globals::InitializeGlobals() {
     //
     nilObject = new (_HEAP) VMObject;
     nilObject->SetField(0, nilObject);
-
+    
 #ifdef __DEBUG
     cout << "We have a Nil object" << endl;
 #endif __DEBUG

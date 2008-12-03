@@ -11,7 +11,7 @@ public:
 	void Add(const T& ptr);
 	void AddIfAbsent(const T& ptr);
 	void Clear();
-	int Size();
+	int Size() const;
 	int IndexOf(const T& needle);
 	T Get(int index);
 
@@ -54,7 +54,7 @@ T ExtendedVector<T>::Get(int index) {
 }
 
 template <class T>
-int ExtendedVector<T>::Size() {
+int ExtendedVector<T>::Size() const {
 	return theVector.size();
 }
 

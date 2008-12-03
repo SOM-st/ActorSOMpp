@@ -11,10 +11,19 @@ public:
     VMDouble();
     VMDouble(double);
     //virtual ~VMDouble();
-    void    SetEmbeddedDouble(double);
-    double  GetEmbeddedDouble();
+    inline void    SetEmbeddedDouble(double);
+    inline double  GetEmbeddedDouble() const;
 private:
     double embeddedDouble;
 };
+
+void VMDouble::SetEmbeddedDouble(double val) {
+    this->embeddedDouble = val;
+}
+
+
+double VMDouble::GetEmbeddedDouble() const {
+    return this->embeddedDouble;
+}
 
 #endif

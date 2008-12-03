@@ -103,9 +103,9 @@ void GarbageCollector::Collect() {
 
 
 void GarbageCollector::markReachableObjects() {
-	map<pString, VMObject*> globals = Universe::GetUniverse()->GetGlobals();
+	map<StdString, VMObject*> globals = Universe::GetUniverse()->GetGlobals();
 
-	for (map<pString, VMObject*>::iterator it = globals.begin(); 
+	for (map<StdString, VMObject*>::iterator it = globals.begin(); 
                                         it!= globals.end(); ++it) {
 		markObject(&(*it->second));
 	}
@@ -162,7 +162,7 @@ void GarbageCollector::mergeFreeSpaces() {
 #define _KB(B) (B/1024)
 #define _MB(B) ((double)B/(1024.0*1024.0))
 
-void GarbageCollector::PrintGCStat() {
+void GarbageCollector::PrintGCStat() const {
     cerr << "-- GC statistics --" << endl;
     cerr << "* heap size " << heap->object_space_size << " B (" << 
         _KB(heap->object_space_size) << " kB, " << 
@@ -170,7 +170,7 @@ void GarbageCollector::PrintGCStat() {
     cerr << "* performed " << num_collections << " collections" << endl;
 }
 
-void GarbageCollector::PrintCollectStat() {
+void GarbageCollector::PrintCollectStat() const {
     cerr << endl << "[GC " << num_collections << ", " << 
         heap->num_alloc << " alloc (" << _KB(heap->spc_alloc) <<
         " kB), " << num_live << " live (" << _KB(spc_live) <<

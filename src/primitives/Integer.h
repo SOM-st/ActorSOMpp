@@ -34,9 +34,9 @@ class VMFrame;
 class VMInteger;
 class VMBigInteger;
 class VMDouble;
-#include "../primitivesCore/Primitive.h"
+#include "../primitivesCore/PrimitiveContainer.h"
  
-class _Integer : public Primitive
+class _Integer : public PrimitiveContainer
 {
 
 public:

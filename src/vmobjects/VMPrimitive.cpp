@@ -38,19 +38,6 @@ VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2) {//,VMObject()
 //}
 
 
-bool VMPrimitive::IsEmpty() {
-    return (bool)empty;
-}
-
-
-void VMPrimitive::SetRoutine(PrimitiveRoutine* rtn) {
-    routine = rtn;
-}
-
-
-void VMPrimitive::Invoke(VMFrame *frm) {
-    (*routine)(this, frm);
-}
 
 
 void VMPrimitive::MarkReferences() {

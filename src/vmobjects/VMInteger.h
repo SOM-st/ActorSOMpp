@@ -12,10 +12,19 @@ public:
     VMInteger();
     VMInteger(int32_t);
     //virtual ~VMInteger();
-    void            SetEmbeddedInteger(int32_t);
-    int32_t         GetEmbeddedInteger();
+    inline void            SetEmbeddedInteger(int32_t);
+    inline int32_t         GetEmbeddedInteger() const;
 private:
     int32_t embeddedInteger;
 };
+
+void VMInteger::SetEmbeddedInteger(int32_t val) {
+    this->embeddedInteger = val;
+}
+
+
+int32_t VMInteger::GetEmbeddedInteger() const {
+    return this->embeddedInteger;
+}
 
 #endif

@@ -46,6 +46,7 @@ Heap::Heap(int object_space_size) {
     uninterruptable_counter = 0;
 	num_alloc = 0;
     spc_alloc = 0;
+    num_alloc_total = 0;
 
 	free_list_start = (free_list_entry*) object_space;
 	free_list_start->size = object_space_size;
@@ -54,15 +55,28 @@ Heap::Heap(int object_space_size) {
 }
 
 Heap::~Heap() {
-    if (gc_verbosity > 0)
+    if (gc_verbosity > 0) {
+        cout << "-- Heap statistics --" << endl;
+        cout << "Total number of allocations: " << num_alloc_total << endl;
+        cout << "Number of allocations since last collection: " 
+             << num_alloc << endl;
+        std::streamsize p = cout.precision();
+        cout.precision(3);
+        cout << "Used memory: " << spc_alloc << "/" 
+             << this->object_space_size << " (" 
+             << ((double)spc_alloc/(double)this->object_space_size)*100 << "%)" << endl;
+        cout.precision(p);
         gc->PrintGCStat();
+    }
 	free(object_space);
+    
 }
 
 VMObject* Heap::AllocateObject(size_t size) {
     VMObject* vmo = (VMObject*) Allocate(size);
     vmo->SetObjectSize(size);
     ++num_alloc;
+    ++num_alloc_total;
     spc_alloc += size;
     return vmo;
 }

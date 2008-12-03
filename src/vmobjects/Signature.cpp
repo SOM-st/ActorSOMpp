@@ -6,7 +6,7 @@ int Signature::GetNumberOfArguments(VMSymbol *sig) {
     // check default binaries
     if(Signature::IsBinary(sig)) return 2;
     else {
-        std::string str = sig->GetStdString();
+        StdString str = sig->GetStdString();
         
         // colons in str
         int num_colons =0;
@@ -25,7 +25,7 @@ int Signature::GetNumberOfArguments(VMSymbol *sig) {
 
 
 bool Signature::IsBinary(VMSymbol *sig) {
-    std::string sigstr = sig->GetStdString();
+    StdString sigstr = sig->GetStdString();
     switch(sigstr[0]) {
             case '~' :
             case '&' :

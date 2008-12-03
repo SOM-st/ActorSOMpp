@@ -6,12 +6,12 @@
 #include "VMMethod.h"
 
 
-bool      VMInvokable::IsPrimitive()  {
+bool      VMInvokable::IsPrimitive() const {
     return false;
 }
 
 
-VMSymbol *VMInvokable::GetSignature() { 
+VMSymbol *VMInvokable::GetSignature() const { 
     return signature; 
 }
 
@@ -21,7 +21,7 @@ void      VMInvokable::SetSignature(VMSymbol* sig)  {
 }
 
 
-VMClass  *VMInvokable::GetHolder()  {
+VMClass  *VMInvokable::GetHolder()  const {
     return holder; 
 }
 

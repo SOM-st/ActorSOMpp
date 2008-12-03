@@ -14,15 +14,34 @@ public:
     //virtual ~VMBlock();
     virtual void MarkReferences();
 
-    void        SetMethod(VMMethod*);
-    VMMethod*   GetMethod();
-    void        SetContext(VMFrame*);
-    VMFrame*    GetContext();
+    inline void        SetMethod(VMMethod*);
+    inline VMMethod*   GetMethod() const;
+    inline void        SetContext(VMFrame*);
+    inline VMFrame*    GetContext() const;
 
     static VMEvaluationPrimitive* GetEvaluationPrimitive(int);
 private:
     VMMethod*   blockMethod;
     VMFrame*    context;
 };
+
+void VMBlock::SetMethod(VMMethod* bMethod) {
+    blockMethod = bMethod;
+}
+
+
+VMMethod* VMBlock::GetMethod() const {
+    return blockMethod;
+}
+
+
+void VMBlock::SetContext(VMFrame* contxt) {
+    context = contxt;
+}
+
+
+VMFrame* VMBlock::GetContext() const {
+    return context;
+}
 
 #endif

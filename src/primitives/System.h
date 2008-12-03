@@ -31,12 +31,12 @@ THE SOFTWARE.
 
 class VMObject;
 class VMFrame;
-#include "../primitivesCore/Primitive.h"
+#include "../primitivesCore/PrimitiveContainer.h"
   
 
 struct timeval;
 
-class _System : public Primitive
+class _System : public PrimitiveContainer
 {
 public:
     _System(void);

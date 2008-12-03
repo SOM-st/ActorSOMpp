@@ -7,8 +7,7 @@
 #include "../misc/defs.h"
 //#include "../primitives/Core.h"
 
-#if defined(__GNUC__)
-#else   //Visual Studio
+#if defined(_MSC_VER)   //Visual Studio
     #   include <windows.h> 
 #endif
 
@@ -24,26 +23,26 @@ public:
     VMClass(int number_of_fields);
 	//virtual ~VMClass() {}
 
-	virtual VMClass*  GetSuperClass(); 
-    virtual void      SetSuperClass(VMClass*); 
-    virtual bool      HasSuperClass(); 
-    virtual VMSymbol* GetName(); 
-    virtual void      SetName(VMSymbol*); 
-    virtual VMArray*  GetInstanceFields(); 
-    virtual void      SetInstanceFields(VMArray*); 
-    virtual VMArray*  GetInstanceInvokables(); 
+	virtual inline VMClass*  GetSuperClass() const; 
+    virtual inline void      SetSuperClass(VMClass*); 
+    virtual bool      HasSuperClass() const;  
+    virtual inline VMSymbol* GetName() const; 
+    virtual inline void      SetName(VMSymbol*);  
+    virtual inline VMArray*  GetInstanceFields() const; 
+    virtual inline void      SetInstanceFields(VMArray*); 
+    virtual inline VMArray*  GetInstanceInvokables() const; 
     virtual void      SetInstanceInvokables(VMArray*); 
-    virtual int       GetNumberOfInstanceInvokables(); 
-    virtual VMObject* GetInstanceInvokable(int); 
+    virtual int       GetNumberOfInstanceInvokables() const; 
+    virtual VMObject* GetInstanceInvokable(int) const; 
     virtual void      SetInstanceInvokable(int, VMObject*); 
-    virtual VMObject* LookupInvokable(VMSymbol*); 
-    virtual int       LookupFieldIndex(VMSymbol*); 
+    virtual VMObject* LookupInvokable(VMSymbol*) const; 
+    virtual int       LookupFieldIndex(VMSymbol*) const; 
     virtual bool      AddInstanceInvokable(VMObject*); 
     virtual void      AddInstancePrimitive(VMPrimitive*); 
-    virtual VMSymbol* GetInstanceFieldName(int); 
-    virtual int       GetNumberOfInstanceFields(); 
-    virtual bool      HasPrimitives(); 
-    virtual void      LoadPrimitives(const vector<pString>&,int);
+    virtual VMSymbol* GetInstanceFieldName(int)const; 
+    virtual int       GetNumberOfInstanceFields() const; 
+    virtual bool      HasPrimitives() const; 
+    virtual void      LoadPrimitives(const vector<StdString>&,int);
 
 	//virtual void MarkReferences();
 	
@@ -51,35 +50,66 @@ public:
 private:
 	
     
-    pString genLoadstring(const pString& cp, 
-                       const pString& cname
-                       );
+    StdString genLoadstring(const StdString& cp, 
+                       const StdString& cname
+                       ) const;
 
-    pString genCoreLoadstring(const pString& cp);
+    StdString genCoreLoadstring(const StdString& cp) const;
 
-    //void* loadLib(const pString& path);
+    //void* loadLib(const StdString& path);
 #if defined(__GNUC__)
-    void* loadLib(const pString& path);
-    bool isResponsible(void* handle, const pString& cl);
-    static void set_primitives(VMClass* cl, void* handle, const pString& cname,
-                    const char* format
-                    );
+    void* loadLib(const StdString& path) const;
+    bool isResponsible(void* handle, const StdString& cl) const;
+    void set_primitives(void* handle, const StdString& cname);
 #else
-    HMODULE loadLib(const pString& path);
-    bool isResponsible(HMODULE handle, const pString& cl);
-    static void set_primitives(VMClass* cl, HMODULE handle, 
-                               const pString& cname,
-                               const char* format);
+    HMODULE loadLib(const StdString& path) const;
+    bool isResponsible(HMODULE handle, const StdString& cl) const;
+    void set_primitives(HMODULE handle, const StdString& cname);
 #endif
 
     
     
-    int numberOfSuperInstanceFields();
+    int numberOfSuperInstanceFields() const;
 
 	VMClass*  super_class; 
     VMSymbol* name; 
     VMArray*  instance_fields; 
     VMArray*  instance_invokables;
 };
+
+
+VMClass* VMClass::GetSuperClass() const {
+	return super_class;
+}
+
+
+void VMClass::SetSuperClass(VMClass* sup) {
+	super_class = sup;
+}
+
+
+VMSymbol* VMClass::GetName()  const {
+	return name;
+}
+
+
+void VMClass::SetName(VMSymbol* nam) {
+	name = nam;
+}
+
+
+VMArray* VMClass::GetInstanceFields() const {
+	return instance_fields;
+}
+
+
+void VMClass::SetInstanceFields(VMArray* inst_fields) {
+	instance_fields = inst_fields;
+}
+
+
+VMArray  *VMClass::GetInstanceInvokables() const {
+	return instance_invokables;
+}
 
 #endif

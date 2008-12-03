@@ -62,35 +62,35 @@ THE SOFTWARE.
 //^^DIFFERENT THAN CSOM! Does the CSOM version work at all????????
 
 
-_BigInteger::_BigInteger( ) : Primitive(){
-    this->SetRoutine("plus", static_cast<PrimitiveRoutine*>(
+_BigInteger::_BigInteger( ) : PrimitiveContainer(){
+    this->SetPrimitive("plus", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Plus)));
 
-    this->SetRoutine("minus", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("minus", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Minus)));
 
-    this->SetRoutine("star", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("star", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Star)));
 
-    this->SetRoutine("slash", static_cast<PrimitiveRoutine*>( 
+    this->SetPrimitive("slash", static_cast<PrimitiveRoutine*>( 
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Slash)));
 
-    this->SetRoutine("percent", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("percent", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Percent)));
 
-    this->SetRoutine("and", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("and", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::And)));
 
-    this->SetRoutine("equal", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("equal", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Equal)));
 
-    this->SetRoutine("lowerthan", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("lowerthan", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Lowerthan)));
 
-    this->SetRoutine("asString", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("asString", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::AsString)));
 
-    this->SetRoutine("sqrt", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("sqrt", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Sqrt)));
 
 }
@@ -220,7 +220,7 @@ void  _BigInteger::AsString(VMObject* /*object*/, VMFrame* frame) {
     int64_t bigint = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << bigint;
-    frame->Push((VMObject*)_UNIVERSE->NewString(pString(Str.str())));
+    frame->Push((VMObject*)_UNIVERSE->NewString(Str.str().c_str()));
     
 }
 

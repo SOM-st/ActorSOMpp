@@ -89,7 +89,7 @@ void  _System::Exit_(VMObject* /*object*/, VMFrame* frame) {
 
 void  _System::PrintString_(VMObject* /*object*/, VMFrame* frame) {
     VMString* arg = (VMString*)frame->Pop();
-    pString str = arg->GetStdString();
+    StdString str = arg->GetStdString();
     cout << str;
 }
 
@@ -116,35 +116,35 @@ void  _System::Time(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-_System::_System(void) : Primitive() {
+_System::_System(void) : PrimitiveContainer() {
     start_time = new timeval();
     gettimeofday(start_time, NULL);
 
-    this->SetRoutine("global_", 
+    this->SetPrimitive("global_", 
         static_cast<PrimitiveRoutine*>(new (_HEAP) 
         Routine<_System>(this, &_System::Global_)));
 
-    this->SetRoutine("global_put_", 
+    this->SetPrimitive("global_put_", 
         static_cast<PrimitiveRoutine*>(new (_HEAP) 
         Routine<_System>(this, &_System::Global_put_)));
 
-    this->SetRoutine("load_", 
+    this->SetPrimitive("load_", 
         static_cast<PrimitiveRoutine*>(new (_HEAP) 
         Routine<_System>(this, &_System::Load_)));
 
-    this->SetRoutine("exit_", 
+    this->SetPrimitive("exit_", 
         static_cast<PrimitiveRoutine*>(new (_HEAP) 
         Routine<_System>(this, &_System::Exit_)));
 
-    this->SetRoutine("printString_", 
+    this->SetPrimitive("printString_", 
         static_cast<PrimitiveRoutine*>(new (_HEAP) 
         Routine<_System>(this, &_System::PrintString_)));
 
-    this->SetRoutine("printNewline", 
+    this->SetPrimitive("printNewline", 
         static_cast<PrimitiveRoutine*>(new (_HEAP) 
         Routine<_System>(this, &_System::PrintNewline)));
 
-    this->SetRoutine("time", 
+    this->SetPrimitive("time", 
         static_cast<PrimitiveRoutine*>(new (_HEAP) 
         Routine<_System>(this, &_System::Time)));
     

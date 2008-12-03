@@ -32,8 +32,8 @@ THE SOFTWARE.
 class VMObject;
 class VMFrame;
  
-#include "../primitivesCore/Primitive.h"
-class _Double : public Primitive
+#include "../primitivesCore/PrimitiveContainer.h"
+class _Double : public PrimitiveContainer
 {
 public:
     _Double();

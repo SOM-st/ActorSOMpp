@@ -32,9 +32,9 @@ THE SOFTWARE.
 class VMObject;
 class VMFrame;
 
-#include "../primitivesCore/Primitive.h"
+#include "../primitivesCore/PrimitiveContainer.h"
 
-class _Block : public Primitive
+class _Block : public PrimitiveContainer
 {
 public:
     _Block();

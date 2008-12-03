@@ -11,15 +11,6 @@ VMBigInteger::VMBigInteger(int64_t val) : VMObject() {
 }
 
 
-int64_t VMBigInteger::GetEmbeddedInteger() {
-    return this->embeddedInteger;
-}
-
-
-void VMBigInteger::SetEmbeddedInteger(int64_t val) {
-    this->embeddedInteger = val;
-}
-
 
 //VMBigInteger::~VMBigInteger()
 //{

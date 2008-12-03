@@ -40,43 +40,14 @@ VMFrame::VMFrame(int size, int nof) : VMArray(size,
 //{
 //}
 
-
-VMFrame* VMFrame::GetPreviousFrame() {
-    return (VMFrame*) this->previous_frame;
-}
-
-
-void     VMFrame::SetPreviousFrame(VMObject* frm) {
-    this->previous_frame = (VMFrame*)frm;
-}
-
-
-void     VMFrame::ClearPreviousFrame() {
-    this->previous_frame = (VMFrame*)Globals::NilObject();
-}
-
-
-bool     VMFrame::HasPreviousFrame() {
+bool     VMFrame::HasPreviousFrame() const {
     return this->previous_frame != Globals::NilObject();
 }
 
 
-bool     VMFrame::IsBootstrapFrame() {
-    return !HasPreviousFrame();
-}
 
 
-VMFrame* VMFrame::GetContext() {
-    return this->context;
-}
-
-
-void     VMFrame::SetContext(VMFrame* frm) {
-    this->context = frm;
-}
-
-
-bool     VMFrame::HasContext() {
+bool     VMFrame::HasContext() const {
     return this->context !=  Globals::NilObject(); //Globals::NilObject();
 }
 
@@ -100,17 +71,8 @@ VMFrame* VMFrame::GetOuterContext() {
 }
 
 
-VMMethod* VMFrame::GetMethod() {
-  
-    return this->method;
-}
 
-
-void      VMFrame::SetMethod(VMMethod* method) {
-    this->method = method;
-}
-
-int VMFrame::RemainingStackSize() {
+int VMFrame::RemainingStackSize() const {
     // - 1 because the stack pointer points at the top entry,
     // so the next entry would be put at stack_pointer+1
     return this->GetNumberOfIndexableFields() - 
@@ -131,7 +93,7 @@ void      VMFrame::Push(VMObject* obj) {
 }
 
 
-void VMFrame::PrintStack() {
+void VMFrame::PrintStack() const {
     cout << "SP: " << this->stack_pointer->GetEmbeddedInteger() << endl;
     for (int i = 0; i < this->GetNumberOfIndexableFields()+1; ++i) {
         VMObject* vmo = (*this)[i];
@@ -164,7 +126,7 @@ void      VMFrame::ResetStackPointer() {
 }
 
 
-int       VMFrame::GetBytecodeIndex() {
+int       VMFrame::GetBytecodeIndex() const {
     return this->bytecode_index->GetEmbeddedInteger();
 }
 
@@ -174,7 +136,7 @@ void      VMFrame::SetBytecodeIndex(int index) {
 }
 
 
-VMObject* VMFrame::GetStackElement(int index) {
+VMObject* VMFrame::GetStackElement(int index) const {
     int sp = this->stack_pointer->GetEmbeddedInteger();
     return (*this)[sp-index];
 }
@@ -200,10 +162,6 @@ void      VMFrame::SetLocal(int index, int contextLevel, VMObject* value) {
 }
 
 
-VMInteger* VMFrame::GetStackPointer() {
-    return stack_pointer;
-}
-
 
 VMObject* VMFrame::GetArgument(int index, int contextLevel) {
     // get the context
@@ -218,10 +176,11 @@ void      VMFrame::SetArgument(int index, int contextLevel, VMObject* value) {
 }
 
 
-void      VMFrame::PrintStackTrace() {
+void      VMFrame::PrintStackTrace() const {
+    //TODO
 }
 
-int       VMFrame::ArgumentStackIndex(int index) {
+int       VMFrame::ArgumentStackIndex(int index) const {
     VMMethod* meth = this->GetMethod();
     return meth->GetNumberOfArguments() - index - 1;
 }

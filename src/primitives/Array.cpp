@@ -34,15 +34,15 @@ THE SOFTWARE.
 #include "Array.h"
 #include "../primitivesCore/Routine.h"
 
-_Array::_Array() : Primitive()
+_Array::_Array() : PrimitiveContainer()
 {
-    this->SetRoutine("new_", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("new_", static_cast<PrimitiveRoutine*>(
                         new (_HEAP) Routine<_Array>(this, &_Array::New_)));
-    this->SetRoutine("at_", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("at_", static_cast<PrimitiveRoutine*>(
                         new (_HEAP) Routine<_Array>(this, &_Array::At_)));
-    this->SetRoutine("at_put_", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("at_put_", static_cast<PrimitiveRoutine*>(
                         new (_HEAP) Routine<_Array>(this, &_Array::At_Put_)));
-    this->SetRoutine("length",  static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("length",  static_cast<PrimitiveRoutine*>(
                         new (_HEAP) Routine<_Array>(this, &_Array::Length)));
 }
 

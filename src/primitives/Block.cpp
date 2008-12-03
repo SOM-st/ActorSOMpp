@@ -55,17 +55,17 @@ void  _Block::Restart(VMObject* /*object*/, VMFrame* frame) {
     frame->ResetStackPointer();
 }
 
-_Block::_Block( ) : Primitive() {
-    this->SetRoutine("value", static_cast<PrimitiveRoutine*>(
+_Block::_Block( ) : PrimitiveContainer() {
+    this->SetPrimitive("value", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_Block>(this, &_Block::Value)));
 
-    this->SetRoutine("restart", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("restart", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_Block>(this, &_Block::Restart)));
 
-    this->SetRoutine("value_", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("value_", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_Block>(this, &_Block::Value_)));
 
-    this->SetRoutine("value_with_", static_cast<PrimitiveRoutine*>(
+    this->SetPrimitive("value_with_", static_cast<PrimitiveRoutine*>(
         new (_HEAP) Routine<_Block>(this, &_Block::Value_with_)));
 }
 

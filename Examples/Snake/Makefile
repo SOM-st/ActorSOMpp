@@ -6,9 +6,9 @@ TARGET		=Terminal
 ################ ONLY CHANGE STUFF BELOW IF YOU REALLY HAVE ###################
 
 
-CC			=gcc
-CFLAGS		=-Wno-endif-labels -std=gnu99 $(DBG_FLAGS) $(INCLUDES)
-LDFLAGS		=$(LIBRARIES)
+CC			=g++
+CFLAGS		=-Wno-endif-labels -O2 $(DBG_FLAGS) $(INCLUDES)
+LDFLAGS		=-enable-auto-import $(LIBRARIES)
 
 INSTALL		=install
 
@@ -29,20 +29,8 @@ LIBRARIES		=-L$(ROOT_DIR)
 
 ifneq ($(OS),)
 # only Windows has OS predefined.
-	LIBS		=-lCSOM
+	LIBS		=-lm -l../../CPPSOM -l../../PrimitiveCore
 endif
-
-OSTOOL			= $(BUILD_DIR)/ostool.exe
-
-#
-#
-#
-#  metarules
-#
-
-.SUFFIXES: .csp
-
-.PHONY: clean
 
 all: $(TARGET).csp
 
@@ -53,9 +41,10 @@ profiling : DBG_FLAGS=-g -pg
 profiling : LDFLAGS+=-pg
 profiling: all
 
+$(TARGET).csp:
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared -g \
+		$(PWD)/$(TARGET).cpp -o $(TARGET).csp $(LIBS)
+	
 clean:
 	rm -Rf $(TARGET).csp
 
-.c.csp:
-	$(CC) $(CFLAGS) $(LDFLAGS) `$(OSTOOL) l $*`\
-		-o `$(OSTOOL) s $*` $< $(LIBS)

@@ -42,66 +42,75 @@ using namespace std;
 class Universe
 {
 public:
+
     Universe* operator->();
+
+    //static methods
 	static Universe* GetUniverse();
     static void Start(int argc, char** argv);
     static void Quit(int);
     static void ErrorExit(const char*);
 
-	map<pString, VMObject*>  GetGlobals() {return globals;}
+    //Globals accessor (only for GC, could be considered to either
+    //be moved there or declared as a private friend method for the GC
+	map<StdString, VMObject*>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
     Interpreter* GetInterpreter() {return interpreter;}
 
     //
 
-    void          Assert(bool);
+    void          Assert(bool) const;
 
-    VMSymbol*     SymbolFor(const pString&);
+    VMSymbol*     SymbolFor(const StdString&);
     VMSymbol*     SymbolForChars(const char*);
 
-    VMArray*      NewArray(int);
-    VMArray*      NewArrayList(pList& list);
-    VMArray*      NewArrayFromArgv(const vector<pString>&);
+    //VMObject instanciation methods. These should probably be refactored to a new class
+    VMArray*      NewArray(int) const;
+    VMArray*      NewArrayList(pList& list) const;
+    VMArray*      NewArrayFromArgv(const vector<StdString>&) const;
     VMBlock*      NewBlock(VMMethod*, VMFrame*, int);
-    VMClass*      NewClass(VMClass*);
-    VMFrame*      NewFrame(VMFrame*, VMMethod*);
-    VMMethod*     NewMethod(VMSymbol*, size_t, size_t);
-    VMObject*     NewInstance(VMClass*);
-    VMInteger*    NewInteger(int32_t);
-    VMBigInteger* NewBigInteger(int64_t);
-    VMDouble*     NewDouble(double);
-    VMClass*      NewMetaclassClass(void);
-    VMString*     NewString(const pString&);
-    VMSymbol*     NewSymbol(const pString&);
-    VMClass*      NewSystemClass(void);
+    VMClass*      NewClass(VMClass*) const;
+    VMFrame*      NewFrame(VMFrame*, VMMethod*) const;
+    VMMethod*     NewMethod(VMSymbol*, size_t, size_t) const;
+    VMObject*     NewInstance(VMClass*) const;
+    VMInteger*    NewInteger(int32_t) const;
+    VMBigInteger* NewBigInteger(int64_t) const;
+    VMDouble*     NewDouble(double) const;
+    VMClass*      NewMetaclassClass(void) const;
+    VMString*     NewString(const StdString&) const;
+    VMSymbol*     NewSymbol(const StdString&);
+    VMString*     NewString(const char*) const;
+    VMSymbol*     NewSymbol(const char*);
+    VMClass*      NewSystemClass(void) const;
     
     VMObject*     NewTaggedInteger(int32_t);
+
     void          InitializeSystemClass(VMClass*, VMClass*, const char*);
 
     VMObject*     GetGlobal(VMSymbol*);
     void          SetGlobal(VMSymbol* name, VMObject* val);
     bool          HasGlobal(VMSymbol*);
 
-    VMClass*      GetBlockClass(void);
+    VMClass*      GetBlockClass(void) const;
     VMClass*      GetBlockClassWithArgs(int);
 
     VMClass*      LoadClass(VMSymbol*);
-    void         LoadSystemClass(VMClass*);
+    void          LoadSystemClass(VMClass*);
     VMClass*      LoadClassBasic(VMSymbol*, VMClass*);
-    VMClass*      LoadShellClass(pString&);
+    VMClass*      LoadShellClass(StdString&);
     
-        Universe();
+    Universe();
 	~Universe();
     //
 private:
-    vector<pString>  handleArguments(int argc, char** argv) ;
-    int getClassPathExt(vector<pString>& tokens, const pString& arg);
+    vector<StdString>  handleArguments(int argc, char** argv) ;
+    int getClassPathExt(vector<StdString>& tokens, const StdString& arg) const;
     
     static Universe *theUniverse;
     
-    int setupClassPath(const pString& cp);
-    int addClassPath(const pString& cp);
-    void printUsageAndExit(char* executable);
+    int setupClassPath(const StdString& cp);
+    int addClassPath(const StdString& cp);
+    void printUsageAndExit(char* executable) const;
 	
 
     void initialize(int, char**);
@@ -112,8 +121,8 @@ private:
     
 	Heap *heap;
     int heapSize;
-	map<pString, VMObject*> globals;
-    vector<pString> class_path;
+	map<StdString, VMObject*> globals;
+    vector<StdString> class_path;
     int cp_count;
     Symboltable* symboltable;
     SourcecodeCompiler* compiler;

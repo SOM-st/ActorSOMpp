@@ -13,8 +13,8 @@ public:
 	GarbageCollector(Heap* h);
 	~GarbageCollector();
 	void Collect();
-    void PrintGCStat();
-    void PrintCollectStat();
+    void PrintGCStat() const;
+    void PrintCollectStat() const;
 	
 
 private:

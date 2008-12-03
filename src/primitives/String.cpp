@@ -38,23 +38,23 @@ THE SOFTWARE.
 #include "String.h"
 #include "../primitivesCore/Routine.h"
 
-_String::_String( ) : Primitive() {
-    this->SetRoutine("concatenate_", new (_HEAP) 
+_String::_String( ) : PrimitiveContainer() {
+    this->SetPrimitive("concatenate_", new (_HEAP) 
         Routine<_String>(this, &_String::Concatenate_));
 
-    this->SetRoutine("asSymbol", new (_HEAP) 
+    this->SetPrimitive("asSymbol", new (_HEAP) 
         Routine<_String>(this, &_String::AsSymbol));
 
-    this->SetRoutine("hashcode", new (_HEAP) 
+    this->SetPrimitive("hashcode", new (_HEAP) 
         Routine<_String>(this, &_String::Hashcode));
 
-    this->SetRoutine("length", new (_HEAP) 
+    this->SetPrimitive("length", new (_HEAP) 
         Routine<_String>(this, &_String::Length));
 
-    this->SetRoutine("equal", new (_HEAP) 
+    this->SetPrimitive("equal", new (_HEAP) 
         Routine<_String>(this, &_String::Equal));
 
-    this->SetRoutine("primSubstringFrom_To_", new (_HEAP)
+    this->SetPrimitive("primSubstringFrom_To_", new (_HEAP)
         Routine<_String>(this, &_String::PrimSubstringFrom_To_));
 }
 
@@ -62,10 +62,10 @@ void  _String::Concatenate_(VMObject* /*object*/, VMFrame* frame) {
 
     VMString* arg = (VMString*)frame->Pop();
     VMString* self = (VMString*)frame->Pop();
-    pString a = pString(arg->GetChars());
-    pString s = pString(self->GetChars());
+    StdString a = arg->GetChars();//StdString(arg->GetChars());
+    StdString s = self->GetChars();//StdString(self->GetChars());
     
-    pString result = s + a;
+    StdString result = s + a;
 
     frame->Push((VMObject*)_UNIVERSE->NewString(result));
 }
@@ -73,7 +73,7 @@ void  _String::Concatenate_(VMObject* /*object*/, VMFrame* frame) {
 
 void  _String::AsSymbol(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
-    pString result = self->GetStdString();
+    StdString result = self->GetStdString();
     frame->Push((VMObject*)_UNIVERSE->SymbolFor(result));
 }
 
@@ -86,7 +86,7 @@ void  _String::Hashcode(VMObject* /*object*/, VMFrame* frame) {
 
 void  _String::Length(VMObject* /*object*/, VMFrame* frame) {
     VMString* self = (VMString*)frame->Pop();
-    //pString result = self->GetStdString();
+    //StdString result = self->GetStdString();
     //size_t len = result.length();
     size_t len = self->GetStringLength();
     frame->Push(_UNIVERSE->NewInteger((int32_t)len));
@@ -99,8 +99,8 @@ void  _String::Equal(VMObject* /*object*/, VMFrame* frame) {
     
     if(op1->GetClass() == op2->GetClass()) {
         
-        pString s1 = ((VMString*)op1)->GetStdString();
-        pString s2 = op2->GetStdString();
+        StdString s1 = ((VMString*)op1)->GetStdString();
+        StdString s2 = op2->GetStdString();
 
         if(s1 == s2) {
             frame->Push(Globals::TrueObject());
@@ -117,11 +117,11 @@ void  _String::PrimSubstringFrom_To_(VMObject* /*object*/, VMFrame* frame) {
     
     VMString* self = (VMString*)frame->Pop();
     
-    pString str = self->GetStdString();
+    StdString str = self->GetStdString();
     int s = start->GetEmbeddedInteger();
     int e = end->GetEmbeddedInteger();
     
-    pString result = str.substr(s, e - s);
+    StdString result = str.substr(s, e - s);
 
     frame->Push((VMObject*) _UNIVERSE->NewString(result));
 }

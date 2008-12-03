@@ -10,17 +10,17 @@ Lexer::~Lexer() {
 }
 
 
-pString Lexer::GetText(void) {
-	return pString(text);
+StdString Lexer::GetText(void) {
+	return StdString(text);
 }
 
-pString Lexer::GetNextText(void) {
-	return pString(nextText);
+StdString Lexer::GetNextText(void) {
+	return StdString(nextText);
 }
 
-pString Lexer::GetRawBuffer(void) {
+StdString Lexer::GetRawBuffer(void) {
 	//for debug
-	return pString(buf);
+	return StdString(buf);
 }
 
 #define _BC (buf[bufp])
@@ -70,8 +70,8 @@ void Lexer::skipComment(void) {
      (C) == ',' || (C) == '@' || (C) == '%')
 #define _MATCH(C, S) \
     if(_BC == (C)) { sym = (S); symc = _BC; sprintf(text, "%c", _BC); bufp++;}
-#define SEPARATOR std::string("----") //FIXME
-#define PRIMITIVE std::string("primitive")
+#define SEPARATOR StdString("----") //FIXME
+#define PRIMITIVE StdString("primitive")
 
 Symbol Lexer::GetSym(void) {
 	//cout << "GetSym ";

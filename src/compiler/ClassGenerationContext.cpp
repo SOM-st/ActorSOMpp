@@ -28,7 +28,7 @@ void ClassGenerationContext::AddInstanceField(VMObject* field) {
 }
 
 
-bool ClassGenerationContext::FindField(const pString& field) {
+bool ClassGenerationContext::FindField(const StdString& field) {
 
 	pList fields = IsClassSide() ?
         class_fields :
@@ -52,7 +52,7 @@ void ClassGenerationContext::AddClassMethod(VMObject* method) {
 
 VMClass* ClassGenerationContext::Assemble() {
     // build class class name
-    pString ccname = string(name->GetStdString()) + " class";
+    StdString ccname = string(name->GetStdString()) + " class";
     
     // Load the super class
     VMClass* super_class = _UNIVERSE->LoadClass(super_name);

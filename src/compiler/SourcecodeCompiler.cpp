@@ -21,12 +21,12 @@ SourcecodeCompiler::~SourcecodeCompiler() {
 }
 
 
-VMClass* SourcecodeCompiler::CompileClass( const pString& path, 
-                                          const pString& file, 
+VMClass* SourcecodeCompiler::CompileClass( const StdString& path, 
+                                          const StdString& file, 
                                           VMClass* system_class ) {
     VMClass* result = system_class;
 
-    pString fname = path + file_separator + file + ".som";
+    StdString fname = path + file_separator + file + ".som";
 #ifdef COMPILER_DEBUG
     std::cout << "compiling " << fname << endl;
 #endif
@@ -41,7 +41,7 @@ VMClass* SourcecodeCompiler::CompileClass( const pString& path,
     result = compile(system_class);
 
     VMSymbol* cname = result->GetName();
-    pString cname_c = cname->GetStdString();
+    StdString cname_c = cname->GetStdString();
 
     if (file != cname_c) {
         
@@ -61,7 +61,7 @@ VMClass* SourcecodeCompiler::CompileClass( const pString& path,
 }
 
 
-VMClass* SourcecodeCompiler::CompileClassString( const pString& stream, 
+VMClass* SourcecodeCompiler::CompileClassString( const StdString& stream, 
                                                 VMClass* system_class ) {
     istringstream* ss = new istringstream(stream);
     if (parser != NULL) delete(parser);
@@ -76,7 +76,7 @@ VMClass* SourcecodeCompiler::CompileClassString( const pString& stream,
 }
 
 
-void SourcecodeCompiler::showCompilationError( const pString& filename, 
+void SourcecodeCompiler::showCompilationError( const StdString& filename, 
                                               const char* message ) {
     cout << "Error when compiling " << filename << ":" << endl;
     cout << message << endl;

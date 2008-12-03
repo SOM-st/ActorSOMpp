@@ -24,9 +24,9 @@ public:
 private:
     VMFrame* frame;
     VMFrame* popFrame();
-    pString uG;
-    pString dnu;
-    pString eB;
+    StdString uG;
+    StdString dnu;
+    StdString eB;
 
     void popFrameAndPushResult(VMObject* result);
     void send(VMSymbol* signature, VMClass* receiver_class);

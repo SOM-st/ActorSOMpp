@@ -32,14 +32,14 @@ THE SOFTWARE.
 #include "../primitivesCore/Routine.h"
 #include "Object.h"
 
-_Object::_Object( ) : Primitive() {
-    this->SetRoutine("equalequal", new (_HEAP) 
+_Object::_Object( ) : PrimitiveContainer() {
+    this->SetPrimitive("equalequal", new (_HEAP) 
         Routine<_Object>(this, &_Object::Equalequal));
 
-    this->SetRoutine("objectSize", new (_HEAP) 
+    this->SetPrimitive("objectSize", new (_HEAP) 
         Routine<_Object>(this, &_Object::ObjectSize));
 
-    this->SetRoutine("hashcode", new (_HEAP) 
+    this->SetPrimitive("hashcode", new (_HEAP) 
         Routine<_Object>(this, &_Object::Hashcode));
 }
 

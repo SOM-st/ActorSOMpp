@@ -14,7 +14,7 @@ public:
     VMClass* Assemble();
     void AssembleSystemClass(VMClass* system_class);
 
-	bool FindField(const pString&);
+	bool FindField(const StdString&);
 	void AddInstanceField(VMObject*);
 	void AddClassField(VMObject*);
 	void AddInstanceMethod(VMObject*);

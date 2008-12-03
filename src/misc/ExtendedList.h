@@ -22,11 +22,13 @@ public:
 	void AddAll(const ExtendedList<T>* list);
     void push_back(const T& ptr);
 	void Clear();
-	int Size();
+	int Size() const;
 	T get(int index);
 	int IndexOf(const T& needle);
+
     typedef typename list<T>::iterator iterator_t;
     typedef typename list<T>::const_iterator const_iterator_t;
+    
     iterator_t begin() {
         return theList.begin();
     }
@@ -84,7 +86,7 @@ T ExtendedList<T>::get(int index) {
 
 
 template <class T>
-int ExtendedList<T>::Size() {
+int ExtendedList<T>::Size() const {
 	return theList.size();
 }
 

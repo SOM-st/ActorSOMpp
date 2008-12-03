@@ -60,40 +60,40 @@ THE SOFTWARE.
     } \
 }
 
-_Integer::_Integer( ) : Primitive() {
+_Integer::_Integer( ) : PrimitiveContainer() {
     srand((unsigned) time(NULL)) ;
-    this->SetRoutine("plus", new (_HEAP) 
+    this->SetPrimitive("plus", new (_HEAP) 
         Routine<_Integer>(this, &_Integer::Plus));
 
-    this->SetRoutine("minus", new (_HEAP) 
+    this->SetPrimitive("minus", new (_HEAP) 
         Routine<_Integer>(this, &_Integer::Minus));
 
-    this->SetRoutine("star", new (_HEAP) 
+    this->SetPrimitive("star", new (_HEAP) 
         Routine<_Integer>(this, &_Integer::Star));
 
-    this->SetRoutine("slash", new (_HEAP) 
+    this->SetPrimitive("slash", new (_HEAP) 
         Routine<_Integer>(this, &_Integer::Slash));
 
-    this->SetRoutine("slashslash", new 
+    this->SetPrimitive("slashslash", new 
         (_HEAP) Routine<_Integer>(this, &_Integer::Slashslash));
 
-    this->SetRoutine("percent", new 
+    this->SetPrimitive("percent", new 
         (_HEAP) Routine<_Integer>(this, &_Integer::Percent));
 
-    this->SetRoutine("and", new 
+    this->SetPrimitive("and", new 
         (_HEAP) Routine<_Integer>(this, &_Integer::And));
-    this->SetRoutine("equal", new 
+    this->SetPrimitive("equal", new 
         (_HEAP) Routine<_Integer>(this, &_Integer::Equal));
 
-    this->SetRoutine("lowerthan", 
+    this->SetPrimitive("lowerthan", 
         new (_HEAP) Routine<_Integer>(this, &_Integer::Lowerthan));
-    this->SetRoutine("asString", 
+    this->SetPrimitive("asString", 
         new (_HEAP) Routine<_Integer>(this, &_Integer::AsString));
 
-    this->SetRoutine("sqrt", 
+    this->SetPrimitive("sqrt", 
         new (_HEAP) Routine<_Integer>(this, &_Integer::Sqrt));
 
-    this->SetRoutine("atRandom", 
+    this->SetPrimitive("atRandom", 
         new (_HEAP) Routine<_Integer>(this, &_Integer::AtRandom));
 }
 
@@ -123,8 +123,7 @@ void _Integer::resendAsBigInteger(VMObject* /*object*/,
     // Resend message:
     VMObject* operands[] = { (VMObject*)right };
     
-    pString ops = pString(op);
-    leftBigInteger->Send(ops, operands, 1);
+    leftBigInteger->Send(op, operands, 1);
     // no reference
     //SEND(op, free);
 }
@@ -136,9 +135,8 @@ void _Integer::resendAsDouble(VMObject* /*object*/, const char* op,
     VMDouble* leftDouble =
         _UNIVERSE->NewDouble((double)left->GetEmbeddedInteger());
     VMObject* operands[] = { (VMObject*)right };
-    pString ops = pString(op);
-    leftDouble->Send(ops, operands, 1);
-    //SEND(op, free);
+    
+    leftDouble->Send(op, operands, 1);
 }
 
 
@@ -305,7 +303,7 @@ void  _Integer::AsString(VMObject* /*object*/, VMFrame* frame) {
     int32_t integer = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << integer;
-    frame->Push( (VMObject*)_UNIVERSE->NewString( pString(Str.str()) ) );   
+    frame->Push( (VMObject*)_UNIVERSE->NewString( Str.str() ) );   
 }
 
 

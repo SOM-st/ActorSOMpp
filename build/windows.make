@@ -37,7 +37,7 @@ CORE_LIBS	=-lm
 
 CSOM_NAME	        =CPPSOM
 CORE_NAME	        =SOMCore
-PRIMITIVECORE_NAME  =PrimitiveCore
+PRIMITIVESCORE_NAME  =PrimitiveCore
 SHARED_EXTENSION    =dll
 
 ############ global stuff -- overridden by ../Makefile
@@ -79,6 +79,12 @@ MAIN_SRC		= $(wildcard $(SRC_DIR)/*.cpp)
 MAIN_OBJ		= $(MAIN_SRC:.cpp=.o)
 #$(SRC_DIR)/main.o
 
+############# snake primitives
+
+SNAKEPRIMITIVESCORE_DIR = $(ROOT_DIR)/Examples/Snake
+SNAKEPRIMITIVESCORE_SRC = $(wildcard $(SNAKEPRIMITIVESCORE_DIR)/*.cpp)
+SNAKEPRIMITIVESCORE_OBJ = $(SNAKEPRIMITIVESCORE_SRC:.cpp=.pic.o)
+
 ############# primitives loading
 
 PRIMITIVESCORE_DIR = $(SRC_DIR)/primitivesCore
@@ -102,11 +108,11 @@ LIBRARIES		=-L$(ROOT_DIR)
 CSOM_OBJ		=  $(MEMORY_OBJ) $(MISC_OBJ) $(VMOBJECTS_OBJ) \
 				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) 
 
-OBJECTS			= $(CSOM_OBJ) $(PRIMITIVES_OBJ) $(PRIMITIVESCORE_OBJ) $(MAIN_OBJ)
+OBJECTS			= $(CSOM_OBJ) $(PRIMITIVES_OBJ) $(PRIMITIVESCORE_OBJ) $(SNAKEPRIMITIVESCORE_OBJ) $(MAIN_OBJ)
 
 SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 				$(MISC_SRC) $(VM_SRC) $(VMOBJECTS_SRC)  \
-				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(MAIN_SRC)
+				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(SNAKEPRIMITIVESCORE_SRC) $(MAIN_SRC)
 
 ############# Things to clean
 
@@ -129,7 +135,7 @@ CLEAN			= $(OBJECTS) \
 all: $(CSOM_NAME).exe \
 	$(CSOM_NAME).$(SHARED_EXTENSION) \
 	$(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
-	CORE
+	CORE 
 
 
 debug : DBG_FLAGS=-DDEBUG -g
@@ -175,6 +181,7 @@ $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME).$(SHARED_EXTENSION) $(P
 		-o $(PRIMITIVECORE_NAME).$(SHARED_EXTENSION) \
 		$(PRIMITIVESCORE_OBJ) \
 		-l$(CSOM_NAME)
+	@touch $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION)
 	@echo PrimitivesCore done.
 
 CORE: $(PRIMITIVESCORE_NAME).dll $(CSOM_NAME).$(SHARED_EXTENSION) $(PRIMITIVES_OBJ)
@@ -182,10 +189,18 @@ CORE: $(PRIMITIVESCORE_NAME).dll $(CSOM_NAME).$(SHARED_EXTENSION) $(PRIMITIVES_O
 	$(CC) $(LDFLAGS) -shared \
 		-o $(CORE_NAME).csp \
 		$(PRIMITIVES_OBJ) \
-		$(CORE_LIBS) -l$(CSOM_NAME) -l$(PRIMITIVECORE_NAME)
+		$(CORE_LIBS) -l$(CSOM_NAME) -l$(PRIMITIVESCORE_NAME)
 	mv $(CORE_NAME).csp $(ST_DIR)
 	@touch CORE
 	@echo SOMCore done.
+
+SNAKE: $(PRIMITIVESCORE_NAME).dll $(CSOM_NAME).$(SHARED_EXTENSION) $(SNAKEPRIMITIVES_OBJ)
+	@echo Linking Snake lib
+	$(CC) $(LDFLAGS) -shared \
+		-o $(EX_DIR)/Snake/Terminal.csp \
+		$(SNAKEPRIMITIVES_OBJ) \
+		$(CORE_LIBS) -l$(CSOM_NAME) -l$(PRIMITIVESCORE_NAME)
+	@echo Snake done.
 
 install: all
 	@echo installing CSOM into build
@@ -196,6 +211,12 @@ install: all
 	@echo Library.
 	@echo done.
 #
+# snake: starts snake
+#
+snake: all SNAKE
+	./$(CSOM_NAME).exe -cp Smalltalk Examples/Snake/Main.som
+
+#
 # console: start the console
 #
 console: all
@@ -205,7 +226,7 @@ console: all
 # test: run the standard test suite
 #
 test: all
-	./$(CSOM_NAME).exe -cp Smalltalk Testsuite/TestHarness.som
+	./$(CSOM_NAME).exe -g -cp Smalltalk Testsuite/TestHarness.som
 
 #
 # bench: run the benchmarks

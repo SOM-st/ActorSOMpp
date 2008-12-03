@@ -44,7 +44,7 @@ VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4) {
 }
 
 
-bool VMClass::HasSuperClass() {
+bool VMClass::HasSuperClass() const {
     return (super_class != NULL && super_class != Globals::NilObject());
 }
 
@@ -86,7 +86,7 @@ void VMClass::AddInstancePrimitive(VMPrimitive *ptr) {
 }
 
 
-VMSymbol* VMClass::GetInstanceFieldName(int index) {
+VMSymbol* VMClass::GetInstanceFieldName(int index) const {
 	if (index >= numberOfSuperInstanceFields()) {
 		index -= numberOfSuperInstanceFields();
 		return (VMSymbol*) (*instance_fields)[index];
@@ -96,39 +96,6 @@ VMSymbol* VMClass::GetInstanceFieldName(int index) {
 }
 
 
-VMClass* VMClass::GetSuperClass() {
-	return super_class;
-}
-
-
-void VMClass::SetSuperClass(VMClass* sup) {
-	super_class = sup;
-}
-
-
-VMSymbol* VMClass::GetName() {
-	return name;
-}
-
-
-void VMClass::SetName(VMSymbol* nam) {
-	name = nam;
-}
-
-
-VMArray* VMClass::GetInstanceFields() {
-	return instance_fields;
-}
-
-
-void VMClass::SetInstanceFields(VMArray* inst_fields) {
-	instance_fields = inst_fields;
-}
-
-
-VMArray  *VMClass::GetInstanceInvokables() {
-	return instance_invokables;
-}
 
 
 void      VMClass::SetInstanceInvokables(VMArray* invokables) {
@@ -145,15 +112,13 @@ void      VMClass::SetInstanceInvokables(VMArray* invokables) {
 }
 
 
-int       VMClass::GetNumberOfInstanceInvokables() {
+int       VMClass::GetNumberOfInstanceInvokables() const {
 	return instance_invokables->GetNumberOfIndexableFields();
 }
 
 
-VMObject *VMClass::GetInstanceInvokable(int index) {
+VMObject *VMClass::GetInstanceInvokable(int index) const {
     return (*instance_invokables)[index];
-	//return instance_invokables[index];
-	//return NULL;
 }
 
 
@@ -167,7 +132,7 @@ void      VMClass::SetInstanceInvokable(int index, VMObject* invokable) {
 }
 
 
-VMObject* VMClass::LookupInvokable(VMSymbol* name) {
+VMObject* VMClass::LookupInvokable(VMSymbol* name) const {
     VMInvokable* invokable = NULL;
     for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
         invokable = (VMInvokable*)(GetInstanceInvokable(i));
@@ -183,7 +148,7 @@ VMObject* VMClass::LookupInvokable(VMSymbol* name) {
 }
 
 
-int       VMClass::LookupFieldIndex(VMSymbol* name) {
+int       VMClass::LookupFieldIndex(VMSymbol* name) const {
     for (int i = 0; i <=GetNumberOfInstanceFields(); ++i) { 
         //even with GetNumberOfInstanceFields == 0 there is the class field 
         if (name == this->GetInstanceFieldName(i) ||
@@ -194,13 +159,13 @@ int       VMClass::LookupFieldIndex(VMSymbol* name) {
 }
 
 
-int       VMClass::GetNumberOfInstanceFields() {
+int       VMClass::GetNumberOfInstanceFields() const {
 	return instance_fields->GetNumberOfIndexableFields()
            + this->numberOfSuperInstanceFields();
 }
 
 
-bool      VMClass::HasPrimitives() {
+bool      VMClass::HasPrimitives() const {
 	for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
         VMInvokable* invokable = (VMInvokable*)(GetInstanceInvokable(i));
         if (invokable->IsPrimitive()) return true;
@@ -209,7 +174,7 @@ bool      VMClass::HasPrimitives() {
 }
 
 
-void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count) {
+void      VMClass::LoadPrimitives(const vector<StdString>& cp,int cp_count) {
 
     // the library handle
     //ifstream* dlhandle = NULL;
@@ -220,35 +185,44 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count) {
 #endif
     //
     // cached object properties
-    pString cname = this->name->GetStdString();
-    //pString cname = this->name->GetStdString;
+    StdString cname = this->name->GetStdString();
+    //StdString cname = this->name->GetStdString;
 
     //// iterate the classpathes
-    for(vector<pString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i) {
+    for(vector<StdString>::const_iterator i = cp.begin(); (i != cp.end()) && dlhandle == NULL; ++i) {
         // check the core library
-        pString loadstring = genCoreLoadstring(*i);
+        StdString loadstring = genCoreLoadstring(*i);
         dlhandle = loadLib(loadstring);
-        if(dlhandle != NULL && isResponsible(dlhandle, cname)) {
-            // the core library is found and responsible
+        if(dlhandle != NULL) {
+
+#if defined(_MSC_VER)
             //initialize core (core has to make sure not to initialize twice -> Core.cpp)
             //Where / How is this done in CSOM?????????
-            //Setup* setup = (Setup*) dlsym(dlhandle, "setup");
-            //const char* dlsym_error = dlerror();
-            //if (!setup) {
-            //    cerr << "Cannot load Core library: " << dlsym_error << '\n';
-            //    dlclose(dlhandle);
-            //    _UNIVERSE->ErrorExit("Core library does not define the setup() initializer.");
-            //}
-            ////call the setup function to intialize the class library
-            //setup();
+            Setup* setup = (Setup*) dlsym(dlhandle, "setup");
+            const char* dlsym_error = dlerror();
+            if (!setup) {
+                cerr << "Cannot load Core library: " << dlsym_error << '\n';
+                dlclose(dlhandle);
+                _UNIVERSE->ErrorExit("Core library does not define the setup() initializer.");
+            }
+            //call the setup function to intialize the class library
+            VMObject* g[] = {Globals::TrueObject(), Globals::FalseObject(), Globals::NilObject()};
+            setup(_UNIVERSE, _HEAP, g);
+#endif
+
+            if(isResponsible(dlhandle, cname))
+            // the core library is found and responsible
+            
             break;
         }
-    cout << "2222222222222222" << endl;
+   
         // the core library is not found or not responsible, 
         // continue w/ class file
         loadstring = genLoadstring(*i, cname);
+        cout << loadstring.c_str() << endl;
         dlhandle = loadLib(loadstring);
         if(dlhandle != NULL) {
+             cout << "2222222222222222" << endl;
             //
             // the class library was found...
             //
@@ -293,8 +267,8 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count) {
     // * do the actual loading for both class and metaclass
     // *
     // */
-    set_primitives(this, dlhandle, cname, INSTANCE_METHOD_FORMAT_S);
-    set_primitives(this->GetClass(), dlhandle, cname, CLASS_METHOD_FORMAT_S);
+    set_primitives(dlhandle, cname);
+    GetClass()->set_primitives(dlhandle, cname);
 }
 
 //
@@ -309,7 +283,7 @@ void      VMClass::LoadPrimitives(const vector<pString>& cp,int cp_count) {
 
 //private Methods
 
-int VMClass::numberOfSuperInstanceFields() {
+int VMClass::numberOfSuperInstanceFields() const {
 	if (this->HasSuperClass()) 
         return this->super_class->GetNumberOfInstanceFields();
 	return 0;
@@ -317,11 +291,12 @@ int VMClass::numberOfSuperInstanceFields() {
 
 //LoadPrimitives helper
 #define shared_extension ".csp"
-pString VMClass::genLoadstring(const pString& cp, 
-                       const pString& cname
-                       ) {
+
+StdString VMClass::genLoadstring(const StdString& cp, 
+                       const StdString& cname
+                       ) const {
     
-    pString loadstring = string(cp);
+    StdString loadstring = string(cp);
     loadstring += file_separator;
     loadstring += cname;
     loadstring += shared_extension;
@@ -335,10 +310,10 @@ pString VMClass::genLoadstring(const pString& cp,
  *  at the classpath given.
  *
  */
-pString VMClass::genCoreLoadstring(const pString& cp) {
+StdString VMClass::genCoreLoadstring(const StdString& cp) const {
     #define S_CORE "SOMCore"
-    pString corename = string(S_CORE);
-    pString result = genLoadstring(cp, corename);
+    StdString corename = string(S_CORE);
+    StdString result = genLoadstring(cp, corename);
     //SEND(corename, free);
     
     return result;
@@ -351,11 +326,11 @@ pString VMClass::genCoreLoadstring(const pString& cp) {
  */
 #if defined(__GNUC__)
 
-void* VMClass::loadLib(const pString& path) {
+void* VMClass::loadLib(const StdString& path) const {
 
 #else
 
-HMODULE VMClass::loadLib(const pString& path) {
+HMODULE VMClass::loadLib(const StdString& path) const {
 
 #endif
 
@@ -404,20 +379,20 @@ HMODULE VMClass::loadLib(const pString& path) {
  */
 #if defined(__GNUC__)
 
-bool VMClass::isResponsible(void* dlhandle, const pString& cl) {
+bool VMClass::isResponsible(void* dlhandle, const StdString& cl) const {
 
 #else
 
-bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl) {
+bool VMClass::isResponsible(HMODULE dlhandle, const StdString& cl) const {
 
 #endif
 
     // function handler
     SupportsClass* supports_class=NULL;
 
-    supports_class = (SupportsClass*)dlsym(dlhandle, "supports_class");
-    cout << "11111111111111" << endl;
+    supports_class = (SupportsClass*)dlsym(dlhandle, "supportsClass");
 	if(!supports_class) {
+        cout << "error: " << dlerror() << endl;
         /*LPTSTR pszMessage;
         DWORD dwLastError = GetLastError(); 
 
@@ -435,7 +410,7 @@ bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl) {
 
         LocalFree(pszMessage);*/
     
-        _UNIVERSE->ErrorExit("Library doesn't have expected format");
+        _UNIVERSE->ErrorExit("Library doesn't have expected format: ");
     }
     
     // test class responsibility
@@ -450,21 +425,18 @@ bool VMClass::isResponsible(HMODULE dlhandle, const pString& cl) {
  *
  */
 #if defined(__GNUC__)
-void VMClass::set_primitives(VMClass* cl, void* dlhandle, const pString& cname,
-                    const char* format
-                    ) {    
+void VMClass::set_primitives(void* dlhandle, const StdString& cname) {    
 #else
-void VMClass::set_primitives(VMClass* cl, HMODULE dlhandle, 
-                             const pString& cname,
-                             const char* format) {    
+void VMClass::set_primitives(HMODULE dlhandle, 
+                             const StdString& cname) {    
 #endif
     VMPrimitive* the_primitive;
     PrimitiveRoutine*   routine=NULL;
     VMInvokable* an_invokable;
     // iterate invokables
-    for(int i = 0; i < cl->GetNumberOfInstanceInvokables(); i++)  {
+    for(int i = 0; i < this->GetNumberOfInstanceInvokables(); i++)  {
         
-        an_invokable = (VMInvokable*)cl->GetInstanceInvokable(i);
+        an_invokable = (VMInvokable*)this->GetInstanceInvokable(i);
 #ifdef __DEBUG
         cout << "cname: >" << cname << "<"<< endl;
         cout << an_invokable->GetSignature()->GetStdString() << endl;
@@ -477,7 +449,7 @@ void VMClass::set_primitives(VMClass* cl, HMODULE dlhandle,
             //
             VMSymbol* sig =  the_primitive->GetSignature();
 
-            pString selector = sig->GetPlainString();
+            StdString selector = sig->GetPlainString();
             
             CreatePrimitive* create = 
                                 (CreatePrimitive*) dlsym(dlhandle, "create");

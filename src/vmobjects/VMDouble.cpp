@@ -11,15 +11,6 @@ VMDouble::VMDouble(double val) : VMObject() {
 }
 
 
-void VMDouble::SetEmbeddedDouble(double val) {
-    this->embeddedDouble = val;
-}
-
-
-double VMDouble::GetEmbeddedDouble() {
-    return this->embeddedDouble;
-}
-
 
 //VMDouble::~VMDouble()
 //{

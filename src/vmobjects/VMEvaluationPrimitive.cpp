@@ -32,14 +32,14 @@ void VMEvaluationPrimitive::MarkReferences() {
 
 
 
-VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc) {
+VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc){
 #define VALUE_S "value"
 #define VALUE_LEN 5
 #define WITH_S    "with:"
 #define WITH_LEN (4+1)
 #define COLON_S ":"
     
-    pString signature_string;
+    StdString signature_string;
     
     // Compute the signature string
     if(argc==1) {
@@ -57,7 +57,7 @@ VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc) {
     return _UNIVERSE->SymbolFor(signature_string);
 }
 
-void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame) {
+void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame){
     VMEvaluationPrimitive* self = (VMEvaluationPrimitive*) object;
 
      // Get the block (the receiver) from the stack

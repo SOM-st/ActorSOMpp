@@ -11,16 +11,18 @@ public:
 	VMString( const string& s );
 	//virtual ~VMString();
 
-    char*       GetChars();
-	std::string GetStdString();
-    int         GetStringLength();
+    inline char*       GetChars() const;
+	StdString GetStdString() const;
+    int         GetStringLength() const;
 
-    void        SetString(const std::string&);
+    void        SetString(const StdString&);
 protected:
     //this could be replaced by the CHARS macro in VMString.cpp
     //in order to decrease the object size
 	char* chars; 
 };
 
-
+char* VMString::GetChars() const {
+	return chars;
+}
 #endif

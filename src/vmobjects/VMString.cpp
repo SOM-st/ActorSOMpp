@@ -7,7 +7,7 @@
 //#define CHARS ((char*)&clazz+sizeof(VMObject*))
 
 
-VMString::VMString(const char* str) : VMObject(0) { //, std::string()
+VMString::VMString(const char* str) : VMObject(0) { //, StdString()
 	chars = (char*)&chars+sizeof(char*);
 	//objectSize += sizeof(char*) + strlen(str) + 1; //set actual object_size
 	//string_length = _UNIVERSE->NewInteger(strlen(str));
@@ -32,7 +32,7 @@ VMString::VMString( const string& s ): VMObject(0) {
 } 
 
 
-void VMString::SetString(const std::string& str) {
+void VMString::SetString(const StdString& str) {
 	if (str.length() > (size_t)GetStringLength()) {
 		//realloc?
         cout << "Problem: trying to SetString of a VMSymbol"
@@ -48,7 +48,7 @@ void VMString::SetString(const std::string& str) {
 }
 
 
-int VMString::GetStringLength() {
+int VMString::GetStringLength() const {
     //cout << objectSize << endl << sizeof(VMString) << endl;
     int length = 0;
     //if (chars != 0) {
@@ -61,14 +61,11 @@ int VMString::GetStringLength() {
 }
 
 
-std::string VMString::GetStdString() {
-    if (chars == 0) return pString("");
-	return pString(chars);
+StdString VMString::GetStdString() const {
+    if (chars == 0) return StdString("");
+	return StdString(chars);
 }
 
 
-char* VMString::GetChars() {
-	return chars;
-}
 
 

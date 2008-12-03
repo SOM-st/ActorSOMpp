@@ -167,48 +167,14 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			Name="VM"
 			>
-			<File
-				RelativePath=".\compiler\BytecodeGenerator.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\ClassGenerationContext.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\Disassembler.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\memory\GarbageCollector.cpp"
-				>
-			</File>
 			<File
 				RelativePath=".\vm\Globals.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\memory\Heap.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\interpreter\Interpreter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\Lexer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\MethodGenerationContext.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\Parser.cpp"
+				RelativePath=".\vm\Globals.h"
 				>
 			</File>
 			<File
@@ -216,19 +182,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\vmobjects\Signature.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\SourcecodeCompiler.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\misc\SymbolCompare.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\Symboltable.cpp"
+				RelativePath=".\vm\Shell.h"
 				>
 			</File>
 			<File
@@ -236,7 +190,47 @@
 				>
 			</File>
 			<File
+				RelativePath=".\vm\Universe.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="VMObjects"
+			>
+			<File
+				RelativePath=".\vmobjects\PrimitiveRoutine.h"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\Signature.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\Signature.h"
+				>
+			</File>
+			<File
+				RelativePath=".\misc\SymbolCompare.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\misc\SymbolCompare.h"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\Symboltable.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\Symboltable.h"
+				>
+			</File>
+			<File
 				RelativePath=".\vmobjects\VMArray.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\VMArray.h"
 				>
 			</File>
 			<File
@@ -244,7 +238,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\vmobjects\VMBigInteger.h"
+				>
+			</File>
+			<File
 				RelativePath=".\vmobjects\VMBlock.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\VMBlock.h"
 				>
 			</File>
 			<File
@@ -252,7 +254,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\vmobjects\VMClass.h"
+				>
+			</File>
+			<File
 				RelativePath=".\vmobjects\VMDouble.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\VMDouble.h"
 				>
 			</File>
 			<File
@@ -260,7 +270,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\vmobjects\VMEvaluationPrimitive.h"
+				>
+			</File>
+			<File
 				RelativePath=".\vmobjects\VMFrame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\VMFrame.h"
 				>
 			</File>
 			<File
@@ -268,7 +286,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\vmobjects\VMInteger.h"
+				>
+			</File>
+			<File
 				RelativePath=".\vmobjects\VMInvokable.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\VMInvokable.h"
 				>
 			</File>
 			<File
@@ -276,7 +302,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\vmobjects\VMMethod.h"
+				>
+			</File>
+			<File
 				RelativePath=".\vmobjects\VMObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\VMObject.h"
 				>
 			</File>
 			<File
@@ -284,25 +318,39 @@
 				>
 			</File>
 			<File
+				RelativePath=".\vmobjects\VMPrimitive.h"
+				>
+			</File>
+			<File
 				RelativePath=".\vmobjects\VMString.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vmobjects\VMString.h"
 				>
 			</File>
 			<File
 				RelativePath=".\vmobjects\VMSymbol.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\vmobjects\VMSymbol.h"
+				>
+			</File>
 		</Filter>
 		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			Name="Compiler"
 			>
+			<File
+				RelativePath=".\compiler\BytecodeGenerator.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\compiler\BytecodeGenerator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\interpreter\bytecodes.h"
+				RelativePath=".\compiler\ClassGenerationContext.cpp"
 				>
 			</File>
 			<File
@@ -310,15 +358,91 @@
 				>
 			</File>
 			<File
+				RelativePath=".\compiler\Disassembler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\Disassembler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\Lexer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\Lexer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\MethodGenerationContext.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\MethodGenerationContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\Parser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\Parser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\SourcecodeCompiler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\compiler\SourcecodeCompiler.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Interpreter"
+			>
+			<File
+				RelativePath=".\interpreter\bytecodes.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interpreter\Interpreter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interpreter\Interpreter.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Memory"
+			>
+			<File
+				RelativePath=".\memory\GarbageCollector.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\memory\GarbageCollector.h"
+				>
+			</File>
+			<File
+				RelativePath=".\memory\Heap.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\memory\Heap.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Misc"
+			>
+			<File
 				RelativePath=".\misc\debug.h"
 				>
 			</File>
 			<File
 				RelativePath=".\misc\defs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\Disassembler.h"
 				>
 			</File>
 			<File
@@ -330,119 +454,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\memory\GarbageCollector.h"
-				>
-			</File>
-			<File
 				RelativePath=".\misc\gettimeofday.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vm\Globals.h"
-				>
-			</File>
-			<File
-				RelativePath=".\memory\Heap.h"
-				>
-			</File>
-			<File
-				RelativePath=".\interpreter\Interpreter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\Lexer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\MethodGenerationContext.h"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\Parser.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\PrimitiveRoutine.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vm\Shell.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\Signature.h"
-				>
-			</File>
-			<File
-				RelativePath=".\compiler\SourcecodeCompiler.h"
-				>
-			</File>
-			<File
-				RelativePath=".\misc\SymbolCompare.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\Symboltable.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vm\Universe.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMArray.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMBigInteger.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMBlock.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMClass.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMDouble.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMEvaluationPrimitive.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMFrame.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMInteger.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMInvokable.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMMethod.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMObject.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMPrimitive.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMString.h"
-				>
-			</File>
-			<File
-				RelativePath=".\vmobjects\VMSymbol.h"
 				>
 			</File>
 		</Filter>
@@ -457,6 +469,14 @@
 		</File>
 		<File
 			RelativePath=".\Debug\cppsom_dll.dll.intermediate.manifest"
+			>
+		</File>
+		<File
+			RelativePath=".\vmobjects\pVMObject.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\vmobjects\pVMObject.h"
 			>
 		</File>
 	</Files>

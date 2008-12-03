@@ -4,7 +4,7 @@
 
 #include "../misc/defs.h"
 #include "ClassGenerationContext.h"
-#include "../misc/ExtendedVector.h"
+//#include "../misc/ExtendedVector.h"
 #include "../misc/ExtendedList.h"
 class VMMethod;
 class VMArray;
@@ -19,21 +19,21 @@ public:
     VMPrimitive*    AssemblePrimitive();
 
 	int8_t          FindLiteralIndex(VMObject* lit);//pVMObject lit);
-	bool            FindVar(const pString& var, int* index, 
+	bool            FindVar(const StdString& var, int* index, 
                             int* context, bool* is_argument);
-	bool            FindField(const pString& field);
+	bool            FindField(const StdString& field);
 	uint8_t         ComputeStackDepth();
 
 	void            SetHolder(ClassGenerationContext* holder);
 	void            SetOuter(MethodGenerationContext* outer);
 	void            SetIsBlockMethod(bool is_block = true);
 	void            SetSignature(VMSymbol* sig);
-	void            AddArgument(const pString& arg);
+	void            AddArgument(const StdString& arg);
 	void            SetPrimitive(bool prim = true);
-	void            AddLocal(const pString& local);
+	void            AddLocal(const StdString& local);
 	void            AddLiteral(VMObject* lit);
-	bool            AddArgumentIfAbsent(const pString& arg);
-	bool            AddLocalIfAbsent(const pString& local);
+	bool            AddArgumentIfAbsent(const StdString& arg);
+	bool            AddLocalIfAbsent(const StdString& local);
 	bool            AddLiteralIfAbsent(VMObject* lit);
 	void            SetFinished(bool finished = true);
 
@@ -52,9 +52,9 @@ private:
     MethodGenerationContext*   outer_genc;
     bool                       block_method;
     VMSymbol*                  signature;
-    ExtendedList<std::string>  arguments;
+    ExtendedList<StdString>  arguments;
     bool                       primitive;
-    ExtendedList<std::string>  locals;
+    ExtendedList<StdString>  locals;
     pList                      literals;
     bool                       finished;
 	vector<uint8_t>            bytecode;

@@ -8,11 +8,11 @@ VMSymbol::VMSymbol(const char* str) : VMString(str) {
 }
 
 
-VMSymbol::VMSymbol( const std::string& s ): VMString(s) {
+VMSymbol::VMSymbol( const StdString& s ): VMString(s) {
 }
 
 
-pString VMSymbol::GetPlainString() {
+StdString VMSymbol::GetPlainString() const {
     ostringstream str;
     char* chars = this->GetChars();
     for(size_t i=0; i <= (size_t)this->GetStringLength(); i++) {
@@ -75,7 +75,7 @@ pString VMSymbol::GetPlainString() {
                 break;
         }
     }
-    pString st = str.str();
+    StdString st = str.str();
     //st[0] = toupper(st[0]);
     return st;
 }

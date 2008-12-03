@@ -69,7 +69,7 @@ void Parser::SingleOperator()
     // TODO
 }
 
-void Parser::assignments( MethodGenerationContext* mgenc, list<pString> l )
+void Parser::assignments( MethodGenerationContext* mgenc, list<StdString> l )
 {
     // TODO
 }
@@ -145,7 +145,7 @@ bool Parser::expectOneOf(Symbol* ss) {
 
 
 
-void Parser::genPushVariable(MethodGenerationContext* mgenc, const pString& var) {
+void Parser::genPushVariable(MethodGenerationContext* mgenc, const StdString& var) {
     // The purpose of this function is to find out whether the variable to be
     // pushed on the stack is a local variable, argument, or object field. This
     // is done by examining all available lexical contexts, starting with the
@@ -175,7 +175,7 @@ void Parser::genPushVariable(MethodGenerationContext* mgenc, const pString& var)
 }
 
 
-void Parser::genPopVariable(MethodGenerationContext* mgenc, const pString& var){
+void Parser::genPopVariable(MethodGenerationContext* mgenc, const StdString& var){
     // The purpose of this function is to find out whether the variable to be
     // popped off the stack is a local variable, argument, or object field. This
     // is done by examining all available lexical contexts, starting with the
@@ -280,7 +280,7 @@ void Parser::Classdef(ClassGenerationContext* cgenc) {
 void Parser::instanceFields(ClassGenerationContext* cgenc) {
     if(accept(Or)) {
         while(sym == Identifier) {
-            pString var = variable();
+            StdString var = variable();
             cgenc->AddInstanceField((VMObject*)_UNIVERSE->SymbolFor(var));
             //SEND(cgenc->instance_fields, add, Universe_symbol_for(var));
             //SEND(var, free);
@@ -293,7 +293,7 @@ void Parser::instanceFields(ClassGenerationContext* cgenc) {
 void Parser::classFields(ClassGenerationContext* cgenc) {
     if(accept(Or)) {
         while(sym == Identifier) {
-            pString var = variable();
+            StdString var = variable();
 			cgenc->AddClassField((VMObject*)_UNIVERSE->SymbolFor(var));
             //SEND(cgenc->class_fields, add, Universe_symbol_for(var));
             //SEND(var, free);
@@ -349,7 +349,7 @@ void Parser::binaryPattern(MethodGenerationContext* mgenc) {
 
 
 void Parser::keywordPattern(MethodGenerationContext* mgenc) {
-    pString kw;// = String_new("");
+    StdString kw;// = String_new("");
     do {
         kw.append(keyword());// kw = SEND(kw, concat, keyword());
 		mgenc->AddArgumentIfAbsent(argument());
@@ -385,7 +385,7 @@ VMSymbol* Parser::unarySelector(void) {
 
 
 VMSymbol* Parser::binarySelector(void) {
-    pString s(text);
+    StdString s(text);
     
     if(accept(Or))
         ;
@@ -408,8 +408,8 @@ VMSymbol* Parser::binarySelector(void) {
 }
 
 
-pString Parser::identifier(void) {
-    pString s(text);
+StdString Parser::identifier(void) {
+    StdString s(text);
     if(accept(Primitive))
         ; // text is set
     else
@@ -419,15 +419,15 @@ pString Parser::identifier(void) {
 }
 
 
-pString Parser::keyword(void) {
-    pString s(text);
+StdString Parser::keyword(void) {
+    StdString s(text);
     expect(Keyword);
     
     return s;
 }
 
 
-pString Parser::argument(void) {
+StdString Parser::argument(void) {
     return variable();
 }
 
@@ -503,11 +503,11 @@ void Parser::expression(MethodGenerationContext* mgenc) {
 
 
 void Parser::assignation(MethodGenerationContext* mgenc) {
-	list<pString> l;
+	list<StdString> l;
     //cout << "assignation" << endl;
     assignments(mgenc, l);
     evaluation(mgenc);
-    list<pString>::iterator i;
+    list<StdString>::iterator i;
     for(i=l.begin(); i != l.end(); ++i)
         bcGen->emit_DUP(mgenc);
     for(i=l.begin(); i != l.end(); ++i)//SEND(l, size); i++)
@@ -517,7 +517,7 @@ void Parser::assignation(MethodGenerationContext* mgenc) {
 }
 
 
-void Parser::assignments(MethodGenerationContext* mgenc, list<pString>& l) {
+void Parser::assignments(MethodGenerationContext* mgenc, list<StdString>& l) {
     if(sym == Identifier) {
         l.push_back(assignment(mgenc));//SEND(l, add, assignment(mgenc));
         PEEK;//Peek();
@@ -527,8 +527,8 @@ void Parser::assignments(MethodGenerationContext* mgenc, list<pString>& l) {
 }
 
 
-pString Parser::assignment(MethodGenerationContext* mgenc) {
-    pString v = variable();
+StdString Parser::assignment(MethodGenerationContext* mgenc) {
+    StdString v = variable();
     VMSymbol* var = _UNIVERSE->SymbolFor(v);
 	mgenc->AddLiteralIfAbsent((VMObject*)var);
     //SEND(mgenc->literals, addIfAbsent, var);
@@ -553,12 +553,12 @@ void Parser::primary(MethodGenerationContext* mgenc, bool* super) {
     *super = false;
     switch(sym) {
         case Identifier: {
-            pString v = variable();
-			if(v == pString("super")) { 
+            StdString v = variable();
+			if(v == "super") { 
                 *super = true;
                 // sends to super push self as the receiver
                 //SEND(v, free);
-                v = pString("self");//String_new("self");
+                v = StdString("self");//String_new("self");
             }
             
             genPushVariable(mgenc, v);
@@ -596,7 +596,7 @@ void Parser::primary(MethodGenerationContext* mgenc, bool* super) {
 }
 
 
-pString Parser::variable(void) {
+StdString Parser::variable(void) {
     return identifier();
 }
 
@@ -666,7 +666,7 @@ void Parser::binaryOperand(MethodGenerationContext* mgenc, bool* super) {
 
 
 void Parser::keywordMessage(MethodGenerationContext* mgenc, bool super) {
-    pString kw;
+    StdString kw;
     do {
         kw.append(keyword());// = SEND(kw, concat, keyword());
         formula(mgenc);
@@ -726,7 +726,7 @@ void Parser::literalNumber(MethodGenerationContext* mgenc) {
     
     VMInteger* lit = _UNIVERSE->NewInteger(val);
 	/*stringstream s;
-	pString str_lit = "";
+	StdString str_lit = "";
 	s << literal->GetEmbeddedInteger();
 	str_lit += s.str();*/
 	mgenc->AddLiteralIfAbsent((VMObject*)lit);
@@ -758,7 +758,7 @@ void Parser::literalSymbol(MethodGenerationContext* mgenc) {
     VMSymbol* symb;
     expect(Pound);
     if(sym == STString) {
-        pString s = _string();
+        StdString s = _string();
         symb = _UNIVERSE->SymbolFor(s);
         //SEND(s, free);
     } else
@@ -771,7 +771,7 @@ void Parser::literalSymbol(MethodGenerationContext* mgenc) {
 
 
 void Parser::literalString(MethodGenerationContext* mgenc) {
-    pString s = _string();
+    StdString s = _string();
 	
     VMString* str = _UNIVERSE->NewString(s);
     mgenc->AddLiteralIfAbsent((VMObject*)str);
@@ -794,7 +794,7 @@ VMSymbol* Parser::selector(void) {
 
 
 VMSymbol* Parser::keywordSelector(void) {
-    pString s(text);// = String_new(text);
+    StdString s(text);// = String_new(text);
     expectOneOf(keywordSelectorSyms);
     VMSymbol* symb = _UNIVERSE->SymbolFor(s);
     //SEND(s, free);
@@ -802,8 +802,8 @@ VMSymbol* Parser::keywordSelector(void) {
 }
 
 
-pString Parser::_string(void) {
-    pString s(text); 
+StdString Parser::_string(void) {
+    StdString s(text); 
     expect(STString);    
     return s; // <-- Literal strings are At Most BUFSIZ chars long.
 }
@@ -820,7 +820,7 @@ void Parser::nestedBlock(MethodGenerationContext* mgenc) {
         blockPattern(mgenc);
     
     // generate Block signature
-    pString block_sig = pString(BLOCK_METHOD_S);// String_new(BLOCK_METHOD_S);
+    StdString block_sig = StdString(BLOCK_METHOD_S);// String_new(BLOCK_METHOD_S);
 	size_t arg_size = mgenc->GetNumberOfArguments();// SEND(mgenc->arguments, size);
     for(size_t i = 1; i < arg_size; i++)
 		block_sig += ":";//.append(':');

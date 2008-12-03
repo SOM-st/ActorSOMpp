@@ -15,18 +15,19 @@ public:
 
 	void        SetIndexableField(int idx, VMObject* item);
 	
-	int         GetNumberOfIndexableFields();
-	VMArray*    CopyAndExtendWith(VMObject*);
-	void        CopyIndexableFieldsTo(VMArray*);
+	inline int         GetNumberOfIndexableFields() const;
+	VMArray*    CopyAndExtendWith(VMObject*) const;
+	void        CopyIndexableFieldsTo(VMArray*) const;
 
-	VMObject* operator[](int idx) {
-		return GetIndexableField(idx);
-	}
+	VMObject* operator[](int idx) const;
 
 private:
-    VMObject*   GetIndexableField(int idx);
 
 	VMInteger* size;
 };
+
+int VMArray::GetNumberOfIndexableFields() const {
+    return size->GetEmbeddedInteger();
+}
 
 #endif

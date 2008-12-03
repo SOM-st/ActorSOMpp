@@ -23,9 +23,9 @@
 Interpreter::Interpreter() {
     this->frame = NULL;
     
-    uG = pString("unknownGlobal:");
-    dnu = pString("doesNotUnderstand:arguments:");
-    eB = pString("escapedBlock:");
+    uG = "unknownGlobal:";
+    dnu = "doesNotUnderstand:arguments:";
+    eB = "escapedBlock:";
     // TODO
 }
 
@@ -140,7 +140,7 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class) {
                 (VMInvokable*) receiver_class->LookupInvokable(signature);
 
     if (invokable != NULL) {
-        invokable->Invoke(_FRAME);
+        (*invokable)(_FRAME);
     } else {
         //doesNotUnderstand
         int number_of_args = Signature::GetNumberOfArguments(signature);
@@ -342,7 +342,7 @@ void Interpreter::do_super_send( int bytecode_index ) {
     VMInvokable* invokable = (VMInvokable*) super->LookupInvokable(signature);
 
     if (invokable != NULL)
-        invokable->Invoke(_FRAME);
+        (*invokable)(_FRAME);
     else {
         int num_of_args = Signature::GetNumberOfArguments(signature);
         VMObject* receiver = _FRAME->GetStackElement(num_of_args - 1);

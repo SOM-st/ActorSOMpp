@@ -138,7 +138,7 @@ void  _Double::AsString(VMObject* /*object*/, VMFrame* frame) {
     ostringstream Str;
     Str.precision(17);
     Str << dbl;
-    frame->Push( (VMObject*)_UNIVERSE->NewString( pString(Str.str()) ) );
+    frame->Push( (VMObject*)_UNIVERSE->NewString( Str.str().c_str() ) );
 }
 
 
@@ -148,35 +148,35 @@ void _Double::Sqrt(VMObject* /*object*/, VMFrame* frame) {
     frame->Push((VMObject*)result);
 }
 
-_Double::_Double( ) : Primitive() {
-    this->SetRoutine("plus", new (_HEAP) 
+_Double::_Double( ) : PrimitiveContainer() {
+    this->SetPrimitive("plus", new (_HEAP) 
         Routine<_Double>(this, &_Double::Plus));
 
-    this->SetRoutine("minus", new (_HEAP) 
+    this->SetPrimitive("minus", new (_HEAP) 
         Routine<_Double>(this, &_Double::Minus));
 
-    this->SetRoutine("star", new (_HEAP) 
+    this->SetPrimitive("star", new (_HEAP) 
         Routine<_Double>(this, &_Double::Star));
 
-    this->SetRoutine("slashslash", new (_HEAP) 
+    this->SetPrimitive("slashslash", new (_HEAP) 
         Routine<_Double>(this, &_Double::Slashslash));
 
-    this->SetRoutine("percent", new (_HEAP) 
+    this->SetPrimitive("percent", new (_HEAP) 
         Routine<_Double>(this, &_Double::Percent));
 
-    this->SetRoutine("and", new (_HEAP) 
+    this->SetPrimitive("and", new (_HEAP) 
         Routine<_Double>(this, &_Double::And));
 
-    this->SetRoutine("equal", new (_HEAP) 
+    this->SetPrimitive("equal", new (_HEAP) 
         Routine<_Double>(this, &_Double::Equal));
 
-    this->SetRoutine("lowerthan", new (_HEAP) 
+    this->SetPrimitive("lowerthan", new (_HEAP) 
         Routine<_Double>(this, &_Double::Lowerthan));
 
-    this->SetRoutine("asString", new (_HEAP) 
+    this->SetPrimitive("asString", new (_HEAP) 
         Routine<_Double>(this, &_Double::AsString));
 
-    this->SetRoutine("sqrt", new (_HEAP) 
+    this->SetPrimitive("sqrt", new (_HEAP) 
         Routine<_Double>(this, &_Double::Sqrt));
 }
 

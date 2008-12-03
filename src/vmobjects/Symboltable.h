@@ -9,13 +9,13 @@
 class Symboltable {
 public:
     VMSymbol* lookup(const char* restrict);
-    VMSymbol* lookup(const pString& restrict);
+    VMSymbol* lookup(const StdString& restrict);
     void      insert(VMSymbol*);
 
     Symboltable();
     ~Symboltable();
 private:
-    map<std::string, VMSymbol*> symtab;
+    map<StdString, VMSymbol*> symtab;
 };
 
 #endif

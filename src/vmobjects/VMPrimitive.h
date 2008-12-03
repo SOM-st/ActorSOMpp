@@ -12,12 +12,14 @@ class VMPrimitive : public VMInvokable { //public VMObject,
 public:
     VMPrimitive(VMSymbol* sig);
     //virtual ~VMPrimitive();
-    virtual bool    IsPrimitive() { return true; };
-    virtual void    Invoke(VMFrame*);
-    virtual bool    IsEmpty();
-    virtual void    SetRoutine(PrimitiveRoutine* rtn);
+    virtual bool    IsPrimitive() const { return true; };
+    virtual inline bool    IsEmpty() const;
+    virtual inline void    SetRoutine(PrimitiveRoutine* rtn);
     virtual void    MarkReferences();
     virtual void    SetEmpty(bool value) { empty = (bool*)value; };
+
+    //operator "()" to invoke the primitive
+    virtual void    operator()(VMFrame* frm) { (*routine)(this, frm); };
 
     static VMPrimitive* GetEmptyPrimitive(VMSymbol* sig);
 private:
@@ -27,5 +29,13 @@ private:
     bool* empty;
     
 };
+bool VMPrimitive::IsEmpty() const {
+    return (bool)empty;
+}
+
+
+void VMPrimitive::SetRoutine(PrimitiveRoutine* rtn) {
+    routine = rtn;
+}
 
 #endif

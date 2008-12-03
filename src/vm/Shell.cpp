@@ -59,8 +59,8 @@ void Shell::Start() {
      */
     while(true) {
         // initialize empty strings
-        pString   statement = pString("");
-        pString   inp = pString("");
+        StdString   statement;
+        StdString   inp;
         
         //printf("---> ");
         cout << "---> ";
@@ -69,10 +69,10 @@ void Shell::Start() {
 
         cin.getline(inbuf, INPUT_MAX_SIZE);
 
-        inp = pString(inbuf);
+        inp = StdString(inbuf);
 
         if (inp.length() == 0) continue;
-        //if (inp == pString(QUIT_CMD)) return;
+        //if (inp == StdString(QUIT_CMD)) return;
         //do {
         //    if(!feof(stdin))
         //        SEND(inp, concatChar, fgetc(stdin));
@@ -129,7 +129,7 @@ void Shell::Start() {
                                     _UNIVERSE->SymbolFor("run:"));
         
         // Invoke the run method
-        initialize->Invoke(current_frame);
+        (*initialize)(current_frame);
         
         // Start the Interpreter
 

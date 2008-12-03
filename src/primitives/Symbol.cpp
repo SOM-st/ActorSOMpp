@@ -39,12 +39,12 @@ _Symbol* Symbol;
 void  _Symbol::AsString(VMObject* /*object*/, VMFrame* frame) {
     VMSymbol* sym = (VMSymbol*) frame->Pop();
 
-    pString str = sym->GetStdString();
+    StdString str = sym->GetStdString();
     frame->Push((VMObject*)_UNIVERSE->NewString(str));
 }
 
-_Symbol::_Symbol( ) : Primitive() {
-    this->SetRoutine("asString", new (_HEAP)
+_Symbol::_Symbol( ) : PrimitiveContainer() {
+    this->SetPrimitive("asString", new (_HEAP)
         Routine<_Symbol>(this, &_Symbol::AsString));
 }
 

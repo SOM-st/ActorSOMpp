@@ -12,11 +12,19 @@ public:
     VMBigInteger(int64_t);
     //virtual ~VMBigInteger();
 
-    void SetEmbeddedInteger(int64_t);
-    int64_t GetEmbeddedInteger();
+    inline void SetEmbeddedInteger(int64_t);
+    inline int64_t GetEmbeddedInteger() const;
 
 private:
     int64_t embeddedInteger;
 };
 
+int64_t VMBigInteger::GetEmbeddedInteger() const {
+    return this->embeddedInteger;
+}
+
+
+void VMBigInteger::SetEmbeddedInteger(int64_t val) {
+    this->embeddedInteger = val;
+}
 #endif

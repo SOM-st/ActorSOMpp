@@ -9,11 +9,15 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SOMCore", "src\primitives\SOMCore.vcproj", "{41B17196-BA46-414B-82BA-7CCF213BA77E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{9EDF060A-3E89-4CB6-84EE-A761302A9BF3} = {9EDF060A-3E89-4CB6-84EE-A761302A9BF3}
+		{0D3B827C-96D7-40C0-8319-B3A3EA492D96} = {0D3B827C-96D7-40C0-8319-B3A3EA492D96}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppsom_dll", "src\cppsom_dll.vcproj", "{9EDF060A-3E89-4CB6-84EE-A761302A9BF3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "primitivesCore", "src\primitivesCore\primitivesCore.vcproj", "{0D3B827C-96D7-40C0-8319-B3A3EA492D96}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9EDF060A-3E89-4CB6-84EE-A761302A9BF3} = {9EDF060A-3E89-4CB6-84EE-A761302A9BF3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

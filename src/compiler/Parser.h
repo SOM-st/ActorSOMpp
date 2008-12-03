@@ -70,9 +70,9 @@ private:
 	void        methodBlock(MethodGenerationContext* mgenc);
 	VMSymbol*   unarySelector(void);
 	VMSymbol*   binarySelector(void);
-	pString     identifier(void);
-	pString     keyword(void);
-	pString     argument(void);
+	StdString     identifier(void);
+	StdString     keyword(void);
+	StdString     argument(void);
 	void        blockContents(MethodGenerationContext* mgenc);
 	void        locals(MethodGenerationContext* mgenc);
 	void        blockBody(MethodGenerationContext* mgenc, bool seen_period);
@@ -80,10 +80,10 @@ private:
 	void        expression(MethodGenerationContext* mgenc);
 	void        assignation(MethodGenerationContext* mgenc);
 	void        assignments(MethodGenerationContext* mgenc, list<string>& l);
-	pString     assignment(MethodGenerationContext* mgenc);
+	StdString     assignment(MethodGenerationContext* mgenc);
 	void        evaluation(MethodGenerationContext* mgenc);
 	void        primary(MethodGenerationContext* mgenc, bool* super);
-	pString     variable(void);
+	StdString     variable(void);
 	void        messages(MethodGenerationContext* mgenc, bool super);
 	void        unaryMessage(MethodGenerationContext* mgenc, bool super);
 	void        binaryMessage(MethodGenerationContext* mgenc, bool super);
@@ -100,12 +100,12 @@ private:
 	void        literalString(MethodGenerationContext* mgenc);
 	VMSymbol*   selector(void);
 	VMSymbol*   keywordSelector(void);
-	pString     _string(void);
+	StdString     _string(void);
 	void        nestedBlock(MethodGenerationContext* mgenc);
 	void        blockPattern(MethodGenerationContext* mgenc);
 	void        blockArguments(MethodGenerationContext* mgenc);
-	void        genPushVariable(MethodGenerationContext*, const pString&);
-	void        genPopVariable(MethodGenerationContext*, const pString&);
+	void        genPushVariable(MethodGenerationContext*, const StdString&);
+	void        genPopVariable(MethodGenerationContext*, const StdString&);
 
 	Lexer* lexer;
 	//ifstream& infile;
@@ -113,19 +113,19 @@ private:
 	Symbol sym;
 	//char symc;
 	//char text[BUFSIZ];
-	pString text;
+	StdString text;
 
 	//bool peekDone;
 	Symbol nextSym;
 	//char nextSymc;
 	//char nextText[BUFSIZ];
-	pString nextText;
+	StdString nextText;
 	/**
 	 * input buffer
 	 */
 
 	//char buf[BUFSIZ];
-	/*std::string buf;
+	/*StdString buf;
 	unsigned int bufp;*/
 
 	/*static Symbol singleOpSyms[];

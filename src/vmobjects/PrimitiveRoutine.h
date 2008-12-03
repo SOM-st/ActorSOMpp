@@ -15,8 +15,7 @@ public:
   // classes will use a pointer to an object and a pointer to a member function
   // to make the function call
   virtual void operator()(VMObject*, VMFrame*)=0;  // call using operator
-  virtual void Call(VMObject*, VMFrame*)=0;        // call using function
-
+ 
   
   virtual void MarkReferences() {
       if (gcfield) return;
@@ -28,10 +27,9 @@ public:
 };
 
 // Typedefs for Primitive loading
-typedef PrimitiveRoutine* CreatePrimitive(const pString&,const pString&);
+typedef PrimitiveRoutine* CreatePrimitive(const StdString&,const StdString&);
 typedef bool SupportsClass(const char*);
-typedef void Setup();
 typedef void TearDown();
-
+typedef void Setup();
 
 #endif

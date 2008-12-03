@@ -49,13 +49,13 @@ class Lexer {
 
 public:
 	Lexer(istream& file);
-    Lexer(const pString& stream);
+    Lexer(const StdString& stream);
 	~Lexer();
 	Symbol      GetSym(void);
 	Symbol      Peek(void);
-	pString     GetText(void);
-	pString     GetNextText(void);
-	pString     GetRawBuffer(void);
+	StdString     GetText(void);
+	StdString     GetNextText(void);
+	StdString     GetRawBuffer(void);
 
 
 private:
@@ -68,7 +68,7 @@ private:
 
 	istream& infile;
 
-    pString stringInput;
+    StdString stringInput;
 
 	Symbol sym;
 	char symc;
@@ -81,7 +81,7 @@ private:
     //^^
 	char nextText[BUFSIZ];
 	
-	std::string buf;
+	StdString buf;
 	unsigned int bufp;
 };
 

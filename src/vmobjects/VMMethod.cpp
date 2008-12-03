@@ -51,8 +51,7 @@ void VMMethod::MarkReferences() {
     bc_length->MarkReferences();*/
 }
 
-
-int VMMethod::GetNumberOfLocals() {
+int VMMethod::GetNumberOfLocals() const {
     return number_of_locals->GetEmbeddedInteger(); 
 }
 
@@ -62,7 +61,7 @@ void VMMethod::SetNumberOfLocals(int nol) {
 }
 
 
-int VMMethod::GetMaximumNumberOfStackElements() {
+int VMMethod::GetMaximumNumberOfStackElements() const {
     return maximum_number_of_stack_elements->GetEmbeddedInteger(); 
 }
 
@@ -72,7 +71,7 @@ void VMMethod::SetMaximumNumberOfStackElements(int stel) {
 }
 
 
-int VMMethod::GetNumberOfArguments() {
+int VMMethod::GetNumberOfArguments() const {
     return number_of_arguments->GetEmbeddedInteger(); 
 }
 
@@ -82,12 +81,12 @@ void VMMethod::SetNumberOfArguments(int noa) {
 }
 
 
-int VMMethod::GetNumberOfBytecodes() {
+int VMMethod::GetNumberOfBytecodes() const {
     return bc_length->GetEmbeddedInteger();
 }
 
 
-void VMMethod::Invoke(VMFrame* frame) {
+void VMMethod::operator()(VMFrame* frame) {
     VMFrame* frm = _UNIVERSE->GetInterpreter()->PushNewFrame(this);
     frm->CopyArgumentsFrom(frame);
 }
@@ -103,7 +102,7 @@ void VMMethod::SetHolderAll(VMClass* hld) {
 }
 
 
-VMObject* VMMethod::GetConstant(int indx) {
+VMObject* VMMethod::GetConstant(int indx) const {
     uint8_t bc = _BC[indx+1];
     if (bc >= this->GetNumberOfIndexableFields()) {
         cout << "Error: Constant index out of range" << endl;
@@ -113,7 +112,7 @@ VMObject* VMMethod::GetConstant(int indx) {
 }
 
 
-uint8_t VMMethod::GetBytecode(int indx) {
+uint8_t VMMethod::GetBytecode(int indx) const {
     return _BC[indx];
 }
 
@@ -124,7 +123,7 @@ void VMMethod::SetBytecode(int indx, uint8_t val) {
 
 
 //VMArray Methods
-VMArray* VMMethod::CopyAndExtendWith(VMObject* item) {
+VMArray* VMMethod::CopyAndExtendWith(VMObject* item) const {
     size_t fields = this->size->GetEmbeddedInteger();
 	VMArray* result = _UNIVERSE->NewArray(fields+1);
     this->CopyIndexableFieldsTo(result);
@@ -133,7 +132,7 @@ VMArray* VMMethod::CopyAndExtendWith(VMObject* item) {
 }
 
 
-VMObject* VMMethod::GetIndexableField(int idx) {
+VMObject* VMMethod::GetIndexableField(int idx) const {
     if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
         cout << "Array index out of bounds: Accessing " << idx
              << ", but only " << size->GetEmbeddedInteger()-1;
@@ -145,7 +144,7 @@ VMObject* VMMethod::GetIndexableField(int idx) {
 }
 
 
-void VMMethod::CopyIndexableFieldsTo(VMArray* to) {
+void VMMethod::CopyIndexableFieldsTo(VMArray* to) const {
 	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
         to->SetIndexableField(i, this->GetIndexableField(i));
 	}
@@ -153,7 +152,7 @@ void VMMethod::CopyIndexableFieldsTo(VMArray* to) {
 }
 
 
-int VMMethod::GetNumberOfIndexableFields() {
+int VMMethod::GetNumberOfIndexableFields() const {
     return size->GetEmbeddedInteger();
 }
 

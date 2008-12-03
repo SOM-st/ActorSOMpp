@@ -55,17 +55,15 @@ class VMObject;
 //
 // macro for freeing an array
 //
-using namespace std;
-#define path_separator '/'
+#define path_separator ':'
 #define file_separator '/'
 
 //typedef int MethodGenerationContext;
 //typedef int ClassGenerationContext;
 //typedef string pVMSymbol;
-typedef string pString;
+typedef std::string StdString;
 
-#if defined(__GNUC__)
-#else
+#if defined(_MSC_VER)
 typedef unsigned long long uint64_t;
 typedef long long int64_t;
 typedef unsigned long uint32_t;

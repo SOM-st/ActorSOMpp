@@ -70,7 +70,7 @@ int8_t MethodGenerationContext::FindLiteralIndex(VMObject* lit) {
 
 }
 
-bool MethodGenerationContext::FindVar(const pString& var, int* index, 
+bool MethodGenerationContext::FindVar(const StdString& var, int* index, 
                                         int* context, bool* is_argument) {
 	if((*index = locals.IndexOf( var)) == -1) {
         if((*index = arguments.IndexOf( var)) == -1) {
@@ -88,7 +88,7 @@ bool MethodGenerationContext::FindVar(const pString& var, int* index,
     return true;
 }
 
-bool MethodGenerationContext::FindField(const pString& field) {
+bool MethodGenerationContext::FindField(const StdString& field) {
 	return holder_genc->FindField(field);
 }
 
@@ -165,11 +165,11 @@ void MethodGenerationContext::SetPrimitive(bool prim) {
 	primitive = prim;
 }
 
-void MethodGenerationContext::AddArgument(const pString& arg) {
+void MethodGenerationContext::AddArgument(const StdString& arg) {
 	arguments.push_back(arg);
 }
 
-void MethodGenerationContext::AddLocal(const pString& local) {
+void MethodGenerationContext::AddLocal(const StdString& local) {
 	locals.push_back(local);
 }
 
@@ -177,13 +177,13 @@ void MethodGenerationContext::AddLiteral(VMObject* lit) {
 	literals.push_back(lit);
 }
 
-bool MethodGenerationContext::AddArgumentIfAbsent(const pString& arg) {
+bool MethodGenerationContext::AddArgumentIfAbsent(const StdString& arg) {
 	if (locals.IndexOf( arg) != -1) return false;
 	arguments.push_back(arg);
 	return true;
 }
 
-bool MethodGenerationContext::AddLocalIfAbsent(const pString& local) {
+bool MethodGenerationContext::AddLocalIfAbsent(const StdString& local) {
 	if (locals.IndexOf( local) != -1) return false;
 	locals.push_back(local);
 	return true;
