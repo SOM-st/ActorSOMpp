@@ -33,6 +33,7 @@ public:
 
     operator int32_t();
     //operator VMPointer<VMObject>&();
+
     operator VMObject*() { return pointer; };
     //operator T*() { return pointer; };
 
