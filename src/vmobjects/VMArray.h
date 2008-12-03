@@ -19,7 +19,7 @@ public:
 	VMArray*    CopyAndExtendWith(VMObject*) const;
 	void        CopyIndexableFieldsTo(VMArray*) const;
 
-	VMObject* operator[](int idx) const;
+	VMObject*& operator[](int idx) const;
 
 private:
 

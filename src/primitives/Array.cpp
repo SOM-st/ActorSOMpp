@@ -60,7 +60,7 @@ void _Array::At_Put_(VMObject* /*object*/, VMFrame* frame) {
     VMInteger* index = (VMInteger*)frame->Pop();
     VMArray* self = (VMArray*)frame->GetStackElement(0);
     int i = index->GetEmbeddedInteger();
-    self->SetIndexableField(i - 1, value);
+    (*self)[i - 1] = value;
 }
 
 

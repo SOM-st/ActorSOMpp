@@ -123,7 +123,7 @@ VMObject *VMClass::GetInstanceInvokable(int index) const {
 
 
 void      VMClass::SetInstanceInvokable(int index, VMObject* invokable) {
-	instance_invokables->SetIndexableField(index, invokable);
+	(*instance_invokables)[index] = invokable;
     if (invokable != Globals::NilObject()) {
         VMInvokable* inv = (VMInvokable*) invokable;
         inv->SetHolder(this);

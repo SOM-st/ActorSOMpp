@@ -6,22 +6,40 @@
 #include "../vm/Universe.h"
 #include <typeinfo>
 
-template<class T>
+template<class T = VMObject>
 class pVMObject
 {
 public:
     pVMObject<T>() { pointer = NULL; };
     pVMObject<T>(T* o) { pointer = o; if (!IsTaggedInteger()) pointer->IncreaseGCCount(); };
-    pVMObject<T>(pVMObject& o) { (pointer = o.pointer)->IncreaseGCCount(); };
+    pVMObject<T>(pVMObject<T>& o) { (pointer = o.pointer)->IncreaseGCCount(); };
     ~pVMObject<T>() { if (pointer) pointer->DecreaseGCCount(); };
     
+    template<class U>
+    pVMObject<T>(pVMObject<U>& o) { 
+        pointer = dynamic_cast<T*>((VMObject*)o);
+        if (!pointer) {
+            cout << "Trying to convert unmatching types: " << typeid(U).name()
+                 << " to " << typeid(T).name() << endl;
+            throw std::bad_exception();
+        }
+    };
+
     bool IsTaggedInteger();
     operator int32_t();
     //operator pVMObject<VMObject>&();
     operator VMObject*() { return pointer; };
+    //operator T*() { return pointer; };
 
-    T* operator ->()
-    {
+    T& operator*() {
+        if (IsTaggedInteger()) {
+            cout << "Dereferencing Tagged Integer" << endl;
+            throw std::bad_exception();
+        }
+        return *pointer;
+    }
+
+    T* operator ->() {
         if (IsTaggedInteger()) {
             //return SomeGlobalIntegerObjectThatAnswersMethodCallsForAllTaggedIntegers;
         }
@@ -33,6 +51,18 @@ public:
     pVMObject<T>& operator =(pVMObject<T>& ptr);
     //pVMObject<T>& operator =(pVMObject<VMObject>& ptr);
     pVMObject<T>& operator =(int32_t value);
+    
+    template<class U>
+    pVMObject<T>& operator =(pVMObject<U>& o){ 
+        pointer = dynamic_cast<T*>((VMObject*)o);
+        if (!pointer) {
+            //warn for now, but later nothing should happen as this might be wanted
+            //to check for NULL
+            cout << "Warning: Trying to convert unmatching types: " 
+                 << typeid(U).name() << " to " << typeid(T).name() << endl;
+            //throw std::bad_exception();
+        }
+    };
 
 private:
     
@@ -51,6 +81,7 @@ pVMObject<T>& pVMObject<T>::operator =( T& ptr )
 {
     if (pointer) pointer->DecreaseGCCount();
     (pointer = &ptr)->IncreaseGCCount();
+    return *this;
 }
 
 template < class T >
@@ -58,6 +89,7 @@ pVMObject<T>& pVMObject<T>::operator =( T* ptr )
 {
     if (pointer) pointer->DecreaseGCCount();
     (pointer = ptr)->IncreaseGCCount();
+    return *this;
 }
 
 template <class T>
@@ -65,6 +97,7 @@ pVMObject<T>& pVMObject<T>::operator =(pVMObject<T>& ptr)
 {
     if (pointer) pointer->DecreaseGCCount();
     (pointer = ptr.pointer)->IncreaseGCCount();
+    return *this;
 }
 
 template <class T>
@@ -72,6 +105,7 @@ pVMObject<T>& pVMObject<T>::operator =(int32_t value)
 {
     if (pointer) pointer->DecreaseGCCount();
     this->SetIntegerValue(value);
+    return *this;
 }
 
 template <class T>

@@ -11,7 +11,8 @@ VMArray::VMArray(int size, int nof) : VMObject(nof+1) {
 	this->size = _UNIVERSE->NewInteger(size);
 
     for (int i = 0; i < size ; ++i) {
-        this->SetIndexableField(i, Globals::NilObject());
+        (*this)[i] = Globals::NilObject();
+        //this->SetIndexableField(i, Globals::NilObject());
     }
     _HEAP->EndUninterruptableAllocation();
 	//objectSize += size * sizeof(VMObject*); 
@@ -24,12 +25,12 @@ VMArray* VMArray::CopyAndExtendWith(VMObject* item) const {
     size_t fields = this->size->GetEmbeddedInteger();
 	VMArray* result = _UNIVERSE->NewArray(fields+1);
     this->CopyIndexableFieldsTo(result);
-	result->SetIndexableField(fields, item);
+	(*result)[fields] = item; //->SetIndexableField(fields, item);
 	return result;
 }
 
 
-VMObject* VMArray::operator[](int idx) const {
+VMObject*& VMArray::operator[](int idx) const {
     if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
         cout << "Array index out of bounds: Accessing " << idx << ", but only " << size->GetEmbeddedInteger()-1;
         cout << " entries are available\n";
@@ -42,7 +43,7 @@ VMObject* VMArray::operator[](int idx) const {
 
 void VMArray::CopyIndexableFieldsTo(VMArray* to) const {
 	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
-        to->SetIndexableField(i, (*this)[i]);
+        (*to)[i] = (*this)[i];
 	}
 	
 }

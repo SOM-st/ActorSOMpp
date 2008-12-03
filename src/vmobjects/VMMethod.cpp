@@ -111,6 +111,9 @@ VMObject* VMMethod::GetConstant(int indx) const {
     return this->GetIndexableField(bc);
 }
 
+uint8_t& VMMethod::operator[](int indx) const {
+	return _BC[indx];
+}
 
 uint8_t VMMethod::GetBytecode(int indx) const {
     return _BC[indx];
@@ -127,7 +130,7 @@ VMArray* VMMethod::CopyAndExtendWith(VMObject* item) const {
     size_t fields = this->size->GetEmbeddedInteger();
 	VMArray* result = _UNIVERSE->NewArray(fields+1);
     this->CopyIndexableFieldsTo(result);
-	result->SetIndexableField(fields, item);
+	(*result)[fields] = item; //SetIndexableField(fields, item);
 	return result;
 }
 
@@ -146,7 +149,7 @@ VMObject* VMMethod::GetIndexableField(int idx) const {
 
 void VMMethod::CopyIndexableFieldsTo(VMArray* to) const {
 	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
-        to->SetIndexableField(i, this->GetIndexableField(i));
+        (*to)[i] = this->GetIndexableField(i);
 	}
 	
 }

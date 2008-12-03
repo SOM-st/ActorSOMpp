@@ -89,7 +89,7 @@ VMObject* VMFrame::Pop() {
 void      VMFrame::Push(VMObject* obj) {
     int32_t sp = this->stack_pointer->GetEmbeddedInteger() + 1;
     this->stack_pointer->SetEmbeddedInteger(sp);
-    this->SetIndexableField(sp, obj);
+    (*this)[sp] = obj; //->SetIndexableField(sp, obj);
 }
 
 
@@ -144,7 +144,7 @@ VMObject* VMFrame::GetStackElement(int index) const {
 
 void      VMFrame::SetStackElement(int index, VMObject* obj) {
     int sp = this->stack_pointer->GetEmbeddedInteger();
-    this->SetIndexableField(sp-index, obj);
+    (*this)[sp-index] = obj; //->SetIndexableField(sp-index, obj);
 }
 
 
@@ -158,7 +158,7 @@ VMObject* VMFrame::GetLocal(int index, int contextLevel) {
 void      VMFrame::SetLocal(int index, int contextLevel, VMObject* value) {
     VMFrame* context = this->GetContextLevel(contextLevel);
     size_t lo = context->local_offset->GetEmbeddedInteger();
-    context->SetIndexableField(lo+index, value);
+    (*context)[lo+index] = value; //->SetIndexableField(lo+index, value);
 }
 
 
@@ -172,7 +172,7 @@ VMObject* VMFrame::GetArgument(int index, int contextLevel) {
 
 void      VMFrame::SetArgument(int index, int contextLevel, VMObject* value) {
     VMFrame* context = this->GetContextLevel(contextLevel);
-    context->SetIndexableField(index, value);
+    (*context)[index] = value; //->SetIndexableField(index, value);
 }
 
 
@@ -194,7 +194,7 @@ void      VMFrame::CopyArgumentsFrom(VMFrame* frame) {
     int num_args = meth->GetNumberOfArguments();
     for(int i=0; i < num_args; ++i) {
         VMObject* stackElem = frame->GetStackElement(num_args - 1 - i);
-        this->SetIndexableField(i, stackElem);
+        (*this)[i] = stackElem;
     }
 }
 

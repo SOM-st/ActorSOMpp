@@ -56,18 +56,28 @@ int main(int argc, char** argv) {
 
    // Universe::handleArguments(&vm_argc, argc, argv);
     Universe::Start(argc, argv);
+
+    cout << "pVMObject size: " << sizeof(pVMObject<VMObject>) << endl;
     
     VMArray* o = _UNIVERSE->NewArray(5);
-    pVMObject<VMArray> po;
-    po = o;
+    pVMObject<VMArray> po(o);
+    pVMObject<VMObject> po3;
+    po3 = po;
+    VMString* c = _UNIVERSE->NewString("testString");
+    pVMObject<VMString> po4(c);
+    po3 = c;
+    po3 = po4;
+    cout << "Accessing testString via cast from pVMObject<VMObject> "
+         << "to pVMObject<VMString>: " <<((pVMObject<VMString>)po3)->GetChars()
+         << endl;
     
-    cout << "pVMObject size: " << sizeof(pVMObject<VMObject>) << endl;
     pVMObject<VMInteger> ti;
     ti = 8;
-    po->SetIndexableField(0, ti);
-    po->operator [](0);
-    pVMObject<VMInteger> ti2((VMInteger*)(po->operator [](0)));
-    cout << "ti + 9 = " << (int32_t)ti + 9 << endl;
+    //po->SetIndexableField(0, ti);
+    (*po)[0] = ti;
+    //po->operator [](0);
+    pVMObject<VMInteger> ti2((VMInteger*)(*po)[0]);
+    cout << "ti2 + 9 = " << (int32_t)ti2 + 9 << endl;
 
     Universe::Quit(ERR_SUCCESS);
 }

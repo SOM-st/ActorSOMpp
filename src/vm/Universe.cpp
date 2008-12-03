@@ -458,7 +458,7 @@ VMArray* Universe::NewArrayFromArgv( const vector<StdString>& argv) const {
     int j = 0;
     for (vector<StdString>::const_iterator i = argv.begin();
          i != argv.end(); ++i) {
-        result->SetIndexableField(j, NewString(*i));
+        (*result)[j] =  NewString(*i);
         ++j;
     }
 
@@ -473,7 +473,8 @@ VMArray* Universe::NewArrayList(pList& list ) const {
     if (result)  {
         for (int i = 0; i < size; ++i) {
             VMObject* elem = list.get(i);
-            result->SetIndexableField(i, elem);
+            //result->SetIndexableField(i, elem);
+            (*result)[i] = elem;
         }
     }
     return result;

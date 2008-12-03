@@ -151,10 +151,10 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class) {
 
         for (int i = number_of_args - 1; i >= 0; --i) {
             VMObject* o = _FRAME->Pop();
-            arguments_array->SetIndexableField(i, o);
+            (*arguments_array)[i] = o; //->SetIndexableField(i, o);
         }
         VMObject* arguments[] = { (VMObject*)signature, 
-                                  (VMObject*) arguments_array };
+                                  (VMObject*)arguments_array };
 
         //check if current frame is big enough for this unplanned Send
         //doesNotUnderstand: needs 3 slots, one for this, one for method name, one for args
@@ -350,7 +350,7 @@ void Interpreter::do_super_send( int bytecode_index ) {
 
         for (int i = num_of_args - 1; i >= 0; --i) {
             VMObject* o = _FRAME->Pop();
-            arguments_array->SetIndexableField(i ,o);
+            (*arguments_array)[i] = o; //->SetIndexableField(i ,o);
         }
         VMObject* arguments[] = { (VMObject*)signature, 
                                   (VMObject*) arguments_array };

@@ -32,8 +32,10 @@ public:
 	virtual void      MarkReferences();
 	virtual void      SetSignature(VMSymbol* sig);
 
+    void              SetIndexableField(int idx, VMObject* item);
+
     //VMArray Methods....
-    void        SetIndexableField(int idx, VMObject* item);
+    
 	
 	int         GetNumberOfIndexableFields() const;
 	VMArray*    CopyAndExtendWith(VMObject*) const;
@@ -41,9 +43,7 @@ public:
 
     /// Methods are considered byte arrays with meta data.
     // So the index operator returns the bytecode at the index.
-    uint8_t operator[](int idx) {
-		return GetBytecode(idx);
-	}
+    uint8_t& operator[](int indx) const;
 
     //operator "()" to invoke the method
     virtual void	  operator()(VMFrame* frame);
