@@ -104,8 +104,8 @@ void GarbageCollector::Collect() {
 
 void GarbageCollector::markReachableObjects() {
 	map<StdString, VMObject*> globals = Universe::GetUniverse()->GetGlobals();
-
-	for (map<StdString, VMObject*>::iterator it = globals.begin(); 
+    map<StdString, VMObject*>::iterator it = globals.begin();
+    for (map<StdString, VMObject*>::iterator it = globals.begin(); 
                                         it!= globals.end(); ++it) {
 		markObject(&(*it->second));
 	}

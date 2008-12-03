@@ -13,21 +13,16 @@ public:
 	//virtual ~VMArray();
 	virtual void MarkReferences();
 
-	void        SetIndexableField(int idx, VMObject* item);
 	
-	inline int         GetNumberOfIndexableFields() const;
+	int         GetNumberOfIndexableFields() const;
 	VMArray*    CopyAndExtendWith(VMObject*) const;
 	void        CopyIndexableFieldsTo(VMArray*) const;
 
 	VMObject*& operator[](int idx) const;
 
-private:
-
+private:	
 	VMInteger* size;
 };
 
-int VMArray::GetNumberOfIndexableFields() const {
-    return size->GetEmbeddedInteger();
-}
 
 #endif
