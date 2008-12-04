@@ -15,34 +15,23 @@
 #include "Symbol.h"
 #include "System.h"
 
-#include "../primitivesCore/Routine.h"
+
 #include "../primitivesCore/PrimitiveContainer.h"
 #include "../primitivesCore/PrimitiveLoader.h"
+
+#if defined (_MSC_VER)
+#include "Core.h"
+#endif
 
 static PrimitiveLoader* loader = NULL;
 //map<StdString, PrimitiveContainer*> primitiveObjects;
 //"Constructor"
-static bool initialized = false;
-#if defined(_MSC_VER)
-#include "Core.h"
-
-Universe* universe;
-Heap* heap;
-VMObject* trueObject;
-VMObject* falseObject;
-VMObject* nilObject;
-
-
-extern "C" void setup(Universe* uni, Heap* h, VMObject** globals) {
-    universe = uni;
-    heap = h;
-    trueObject = globals[0];
-    falseObject = globals[1];
-    nilObject = globals[2];
-#else
+//#define __DEBUG
 extern "C" void setup() {
-#endif
     if (!loader) {
+#ifdef __DEBUG
+        cout << "Setting up the Core library" << endl;
+#endif
         //Initialize loader
         loader = new PrimitiveLoader();
         loader->AddPrimitiveObject("Array", 
@@ -78,9 +67,7 @@ extern "C" void setup() {
 }
 
 extern "C" bool supportsClass(const char* name) {
-#if defined (__GNUC__)
     if (!loader) setup();
-#endif
     return loader->SupportsClass(name);
 }
 
@@ -97,10 +84,7 @@ extern "C" PrimitiveRoutine* create(const StdString& cname, const StdString& fna
 #ifdef __DEBUG
     cout << "Loading PrimitiveContainer: " << cname << "::" << fname << endl;
 #endif
-#if defined (__GNUC__)
     if (!loader) setup();
-#endif
-
     return loader->GetPrimitiveRoutine(cname, fname);
 }
 

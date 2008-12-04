@@ -2,33 +2,39 @@
 
 #ifndef OBJECTFORMATS_H_
 #define OBJECTFORMATS_H_
-class VMArray;
-class VMBigInteger;
-class VMSymbol;
-class VMDouble;
-class VMEvaluationPrimitive;
-class VMFrame;
-class VMInteger;
-class VMInvokable;
-class VMMethod;
-class VMObject;
-class VMPrimitive;
-class VMString;
-class VMSymbol;
+//class VMArray;
+//class VMBigInteger;
+//class VMSymbol;
+//class VMDouble;
+//class VMEvaluationPrimitive;
+//class VMFrame;
+//class VMInteger;
+//class VMInvokable;
+//class VMMethod;
+//class VMObject;
+//class VMPrimitive;
+//class VMString;
+//class VMSymbol;
+//class PrimitiveRoutine;
+//#include <vmobjects/VMPointer.h>
 
-typedef VMPointer<VMArray>      pVMArray;
-typedef VMPointer<VMBigInteger> pVMBigInteger;
-typedef VMPointer<VMBlock>      pVMBlock;
-typedef VMPointer<VMClass>      pVMClass;
-typedef VMPointer<VMDouble>     pVMDouble;
-typedef VMPointer<VMEvaluationPrimitive> pVMEvaluationPrimitive;
-typedef VMPointer<VMFrame>      pVMFrame;
-typedef VMPointer<VMInteger>    pVMInteger;
-typedef VMPointer<VMInvokable>  pVMInvokable;
-typedef VMPointer<VMMethod>     pVMMethod;
-typedef VMPointer<VMObject>     pVMObject;
-typedef VMPointer<VMPrimitive>  pVMPrimitive;
-typedef VMPointer<VMString>     pVMString;
-typedef VMPointer<VMSymbol>     pVMSymbol;
+#define pVMArray VMPointer<VMArray> 
+#define pVMBigInteger VMPointer<VMBigInteger> 
+#define pVMBlock VMPointer<VMBlock> 
+#define pVMClass VMPointer<VMClass> 
+#define pVMDouble VMPointer<VMDouble> 
+#define pVMEvaluationPrimitive VMPointer<VMEvaluationPrimitive> 
+#define pVMFrame VMPointer<VMFrame> 
+#define pVMInteger VMPointer<VMInteger> 
+#define pVMInvokable VMPointer<VMInvokable> 
+#define pVMMethod VMPointer<VMMethod> 
+#define pVMObject VMPointer<VMObject> 
+#define pVMPrimitive VMPointer<VMPrimitive> 
+#define pVMString VMPointer<VMString> 
+#define pVMSymbol VMPointer<VMSymbol> 
+
+
+
+
 
 #endif OBJECTFORMATS_H_

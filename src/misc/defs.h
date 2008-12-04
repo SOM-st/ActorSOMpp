@@ -30,10 +30,6 @@ THE SOFTWARE.
 
 //#include <stdint.h>
 #include <string>
-#include <list>
-#include <vector>
-class VMObject;
-#include "ExtendedList.h"
 //
 // error codes
 //
@@ -73,8 +69,6 @@ typedef short int16_t;
 typedef unsigned char uint8_t;
 typedef char int8_t;
 #endif
-
-typedef ExtendedList<VMObject*> pList;
 
 
 #endif

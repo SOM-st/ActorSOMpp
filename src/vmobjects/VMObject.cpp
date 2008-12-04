@@ -107,6 +107,17 @@ void VMObject::SetField(int index, VMObject* value) {
      FIELDS[index] = value;
 }
 
+//returns the Object's additional memory used (e.g. for Array fields)
+int VMObject::GetAdditionalSpaceConsumption() const
+{
+    //The VM*-Object's additional memory used needs to be calculated.
+    //It's      the total object size   MINUS   sizeof(VMObject) for basic
+    //VMObject  MINUS   the number of fields times sizeof(VMObject*)
+    return (objectSize - (sizeof(VMObject) + 
+                          sizeof(VMObject*) * (this->GetNumberOfFields() - 1)));
+}
+
+
 void VMObject::MarkReferences() {
     if (this->gcfield) return;
 	this->SetGCField(1);

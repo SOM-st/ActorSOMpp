@@ -28,11 +28,11 @@ public:
     PrimitiveLoader();
     virtual ~PrimitiveLoader();
     virtual PrimitiveRoutine* 
-                GetPrimitiveRoutine(const StdString& cname, const StdString& mname);
+        GetPrimitiveRoutine(const std::string& cname, const std::string& mname);
     virtual void AddPrimitiveObject(const char*, PrimitiveContainer*);
     virtual bool SupportsClass(const char*);
 private:
-    map<StdString, PrimitiveContainer*> primitiveObjects;
+    std::map<StdString, PrimitiveContainer*> primitiveObjects;
 };
 
 #endif PRIMITIVESCORE_H_

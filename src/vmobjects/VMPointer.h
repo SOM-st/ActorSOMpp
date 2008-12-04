@@ -68,6 +68,7 @@ public:
                  << typeid(U).name() << " to " << typeid(T).name() << endl;
             //throw std::bad_exception();
         }
+        return *this;
     };
 
     bool operator==(VMPointer<T>& o) {
@@ -163,7 +164,7 @@ void VMPointer<T>::SetIntegerValue( int32_t value )
     }
     else 
         pointer = (T*) (value | 0x80000000);
-}
+};
 
 
 

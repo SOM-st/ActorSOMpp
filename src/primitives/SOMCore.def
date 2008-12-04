@@ -1,7 +1,0 @@
-LIBRARY	"SOMCore"
-
-EXPORTS
-    supportsClass
-    setup
-    tearDown
-    create

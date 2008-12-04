@@ -30,7 +30,7 @@ void ClassGenerationContext::AddInstanceField(VMObject* field) {
 
 bool ClassGenerationContext::FindField(const StdString& field) {
 
-	pList fields = IsClassSide() ?
+	ExtendedList<VMObject*> fields = IsClassSide() ?
         class_fields :
         instance_fields;
     return fields.IndexOf( (VMObject*)_UNIVERSE->SymbolFor(field)) != -1;

@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include <string>
 #include "../misc/defs.h"
 
+using namespace std;
+
 typedef enum {
     NONE, Integer, Not, And, Or, Star, Div, Mod, Plus,
     Minus, Equal, More, Less, Comma, At, Per, NewBlock,

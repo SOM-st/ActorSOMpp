@@ -6,6 +6,8 @@ class VMObject;
 class VMClass;
 
 #include "../misc/defs.h"
+#include "../misc/ExtendedList.h"
+
 class ClassGenerationContext {
 	
 public:
@@ -30,10 +32,10 @@ private:
     VMSymbol* name;
     VMSymbol* super_name;
     bool      class_side;
-    pList     instance_fields;
-    pList     instance_methods;
-    pList     class_fields;
-    pList     class_methods;
+    ExtendedList<VMObject*>     instance_fields;
+    ExtendedList<VMObject*>     instance_methods;
+    ExtendedList<VMObject*>     class_fields;
+    ExtendedList<VMObject*>     class_methods;
 
 };
 

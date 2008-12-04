@@ -14,6 +14,6 @@ void PrimitiveContainer::SetPrimitive( const char* name, PrimitiveRoutine* routi
     (*methods)[StdString(name)] = routine;
 }
 
-PrimitiveRoutine* PrimitiveContainer::GetPrimitive(const StdString& routineName) {
+PrimitiveRoutine* PrimitiveContainer::GetPrimitive(const std::string& routineName) {
     return (*methods)[routineName];
 }

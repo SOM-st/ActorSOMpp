@@ -89,7 +89,7 @@ void  _System::Exit_(VMObject* /*object*/, VMFrame* frame) {
 
 void  _System::PrintString_(VMObject* /*object*/, VMFrame* frame) {
     VMString* arg = (VMString*)frame->Pop();
-    StdString str = arg->GetStdString();
+    std::string str = arg->GetStdString();
     cout << str;
 }
 

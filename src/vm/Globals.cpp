@@ -27,7 +27,7 @@ VMClass* Globals::stringClass;
 VMClass* Globals::systemClass;
 VMClass* Globals::blockClass;
 VMClass* Globals::doubleClass;
-
+//#define __DEBUG
 ///
 //Call this method before using any of the globals or it will crash!
 //

@@ -466,7 +466,7 @@ VMArray* Universe::NewArrayFromArgv( const vector<StdString>& argv) const {
 }
 
 
-VMArray* Universe::NewArrayList(pList& list ) const {
+VMArray* Universe::NewArrayList(ExtendedList<VMObject*>& list ) const {
     int size = list.Size();
     VMArray* result = NewArray(size);
 

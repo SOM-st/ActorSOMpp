@@ -4,6 +4,7 @@
 #define PRIMITIVECONTAINER_H_
 #include "../misc/defs.h"
 #include "../vmobjects/PrimitiveRoutine.h"
+#include <map>
 
 ///Base class for all container objects holding CPPSOM primitives.
 //Primitive container classes need to initialize a std::map<StdString,
@@ -23,10 +24,10 @@ public:
     //  virtual void operator()(VMObject*, VMFrame*)
     virtual void SetPrimitive(const char* name, PrimitiveRoutine* routine);
 
-    virtual PrimitiveRoutine* GetPrimitive(const StdString& routineName);
+    virtual PrimitiveRoutine* GetPrimitive(const std::string& routineName);
 
 private:
-    map<StdString, PrimitiveRoutine*>* methods;
+    std::map<std::string, PrimitiveRoutine*>* methods;
 };
 
 #endif

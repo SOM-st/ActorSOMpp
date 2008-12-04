@@ -6,7 +6,6 @@
 #include "VMObject.h"
 #include "VMFrame.h"
 
-
 // abstract base class
 class PrimitiveRoutine : public VMObject {
 public:
@@ -27,7 +26,7 @@ public:
 };
 
 // Typedefs for Primitive loading
-typedef PrimitiveRoutine* CreatePrimitive(const StdString&,const StdString&);
+typedef PrimitiveRoutine* CreatePrimitive(const std::string&,const std::string&);
 typedef bool SupportsClass(const char*);
 typedef void TearDown();
 typedef void Setup();

@@ -8,7 +8,8 @@
 //#include "../primitives/Core.h"
 
 #if defined(_MSC_VER)   //Visual Studio
-    #   include <windows.h> 
+    #include <windows.h> 
+    #include "../primitives/Core.h"
 #endif
 
 class VMSymbol;
@@ -57,15 +58,14 @@ private:
     StdString genCoreLoadstring(const StdString& cp) const;
 
     //void* loadLib(const StdString& path);
-#if defined(__GNUC__)
     void* loadLib(const StdString& path) const;
     bool isResponsible(void* handle, const StdString& cl) const;
     void set_primitives(void* handle, const StdString& cname);
-#else
-    HMODULE loadLib(const StdString& path) const;
-    bool isResponsible(HMODULE handle, const StdString& cl) const;
-    void set_primitives(HMODULE handle, const StdString& cname);
-#endif
+//#else
+//    HMODULE loadLib(const StdString& path) const;
+//    bool isResponsible(HMODULE handle, const StdString& cl) const;
+//    void set_primitives(HMODULE handle, const StdString& cname);
+//#endif
 
     
     

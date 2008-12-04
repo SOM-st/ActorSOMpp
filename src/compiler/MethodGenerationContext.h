@@ -2,6 +2,8 @@
 #ifndef METHODGENERATIONCONTEXT_H_
 #define METHODGeNERATIONCONTEXT_H_
 
+#include <vector>
+
 #include "../misc/defs.h"
 #include "ClassGenerationContext.h"
 //#include "../misc/ExtendedVector.h"
@@ -55,7 +57,7 @@ private:
     ExtendedList<StdString>  arguments;
     bool                       primitive;
     ExtendedList<StdString>  locals;
-    pList                      literals;
+    ExtendedList<VMObject*>                      literals;
     bool                       finished;
 	vector<uint8_t>            bytecode;
 };

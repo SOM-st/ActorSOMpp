@@ -8,6 +8,7 @@
 #include "../memory/Heap.h"
 #include "../vm/Universe.h"
 
+#include "ObjectFormats.h"
 //#include "VMClass.h"
 class VMSymbol;
 class VMClass;
@@ -104,6 +105,7 @@ public:
      }
 	
 protected:
+    int GetAdditionalSpaceConsumption() const;
     //VMObject essentials
 	int32_t     hash;
     int32_t     objectSize; //set by the heap at allocation time

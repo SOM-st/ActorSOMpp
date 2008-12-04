@@ -23,7 +23,7 @@ bool PrimitiveLoader::SupportsClass( const char* name ) {
     return primitiveObjects[StdString(name)] != NULL;
 }
 
-PrimitiveRoutine* PrimitiveLoader::GetPrimitiveRoutine( const StdString& cname, const StdString& mname ) {
+PrimitiveRoutine* PrimitiveLoader::GetPrimitiveRoutine( const std::string& cname, const std::string& mname ) {
     PrimitiveRoutine* result; 
     PrimitiveContainer* primitive = primitiveObjects[cname];
     if (!primitive) {

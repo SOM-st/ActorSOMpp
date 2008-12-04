@@ -50,14 +50,18 @@ void VMString::SetString(const StdString& str) {
 
 int VMString::GetStringLength() const {
     //cout << objectSize << endl << sizeof(VMString) << endl;
-    int length = 0;
-    //if (chars != 0) {
-        while(chars[length++] != '\0');
-        if (length != 0)
-            --length;
-    //}
-   //cout << length << endl << endl;
-    return length;
+    //get the additional memory allocated by this object and substract one
+    //for the '0' character and four for the char*
+    return this->GetAdditionalSpaceConsumption() - 4 - 1;
+    //int length = 0;
+    ////if (chars != 0) {
+    //    while(chars[length++] != '\0');
+    //    if (length != 0)
+    //        --length;
+    ////}
+    //    cout << "length: " << length << endl;
+    //    cout << "addsp: " << this->GetAdditionalSpaceConsumption() << endl << endl;
+    //return length;
 }
 
 

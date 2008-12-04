@@ -5,6 +5,7 @@
 
 //#define __DEBUG
 #include <map>
+#include <vector>
 
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
@@ -66,7 +67,7 @@ public:
 
     //VMObject instanciation methods. These should probably be refactored to a new class
     VMArray*      NewArray(int) const;
-    VMArray*      NewArrayList(pList& list) const;
+    VMArray*      NewArrayList(ExtendedList<VMObject*>& list) const;
     VMArray*      NewArrayFromArgv(const vector<StdString>&) const;
     VMBlock*      NewBlock(VMMethod*, VMFrame*, int);
     VMClass*      NewClass(VMClass*) const;
