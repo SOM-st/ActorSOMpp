@@ -49,7 +49,7 @@ void VMPrimitive::MarkReferences() {
         if ((void*)FIELDS[i] == (void*)this->empty) 
             continue;
         if ((void*)FIELDS[i] == (void*)this->routine)
-            cout << "routine" << endl;
+            ;//cout << "routine" << endl;
         FIELDS[i]->MarkReferences();
     }
 }

@@ -58,33 +58,33 @@ int main(int argc, char** argv) {
    // Universe::handleArguments(&vm_argc, argc, argv);
     Universe::Start(argc, argv);
 
-    cout << "pVMObject size: " << sizeof(VMPointer<VMObject>) << endl;
-    VMArray* o = _UNIVERSE->NewArray(5);
-    pVMArray array;
-    array = o;
-    pVMObject object;
-    object = array;
-    pVMString string = _UNIVERSE->NewString("testString");
-    object = string;
-    cout << "Accessing testString via cast from pVMObject<VMObject> "
-         << "to pVMObject<VMString>: " <<((VMPointer<VMString>)object)->GetChars()
-         << endl;
-    object = o;
-    if (object == array) cout << "ja pVMArray(o) == pVMObject(o)" << endl;
-    if (object != string) cout << "!= ist auch toll" << endl;
+    //cout << "pVMObject size: " << sizeof(VMPointer<VMObject>) << endl;
+    //VMArray* o = _UNIVERSE->NewArray(5);
+    //pVMArray array;
+    //array = o;
+    //pVMObject object;
+    //object = array;
+    //pVMString string = _UNIVERSE->NewString("testString");
+    //object = string;
+    //cout << "Accessing testString via cast from pVMObject<VMObject> "
+    //     << "to pVMObject<VMString>: " <<((VMPointer<VMString>)object)->GetChars()
+    //     << endl;
+    //object = o;
+    //if (object == array) cout << "ja pVMArray(o) == pVMObject(o)" << endl;
+    //if (object != string) cout << "!= ist auch toll" << endl;
 
-    pVMInteger ti;
-    pVMInteger ti2;
-    ti = 8;
-    ti2 = 8;
-    if (ti == ti2) cout << "8 == 8" << endl;
-    //po->SetIndexableField(0, ti);
-    (*array)[0] = ti;
-    //po->operator [](0);
-    pVMInteger ti3((VMInteger*)(*array)[0]);
-    cout << "(int32_t)ti3 + 9 = " << (int32_t)ti3 + 9 << endl;
-    cout << "4 + (int32_t)ti = " << 4 + (int32_t)ti << endl;
-    cout << "ti->GetObjectSize(): " << ti->GetObjectSize() << endl;
+    //pVMInteger ti;
+    //pVMInteger ti2;
+    //ti = 8;
+    //ti2 = 8;
+    //if (ti == ti2) cout << "8 == 8" << endl;
+    ////po->SetIndexableField(0, ti);
+    //(*array)[0] = ti;
+    ////po->operator [](0);
+    //pVMInteger ti3((VMInteger*)(*array)[0]);
+    //cout << "(int32_t)ti3 + 9 = " << (int32_t)ti3 + 9 << endl;
+    //cout << "4 + (int32_t)ti = " << 4 + (int32_t)ti << endl;
+    //cout << "ti->GetObjectSize(): " << ti->GetObjectSize() << endl;
     Universe::Quit(ERR_SUCCESS);
 }
 
