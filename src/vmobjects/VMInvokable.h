@@ -12,17 +12,17 @@ public:
     VMInvokable(int nof = 0) : VMObject(nof+2) {};
 
     //virtual operator "()" to invoke the invokable
-    virtual void      operator()(VMFrame*) = 0;
+    virtual void      operator()(pVMFrame) = 0;
 
 	virtual bool      IsPrimitive() const;
 	virtual VMSymbol *GetSignature() const;
-	virtual void      SetSignature(VMSymbol* sig);
+	virtual void      SetSignature(pVMSymbol sig);
 	virtual VMClass  *GetHolder() const;
-	virtual void      SetHolder(VMClass* hld);
+	virtual void      SetHolder(pVMClass hld);
     
 protected:
-	VMSymbol* signature;
-	VMClass* holder;
+	pVMSymbol signature;
+	pVMClass holder;
 };
 
 

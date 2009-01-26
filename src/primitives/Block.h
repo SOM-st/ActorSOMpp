@@ -38,10 +38,10 @@ class _Block : public PrimitiveContainer
 {
 public:
     _Block();
-    void  Value(VMObject* object, VMFrame* frame);
-    void  Restart(VMObject* object, VMFrame* frame);
-    void  Value_(VMObject* object, VMFrame* frame);
-    void  Value_with_(VMObject* object, VMFrame* frame);
+    void  Value(pVMObject object, pVMFrame frame);
+    void  Restart(pVMObject object, pVMFrame frame);
+    void  Value_(pVMObject object, pVMFrame frame);
+    void  Value_with_(pVMObject object, pVMFrame frame);
 };
 
 #endif

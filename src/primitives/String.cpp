@@ -58,34 +58,34 @@ _String::_String( ) : PrimitiveContainer() {
         Routine<_String>(this, &_String::PrimSubstringFrom_To_));
 }
 
-void  _String::Concatenate_(VMObject* /*object*/, VMFrame* frame) {
+void  _String::Concatenate_(pVMObject /*object*/, pVMFrame frame) {
 
-    VMString* arg = (VMString*)frame->Pop();
-    VMString* self = (VMString*)frame->Pop();
+    pVMString arg = (pVMString)frame->Pop();
+    pVMString self = (pVMString)frame->Pop();
     StdString a = arg->GetChars();//StdString(arg->GetChars());
     StdString s = self->GetChars();//StdString(self->GetChars());
     
     StdString result = s + a;
 
-    frame->Push((VMObject*)_UNIVERSE->NewString(result));
+    frame->Push((pVMObject)_UNIVERSE->NewString(result));
 }
 
 
-void  _String::AsSymbol(VMObject* /*object*/, VMFrame* frame) {
-    VMString* self = (VMString*)frame->Pop();
+void  _String::AsSymbol(pVMObject /*object*/, pVMFrame frame) {
+    pVMString self = (pVMString)frame->Pop();
     StdString result = self->GetStdString();
-    frame->Push((VMObject*)_UNIVERSE->SymbolFor(result));
+    frame->Push((pVMObject)_UNIVERSE->SymbolFor(result));
 }
 
 
-void  _String::Hashcode(VMObject* /*object*/, VMFrame* frame) {
-    VMString* self = (VMString*)frame->Pop();
-    frame->Push((VMObject*)_UNIVERSE->NewInteger(self->GetHash()));
+void  _String::Hashcode(pVMObject /*object*/, pVMFrame frame) {
+    pVMString self = (pVMString)frame->Pop();
+    frame->Push((pVMObject)_UNIVERSE->NewInteger(self->GetHash()));
 }
 
 
-void  _String::Length(VMObject* /*object*/, VMFrame* frame) {
-    VMString* self = (VMString*)frame->Pop();
+void  _String::Length(pVMObject /*object*/, pVMFrame frame) {
+    pVMString self = (pVMString)frame->Pop();
     //StdString result = self->GetStdString();
     //size_t len = result.length();
     size_t len = self->GetStringLength();
@@ -93,13 +93,13 @@ void  _String::Length(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _String::Equal(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* op1 = frame->Pop();
-    VMString* op2 = (VMString*)frame->Pop();
+void  _String::Equal(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject op1 = frame->Pop();
+    pVMString op2 = (pVMString)frame->Pop();
     
     if(op1->GetClass() == op2->GetClass()) {
         
-        StdString s1 = ((VMString*)op1)->GetStdString();
+        StdString s1 = ((pVMString)op1)->GetStdString();
         StdString s2 = op2->GetStdString();
 
         if(s1 == s2) {
@@ -111,11 +111,11 @@ void  _String::Equal(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _String::PrimSubstringFrom_To_(VMObject* /*object*/, VMFrame* frame) {
-    VMInteger* end = (VMInteger*)frame->Pop();
-    VMInteger* start = (VMInteger*)frame->Pop();
+void  _String::PrimSubstringFrom_To_(pVMObject /*object*/, pVMFrame frame) {
+    pVMInteger end = (pVMInteger)frame->Pop();
+    pVMInteger start = (pVMInteger)frame->Pop();
     
-    VMString* self = (VMString*)frame->Pop();
+    pVMString self = (pVMString)frame->Pop();
     
     StdString str = self->GetStdString();
     int s = start->GetEmbeddedInteger();
@@ -123,7 +123,7 @@ void  _String::PrimSubstringFrom_To_(VMObject* /*object*/, VMFrame* frame) {
     
     StdString result = str.substr(s, e - s);
 
-    frame->Push((VMObject*) _UNIVERSE->NewString(result));
+    frame->Push((pVMObject) _UNIVERSE->NewString(result));
 }
 
 

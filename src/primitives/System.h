@@ -42,13 +42,13 @@ public:
     _System(void);
     virtual ~_System();
 
-    void Global_(VMObject* object, VMFrame* frame);
-    void Global_put_(VMObject* object, VMFrame* frame);
-    void Load_(VMObject* object, VMFrame* frame);
-    void Exit_(VMObject* object, VMFrame* frame);
-    void PrintString_(VMObject* object, VMFrame* frame);
-    void PrintNewline(VMObject* object, VMFrame* frame);
-    void Time(VMObject* object, VMFrame* frame);
+    void Global_(pVMObject object, pVMFrame frame);
+    void Global_put_(pVMObject object, pVMFrame frame);
+    void Load_(pVMObject object, pVMFrame frame);
+    void Exit_(pVMObject object, pVMFrame frame);
+    void PrintString_(pVMObject object, pVMFrame frame);
+    void PrintNewline(pVMObject object, pVMFrame frame);
+    void Time(pVMObject object, pVMFrame frame);
 
     
 private:

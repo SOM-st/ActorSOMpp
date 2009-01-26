@@ -9,7 +9,7 @@
 
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
-
+#include "../vmobjects/ObjectFormats.h"
 #include "../interpreter/Interpreter.h"
 #include "../memory/Heap.h"
 #include "Globals.h"
@@ -54,7 +54,7 @@ public:
 
     //Globals accessor (only for GC, could be considered to either
     //be moved there or declared as a private friend method for the GC
-	map<StdString, VMObject*>  GetGlobals() {return globals;}
+	map<StdString, pVMObject>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
     Interpreter* GetInterpreter() {return interpreter;}
 
@@ -62,43 +62,43 @@ public:
 
     void          Assert(bool) const;
 
-    VMSymbol*     SymbolFor(const StdString&);
-    VMSymbol*     SymbolForChars(const char*);
+    pVMSymbol     SymbolFor(const StdString&);
+    pVMSymbol     SymbolForChars(const char*);
 
     //VMObject instanciation methods. These should probably be refactored to a new class
-    VMArray*      NewArray(int) const;
-    VMArray*      NewArrayList(ExtendedList<VMObject*>& list) const;
-    VMArray*      NewArrayFromArgv(const vector<StdString>&) const;
-    VMBlock*      NewBlock(VMMethod*, VMFrame*, int);
-    VMClass*      NewClass(VMClass*) const;
-    VMFrame*      NewFrame(VMFrame*, VMMethod*) const;
-    VMMethod*     NewMethod(VMSymbol*, size_t, size_t) const;
-    VMObject*     NewInstance(VMClass*) const;
-    VMInteger*    NewInteger(int32_t) const;
-    VMBigInteger* NewBigInteger(int64_t) const;
-    VMDouble*     NewDouble(double) const;
-    VMClass*      NewMetaclassClass(void) const;
-    VMString*     NewString(const StdString&) const;
-    VMSymbol*     NewSymbol(const StdString&);
-    VMString*     NewString(const char*) const;
-    VMSymbol*     NewSymbol(const char*);
-    VMClass*      NewSystemClass(void) const;
+    pVMArray      NewArray(int) const;
+    pVMArray      NewArrayList(ExtendedList<pVMObject>& list) const;
+    pVMArray      NewArrayFromArgv(const vector<StdString>&) const;
+    pVMBlock      NewBlock(pVMMethod, pVMFrame, int);
+    pVMClass      NewClass(pVMClass) const;
+    pVMFrame      NewFrame(pVMFrame, pVMMethod) const;
+    pVMMethod     NewMethod(pVMSymbol, size_t, size_t) const;
+    pVMObject     NewInstance(pVMClass) const;
+    pVMInteger    NewInteger(int32_t) const;
+    pVMBigInteger NewBigInteger(int64_t) const;
+    pVMDouble     NewDouble(double) const;
+    pVMClass      NewMetaclassClass(void) const;
+    pVMString     NewString(const StdString&) const;
+    pVMSymbol     NewSymbol(const StdString&);
+    pVMString     NewString(const char*) const;
+    pVMSymbol     NewSymbol(const char*);
+    pVMClass      NewSystemClass(void) const;
     
-    VMObject*     NewTaggedInteger(int32_t);
+    pVMObject     NewTaggedInteger(int32_t);
 
-    void          InitializeSystemClass(VMClass*, VMClass*, const char*);
+    void          InitializeSystemClass(pVMClass, pVMClass, const char*);
 
-    VMObject*     GetGlobal(VMSymbol*);
-    void          SetGlobal(VMSymbol* name, VMObject* val);
-    bool          HasGlobal(VMSymbol*);
+    pVMObject     GetGlobal(pVMSymbol);
+    void          SetGlobal(pVMSymbol name, pVMObject val);
+    bool          HasGlobal(pVMSymbol);
 
-    VMClass*      GetBlockClass(void) const;
-    VMClass*      GetBlockClassWithArgs(int);
+    pVMClass      GetBlockClass(void) const;
+    pVMClass      GetBlockClassWithArgs(int);
 
-    VMClass*      LoadClass(VMSymbol*);
-    void          LoadSystemClass(VMClass*);
-    VMClass*      LoadClassBasic(VMSymbol*, VMClass*);
-    VMClass*      LoadShellClass(StdString&);
+    pVMClass      LoadClass(pVMSymbol);
+    void          LoadSystemClass(pVMClass);
+    pVMClass      LoadClassBasic(pVMSymbol, pVMClass);
+    pVMClass      LoadShellClass(StdString&);
     
     Universe();
 	~Universe();
@@ -122,7 +122,7 @@ private:
     
 	Heap *heap;
     int heapSize;
-	map<StdString, VMObject*> globals;
+	map<StdString, pVMObject> globals;
     vector<StdString> class_path;
     int cp_count;
     Symboltable* symboltable;

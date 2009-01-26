@@ -37,9 +37,9 @@ class _Object : public PrimitiveContainer
 {
 public:
     _Object();
-    void  Equalequal(VMObject* object, VMFrame* frame);
-    void  ObjectSize(VMObject* object, VMFrame* frame);
-    void  Hashcode(VMObject* object, VMFrame* frame);
+    void  Equalequal(pVMObject object, pVMFrame frame);
+    void  ObjectSize(pVMObject object, pVMFrame frame);
+    void  Hashcode(pVMObject object, pVMFrame frame);
 };
 
 #endif

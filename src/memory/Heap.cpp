@@ -77,9 +77,9 @@ Heap::~Heap() {
     
 }
 
-VMObject* Heap::AllocateObject(size_t size) {
+pVMObject Heap::AllocateObject(size_t size) {
     int paddedSize = size + PAD_BYTES(size);
-    VMObject* vmo = (VMObject*) Allocate(paddedSize);
+    pVMObject vmo = (pVMObject) Allocate(paddedSize);
     vmo->SetObjectSize(paddedSize);
     ++num_alloc;
     ++num_alloc_total;

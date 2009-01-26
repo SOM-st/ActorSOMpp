@@ -14,10 +14,10 @@ public:
 	virtual void MarkReferences();
 
 	int         GetNumberOfIndexableFields() const;
-	VMArray*    CopyAndExtendWith(VMObject*) const;
-	void        CopyIndexableFieldsTo(VMArray*) const;
+	pVMArray    CopyAndExtendWith(pVMObject) const;
+	void        CopyIndexableFieldsTo(pVMArray) const;
 
-	VMObject*& operator[](int idx) const;	
+	pVMObject& operator[](int idx) const;	
 };
 
 

@@ -25,37 +25,37 @@ public:
     virtual int       GetNumberOfArguments() const;
     virtual void      SetNumberOfArguments(int);
     virtual int       GetNumberOfBytecodes() const;
-    virtual void      SetHolderAll(VMClass* hld); 
-    virtual VMObject* GetConstant(int indx) const; 
+    virtual void      SetHolderAll(pVMClass hld); 
+    virtual pVMObject GetConstant(int indx) const; 
     virtual uint8_t   GetBytecode(int indx) const; 
     virtual void      SetBytecode(int indx, uint8_t); 
 	virtual void      MarkReferences();
-	virtual void      SetSignature(VMSymbol* sig);
+	virtual void      SetSignature(pVMSymbol sig);
 
-    void              SetIndexableField(int idx, VMObject* item);
+    void              SetIndexableField(int idx, pVMObject item);
 
     //VMArray Methods....
     
 	
 	int         GetNumberOfIndexableFields() const;
-	VMArray*    CopyAndExtendWith(VMObject*) const;
-	void        CopyIndexableFieldsTo(VMArray*) const;
+	pVMArray    CopyAndExtendWith(pVMObject) const;
+	void        CopyIndexableFieldsTo(pVMArray) const;
 
     /// Methods are considered byte arrays with meta data.
     // So the index operator returns the bytecode at the index.
     uint8_t& operator[](int indx) const;
 
     //operator "()" to invoke the method
-    virtual void	  operator()(VMFrame* frame);
+    virtual void	  operator()(pVMFrame frame);
 
 private:
-    VMObject*   GetIndexableField(int idx) const;
+    pVMObject   GetIndexableField(int idx) const;
 
-    VMInteger* size;
-    VMInteger* number_of_locals;
-    VMInteger* maximum_number_of_stack_elements;
-    VMInteger* bc_length;
-    VMInteger* number_of_arguments;
+    pVMInteger size;
+    pVMInteger number_of_locals;
+    pVMInteger maximum_number_of_stack_elements;
+    pVMInteger bc_length;
+    pVMInteger number_of_arguments;
 };
 
 

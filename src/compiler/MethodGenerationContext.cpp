@@ -19,11 +19,11 @@ MethodGenerationContext::MethodGenerationContext() {
 	finished = false;
 }
 
-VMMethod* MethodGenerationContext::Assemble() {
+pVMMethod MethodGenerationContext::Assemble() {
     // create a method instance with the given number of bytecodes and literals
     int num_literals = this->literals.Size();
     
-    VMMethod* meth = _UNIVERSE->NewMethod(this->signature, bytecode.size(),
+    pVMMethod meth = _UNIVERSE->NewMethod(this->signature, bytecode.size(),
                                                                 num_literals);
     
     // populate the fields that are immediately available
@@ -37,7 +37,7 @@ VMMethod* MethodGenerationContext::Assemble() {
 #endif
     // copy literals into the method
     for(int i = 0; i < num_literals; i++) {
-        VMObject* l = literals.get(i);
+        pVMObject l = literals.get(i);
         meth->SetIndexableField(i, l);
     }
 #ifdef __DEBUG
@@ -58,14 +58,14 @@ VMMethod* MethodGenerationContext::Assemble() {
     return meth;
 }
 
-VMPrimitive* MethodGenerationContext::AssemblePrimitive() {
+pVMPrimitive MethodGenerationContext::AssemblePrimitive() {
     return VMPrimitive::GetEmptyPrimitive(this->signature);
 }
 
 MethodGenerationContext::~MethodGenerationContext() {
 }
 
-int8_t MethodGenerationContext::FindLiteralIndex(VMObject* lit) {
+int8_t MethodGenerationContext::FindLiteralIndex(pVMObject lit) {
 	return (int8_t)literals.IndexOf(lit);//literals.IndexOf(lit);
 
 }
@@ -119,7 +119,7 @@ uint8_t MethodGenerationContext::ComputeStackDepth() {
             case BC_SUPER_SEND       : {
                 // these are special: they need to look at the number of
                 // arguments (extractable from the signature)
-                VMSymbol* sig = (VMSymbol*)literals.get(bytecode[i + 1]);
+                pVMSymbol sig = (pVMSymbol)literals.get(bytecode[i + 1]);
                     //SEND(mgenc->literals, get, mgenc->bytecode[i + 1]);
                 
                 depth -= Signature::GetNumberOfArguments(sig);
@@ -157,7 +157,7 @@ void MethodGenerationContext::SetIsBlockMethod(bool is_block) {
 	block_method = is_block;
 }
 
-void MethodGenerationContext::SetSignature(VMSymbol* sig) {
+void MethodGenerationContext::SetSignature(pVMSymbol sig) {
 	signature = sig;
 }
 
@@ -173,7 +173,7 @@ void MethodGenerationContext::AddLocal(const StdString& local) {
 	locals.push_back(local);
 }
 
-void MethodGenerationContext::AddLiteral(VMObject* lit) {
+void MethodGenerationContext::AddLiteral(pVMObject lit) {
 	literals.push_back(lit);
 }
 
@@ -189,7 +189,7 @@ bool MethodGenerationContext::AddLocalIfAbsent(const StdString& local) {
 	return true;
 }
 
-bool MethodGenerationContext::AddLiteralIfAbsent(VMObject* lit) {
+bool MethodGenerationContext::AddLiteralIfAbsent(pVMObject lit) {
 	if (literals.IndexOf( lit) != -1) return false;
 	literals.push_back(lit);
 	return true;
@@ -206,7 +206,7 @@ MethodGenerationContext* MethodGenerationContext::get_outer() {
 	return outer_genc;
 }
 
-VMSymbol* MethodGenerationContext::GetSignature() {
+pVMSymbol MethodGenerationContext::GetSignature() {
 	return signature;
 }
 

@@ -38,32 +38,32 @@ void BytecodeGenerator::emit_PUSH_ARGUMENT(
 
 
 void BytecodeGenerator::emit_PUSH_FIELD(
-                MethodGenerationContext* mgenc, VMSymbol* field ) {
-    EMIT2(BC_PUSH_FIELD, mgenc->FindLiteralIndex((VMObject*)field));
+                MethodGenerationContext* mgenc, pVMSymbol field ) {
+    EMIT2(BC_PUSH_FIELD, mgenc->FindLiteralIndex((pVMObject)field));
 }
 
 
 void BytecodeGenerator::emit_PUSH_BLOCK(
-                MethodGenerationContext* mgenc, VMMethod* block ) {
-    EMIT2(BC_PUSH_BLOCK, mgenc->FindLiteralIndex((VMObject*)block));
+                MethodGenerationContext* mgenc, pVMMethod block ) {
+    EMIT2(BC_PUSH_BLOCK, mgenc->FindLiteralIndex((pVMObject)block));
 }
 
 
 void BytecodeGenerator::emit_PUSH_CONSTANT(
-                MethodGenerationContext* mgenc, VMObject* cst ) {
+                MethodGenerationContext* mgenc, pVMObject cst ) {
     EMIT2(BC_PUSH_CONSTANT, mgenc->FindLiteralIndex(cst));
 }
 
 
 void BytecodeGenerator::emit_PUSH_CONSTANT_String( 
-                MethodGenerationContext* mgenc, VMString* str ){
-   EMIT2(BC_PUSH_CONSTANT, mgenc->FindLiteralIndex((VMObject*)str));
+                MethodGenerationContext* mgenc, pVMString str ){
+   EMIT2(BC_PUSH_CONSTANT, mgenc->FindLiteralIndex((pVMObject)str));
 }
 
 
 void BytecodeGenerator::emit_PUSH_GLOBAL(
-                MethodGenerationContext* mgenc, VMSymbol* global ) {
-    EMIT2(BC_PUSH_GLOBAL, mgenc->FindLiteralIndex((VMObject*)global));
+                MethodGenerationContext* mgenc, pVMSymbol global ) {
+    EMIT2(BC_PUSH_GLOBAL, mgenc->FindLiteralIndex((pVMObject)global));
 }
 
 
@@ -85,20 +85,20 @@ void BytecodeGenerator::emit_POP_ARGUMENT(
 
 
 void BytecodeGenerator::emit_POP_FIELD(
-                MethodGenerationContext* mgenc, VMSymbol* field ) {
-    EMIT2(BC_POP_FIELD, mgenc->FindLiteralIndex((VMObject*)field));
+                MethodGenerationContext* mgenc, pVMSymbol field ) {
+    EMIT2(BC_POP_FIELD, mgenc->FindLiteralIndex((pVMObject)field));
 }
 
 
 void BytecodeGenerator::emit_SEND(
-                MethodGenerationContext* mgenc, VMSymbol* msg ) {
-    EMIT2(BC_SEND, mgenc->FindLiteralIndex((VMObject*)msg));
+                MethodGenerationContext* mgenc, pVMSymbol msg ) {
+    EMIT2(BC_SEND, mgenc->FindLiteralIndex((pVMObject)msg));
 }
 
 
 void BytecodeGenerator::emit_SUPER_SEND(
-                MethodGenerationContext* mgenc, VMSymbol* msg ) {
-    EMIT2(BC_SUPER_SEND, mgenc->FindLiteralIndex((VMObject*)msg));
+                MethodGenerationContext* mgenc, pVMSymbol msg ) {
+    EMIT2(BC_SUPER_SEND, mgenc->FindLiteralIndex((pVMObject)msg));
 }
 
 

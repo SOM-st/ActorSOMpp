@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
     Universe::Start(argc, argv);
 
     //cout << "pVMObject size: " << sizeof(VMPointer<VMObject>) << endl;
-    //VMArray* o = _UNIVERSE->NewArray(5);
+    //pVMArray o = _UNIVERSE->NewArray(5);
     //pVMArray array;
     //array = o;
     //pVMObject object;
@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
     ////po->SetIndexableField(0, ti);
     //(*array)[0] = ti;
     ////po->operator [](0);
-    //pVMInteger ti3((VMInteger*)(*array)[0]);
+    //pVMInteger ti3((pVMInteger)(*array)[0]);
     //cout << "(int32_t)ti3 + 9 = " << (int32_t)ti3 + 9 << endl;
     //cout << "4 + (int32_t)ti = " << 4 + (int32_t)ti << endl;
     //cout << "ti->GetObjectSize(): " << ti->GetObjectSize() << endl;

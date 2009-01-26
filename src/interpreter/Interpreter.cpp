@@ -39,7 +39,7 @@ void Interpreter::Start() {
     while (true) {
         int bytecode_index = _FRAME->GetBytecodeIndex();
 
-        VMMethod* method = this->GetMethod();
+        pVMMethod method = this->GetMethod();
         uint8_t bytecode = (*method)[bytecode_index];
 
         int bytecode_length = Bytecode::GetBytecodeLength(bytecode);
@@ -79,24 +79,24 @@ void Interpreter::Start() {
 }
 
 
-VMFrame* Interpreter::PushNewFrame( VMMethod* method ) {
+pVMFrame Interpreter::PushNewFrame( pVMMethod method ) {
     _SETFRAME(_UNIVERSE->NewFrame(_FRAME, method));
     return _FRAME;
 }
 
 
-void Interpreter::SetFrame( VMFrame* frame ) {
+void Interpreter::SetFrame( pVMFrame frame ) {
     this->frame = frame;   
 }
 
 
-VMFrame* Interpreter::GetFrame() {
+pVMFrame Interpreter::GetFrame() {
     return this->frame;
 }
 
 
-VMMethod* Interpreter::GetMethod() {
-    VMMethod* method = _FRAME->GetMethod();
+pVMMethod Interpreter::GetMethod() {
+    pVMMethod method = _FRAME->GetMethod();
    /* cout << "bytecodes: ";
       for (int i = 0; i < method->BytecodeLength(); ++i)
     {
@@ -107,14 +107,14 @@ VMMethod* Interpreter::GetMethod() {
 }
 
 
-VMObject* Interpreter::GetSelf() {
-    VMFrame* context = _FRAME->GetOuterContext();//ups...
+pVMObject Interpreter::GetSelf() {
+    pVMFrame context = _FRAME->GetOuterContext();//ups...
     return context->GetArgument(0,0);
 }
 
 
-VMFrame* Interpreter::popFrame() {
-    VMFrame* result = _FRAME;
+pVMFrame Interpreter::popFrame() {
+    pVMFrame result = _FRAME;
     this->SetFrame(_FRAME->GetPreviousFrame());
 
     result->ClearPreviousFrame();
@@ -123,10 +123,10 @@ VMFrame* Interpreter::popFrame() {
 }
 
 
-void Interpreter::popFrameAndPushResult( VMObject* result ) {
-    VMFrame* prevFrame = this->popFrame();
+void Interpreter::popFrameAndPushResult( pVMObject result ) {
+    pVMFrame prevFrame = this->popFrame();
 
-    VMMethod* method = prevFrame->GetMethod();
+    pVMMethod method = prevFrame->GetMethod();
     int number_of_args = method->GetNumberOfArguments();
 
     for (int i = 0; i < number_of_args; ++i) _FRAME->Pop();
@@ -135,9 +135,9 @@ void Interpreter::popFrameAndPushResult( VMObject* result ) {
 }
 
 
-void Interpreter::send( VMSymbol* signature, VMClass* receiver_class) {
-    VMInvokable* invokable = 
-                (VMInvokable*) receiver_class->LookupInvokable(signature);
+void Interpreter::send( pVMSymbol signature, pVMClass receiver_class) {
+    pVMInvokable invokable = 
+                (pVMInvokable) receiver_class->LookupInvokable(signature);
 
     if (invokable != NULL) {
         (*invokable)(_FRAME);
@@ -145,16 +145,16 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class) {
         //doesNotUnderstand
         int number_of_args = Signature::GetNumberOfArguments(signature);
 
-        VMObject* receiver = _FRAME->GetStackElement(number_of_args-1);
+        pVMObject receiver = _FRAME->GetStackElement(number_of_args-1);
 
-        VMArray* arguments_array = _UNIVERSE->NewArray(number_of_args);
+        pVMArray arguments_array = _UNIVERSE->NewArray(number_of_args);
 
         for (int i = number_of_args - 1; i >= 0; --i) {
-            VMObject* o = _FRAME->Pop();
+            pVMObject o = _FRAME->Pop();
             (*arguments_array)[i] = o; //->SetIndexableField(i, o);
         }
-        VMObject* arguments[] = { (VMObject*)signature, 
-                                  (VMObject*)arguments_array };
+        pVMObject arguments[] = { (pVMObject)signature, 
+                                  (pVMObject)arguments_array };
 
         //check if current frame is big enough for this unplanned Send
         //doesNotUnderstand: needs 3 slots, one for this, one for method name, one for args
@@ -175,63 +175,63 @@ void Interpreter::send( VMSymbol* signature, VMClass* receiver_class) {
 
 
 void Interpreter::do_dup() {
-    VMObject* elem = _FRAME->GetStackElement(0);
+    pVMObject elem = _FRAME->GetStackElement(0);
     _FRAME->Push(elem);
 }
 
 
 void Interpreter::do_push_local( int bytecode_index ) {
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
     uint8_t bc1 = (*method)[bytecode_index + 1];
     uint8_t bc2 = (*method)[bytecode_index + 2];
 
-    VMObject* local = _FRAME->GetLocal(bc1, bc2);
+    pVMObject local = _FRAME->GetLocal(bc1, bc2);
 
     _FRAME->Push(local);
 }
 
 
 void Interpreter::do_push_argument( int bytecode_index ) {
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
     uint8_t bc1 = (*method)[bytecode_index + 1];
     uint8_t bc2 = (*method)[bytecode_index + 2];
 
-    VMObject* argument = _FRAME->GetArgument(bc1, bc2);
+    pVMObject argument = _FRAME->GetArgument(bc1, bc2);
 
     _FRAME->Push(argument);
 }
 
 
 void Interpreter::do_push_field( int bytecode_index ) {
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
 
-    VMSymbol* field_name = (VMSymbol*) method->GetConstant(bytecode_index);
+    pVMSymbol field_name = (pVMSymbol) method->GetConstant(bytecode_index);
 
-    VMObject* self = _SELF;
+    pVMObject self = _SELF;
     int field_index = self->GetFieldIndex(field_name);
 
-    VMObject* o = self->GetField(field_index);
+    pVMObject o = self->GetField(field_index);
 
     _FRAME->Push(o);
 }
 
 
 void Interpreter::do_push_block( int bytecode_index ) {
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
 
-    VMMethod* blockMethod = (VMMethod*)method->GetConstant(bytecode_index);
+    pVMMethod blockMethod = (pVMMethod)method->GetConstant(bytecode_index);
 
     int num_of_args = blockMethod->GetNumberOfArguments();
 
-    _FRAME->Push((VMObject*) _UNIVERSE->NewBlock(blockMethod, _FRAME,
+    _FRAME->Push((pVMObject) _UNIVERSE->NewBlock(blockMethod, _FRAME,
                                                  num_of_args));
 }
 
 
 void Interpreter::do_push_constant( int bytecode_index ) {
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
 
-    VMObject* constant = method->GetConstant(bytecode_index);
+    pVMObject constant = method->GetConstant(bytecode_index);
     _FRAME->Push(constant);
     
    // _FRAME->PrintStack();
@@ -242,17 +242,17 @@ void Interpreter::do_push_constant( int bytecode_index ) {
 void Interpreter::do_push_global( int bytecode_index) {
     
 
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
 
-    VMSymbol* global_name = (VMSymbol*) method->GetConstant(bytecode_index);
+    pVMSymbol global_name = (pVMSymbol) method->GetConstant(bytecode_index);
 
-    VMObject* global = _UNIVERSE->GetGlobal(global_name);
+    pVMObject global = _UNIVERSE->GetGlobal(global_name);
 
     if(global != NULL)
         _FRAME->Push(global);
     else {
-        VMObject* arguments[] = { (VMObject*) global_name };
-        VMObject* self = _SELF;
+        pVMObject arguments[] = { (pVMObject) global_name };
+        pVMObject self = _SELF;
 
         //check if there is enough space on the stack for this unplanned Send
         //unknowGlobal: needs 2 slots, one for "this" and one for the argument
@@ -279,50 +279,50 @@ void Interpreter::do_pop() {
 
 
 void Interpreter::do_pop_local( int bytecode_index ) {
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
 
     uint8_t bc1 = (*method)[bytecode_index + 1];
     uint8_t bc2 = (*method)[bytecode_index + 2];
 
-    VMObject* o = _FRAME->Pop();
+    pVMObject o = _FRAME->Pop();
 
     _FRAME->SetLocal(bc1, bc2, o);
 }
 
 
 void Interpreter::do_pop_argument( int bytecode_index ) {
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
 
     uint8_t bc1 = (*method)[bytecode_index + 1];
     uint8_t bc2 = (*method)[bytecode_index + 2];
 
-    VMObject* o = _FRAME->Pop();
+    pVMObject o = _FRAME->Pop();
     _FRAME->SetArgument(bc1, bc2, o);
 }
 
 
 void Interpreter::do_pop_field( int bytecode_index ) {
-    VMMethod* method = _METHOD;
-    VMSymbol* field_name = (VMSymbol*) method->GetConstant(bytecode_index);
+    pVMMethod method = _METHOD;
+    pVMSymbol field_name = (pVMSymbol) method->GetConstant(bytecode_index);
 
-    VMObject* self = _SELF;
+    pVMObject self = _SELF;
     int field_index = self->GetFieldIndex(field_name);
 
-    VMObject* o = _FRAME->Pop();
+    pVMObject o = _FRAME->Pop();
     self->SetField(field_index, o);
 }
 
 
 void Interpreter::do_send( int bytecode_index ) {
-    VMMethod* method = _METHOD;
+    pVMMethod method = _METHOD;
     
-    VMSymbol* signature = (VMSymbol*) method->GetConstant(bytecode_index);
+    pVMSymbol signature = (pVMSymbol) method->GetConstant(bytecode_index);
 #ifdef __DEBUG
         cout << "sig: " << signature->GetChars() << endl;
 #endif
     int num_of_args = Signature::GetNumberOfArguments(signature);
 
-    VMObject* receiver = _FRAME->GetStackElement(num_of_args-1);
+    pVMObject receiver = _FRAME->GetStackElement(num_of_args-1);
 #ifdef __DEBUG
     cout << "rec("<<num_of_args-1<<"): " << 
             receiver->GetClass()->GetName()->GetChars() << endl;
@@ -332,51 +332,51 @@ void Interpreter::do_send( int bytecode_index ) {
 
 
 void Interpreter::do_super_send( int bytecode_index ) {
-    VMMethod* method = _METHOD;
-    VMSymbol* signature = (VMSymbol*) method->GetConstant(bytecode_index);
+    pVMMethod method = _METHOD;
+    pVMSymbol signature = (pVMSymbol) method->GetConstant(bytecode_index);
 
-    VMFrame* ctxt = _FRAME->GetOuterContext();
-    VMMethod* real_method = ctxt->GetMethod();
-    VMClass* holder = real_method->GetHolder();
-    VMClass* super = holder->GetSuperClass();
-    VMInvokable* invokable = (VMInvokable*) super->LookupInvokable(signature);
+    pVMFrame ctxt = _FRAME->GetOuterContext();
+    pVMMethod real_method = ctxt->GetMethod();
+    pVMClass holder = real_method->GetHolder();
+    pVMClass super = holder->GetSuperClass();
+    pVMInvokable invokable = (pVMInvokable) super->LookupInvokable(signature);
 
     if (invokable != NULL)
         (*invokable)(_FRAME);
     else {
         int num_of_args = Signature::GetNumberOfArguments(signature);
-        VMObject* receiver = _FRAME->GetStackElement(num_of_args - 1);
-        VMArray* arguments_array = _UNIVERSE->NewArray(num_of_args);
+        pVMObject receiver = _FRAME->GetStackElement(num_of_args - 1);
+        pVMArray arguments_array = _UNIVERSE->NewArray(num_of_args);
 
         for (int i = num_of_args - 1; i >= 0; --i) {
-            VMObject* o = _FRAME->Pop();
+            pVMObject o = _FRAME->Pop();
             (*arguments_array)[i] = o; //->SetIndexableField(i ,o);
         }
-        VMObject* arguments[] = { (VMObject*)signature, 
-                                  (VMObject*) arguments_array };
+        pVMObject arguments[] = { (pVMObject)signature, 
+                                  (pVMObject) arguments_array };
         receiver->Send(dnu, arguments, 2);
     }
 }
 
 
 void Interpreter::do_return_local() {
-    VMObject* result = _FRAME->Pop();
+    pVMObject result = _FRAME->Pop();
 
     this->popFrameAndPushResult(result);
 }
 
 
 void Interpreter::do_return_non_local() {
-    VMObject* result = _FRAME->Pop();
+    pVMObject result = _FRAME->Pop();
 
-    VMFrame* context = _FRAME->GetOuterContext();
+    pVMFrame context = _FRAME->GetOuterContext();
 
     if (!context->HasPreviousFrame()) {
-        VMBlock* block = (VMBlock*) _FRAME->GetArgument(0, 0);
-        VMFrame* prev_frame = _FRAME->GetPreviousFrame();
-        VMFrame* outer_context = prev_frame->GetOuterContext();
-        VMObject* sender = outer_context->GetArgument(0, 0);
-        VMObject* arguments[] = { (VMObject*)block };
+        pVMBlock block = (pVMBlock) _FRAME->GetArgument(0, 0);
+        pVMFrame prev_frame = _FRAME->GetPreviousFrame();
+        pVMFrame outer_context = prev_frame->GetOuterContext();
+        pVMObject sender = outer_context->GetArgument(0, 0);
+        pVMObject arguments[] = { (pVMObject)block };
 
         this->popFrame();
 

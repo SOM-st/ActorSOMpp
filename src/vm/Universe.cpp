@@ -26,26 +26,26 @@
 
 // Here we go:
 // externally refenced variables:
-//VMObject* Globals::NilObject() = NULL;
-//VMObject* Globals::TrueObject() = NULL;
-//VMObject* Globals::FalseObject() = NULL;
+//pVMObject Globals::NilObject() = NULL;
+//pVMObject Globals::TrueObject() = NULL;
+//pVMObject Globals::FalseObject() = NULL;
 //
-//VMClass* Globals::ObjectClass() = NULL;
-//VMClass* Globals::ClassClass() = NULL;
-//VMClass* Globals::MetaClassClass() = NULL;
+//pVMClass Globals::ObjectClass() = NULL;
+//pVMClass Globals::ClassClass() = NULL;
+//pVMClass Globals::MetaClassClass() = NULL;
 //
-//VMClass* Globals::NilClass() = NULL;
-//VMClass* Globals::IntegerClass() = NULL;
-//VMClass* Globals::BigIntegerClass() = NULL;
-//VMClass* Globals::ArrayClass() = NULL;
-//VMClass* Globals::MethodClass() = NULL;
-//VMClass* Globals::SymbolClass() = NULL;
-//VMClass* Globals::FrameClass() = NULL;
-//VMClass* Globals::PrimitiveClass()() = NULL;
-//VMClass* Globals::StringClass() = NULL;
-//VMClass* Globals::SystemClass() = NULL;
-//VMClass* Globals::BlockClass() = NULL;
-//VMClass* Globals::DoubleClass() = NULL;
+//pVMClass Globals::NilClass() = NULL;
+//pVMClass Globals::IntegerClass() = NULL;
+//pVMClass Globals::BigIntegerClass() = NULL;
+//pVMClass Globals::ArrayClass() = NULL;
+//pVMClass Globals::MethodClass() = NULL;
+//pVMClass Globals::SymbolClass() = NULL;
+//pVMClass Globals::FrameClass() = NULL;
+//pVMClass Globals::PrimitiveClass()() = NULL;
+//pVMClass Globals::StringClass() = NULL;
+//pVMClass Globals::SystemClass() = NULL;
+//pVMClass Globals::BlockClass() = NULL;
+//pVMClass Globals::DoubleClass() = NULL;
 
 short dump_bytecodes;
 short gc_verbosity;
@@ -235,7 +235,7 @@ void Universe::initialize(int _argc, char** _argv) {
     cout << "Initializing the global objects" << endl;
     Globals::InitializeGlobals();
     cout << "Done." << endl;
-    VMObject* system_object = NewInstance(Globals::SystemClass());
+    pVMObject system_object = NewInstance(Globals::SystemClass());
 
     cout << "Set globals" << endl;
     this->SetGlobal(SymbolForChars("nil"), Globals::NilObject());
@@ -247,7 +247,7 @@ void Universe::initialize(int _argc, char** _argv) {
 
     cout << "Creating fake bootstrap method" << endl;
     
-    VMMethod* bootstrap_method = NewMethod(SymbolForChars("bootstrap"), 1, 0);
+    pVMMethod bootstrap_method = NewMethod(SymbolForChars("bootstrap"), 1, 0);
     bootstrap_method->SetBytecode(0, BC_HALT);
     bootstrap_method->SetNumberOfLocals(0);
     //bootstrap_method->SetNumberOfArguments(0);
@@ -265,14 +265,14 @@ void Universe::initialize(int _argc, char** _argv) {
     short trace = 2 - dump_bytecodes;
     if(!(trace > 0)) dump_bytecodes = 1;
 
-    VMArray* arguments_array = _UNIVERSE->NewArrayFromArgv(argv);
+    pVMArray arguments_array = _UNIVERSE->NewArrayFromArgv(argv);
     
-    VMFrame* bootstrap_frame = interpreter->PushNewFrame(bootstrap_method);
+    pVMFrame bootstrap_frame = interpreter->PushNewFrame(bootstrap_method);
     bootstrap_frame->Push(system_object);
-    bootstrap_frame->Push((VMObject*)arguments_array);
+    bootstrap_frame->Push((pVMObject)arguments_array);
 
-    VMInvokable* initialize = 
-        (VMInvokable*)Globals::SystemClass()->LookupInvokable(this->SymbolForChars("initialize:"));
+    pVMInvokable initialize = 
+        (pVMInvokable)Globals::SystemClass()->LookupInvokable(this->SymbolForChars("initialize:"));
     (*initialize)(bootstrap_frame);
     
     // reset "-d" indicator
@@ -294,9 +294,9 @@ Universe::~Universe() {
 }
 
 
-VMObject* Universe::NewTaggedInteger(int32_t val) {
+pVMObject Universe::NewTaggedInteger(int32_t val) {
     val += 0x80000000;
-    return (VMObject*) val;
+    return (pVMObject) val;
 }
 
 
@@ -308,62 +308,62 @@ void Universe::Assert( bool value) const {
 }
 
 
-VMClass* Universe::GetBlockClass() const {
+pVMClass Universe::GetBlockClass() const {
     return Globals::BlockClass();
 }
 
 
-VMClass* Universe::GetBlockClassWithArgs( int number_of_arguments) {
+pVMClass Universe::GetBlockClassWithArgs( int number_of_arguments) {
     this->Assert(number_of_arguments < 10);
 
     ostringstream Str;
     Str << "Block" << number_of_arguments ;
     StdString block_name(Str.str());
-    VMSymbol* name = SymbolFor(block_name);
+    pVMSymbol name = SymbolFor(block_name);
 
     if (HasGlobal(name))
-        return (VMClass*)GetGlobal(name);
+        return (pVMClass)GetGlobal(name);
 
-    VMClass* result = LoadClassBasic(name, NULL);
+    pVMClass result = LoadClassBasic(name, NULL);
 
     result->AddInstancePrimitive(new (_HEAP) VMEvaluationPrimitive(number_of_arguments) );
 
-    SetGlobal(name, (VMObject*) result);
+    SetGlobal(name, (pVMObject) result);
 
     return result;
 }
 
 
 
-VMObject* Universe::GetGlobal( VMSymbol* name) {
+pVMObject Universe::GetGlobal( pVMSymbol name) {
     if (HasGlobal(name))
-        return (VMObject*)globals[name->GetStdString()];
+        return (pVMObject)globals[name->GetStdString()];
 
     return NULL;
 }
 
 
-bool Universe::HasGlobal( VMSymbol* name) {
+bool Universe::HasGlobal( pVMSymbol name) {
     if (globals[name->GetStdString()] != NULL) return true;
     else return false;
 }
 
 
-void Universe::InitializeSystemClass( VMClass* system_class, 
-                                     VMClass* super_class, const char* name) {
+void Universe::InitializeSystemClass( pVMClass system_class, 
+                                     pVMClass super_class, const char* name) {
     StdString s_name(name);
 
     if (super_class != NULL) {
         system_class->SetSuperClass(super_class);
-        VMClass* sys_class_class = system_class->GetClass();
-        VMClass* super_class_class = super_class->GetClass();
+        pVMClass sys_class_class = system_class->GetClass();
+        pVMClass super_class_class = super_class->GetClass();
         sys_class_class->SetSuperClass(super_class_class);
     } else {
-        VMClass* sys_class_class = system_class->GetClass();
+        pVMClass sys_class_class = system_class->GetClass();
         sys_class_class->SetSuperClass(Globals::ClassClass());
     }
 
-    VMClass* sys_class_class = system_class->GetClass();
+    pVMClass sys_class_class = system_class->GetClass();
 
     system_class->SetInstanceFields(NewArray(0));
     sys_class_class->SetInstanceFields(NewArray(0));
@@ -377,17 +377,17 @@ void Universe::InitializeSystemClass( VMClass* system_class,
     StdString class_class_name(Str.str());
     sys_class_class->SetName(SymbolFor(class_class_name));
 
-    SetGlobal(system_class->GetName(), (VMObject*)system_class);
+    SetGlobal(system_class->GetName(), (pVMObject)system_class);
 
 
 }
 
 
-VMClass* Universe::LoadClass( VMSymbol* name) {
+pVMClass Universe::LoadClass( pVMSymbol name) {
    if (HasGlobal(name))
-       return dynamic_cast<VMClass*>(GetGlobal(name));
+       return dynamic_cast<pVMClass>(GetGlobal(name));
 
-   VMClass* result = LoadClassBasic(name, NULL);
+   pVMClass result = LoadClassBasic(name, NULL);
 
    if (!result) {
        cout << "can\'t load class " << name->GetStdString() << endl;
@@ -401,10 +401,10 @@ VMClass* Universe::LoadClass( VMSymbol* name) {
 }
 
 
-VMClass* Universe::LoadClassBasic( VMSymbol* name, VMClass* system_class) {
+pVMClass Universe::LoadClassBasic( pVMSymbol name, pVMClass system_class) {
     StdString s_name = name->GetStdString();
     //cout << s_name.c_str() << endl;
-    VMClass* result;
+    pVMClass result;
 
     for (vector<StdString>::iterator i = class_path.begin();
          i != class_path.end(); ++i) {
@@ -422,16 +422,16 @@ VMClass* Universe::LoadClassBasic( VMSymbol* name, VMClass* system_class) {
 }
 
 
-VMClass* Universe::LoadShellClass( StdString& stmt) {
-    VMClass* result = compiler->CompileClassString(stmt, NULL);
+pVMClass Universe::LoadShellClass( StdString& stmt) {
+    pVMClass result = compiler->CompileClassString(stmt, NULL);
      if(dump_bytecodes)
          Disassembler::Dump(result);
     return result;
 }
 
 
-void Universe::LoadSystemClass( VMClass* system_class) {
-    VMClass* result =
+void Universe::LoadSystemClass( pVMClass system_class) {
+    pVMClass result =
         LoadClassBasic(system_class->GetName(), system_class);
     StdString s = system_class->GetName()->GetStdString();
 
@@ -445,16 +445,16 @@ void Universe::LoadSystemClass( VMClass* system_class) {
 }
 
 
-VMArray* Universe::NewArray( int size) const {
-    int additionalBytes = size*sizeof(VMObject*);
-    VMArray* result = new (_HEAP, additionalBytes) VMArray(size);
+pVMArray Universe::NewArray( int size) const {
+    int additionalBytes = size*sizeof(pVMObject);
+    pVMArray result = new (_HEAP, additionalBytes) VMArray(size);
     result->SetClass(Globals::ArrayClass());
     return result;
 }
 
 
-VMArray* Universe::NewArrayFromArgv( const vector<StdString>& argv) const {
-    VMArray* result = NewArray(argv.size());
+pVMArray Universe::NewArrayFromArgv( const vector<StdString>& argv) const {
+    pVMArray result = NewArray(argv.size());
     int j = 0;
     for (vector<StdString>::const_iterator i = argv.begin();
          i != argv.end(); ++i) {
@@ -466,13 +466,13 @@ VMArray* Universe::NewArrayFromArgv( const vector<StdString>& argv) const {
 }
 
 
-VMArray* Universe::NewArrayList(ExtendedList<VMObject*>& list ) const {
+pVMArray Universe::NewArrayList(ExtendedList<pVMObject>& list ) const {
     int size = list.Size();
-    VMArray* result = NewArray(size);
+    pVMArray result = NewArray(size);
 
     if (result)  {
         for (int i = 0; i < size; ++i) {
-            VMObject* elem = list.get(i);
+            pVMObject elem = list.get(i);
             //result->SetIndexableField(i, elem);
             (*result)[i] = elem;
         }
@@ -481,16 +481,16 @@ VMArray* Universe::NewArrayList(ExtendedList<VMObject*>& list ) const {
 }
 
 
-VMBigInteger* Universe::NewBigInteger( int64_t value) const {
-    VMBigInteger* result = new (_HEAP) VMBigInteger(value);
+pVMBigInteger Universe::NewBigInteger( int64_t value) const {
+    pVMBigInteger result = new (_HEAP) VMBigInteger(value);
     result->SetClass(Globals::BigIntegerClass());
 
     return result;
 }
 
 
-VMBlock* Universe::NewBlock( VMMethod* method, VMFrame* context, int arguments) {
-    VMBlock* result = new (_HEAP) VMBlock;
+pVMBlock Universe::NewBlock( pVMMethod method, pVMFrame context, int arguments) {
+    pVMBlock result = new (_HEAP) VMBlock;
     result->SetClass(this->GetBlockClassWithArgs(arguments));
 
     result->SetMethod(method);
@@ -500,10 +500,10 @@ VMBlock* Universe::NewBlock( VMMethod* method, VMFrame* context, int arguments) 
 }
 
 
-VMClass* Universe::NewClass( VMClass* class_of_class) const {
+pVMClass Universe::NewClass( pVMClass class_of_class) const {
     int num_fields = class_of_class->GetNumberOfInstanceFields();
-    VMClass* result;
-    int additionalBytes = num_fields * sizeof(VMObject*);
+    pVMClass result;
+    int additionalBytes = num_fields * sizeof(pVMObject);
     if (num_fields) result = new (_HEAP, additionalBytes) VMClass(num_fields);
     else result = new (_HEAP) VMClass;
 
@@ -513,20 +513,20 @@ VMClass* Universe::NewClass( VMClass* class_of_class) const {
 }
 
 
-VMDouble* Universe::NewDouble( double value) const {
-    VMDouble* result = new (_HEAP) VMDouble(value);
+pVMDouble Universe::NewDouble( double value) const {
+    pVMDouble result = new (_HEAP) VMDouble(value);
     result->SetClass(Globals::DoubleClass());
     return result;
 }
 
 
-VMFrame* Universe::NewFrame( VMFrame* previous_frame, VMMethod* method) const {
+pVMFrame Universe::NewFrame( pVMFrame previous_frame, pVMMethod method) const {
     int length = method->GetNumberOfArguments() +
                  method->GetNumberOfLocals()+
                  method->GetMaximumNumberOfStackElements(); 
    
-    int additionalBytes = length * sizeof(VMObject*);
-    VMFrame* result = new (_HEAP, additionalBytes) VMFrame(length);
+    int additionalBytes = length * sizeof(pVMObject);
+    pVMFrame result = new (_HEAP, additionalBytes) VMFrame(length);
     result->SetClass(Globals::FrameClass());
 
     result->SetMethod(method);
@@ -541,40 +541,40 @@ VMFrame* Universe::NewFrame( VMFrame* previous_frame, VMMethod* method) const {
 }
 
 
-VMObject* Universe::NewInstance( VMClass*  class_of_instance) const {
+pVMObject Universe::NewInstance( pVMClass  class_of_instance) const {
     //the number of fields for allocation. We have to calculate the clazz
     //field out of this, because it is already taken care of by VMObject
     int num_of_fields = class_of_instance->GetNumberOfInstanceFields() - 1;
     //the additional space needed is calculated from the number of fields
-    int additionalBytes = num_of_fields * sizeof(VMObject*);
-    VMObject* result = new (_HEAP, additionalBytes) VMObject(num_of_fields);
+    int additionalBytes = num_of_fields * sizeof(pVMObject);
+    pVMObject result = new (_HEAP, additionalBytes) VMObject(num_of_fields);
     result->SetClass(class_of_instance);
     return result;
 }
 
-VMInteger* Universe::NewInteger( int32_t value) const {
-    VMInteger* result = new (_HEAP) VMInteger(value);
+pVMInteger Universe::NewInteger( int32_t value) const {
+    pVMInteger result = new (_HEAP) VMInteger(value);
     result->SetClass(Globals::IntegerClass());
     return result;
 }
 
-VMClass* Universe::NewMetaclassClass() const {
-    VMClass* result = new (_HEAP) VMClass;
+pVMClass Universe::NewMetaclassClass() const {
+    pVMClass result = new (_HEAP) VMClass;
     result->SetClass(new (_HEAP) VMClass);
 
-    VMClass* mclass = result->GetClass();
+    pVMClass mclass = result->GetClass();
     mclass->SetClass(result);
 
     return result;
 }
 
 
-VMMethod* Universe::NewMethod( VMSymbol* signature, 
+pVMMethod Universe::NewMethod( pVMSymbol signature, 
                     size_t number_of_bytecodes, size_t number_of_constants) const {
     //Method needs space for the bytecodes and the pointers to the constants
     int additionalBytes = number_of_bytecodes + 
-                number_of_constants*sizeof(VMObject*);
-    VMMethod* result = new (_HEAP,additionalBytes) 
+                number_of_constants*sizeof(pVMObject);
+    pVMMethod result = new (_HEAP,additionalBytes) 
                 VMMethod(number_of_bytecodes, number_of_constants);
     result->SetClass(Globals::MethodClass());
 
@@ -583,27 +583,27 @@ VMMethod* Universe::NewMethod( VMSymbol* signature,
     return result;
 }
 
-VMString* Universe::NewString( const StdString& str) const {
+pVMString Universe::NewString( const StdString& str) const {
     return NewString(str.c_str());
 }
 
-VMString* Universe::NewString( const char* str) const {
+pVMString Universe::NewString( const char* str) const {
     //string needs space for str.length characters plus one byte for '\0'
     int additionalBytes = strlen(str) + 1;// str.length() + 1;
-    VMString* result = new (_HEAP, additionalBytes) VMString(str);
+    pVMString result = new (_HEAP, additionalBytes) VMString(str);
     result->SetClass(Globals::StringClass());
 
     return result;
 }
 
-VMSymbol* Universe::NewSymbol( const StdString& str) {
+pVMSymbol Universe::NewSymbol( const StdString& str) {
     return NewSymbol(str.c_str());
 }
 
-VMSymbol* Universe::NewSymbol( const char* str ) {
+pVMSymbol Universe::NewSymbol( const char* str ) {
     //symbol needs space for str.length characters plus one byte for '\0'
     int additionalBytes = strlen(str) + 1; // str.length() + 1;
-    VMSymbol* result = new (_HEAP, additionalBytes) VMSymbol(str);
+    pVMSymbol result = new (_HEAP, additionalBytes) VMSymbol(str);
     result->SetClass(Globals::SymbolClass());
 
     symboltable->insert(result);
@@ -612,11 +612,11 @@ VMSymbol* Universe::NewSymbol( const char* str ) {
 }
 
 
-VMClass* Universe::NewSystemClass() const {
-    VMClass* system_class = new (_HEAP) VMClass();
+pVMClass Universe::NewSystemClass() const {
+    pVMClass system_class = new (_HEAP) VMClass();
 
     system_class->SetClass(new (_HEAP) VMClass());
-    VMClass* mclass = system_class->GetClass();
+    pVMClass mclass = system_class->GetClass();
     
     mclass->SetClass(Globals::MetaClassClass());
 
@@ -624,14 +624,14 @@ VMClass* Universe::NewSystemClass() const {
 }
 
 
-VMSymbol* Universe::SymbolFor( const StdString& str) {
+pVMSymbol Universe::SymbolFor( const StdString& str) {
     return SymbolForChars(str.c_str());
     
 }
 
 
-VMSymbol* Universe::SymbolForChars( const char* str) {
-    VMSymbol* result = symboltable->lookup(str);
+pVMSymbol Universe::SymbolForChars( const char* str) {
+    pVMSymbol result = symboltable->lookup(str);
     
     return (result != NULL) ?
            result :
@@ -639,12 +639,12 @@ VMSymbol* Universe::SymbolForChars( const char* str) {
 }
 
 
-void Universe::SetGlobal(VMSymbol* name, VMObject *val) {
+void Universe::SetGlobal(pVMSymbol name, VMObject *val) {
     StdString str =  name->GetStdString();
 
     globals[str] = val;
-	//globals.insert(pair<StdString, VMObject*>(name->GetStdString(), val));
-    VMObject* p = globals[str];
+	//globals.insert(pair<StdString, pVMObject>(name->GetStdString(), val));
+    pVMObject p = globals[str];
     if (p == NULL) {
         cout << "Global " << str << " just added, but globals[" << str << "] == NULL" << endl;
     }

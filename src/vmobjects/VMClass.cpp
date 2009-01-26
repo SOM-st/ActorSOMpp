@@ -40,7 +40,7 @@ VMClass::VMClass() : VMObject(4) {
 
 
 VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4) {
-    //this->objectSize = sizeof(VMClass) + number_of_fields*sizeof(VMObject*);
+    //this->objectSize = sizeof(VMClass) + number_of_fields*sizeof(pVMObject);
 }
 
 
@@ -50,19 +50,19 @@ bool VMClass::HasSuperClass() const {
 
 
 bool VMClass::AddInstanceInvokable(VMObject *ptr) {
-    VMInvokable* newInvokable = dynamic_cast<VMInvokable*>(ptr);
+    pVMInvokable newInvokable = dynamic_cast<pVMInvokable>(ptr);
     if (newInvokable == NULL) {
         cout << "Error: trying to add non-invokable to invokables array" << endl;
         throw std::bad_typeid();//("Trying to add non-invokable to invokables array");
     }
 	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i) {
-        VMInvokable* inv = dynamic_cast<VMInvokable*>( (*instance_invokables)[i] );
+        pVMInvokable inv = dynamic_cast<pVMInvokable>( (*instance_invokables)[i] );
 		if (inv != 0) {
             if (newInvokable->GetSignature() == inv->GetSignature()) {
                 this->SetInstanceInvokable(i, ptr);
                 return false;
             }
-			//if (ptr->GetSignature() == ((VMInvokable*)cmp)->GetSignature()) {
+			//if (ptr->GetSignature() == ((pVMInvokable)cmp)->GetSignature()) {
 			//	  instance_invokables->SetIndexableField(i, ptr);
 			//	  return false;
 			//}
@@ -80,16 +80,16 @@ bool VMClass::AddInstanceInvokable(VMObject *ptr) {
 
 
 void VMClass::AddInstancePrimitive(VMPrimitive *ptr) {
-	if (AddInstanceInvokable((VMObject*)ptr)) {
+	if (AddInstanceInvokable((pVMObject)ptr)) {
 		//cout << "Warn: Primitive "<<ptr->GetSignature<<" is not in class definition for class " << name->GetStdString() << endl;
 	}
 }
 
 
-VMSymbol* VMClass::GetInstanceFieldName(int index) const {
+pVMSymbol VMClass::GetInstanceFieldName(int index) const {
 	if (index >= numberOfSuperInstanceFields()) {
 		index -= numberOfSuperInstanceFields();
-		return (VMSymbol*) (*instance_fields)[index];
+		return (pVMSymbol) (*instance_fields)[index];
 	}
 	
 	return super_class->GetInstanceFieldName(index);
@@ -98,12 +98,12 @@ VMSymbol* VMClass::GetInstanceFieldName(int index) const {
 
 
 
-void      VMClass::SetInstanceInvokables(VMArray* invokables) {
+void      VMClass::SetInstanceInvokables(pVMArray invokables) {
 
 	instance_invokables = invokables;
 
     for (int i = 0; i < this->GetNumberOfInstanceInvokables(); ++i) {
-        VMInvokable* inv = (VMInvokable*)(*instance_invokables)[i];
+        pVMInvokable inv = (pVMInvokable)(*instance_invokables)[i];
         if (inv != Globals::NilObject()) {
             inv->SetHolder(this);
         }
@@ -122,33 +122,33 @@ VMObject *VMClass::GetInstanceInvokable(int index) const {
 }
 
 
-void      VMClass::SetInstanceInvokable(int index, VMObject* invokable) {
+void      VMClass::SetInstanceInvokable(int index, pVMObject invokable) {
 	(*instance_invokables)[index] = invokable;
     if (invokable != Globals::NilObject()) {
-        VMInvokable* inv = (VMInvokable*) invokable;
+        pVMInvokable inv = (pVMInvokable) invokable;
         inv->SetHolder(this);
     }
 	//instance_invokables[index] = invokable;
 }
 
 
-VMObject* VMClass::LookupInvokable(VMSymbol* name) const {
-    VMInvokable* invokable = NULL;
+pVMObject VMClass::LookupInvokable(pVMSymbol name) const {
+    pVMInvokable invokable = NULL;
     for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
-        invokable = (VMInvokable*)(GetInstanceInvokable(i));
+        invokable = (pVMInvokable)(GetInstanceInvokable(i));
         if (invokable->GetSignature() == name) 
-            return (VMObject*)invokable;
+            return (pVMObject)invokable;
     }
     invokable = NULL;
     //look in super class
     if (this->HasSuperClass())  {
-        invokable = (VMInvokable*)this->super_class->LookupInvokable(name);
+        invokable = (pVMInvokable)this->super_class->LookupInvokable(name);
     }
-	return (VMObject*)invokable;
+	return (pVMObject)invokable;
 }
 
 
-int       VMClass::LookupFieldIndex(VMSymbol* name) const {
+int       VMClass::LookupFieldIndex(pVMSymbol name) const {
     for (int i = 0; i <=GetNumberOfInstanceFields(); ++i) { 
         //even with GetNumberOfInstanceFields == 0 there is the class field 
         if (name == this->GetInstanceFieldName(i) ||
@@ -167,7 +167,7 @@ int       VMClass::GetNumberOfInstanceFields() const {
 
 bool      VMClass::HasPrimitives() const {
 	for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
-        VMInvokable* invokable = (VMInvokable*)(GetInstanceInvokable(i));
+        pVMInvokable invokable = (pVMInvokable)(GetInstanceInvokable(i));
         if (invokable->IsPrimitive()) return true;
     }
     return false;
@@ -343,13 +343,13 @@ bool VMClass::isResponsible(void* dlhandle, const StdString& cl) const {
  *
  */
 void VMClass::set_primitives(void* dlhandle, const StdString& cname) {    
-    VMPrimitive* the_primitive;
+    pVMPrimitive the_primitive;
     PrimitiveRoutine*   routine=NULL;
-    VMInvokable* an_invokable;
+    pVMInvokable an_invokable;
     // iterate invokables
     for(int i = 0; i < this->GetNumberOfInstanceInvokables(); i++)  {
         
-        an_invokable = (VMInvokable*)this->GetInstanceInvokable(i);
+        an_invokable = (pVMInvokable)this->GetInstanceInvokable(i);
 #ifdef __DEBUG
         cout << "cname: >" << cname << "<"<< endl;
         cout << an_invokable->GetSignature()->GetStdString() << endl;
@@ -358,12 +358,12 @@ void VMClass::set_primitives(void* dlhandle, const StdString& cname) {
 #ifdef __DEBUG
             cout << "... is a primitive, and is going to be loaded now" << endl;
 #endif
-            the_primitive = (VMPrimitive*) an_invokable;
+            the_primitive = (pVMPrimitive) an_invokable;
             //
             // we have a primitive to load
             // get it's selector
             //
-            VMSymbol* sig =  the_primitive->GetSignature();
+            pVMSymbol sig =  the_primitive->GetSignature();
             StdString selector = sig->GetPlainString();
 #if defined(__GNUC__)
             CreatePrimitive* create = 

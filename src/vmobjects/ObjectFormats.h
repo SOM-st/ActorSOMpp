@@ -18,20 +18,20 @@
 //class PrimitiveRoutine;
 //#include <vmobjects/VMPointer.h>
 
-#define pVMArray VMPointer<VMArray> 
-#define pVMBigInteger VMPointer<VMBigInteger> 
-#define pVMBlock VMPointer<VMBlock> 
-#define pVMClass VMPointer<VMClass> 
-#define pVMDouble VMPointer<VMDouble> 
-#define pVMEvaluationPrimitive VMPointer<VMEvaluationPrimitive> 
-#define pVMFrame VMPointer<VMFrame> 
-#define pVMInteger VMPointer<VMInteger> 
-#define pVMInvokable VMPointer<VMInvokable> 
-#define pVMMethod VMPointer<VMMethod> 
-#define pVMObject VMPointer<VMObject> 
-#define pVMPrimitive VMPointer<VMPrimitive> 
-#define pVMString VMPointer<VMString> 
-#define pVMSymbol VMPointer<VMSymbol> 
+#define pVMArray VMArray*
+#define pVMBigInteger VMBigInteger*
+#define pVMBlock VMBlock*
+#define pVMClass VMClass*
+#define pVMDouble VMDouble*
+#define pVMEvaluationPrimitive VMEvaluationPrimitive*
+#define pVMFrame VMFrame*
+#define pVMInteger VMInteger* 
+#define pVMInvokable VMInvokable*
+#define pVMMethod VMMethod* 
+#define pVMObject VMObject* 
+#define pVMPrimitive VMPrimitive* 
+#define pVMString VMString* 
+#define pVMSymbol VMSymbol* 
 
 
 

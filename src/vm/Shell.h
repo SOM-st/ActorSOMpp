@@ -8,13 +8,13 @@ class VMMethod;
 class Shell {
 public:
     Shell();
-    Shell(VMMethod*);
+    Shell(pVMMethod);
     ~Shell();
-    void SetBootstrapMethod(VMMethod* bsm) { bootstrap_method = bsm; } ;
-    VMMethod* GetBootstrapMethod() const { return bootstrap_method; } ;
+    void SetBootstrapMethod(pVMMethod bsm) { bootstrap_method = bsm; } ;
+    pVMMethod GetBootstrapMethod() const { return bootstrap_method; } ;
     void Start();
 private:
-    VMMethod* bootstrap_method;
+    pVMMethod bootstrap_method;
 };
 
 #endif

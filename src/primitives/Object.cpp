@@ -43,23 +43,23 @@ _Object::_Object( ) : PrimitiveContainer() {
         Routine<_Object>(this, &_Object::Hashcode));
 }
 
-void  _Object::Equalequal(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* op1 = frame->Pop();
-    VMObject* op2 = frame->Pop();
+void  _Object::Equalequal(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject op1 = frame->Pop();
+    pVMObject op2 = frame->Pop();
     
     frame->Push( op1 == op2 ? Globals::TrueObject() : Globals::FalseObject() );
 }
 
 
-void  _Object::ObjectSize(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* self = frame->Pop();
+void  _Object::ObjectSize(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject self = frame->Pop();
 
-    frame->Push( (VMObject*)_UNIVERSE->NewInteger(self->GetObjectSize()) );
+    frame->Push( (pVMObject)_UNIVERSE->NewInteger(self->GetObjectSize()) );
 }
 
 
-void  _Object::Hashcode(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* self = frame->Pop();
-    frame->Push( (VMObject*)_UNIVERSE->NewInteger(self->GetHash()) );
+void  _Object::Hashcode(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject self = frame->Pop();
+    frame->Push( (pVMObject)_UNIVERSE->NewInteger(self->GetHash()) );
 }
 

@@ -16,7 +16,7 @@ VMSymbol *VMInvokable::GetSignature() const {
 }
 
 
-void      VMInvokable::SetSignature(VMSymbol* sig)  { 
+void      VMInvokable::SetSignature(pVMSymbol sig)  { 
     signature = sig;
 }
 
@@ -26,7 +26,7 @@ VMClass  *VMInvokable::GetHolder()  const {
 }
 
 
-void      VMInvokable::SetHolder(VMClass* hld) {
+void      VMInvokable::SetHolder(pVMClass hld) {
     holder = hld; 
 }
-//virtual void invoke_method(VMFrame*) = 0;
+//virtual void invoke_method(pVMFrame) = 0;

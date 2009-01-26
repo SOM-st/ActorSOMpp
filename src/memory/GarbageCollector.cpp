@@ -53,7 +53,7 @@ void GarbageCollector::Collect() {
 		} else if (pointer == (void*)currentEntry->next)  {
 			bytesToSkip = currentEntry->next->size;
 		} else { //we found a VMObject
-			VMObject* object = (VMObject*) pointer;
+			pVMObject object = (pVMObject) pointer;
 			bytesToSkip = object->GetObjectSize();
 
 			if (object->GetGCField() == 1)  {
@@ -103,23 +103,23 @@ void GarbageCollector::Collect() {
 
 
 void GarbageCollector::markReachableObjects() {
-	map<StdString, VMObject*> globals = Universe::GetUniverse()->GetGlobals();
-    map<StdString, VMObject*>::iterator it = globals.begin();
-    for (map<StdString, VMObject*>::iterator it = globals.begin(); 
+	map<StdString, pVMObject> globals = Universe::GetUniverse()->GetGlobals();
+    map<StdString, pVMObject>::iterator it = globals.begin();
+    for (map<StdString, pVMObject>::iterator it = globals.begin(); 
                                         it!= globals.end(); ++it) {
 		markObject(&(*it->second));
 	}
     // Get the current frame and mark it.
 	// Since marking is done recursively, this automatically
 	// marks the whole stack
-    VMFrame* current_frame = _UNIVERSE->GetInterpreter()->GetFrame();
+    pVMFrame current_frame = _UNIVERSE->GetInterpreter()->GetFrame();
     if (current_frame != NULL) {
-        markObject((VMObject*)current_frame);
+        markObject((pVMObject)current_frame);
     }
 }
 
 
-void GarbageCollector::markObject(VMObject* obj) {
+void GarbageCollector::markObject(pVMObject obj) {
 	if (   ((void*) obj >= (void*)  heap->object_space) 
 		&& ((void*) obj <= (void*) heap->object_space) + heap->object_space_size) {
 		if (obj->GetGCField() != 1) {

@@ -3,6 +3,7 @@
 #ifndef SOURCECODECOMPILER_H_
 #define SOURCECODECOMPILER_H_
 #include "../misc/defs.h"
+#include "../vmobjects/ObjectFormats.h"
 class VMClass;
 class Parser;
 
@@ -12,12 +13,12 @@ public:
     SourcecodeCompiler();
     ~SourcecodeCompiler();
 
-    VMClass* CompileClass(const StdString& path, const StdString& file,
-                                  VMClass* system_class);
-    VMClass* CompileClassString(const StdString& stream, VMClass* system_class);
+    pVMClass CompileClass(const StdString& path, const StdString& file,
+                                  pVMClass system_class);
+    pVMClass CompileClassString(const StdString& stream, pVMClass system_class);
 private:
     void showCompilationError(const StdString& filename, const char* message);
-    VMClass* compile(VMClass* system_class);
+    pVMClass compile(pVMClass system_class);
     Parser* parser;
 };
 

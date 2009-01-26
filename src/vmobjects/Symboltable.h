@@ -8,14 +8,14 @@
 
 class Symboltable {
 public:
-    VMSymbol* lookup(const char* restrict);
-    VMSymbol* lookup(const StdString& restrict);
-    void      insert(VMSymbol*);
+    pVMSymbol lookup(const char* restrict);
+    pVMSymbol lookup(const StdString& restrict);
+    void      insert(pVMSymbol);
 
     Symboltable();
     ~Symboltable();
 private:
-    map<StdString, VMSymbol*> symtab;
+    map<StdString, pVMSymbol> symtab;
 };
 
 #endif

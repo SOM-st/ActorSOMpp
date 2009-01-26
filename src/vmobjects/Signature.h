@@ -4,11 +4,11 @@
 #define SIGNATURE_H_
 
 class VMSymbol;
-
+#include "../vmobjects/ObjectFormats.h"
 class Signature {
 public:
-    static int GetNumberOfArguments(VMSymbol* sig);
-    static bool IsBinary(VMSymbol* sig);
+    static int GetNumberOfArguments(pVMSymbol sig);
+    static bool IsBinary(pVMSymbol sig);
 
 };
 

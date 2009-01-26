@@ -8,16 +8,16 @@
 #include "../primitivesCore/Routine.h"
 
 
-VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig ) {
+pVMPrimitive VMPrimitive::GetEmptyPrimitive( pVMSymbol sig ) {
     
-    VMPrimitive* prim = new (_HEAP) VMPrimitive(sig);
+    pVMPrimitive prim = new (_HEAP) VMPrimitive(sig);
     prim->empty = (bool*)1;
     prim->SetRoutine(new Routine<VMPrimitive>(prim, &VMPrimitive::EmptyRoutine));
     return prim;
 }
 
 
-VMPrimitive::VMPrimitive(VMSymbol* signature) : VMInvokable(2) {//,VMObject()
+VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(2) {//,VMObject()
     _HEAP->StartUninterruptableAllocation();
     //the only class that explicitly does this.
     this->SetClass(Globals::PrimitiveClass());
@@ -56,9 +56,9 @@ void VMPrimitive::MarkReferences() {
 }
 
 
-void VMPrimitive::EmptyRoutine( VMObject* _self, VMFrame* /*frame*/ ) {
-    VMInvokable* self = (VMInvokable*) _self;
-    VMSymbol* sig = self->GetSignature();
+void VMPrimitive::EmptyRoutine( pVMObject _self, pVMFrame /*frame*/ ) {
+    pVMInvokable self = (pVMInvokable) _self;
+    pVMSymbol sig = self->GetSignature();
     cout << "undefined primitive called: " << sig->GetChars() << endl;
 }
 

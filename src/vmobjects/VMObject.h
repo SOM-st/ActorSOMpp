@@ -13,7 +13,7 @@
 class VMSymbol;
 class VMClass;
 
-#define FIELDS ((VMObject**)&clazz)
+#define FIELDS ((pVMObject*)&clazz)
 
 /*
  **************************VMOBJECT****************************
@@ -37,17 +37,17 @@ public:
     VMObject(int numberOfFields = 0);
     
     /* Virtual member functions */
-	virtual VMClass*    GetClass() const;
-	virtual void        SetClass(VMClass* cl);
-	virtual VMSymbol*   GetFieldName(int index) const; 
-	virtual int         GetFieldIndex(VMSymbol* fieldName) const;
+	virtual pVMClass    GetClass() const;
+	virtual void        SetClass(pVMClass cl);
+	virtual pVMSymbol   GetFieldName(int index) const; 
+	virtual int         GetFieldIndex(pVMSymbol fieldName) const;
 	virtual int         GetNumberOfFields() const;
 	virtual void        SetNumberOfFields(int nof);
 	virtual int         GetDefaultNumberOfFields() const;
-	virtual void        Send(StdString, VMObject**, int);
-	virtual VMObject*   GetField(int index) const;
+	virtual void        Send(StdString, pVMObject*, int);
+	virtual pVMObject   GetField(int index) const;
     virtual void        Assert(bool value) const;
-	virtual void        SetField(int index, VMObject* value);
+	virtual void        SetField(int index, pVMObject value);
 	virtual void        MarkReferences();
 
     virtual void        IncreaseGCCount() {};
@@ -65,10 +65,10 @@ public:
      * usage: new( <heap> [, <additional_bytes>] ) VMObject( <constructor params> )
      * num_bytes parameter is set by the compiler.
      * parameter additional_bytes (a_b) is used for:
-     *   - fields in VMObject, a_b must be set to (numberOfFields*sizeof(VMObject*))
+     *   - fields in VMObject, a_b must be set to (numberOfFields*sizeof(pVMObject))
      *   - chars in VMString/VMSymbol, a_b must be set to (Stringlength + 1)
      *   - array size in VMArray; a_b must be set to (size_of_array*sizeof(VMObect*))
-     *   - fields in VMMethod, a_b must be set to (number_of_bc + number_of_csts*sizeof(VMObject*))
+     *   - fields in VMMethod, a_b must be set to (number_of_bc + number_of_csts*sizeof(pVMObject))
      */
 	void *operator new( size_t num_bytes, Heap *heap, 
                         unsigned int additional_bytes = 0) {
@@ -86,12 +86,12 @@ public:
 
 	void operator delete(void* self, Heap *heap, 
                          unsigned int /*additional_bytes*/) {
-        int size = ((VMObject*)self)->GetObjectSize();
+        int size = ((pVMObject)self)->GetObjectSize();
 		heap->Free(self, size);
 	}
 
 	 void operator delete( void *self, Heap *heap) {
-         int size = ((VMObject*)self)->GetObjectSize();
+         int size = ((pVMObject)self)->GetObjectSize();
 		 heap->Free(self, size); 
 	 } 
 
@@ -99,7 +99,7 @@ public:
 		 heap->Free(self); 
 	 }
 
-     VMObject* operator->() {
+     pVMObject operator->() {
          cout << "->" << endl;
          return this;
      }
@@ -112,11 +112,11 @@ protected:
     int32_t     numberOfFields;
     bool        gcfield;
 
-    //VMObject** FIELDS;
+    //pVMObject* FIELDS;
     //Start of fields. All members beyond this point are indexable 
     //through FIELDS-macro instead of the member above. 
     //So clazz == FIELDS[0]
-	VMClass*    clazz;
+	pVMClass    clazz;
 private:
     static const int VMObjectNumberOfFields;
 };

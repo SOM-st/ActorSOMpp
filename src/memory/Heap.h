@@ -7,6 +7,7 @@
 
 #include "GarbageCollector.h"
 #include "../misc/defs.h"
+#include "../vmobjects/ObjectFormats.h"
 //#include "../misc/HashMap.h"
 class VMObject;
 
@@ -27,7 +28,7 @@ public:
     static void DestroyHeap();
 	Heap(int object_space_size = 1048576);
 	~Heap();
-    VMObject* AllocateObject(size_t size);
+    pVMObject AllocateObject(size_t size);
 	void* Allocate(size_t size);
     void Free(void* ptr);
 	void Free(void* ptr, int size);

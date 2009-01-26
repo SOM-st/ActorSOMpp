@@ -31,7 +31,7 @@ void VMEvaluationPrimitive::MarkReferences() {
 
 
 
-VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc){
+pVMSymbol VMEvaluationPrimitive::computeSignatureString(int argc){
 #define VALUE_S "value"
 #define VALUE_LEN 5
 #define WITH_S    "with:"
@@ -57,17 +57,17 @@ VMSymbol* VMEvaluationPrimitive::computeSignatureString(int argc){
 }
 
 void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame){
-    VMEvaluationPrimitive* self = (VMEvaluationPrimitive*) object;
+    pVMEvaluationPrimitive self = (pVMEvaluationPrimitive) object;
 
      // Get the block (the receiver) from the stack
     int num_args = self->numberOfArguments->GetEmbeddedInteger();
-    VMBlock* block = (VMBlock*) frame->GetStackElement(num_args - 1);
+    pVMBlock block = (pVMBlock) frame->GetStackElement(num_args - 1);
     
     // Get the context of the block...
-    VMFrame* context = block->GetContext();
+    pVMFrame context = block->GetContext();
     
     // Push a new frame and set its context to be the one specified in the block
-    VMFrame* NewFrame = _UNIVERSE->GetInterpreter()->PushNewFrame(
+    pVMFrame NewFrame = _UNIVERSE->GetInterpreter()->PushNewFrame(
                                                         block->GetMethod());
     NewFrame->CopyArgumentsFrom(frame);
     NewFrame->SetContext(context);

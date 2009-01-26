@@ -37,7 +37,7 @@ class _Class : public PrimitiveContainer
 {
 public:
     _Class();
-    void  New(VMObject* object, VMFrame* frame);
+    void  New(pVMObject object, pVMFrame frame);
 };
 
 

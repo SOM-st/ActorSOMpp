@@ -24,23 +24,23 @@ public:
     VMClass(int number_of_fields);
 	//virtual ~VMClass() {}
 
-	virtual inline VMClass*  GetSuperClass() const; 
-    virtual inline void      SetSuperClass(VMClass*); 
+	virtual inline pVMClass  GetSuperClass() const; 
+    virtual inline void      SetSuperClass(pVMClass); 
     virtual bool      HasSuperClass() const;  
-    virtual inline VMSymbol* GetName() const; 
-    virtual inline void      SetName(VMSymbol*);  
-    virtual inline VMArray*  GetInstanceFields() const; 
-    virtual inline void      SetInstanceFields(VMArray*); 
-    virtual inline VMArray*  GetInstanceInvokables() const; 
-    virtual void      SetInstanceInvokables(VMArray*); 
+    virtual inline pVMSymbol GetName() const; 
+    virtual inline void      SetName(pVMSymbol);  
+    virtual inline pVMArray  GetInstanceFields() const; 
+    virtual inline void      SetInstanceFields(pVMArray); 
+    virtual inline pVMArray  GetInstanceInvokables() const; 
+    virtual void      SetInstanceInvokables(pVMArray); 
     virtual int       GetNumberOfInstanceInvokables() const; 
-    virtual VMObject* GetInstanceInvokable(int) const; 
-    virtual void      SetInstanceInvokable(int, VMObject*); 
-    virtual VMObject* LookupInvokable(VMSymbol*) const; 
-    virtual int       LookupFieldIndex(VMSymbol*) const; 
-    virtual bool      AddInstanceInvokable(VMObject*); 
-    virtual void      AddInstancePrimitive(VMPrimitive*); 
-    virtual VMSymbol* GetInstanceFieldName(int)const; 
+    virtual pVMObject GetInstanceInvokable(int) const; 
+    virtual void      SetInstanceInvokable(int, pVMObject); 
+    virtual pVMObject LookupInvokable(pVMSymbol) const; 
+    virtual int       LookupFieldIndex(pVMSymbol) const; 
+    virtual bool      AddInstanceInvokable(pVMObject); 
+    virtual void      AddInstancePrimitive(pVMPrimitive); 
+    virtual pVMSymbol GetInstanceFieldName(int)const; 
     virtual int       GetNumberOfInstanceFields() const; 
     virtual bool      HasPrimitives() const; 
     virtual void      LoadPrimitives(const vector<StdString>&,int);
@@ -71,39 +71,39 @@ private:
     
     int numberOfSuperInstanceFields() const;
 
-	VMClass*  super_class; 
-    VMSymbol* name; 
-    VMArray*  instance_fields; 
-    VMArray*  instance_invokables;
+	pVMClass  super_class; 
+    pVMSymbol name; 
+    pVMArray  instance_fields; 
+    pVMArray  instance_invokables;
 };
 
 
-VMClass* VMClass::GetSuperClass() const {
+pVMClass VMClass::GetSuperClass() const {
 	return super_class;
 }
 
 
-void VMClass::SetSuperClass(VMClass* sup) {
+void VMClass::SetSuperClass(pVMClass sup) {
 	super_class = sup;
 }
 
 
-VMSymbol* VMClass::GetName()  const {
+pVMSymbol VMClass::GetName()  const {
 	return name;
 }
 
 
-void VMClass::SetName(VMSymbol* nam) {
+void VMClass::SetName(pVMSymbol nam) {
 	name = nam;
 }
 
 
-VMArray* VMClass::GetInstanceFields() const {
+pVMArray VMClass::GetInstanceFields() const {
 	return instance_fields;
 }
 
 
-void VMClass::SetInstanceFields(VMArray* inst_fields) {
+void VMClass::SetInstanceFields(pVMArray inst_fields) {
 	instance_fields = inst_fields;
 }
 

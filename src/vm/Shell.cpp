@@ -23,7 +23,7 @@ Shell::Shell() {
 }
 
 
-Shell::Shell(VMMethod* bsm) {
+Shell::Shell(pVMMethod bsm) {
     this->bootstrap_method = bsm;
 }
 
@@ -43,9 +43,9 @@ void Shell::Start() {
     // the statement to evaluate
     char      inbuf[INPUT_MAX_SIZE];
     int       bytecode_index, counter = 0;
-    VMFrame*  current_frame;
-    VMClass*  runClass;
-    VMObject* it = Globals::NilObject(); // last evaluation result.
+    pVMFrame  current_frame;
+    pVMClass  runClass;
+    pVMObject it = Globals::NilObject(); // last evaluation result.
 
     cout << "SOM Shell. Type \"" << QUIT_CMD << "\" to exit.\n";
 
@@ -124,8 +124,8 @@ void Shell::Start() {
         current_frame->Push(it);
         
         // Lookup the run: method
-        VMInvokable* initialize = 
-            (VMInvokable*)runClass->LookupInvokable(
+        pVMInvokable initialize = 
+            (pVMInvokable)runClass->LookupInvokable(
                                     _UNIVERSE->SymbolFor("run:"));
         
         // Invoke the run method

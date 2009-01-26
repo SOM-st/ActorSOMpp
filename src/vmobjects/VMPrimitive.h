@@ -10,7 +10,7 @@ class VMSymbol;
 
 class VMPrimitive : public VMInvokable { //public VMObject, 
 public:
-    VMPrimitive(VMSymbol* sig);
+    VMPrimitive(pVMSymbol sig);
     //virtual ~VMPrimitive();
     virtual bool    IsPrimitive() const { return true; };
     virtual inline bool    IsEmpty() const;
@@ -19,11 +19,11 @@ public:
     virtual void    SetEmpty(bool value) { empty = (bool*)value; };
 
     //operator "()" to invoke the primitive
-    virtual void    operator()(VMFrame* frm) { (*routine)(this, frm); };
+    virtual void    operator()(pVMFrame frm) { (*routine)(this, frm); };
 
-    static VMPrimitive* GetEmptyPrimitive(VMSymbol* sig);
+    static pVMPrimitive GetEmptyPrimitive(pVMSymbol sig);
 private:
-    void EmptyRoutine(VMObject* self, VMFrame* frame);
+    void EmptyRoutine(pVMObject self, pVMFrame frame);
 
     PrimitiveRoutine* routine;
     bool* empty;

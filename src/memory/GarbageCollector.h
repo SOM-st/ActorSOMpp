@@ -4,7 +4,7 @@
 #define GARBAGECOLLECTOR_H_
 
 class Heap;
-
+#include "../vmobjects/ObjectFormats.h"
 class VMObject;
 #include "../misc/defs.h"
 
@@ -19,7 +19,7 @@ public:
 
 private:
 	void markReachableObjects();
-	void markObject(VMObject* obj);
+	void markObject(pVMObject obj);
 	void mergeFreeSpaces();
 	Heap* heap;
 

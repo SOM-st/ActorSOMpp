@@ -10,26 +10,26 @@ class VMObject;
 class VMSymbol;
 class VMClass;
 #include "../misc/defs.h"
-
+#include "../vmobjects/ObjectFormats.h"
 class Interpreter {
 public:
     Interpreter();
     ~Interpreter();
     void Start();
-    VMFrame* PushNewFrame(VMMethod* method);
-    void SetFrame(VMFrame* frame);
-    VMFrame* GetFrame();
-    VMMethod* GetMethod();
-    VMObject* GetSelf();
+    pVMFrame PushNewFrame(pVMMethod method);
+    void SetFrame(pVMFrame frame);
+    pVMFrame GetFrame();
+    pVMMethod GetMethod();
+    pVMObject GetSelf();
 private:
-    VMFrame* frame;
-    VMFrame* popFrame();
+    pVMFrame frame;
+    pVMFrame popFrame();
     StdString uG;
     StdString dnu;
     StdString eB;
 
-    void popFrameAndPushResult(VMObject* result);
-    void send(VMSymbol* signature, VMClass* receiver_class);
+    void popFrameAndPushResult(pVMObject result);
+    void send(pVMSymbol signature, pVMClass receiver_class);
     
     void do_dup();
     void do_push_local(int bytecode_index);

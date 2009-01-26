@@ -44,20 +44,20 @@ THE SOFTWARE.
 
 #define CHECK_BIGINT(object, result) { \
     /* Check second parameter type: */ \
-    VMInteger* ptr;\
-    if((ptr = dynamic_cast<VMInteger*>(object)) != NULL) { \
+    pVMInteger ptr;\
+    if((ptr = dynamic_cast<pVMInteger>(object)) != NULL) { \
         /* Second operand was Integer*/ \
         int32_t i = ptr->GetEmbeddedInteger(); \
         (result) = _UNIVERSE->NewBigInteger((int64_t)i); \
     } else \
-        (result) = (VMBigInteger*)(object); \
+        (result) = (pVMBigInteger)(object); \
 }
 
 #define PUSH_INT_OR_BIGINT(result) { \
     if(result > INT32_MAX ||result < INT32_MIN) \
-        frame->Push((VMObject*)_UNIVERSE->NewBigInteger((result))); \
+        frame->Push((pVMObject)_UNIVERSE->NewBigInteger((result))); \
     else \
-        frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)(result))); \
+        frame->Push((pVMObject)_UNIVERSE->NewInteger((int32_t)(result))); \
 }
 //^^DIFFERENT THAN CSOM! Does the CSOM version work at all????????
 
@@ -96,10 +96,10 @@ _BigInteger::_BigInteger( ) : PrimitiveContainer(){
 }
 
 
-void  _BigInteger::Plus(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* rightObj  = frame->Pop();
-    VMBigInteger* right = NULL;
-    VMBigInteger* left  = (VMBigInteger*)frame->Pop();
+void  _BigInteger::Plus(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject rightObj  = frame->Pop();
+    pVMBigInteger right = NULL;
+    pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);
     
@@ -110,10 +110,10 @@ void  _BigInteger::Plus(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Minus(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* rightObj  = frame->Pop();
-    VMBigInteger* right = NULL;
-    VMBigInteger* left  = (VMBigInteger*)frame->Pop();
+void  _BigInteger::Minus(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject rightObj  = frame->Pop();
+    pVMBigInteger right = NULL;
+    pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
     
@@ -124,10 +124,10 @@ void  _BigInteger::Minus(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Star(VMObject* /*object*/, VMFrame* frame) {
-   VMObject* rightObj  = frame->Pop();
-    VMBigInteger* right = NULL;
-    VMBigInteger* left  = (VMBigInteger*)frame->Pop();
+void  _BigInteger::Star(pVMObject /*object*/, pVMFrame frame) {
+   pVMObject rightObj  = frame->Pop();
+    pVMBigInteger right = NULL;
+    pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
     
@@ -138,10 +138,10 @@ void  _BigInteger::Star(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Slash(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* rightObj  = frame->Pop();
-    VMBigInteger* right = NULL;
-    VMBigInteger* left  = (VMBigInteger*)frame->Pop();
+void  _BigInteger::Slash(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject rightObj  = frame->Pop();
+    pVMBigInteger right = NULL;
+    pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
     
@@ -152,40 +152,40 @@ void  _BigInteger::Slash(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Percent(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* rightObj  = frame->Pop();
-    VMBigInteger* right = NULL;
-    VMBigInteger* left  = (VMBigInteger*)frame->Pop();
+void  _BigInteger::Percent(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject rightObj  = frame->Pop();
+    pVMBigInteger right = NULL;
+    pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
     
     // Do operation and perform conversion to Integer if required
-    VMBigInteger* result = _UNIVERSE->NewBigInteger(  left->GetEmbeddedInteger()
+    pVMBigInteger result = _UNIVERSE->NewBigInteger(  left->GetEmbeddedInteger()
                                                     % right->GetEmbeddedInteger());
     
-    frame->Push((VMObject*) result);
+    frame->Push((pVMObject) result);
 }
 
 
-void  _BigInteger::And(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* rightObj  = frame->Pop();
-    VMBigInteger* right = NULL;
-    VMBigInteger* left  = (VMBigInteger*)frame->Pop();
+void  _BigInteger::And(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject rightObj  = frame->Pop();
+    pVMBigInteger right = NULL;
+    pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
     
     // Do operation and perform conversion to Integer if required
-    VMBigInteger* result = _UNIVERSE->NewBigInteger(  left->GetEmbeddedInteger()
+    pVMBigInteger result = _UNIVERSE->NewBigInteger(  left->GetEmbeddedInteger()
                                                     & right->GetEmbeddedInteger());
     
-    frame->Push((VMObject*) result);
+    frame->Push((pVMObject) result);
 }
 
 
-void  _BigInteger::Equal(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* rightObj  = frame->Pop();
-    VMBigInteger* right = NULL;
-    VMBigInteger* left  = (VMBigInteger*)frame->Pop();
+void  _BigInteger::Equal(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject rightObj  = frame->Pop();
+    pVMBigInteger right = NULL;
+    pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
     
@@ -197,10 +197,10 @@ void  _BigInteger::Equal(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _BigInteger::Lowerthan(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* rightObj  = frame->Pop();
-    VMBigInteger* right = NULL;
-    VMBigInteger* left  = (VMBigInteger*)frame->Pop();
+void  _BigInteger::Lowerthan(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject rightObj  = frame->Pop();
+    pVMBigInteger right = NULL;
+    pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
     
@@ -213,22 +213,22 @@ void  _BigInteger::Lowerthan(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _BigInteger::AsString(VMObject* /*object*/, VMFrame* frame) {
-    VMBigInteger* self = (VMBigInteger*)frame->Pop();
+void  _BigInteger::AsString(pVMObject /*object*/, pVMFrame frame) {
+    pVMBigInteger self = (pVMBigInteger)frame->Pop();
     // temporary storage for the number string
     // use c99 snprintf-goodie
     int64_t bigint = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << bigint;
-    frame->Push((VMObject*)_UNIVERSE->NewString(Str.str().c_str()));
+    frame->Push((pVMObject)_UNIVERSE->NewString(Str.str().c_str()));
     
 }
 
 
-void  _BigInteger::Sqrt(VMObject* /*object*/, VMFrame* frame) {
-    VMBigInteger* self = (VMBigInteger*)frame->Pop();
+void  _BigInteger::Sqrt(pVMObject /*object*/, pVMFrame frame) {
+    pVMBigInteger self = (pVMBigInteger)frame->Pop();
     int64_t i = self->GetEmbeddedInteger();
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(sqrt((double)i)));
+    frame->Push((pVMObject)_UNIVERSE->NewDouble(sqrt((double)i)));
 }
 
 

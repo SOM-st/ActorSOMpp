@@ -11,21 +11,21 @@
 template <class TClass> class Routine : public PrimitiveRoutine
 {
 private:
-  void (TClass::*fpt)(VMObject*, VMFrame*);   // pointer to member function
+  void (TClass::*fpt)(pVMObject, pVMFrame);   // pointer to member function
   TClass* pt2Object;                          // pointer to object
 
 public:
 
   // constructor - takes pointer to an object and pointer to a member and stores
   // them in two private variables
-   Routine(TClass* _pt2Object, void(TClass::*_fpt)(VMObject*, VMFrame*)) : 
+   Routine(TClass* _pt2Object, void(TClass::*_fpt)(pVMObject, pVMFrame)) : 
        PrimitiveRoutine() { 
        pt2Object = _pt2Object;  
        fpt=_fpt; 
    };
 
   // override operator "()"
-  virtual void operator()(VMObject* obj, VMFrame* frm) {
+  virtual void operator()(pVMObject obj, pVMFrame frm) {
       (*pt2Object.*fpt)(obj, frm);// execute member function
   };              
 

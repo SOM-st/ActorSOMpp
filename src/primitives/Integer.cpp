@@ -49,13 +49,13 @@ THE SOFTWARE.
  * of an Integer operation).
  */
 #define CHECK_COERCION(obj,receiver,op) { \
-    if(dynamic_cast<VMBigInteger*>(obj) != NULL) { \
+    if(dynamic_cast<pVMBigInteger>(obj) != NULL) { \
         resendAsBigInteger( \
-            object, (op), (receiver), (VMBigInteger*)(obj)); \
+            object, (op), (receiver), (pVMBigInteger)(obj)); \
         return; \
-    } else if(dynamic_cast<VMDouble*>(obj) != NULL) { \
+    } else if(dynamic_cast<pVMDouble>(obj) != NULL) { \
         resendAsDouble( \
-            object, (op), (receiver), (VMDouble*)(obj)); \
+            object, (op), (receiver), (pVMDouble)(obj)); \
         return; \
     } \
 }
@@ -102,26 +102,26 @@ _Integer::_Integer( ) : PrimitiveContainer() {
 //
 
 
-void _Integer::pushResult(VMObject* /*object*/, VMFrame* frame, 
+void _Integer::pushResult(pVMObject /*object*/, pVMFrame frame, 
                               int64_t result) {
     int32_t i32min = INT32_MIN;
     // Check with integer bounds and push:
     if(result > INT32_MAX || result < i32min)
-        frame->Push((VMObject*)_UNIVERSE->NewBigInteger(result));
+        frame->Push((pVMObject)_UNIVERSE->NewBigInteger(result));
     else
-        frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)result));
+        frame->Push((pVMObject)_UNIVERSE->NewInteger((int32_t)result));
 }
 
 
-void _Integer::resendAsBigInteger(VMObject* /*object*/, 
+void _Integer::resendAsBigInteger(pVMObject /*object*/, 
                                   const char* op,
-                                  VMInteger* left, VMBigInteger* right) {
+                                  pVMInteger left, pVMBigInteger right) {
     // Construct left value as BigInteger:
-    VMBigInteger* leftBigInteger = 
+    pVMBigInteger leftBigInteger = 
         _UNIVERSE->NewBigInteger((int64_t)left->GetEmbeddedInteger());
     
     // Resend message:
-    VMObject* operands[] = { (VMObject*)right };
+    pVMObject operands[] = { (pVMObject)right };
     
     leftBigInteger->Send(op, operands, 1);
     // no reference
@@ -129,12 +129,12 @@ void _Integer::resendAsBigInteger(VMObject* /*object*/,
 }
 
 
-void _Integer::resendAsDouble(VMObject* /*object*/, const char* op,
-    VMInteger* left, VMDouble* right
+void _Integer::resendAsDouble(pVMObject /*object*/, const char* op,
+    pVMInteger left, pVMDouble right
 ) {
-    VMDouble* leftDouble =
+    pVMDouble leftDouble =
         _UNIVERSE->NewDouble((double)left->GetEmbeddedInteger());
-    VMObject* operands[] = { (VMObject*)right };
+    pVMObject operands[] = { (pVMObject)right };
     
     leftDouble->Send(op, operands, 1);
 }
@@ -146,14 +146,14 @@ void _Integer::resendAsDouble(VMObject* /*object*/, const char* op,
 //
 
 
-void  _Integer::Plus(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::Plus(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "+");
 
     // Do operation:
-    VMInteger* right = (VMInteger*)rightObj;
+    pVMInteger right = (pVMInteger)rightObj;
     
     int64_t result = (int64_t)left->GetEmbeddedInteger() + 
         (int64_t)right->GetEmbeddedInteger();
@@ -161,14 +161,14 @@ void  _Integer::Plus(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::Minus(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::Minus(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "-");
 
     // Do operation:
-    VMInteger* right = (VMInteger*)rightObj;
+    pVMInteger right = (pVMInteger)rightObj;
     
     int64_t result = (int64_t)left->GetEmbeddedInteger() - 
         (int64_t)right->GetEmbeddedInteger();
@@ -176,14 +176,14 @@ void  _Integer::Minus(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::Star(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::Star(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "*");
 
     // Do operation:
-    VMInteger* right = (VMInteger*)rightObj;
+    pVMInteger right = (pVMInteger)rightObj;
     
     int64_t result = (int64_t)left->GetEmbeddedInteger() * 
         (int64_t)right->GetEmbeddedInteger();
@@ -191,14 +191,14 @@ void  _Integer::Star(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::Slashslash(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::Slashslash(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "/");
 
     // Do operation:
-    VMInteger* right = (VMInteger*)rightObj;
+    pVMInteger right = (pVMInteger)rightObj;
     
     double result = (double)left->GetEmbeddedInteger() /
         (double)right->GetEmbeddedInteger();
@@ -206,14 +206,14 @@ void  _Integer::Slashslash(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::Slash(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::Slash(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "/");
 
     // Do operation:
-    VMInteger* right = (VMInteger*)rightObj;
+    pVMInteger right = (pVMInteger)rightObj;
     
     int64_t result = (int64_t)left->GetEmbeddedInteger() / 
         (int64_t)right->GetEmbeddedInteger();
@@ -221,14 +221,14 @@ void  _Integer::Slash(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::Percent(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::Percent(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "%");
 
     // Do operation:
-    VMInteger* right = (VMInteger*)rightObj;
+    pVMInteger right = (pVMInteger)rightObj;
 
     int64_t result = (int64_t)left->GetEmbeddedInteger() %
         (int64_t)right->GetEmbeddedInteger();
@@ -236,14 +236,14 @@ void  _Integer::Percent(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::And(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::And(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "&");
 
     // Do operation:
-    VMInteger* right = (VMInteger*)rightObj;
+    pVMInteger right = (pVMInteger)rightObj;
     
     int64_t result = (int64_t)left->GetEmbeddedInteger() & 
         (int64_t)right->GetEmbeddedInteger();
@@ -251,24 +251,24 @@ void  _Integer::And(VMObject* object, VMFrame* frame) {
 }   
 
 
-void  _Integer::Equal(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::Equal(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "=");
 
-    if(dynamic_cast<VMInteger*>(rightObj) != NULL) {
+    if(dynamic_cast<pVMInteger>(rightObj) != NULL) {
         // Second operand was Integer:
-        VMInteger* right = (VMInteger*)rightObj;
+        pVMInteger right = (pVMInteger)rightObj;
         
         if(left->GetEmbeddedInteger()
             == right->GetEmbeddedInteger())
             frame->Push(Globals::TrueObject());
         else
             frame->Push(Globals::FalseObject());
-    } else if(dynamic_cast<VMDouble*>(rightObj) != NULL) {
+    } else if(dynamic_cast<pVMDouble>(rightObj) != NULL) {
         // Second operand was Double:
-        VMDouble* right = (VMDouble*)rightObj;
+        pVMDouble right = (pVMDouble)rightObj;
         
         if((double)left->GetEmbeddedInteger()
             == right->GetEmbeddedDouble())
@@ -281,13 +281,13 @@ void  _Integer::Equal(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::Lowerthan(VMObject* object, VMFrame* frame) {
-    VMObject* rightObj = frame->Pop();
-    VMInteger* left = (VMInteger*)frame->Pop();
+void  _Integer::Lowerthan(pVMObject object, pVMFrame frame) {
+    pVMObject rightObj = frame->Pop();
+    pVMInteger left = (pVMInteger)frame->Pop();
     
     CHECK_COERCION(rightObj, left, "<");
 
-    VMInteger* right = (VMInteger*)rightObj;
+    pVMInteger right = (pVMInteger)rightObj;
     
     if(left->GetEmbeddedInteger() < right->GetEmbeddedInteger())
         frame->Push(Globals::TrueObject());
@@ -296,28 +296,28 @@ void  _Integer::Lowerthan(VMObject* object, VMFrame* frame) {
 }
 
 
-void  _Integer::AsString(VMObject* /*object*/, VMFrame* frame) {
-    VMInteger* self = (VMInteger*)frame->Pop();
+void  _Integer::AsString(pVMObject /*object*/, pVMFrame frame) {
+    pVMInteger self = (pVMInteger)frame->Pop();
     // temporary storage for the number string
     // use c99 snprintf-goodie
     int32_t integer = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << integer;
-    frame->Push( (VMObject*)_UNIVERSE->NewString( Str.str() ) );   
+    frame->Push( (pVMObject)_UNIVERSE->NewString( Str.str() ) );   
 }
 
 
-void  _Integer::Sqrt(VMObject* /*object*/, VMFrame* frame) {
-    VMInteger* self = (VMInteger*)frame->Pop();
+void  _Integer::Sqrt(pVMObject /*object*/, pVMFrame frame) {
+    pVMInteger self = (pVMInteger)frame->Pop();
     double result = sqrt((double)self->GetEmbeddedInteger());
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(result));
+    frame->Push((pVMObject)_UNIVERSE->NewDouble(result));
 }
 
 
-void  _Integer::AtRandom(VMObject* /*object*/, VMFrame* frame) {
-    VMInteger* self = (VMInteger*)frame->Pop();
+void  _Integer::AtRandom(pVMObject /*object*/, pVMFrame frame) {
+    pVMInteger self = (pVMInteger)frame->Pop();
     int32_t result = (self->GetEmbeddedInteger() * rand())%INT32_MAX;
-    frame->Push((VMObject*) _UNIVERSE->NewInteger(result));
+    frame->Push((pVMObject) _UNIVERSE->NewInteger(result));
 }
 
 

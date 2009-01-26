@@ -36,11 +36,11 @@ THE SOFTWARE.
  
 _Symbol* Symbol;
 
-void  _Symbol::AsString(VMObject* /*object*/, VMFrame* frame) {
-    VMSymbol* sym = (VMSymbol*) frame->Pop();
+void  _Symbol::AsString(pVMObject /*object*/, pVMFrame frame) {
+    pVMSymbol sym = (pVMSymbol) frame->Pop();
 
     StdString str = sym->GetStdString();
-    frame->Push((VMObject*)_UNIVERSE->NewString(str));
+    frame->Push((pVMObject)_UNIVERSE->NewString(str));
 }
 
 _Symbol::_Symbol( ) : PrimitiveContainer() {

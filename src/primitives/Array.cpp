@@ -46,37 +46,37 @@ _Array::_Array() : PrimitiveContainer()
                         new Routine<_Array>(this, &_Array::Length)));
 }
 
-void _Array::At_(VMObject* /*object*/, VMFrame* frame) {
-    VMInteger* index = (VMInteger*) frame->Pop();
-    VMArray* self = (VMArray*) frame->Pop();
+void _Array::At_(pVMObject /*object*/, pVMFrame frame) {
+    pVMInteger index = (pVMInteger) frame->Pop();
+    pVMArray self = (pVMArray) frame->Pop();
     int i = index->GetEmbeddedInteger();
-    VMObject* elem = (*self)[i-1];//->GetIndexableField(i-1);
+    pVMObject elem = (*self)[i-1];//->GetIndexableField(i-1);
     frame->Push(elem);
 }
 
 
-void _Array::At_Put_(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* value = frame->Pop();
-    VMInteger* index = (VMInteger*)frame->Pop();
-    VMArray* self = (VMArray*)frame->GetStackElement(0);
+void _Array::At_Put_(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject value = frame->Pop();
+    pVMInteger index = (pVMInteger)frame->Pop();
+    pVMArray self = (pVMArray)frame->GetStackElement(0);
     int i = index->GetEmbeddedInteger();
     (*self)[i - 1] = value;
 }
 
 
-void _Array::Length(VMObject* /*object*/, VMFrame* frame) {
-    VMArray* self = (VMArray*) frame->Pop();
-    VMInteger* new_int =
+void _Array::Length(pVMObject /*object*/, pVMFrame frame) {
+    pVMArray self = (pVMArray) frame->Pop();
+    pVMInteger new_int =
         _UNIVERSE->NewInteger(self->GetNumberOfIndexableFields());
-    frame->Push((VMObject*)new_int);
+    frame->Push((pVMObject)new_int);
 }
 
 
-void _Array::New_(VMObject* /*object*/, VMFrame* frame) {
-    VMInteger* length = (VMInteger*)frame->Pop();
-    /*VMClass* self = (VMClass*)*/
+void _Array::New_(pVMObject /*object*/, pVMFrame frame) {
+    pVMInteger length = (pVMInteger)frame->Pop();
+    /*pVMClass self = (pVMClass)*/
     frame->Pop();        
     int size = length->GetEmbeddedInteger();
-    frame->Push((VMObject*) _UNIVERSE->NewArray(size));
+    frame->Push((pVMObject) _UNIVERSE->NewArray(size));
 }
 

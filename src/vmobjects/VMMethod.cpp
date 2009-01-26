@@ -19,7 +19,7 @@
 VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) 
                     : VMInvokable(nof + 5) {
     _HEAP->StartUninterruptableAllocation();
-    //objectSize += bc_count + number_of_constants*sizeof(VMObject*);
+    //objectSize += bc_count + number_of_constants*sizeof(pVMObject);
     bc_length = _UNIVERSE->NewInteger( bc_count );
     number_of_locals = _UNIVERSE->NewInteger(0);
     maximum_number_of_stack_elements = _UNIVERSE->NewInteger(0);
@@ -31,7 +31,7 @@ VMMethod::VMMethod(int bc_count, int number_of_constants, int nof)
     _HEAP->EndUninterruptableAllocation();
 }
 
-void      VMMethod::SetSignature(VMSymbol* sig) { 
+void      VMMethod::SetSignature(pVMSymbol sig) { 
     VMInvokable::SetSignature(sig);
     
     SetNumberOfArguments(Signature::GetNumberOfArguments(signature));
@@ -86,23 +86,23 @@ int VMMethod::GetNumberOfBytecodes() const {
 }
 
 
-void VMMethod::operator()(VMFrame* frame) {
-    VMFrame* frm = _UNIVERSE->GetInterpreter()->PushNewFrame(this);
+void VMMethod::operator()(pVMFrame frame) {
+    pVMFrame frm = _UNIVERSE->GetInterpreter()->PushNewFrame(this);
     frm->CopyArgumentsFrom(frame);
 }
 
 
-void VMMethod::SetHolderAll(VMClass* hld) {
+void VMMethod::SetHolderAll(pVMClass hld) {
     for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
-        VMObject* o = GetIndexableField(i);
-        if (dynamic_cast<VMInvokable*>(o) != NULL)  {
-            ((VMInvokable*)o)->SetHolder(hld);
+        pVMObject o = GetIndexableField(i);
+        if (dynamic_cast<pVMInvokable>(o) != NULL)  {
+            ((pVMInvokable)o)->SetHolder(hld);
         }
     }
 }
 
 
-VMObject* VMMethod::GetConstant(int indx) const {
+pVMObject VMMethod::GetConstant(int indx) const {
     uint8_t bc = _BC[indx+1];
     if (bc >= this->GetNumberOfIndexableFields()) {
         cout << "Error: Constant index out of range" << endl;
@@ -126,16 +126,16 @@ void VMMethod::SetBytecode(int indx, uint8_t val) {
 
 
 //VMArray Methods
-VMArray* VMMethod::CopyAndExtendWith(VMObject* item) const {
+pVMArray VMMethod::CopyAndExtendWith(pVMObject item) const {
     size_t fields = this->size->GetEmbeddedInteger();
-	VMArray* result = _UNIVERSE->NewArray(fields+1);
+	pVMArray result = _UNIVERSE->NewArray(fields+1);
     this->CopyIndexableFieldsTo(result);
 	(*result)[fields] = item; //SetIndexableField(fields, item);
 	return result;
 }
 
 
-VMObject* VMMethod::GetIndexableField(int idx) const {
+pVMObject VMMethod::GetIndexableField(int idx) const {
     if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
         cout << "Array index out of bounds: Accessing " << idx
              << ", but only " << size->GetEmbeddedInteger()-1;
@@ -147,7 +147,7 @@ VMObject* VMMethod::GetIndexableField(int idx) const {
 }
 
 
-void VMMethod::CopyIndexableFieldsTo(VMArray* to) const {
+void VMMethod::CopyIndexableFieldsTo(pVMArray to) const {
 	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
         (*to)[i] = this->GetIndexableField(i);
 	}
@@ -160,7 +160,7 @@ int VMMethod::GetNumberOfIndexableFields() const {
 }
 
 
-void VMMethod::SetIndexableField(int idx, VMObject* item) {
+void VMMethod::SetIndexableField(int idx, pVMObject item) {
     if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
         cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
         cout << " entries available\n";

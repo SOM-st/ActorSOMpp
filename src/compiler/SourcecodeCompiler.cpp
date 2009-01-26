@@ -21,10 +21,10 @@ SourcecodeCompiler::~SourcecodeCompiler() {
 }
 
 
-VMClass* SourcecodeCompiler::CompileClass( const StdString& path, 
+pVMClass SourcecodeCompiler::CompileClass( const StdString& path, 
                                           const StdString& file, 
-                                          VMClass* system_class ) {
-    VMClass* result = system_class;
+                                          pVMClass system_class ) {
+    pVMClass result = system_class;
 
     StdString fname = path + file_separator + file + ".som";
 #ifdef COMPILER_DEBUG
@@ -40,7 +40,7 @@ VMClass* SourcecodeCompiler::CompileClass( const StdString& path,
     parser = new Parser(*fp);
     result = compile(system_class);
 
-    VMSymbol* cname = result->GetName();
+    pVMSymbol cname = result->GetName();
     StdString cname_c = cname->GetStdString();
 
     if (file != cname_c) {
@@ -61,13 +61,13 @@ VMClass* SourcecodeCompiler::CompileClass( const StdString& path,
 }
 
 
-VMClass* SourcecodeCompiler::CompileClassString( const StdString& stream, 
-                                                VMClass* system_class ) {
+pVMClass SourcecodeCompiler::CompileClassString( const StdString& stream, 
+                                                pVMClass system_class ) {
     istringstream* ss = new istringstream(stream);
     if (parser != NULL) delete(parser);
     parser = new Parser(*ss);
     
-    VMClass* result = compile(system_class);
+    pVMClass result = compile(system_class);
     delete(parser);
     parser = NULL;
     delete(ss);
@@ -83,14 +83,14 @@ void SourcecodeCompiler::showCompilationError( const StdString& filename,
 }
 
 
-VMClass* SourcecodeCompiler::compile( VMClass* system_class ) {
+pVMClass SourcecodeCompiler::compile( pVMClass system_class ) {
     if (parser == NULL) {
         cout << "Parser not initiated" << endl;
         _UNIVERSE->ErrorExit("Compiler error");
     }
     ClassGenerationContext* cgc = new ClassGenerationContext();
 
-    VMClass* result = system_class;
+    pVMClass result = system_class;
 
     parser->Classdef(cgc);
 

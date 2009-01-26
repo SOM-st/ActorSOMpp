@@ -7,8 +7,8 @@
 
 VMBlock::VMBlock() : VMObject(2) {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
-     blockMethod = (VMMethod*) Globals::NilObject();
-     context = (VMFrame*) Globals::NilObject();
+     blockMethod = (pVMMethod) Globals::NilObject();
+     context = (pVMFrame) Globals::NilObject();
 }
 
 
@@ -27,6 +27,6 @@ void VMBlock::MarkReferences() {
 
 
 
-VMEvaluationPrimitive* VMBlock::GetEvaluationPrimitive(int numberOfArguments) {
+pVMEvaluationPrimitive VMBlock::GetEvaluationPrimitive(int numberOfArguments) {
     return new (_HEAP) VMEvaluationPrimitive(numberOfArguments);
 }

@@ -7,26 +7,26 @@
 //
 //the static global objects
 //
-VMObject* Globals::nilObject;
-VMObject* Globals::trueObject;
-VMObject* Globals::falseObject;
+pVMObject Globals::nilObject;
+pVMObject Globals::trueObject;
+pVMObject Globals::falseObject;
       
-VMClass* Globals::objectClass;
-VMClass* Globals::classClass;
-VMClass* Globals::metaClassClass;
+pVMClass Globals::objectClass;
+pVMClass Globals::classClass;
+pVMClass Globals::metaClassClass;
   
-VMClass* Globals::nilClass;
-VMClass* Globals::integerClass;
-VMClass* Globals::bigIntegerClass;
-VMClass* Globals::arrayClass;
-VMClass* Globals::methodClass;
-VMClass* Globals::symbolClass;
-VMClass* Globals::frameClass;
-VMClass* Globals::primitiveClass;
-VMClass* Globals::stringClass;
-VMClass* Globals::systemClass;
-VMClass* Globals::blockClass;
-VMClass* Globals::doubleClass;
+pVMClass Globals::nilClass;
+pVMClass Globals::integerClass;
+pVMClass Globals::bigIntegerClass;
+pVMClass Globals::arrayClass;
+pVMClass Globals::methodClass;
+pVMClass Globals::symbolClass;
+pVMClass Globals::frameClass;
+pVMClass Globals::primitiveClass;
+pVMClass Globals::stringClass;
+pVMClass Globals::systemClass;
+pVMClass Globals::blockClass;
+pVMClass Globals::doubleClass;
 //#define __DEBUG
 ///
 //Call this method before using any of the globals or it will crash!
@@ -129,75 +129,75 @@ void Globals::InitializeGlobals() {
 
 
 
-VMObject* Globals::NilObject() {
+pVMObject Globals::NilObject() {
     return nilObject;
 }
 
-VMObject* Globals::TrueObject() {
+pVMObject Globals::TrueObject() {
     return trueObject;
 }
 
-VMObject* Globals::FalseObject() {
+pVMObject Globals::FalseObject() {
     return falseObject;
 }
 
-VMClass* Globals::ObjectClass() {
+pVMClass Globals::ObjectClass() {
     return objectClass;
 }
 
-VMClass* Globals::ClassClass() {
+pVMClass Globals::ClassClass() {
     return classClass;
 }
 
-VMClass* Globals::MetaClassClass() {
+pVMClass Globals::MetaClassClass() {
     return metaClassClass;
 }
 
-VMClass* Globals::NilClass() {
+pVMClass Globals::NilClass() {
     return nilClass;
 }
 
-VMClass* Globals::IntegerClass() {
+pVMClass Globals::IntegerClass() {
     return integerClass;
 }
 
-VMClass* Globals::BigIntegerClass() {
+pVMClass Globals::BigIntegerClass() {
     return bigIntegerClass;
 }
 
-VMClass* Globals::ArrayClass() {
+pVMClass Globals::ArrayClass() {
     return arrayClass;
 }
 
-VMClass* Globals::MethodClass() {
+pVMClass Globals::MethodClass() {
     return methodClass;
 }
 
-VMClass* Globals::SymbolClass() {
+pVMClass Globals::SymbolClass() {
     return symbolClass;
 }
 
-VMClass* Globals::FrameClass() {
+pVMClass Globals::FrameClass() {
     return frameClass;
 }
 
-VMClass* Globals::PrimitiveClass() {
+pVMClass Globals::PrimitiveClass() {
     return primitiveClass;
 }
 
-VMClass* Globals::StringClass() {
+pVMClass Globals::StringClass() {
     return stringClass;
 }
 
-VMClass* Globals::SystemClass() {
+pVMClass Globals::SystemClass() {
     return systemClass;
 }
 
-VMClass* Globals::BlockClass() {
+pVMClass Globals::BlockClass() {
     return blockClass;
 }
 
-VMClass* Globals::DoubleClass() {
+pVMClass Globals::DoubleClass() {
     return doubleClass;
 }
 

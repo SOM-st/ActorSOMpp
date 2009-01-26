@@ -21,7 +21,7 @@ public:
     
     template<class U>
     VMPointer<T>(VMPointer<U>& o) { 
-        pointer = dynamic_cast<T*>((VMObject*)o);
+        pointer = dynamic_cast<T*>((pVMObject)o);
         if (!pointer) {
             cout << "Trying to convert unmatching types: " << typeid(U).name()
                  << " to " << typeid(T).name() << endl;
@@ -35,7 +35,7 @@ public:
     operator int32_t();
     //operator VMPointer<VMObject>&();
 
-    operator VMObject*() { return pointer; };
+    operator pVMObject() { return pointer; };
     //operator T*() { return pointer; };
 
     T& operator*() {
@@ -62,7 +62,7 @@ public:
     
     template<class U>
     VMPointer<T>& operator =(VMPointer<U>& o){ 
-        pointer = dynamic_cast<T*>((VMObject*)o);
+        pointer = dynamic_cast<T*>((pVMObject)o);
         if (!pointer) {
             //warn for now, but later nothing should happen as this might be wanted
             //to check for NULL
@@ -79,7 +79,7 @@ public:
 
     template <class U>
     bool operator==(VMPointer<U>& o) {
-        return pointer == (VMObject*)o;
+        return pointer == (pVMObject)o;
     }
     
     bool operator!=(VMPointer<T>& o) {
@@ -88,7 +88,7 @@ public:
 
     template <class U>
     bool operator!=(VMPointer<U>& o) {
-        return pointer != (VMObject*)o;
+        return pointer != (pVMObject)o;
     }
 
 private:
@@ -146,7 +146,7 @@ VMPointer<T>::operator int32_t() {
     {
         return ((int32_t)pointer & 0x7FFFFFFF);
     }
-    VMInteger* vmi;
+    pVMInteger vmi;
     if ((vmi = dynamic_cast<T*>(pointer)) == NULL) {
         cout << "Bad cast to integer from non (tagged) integer VMObject." << endl;
         throw std::bad_typeid();

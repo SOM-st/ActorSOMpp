@@ -18,58 +18,58 @@ ClassGenerationContext::~ClassGenerationContext() {
 }
 
 
-void ClassGenerationContext::AddClassField(VMObject* field) {
+void ClassGenerationContext::AddClassField(pVMObject field) {
 	this->class_fields.Add(field);
 }
 
 
-void ClassGenerationContext::AddInstanceField(VMObject* field) {
+void ClassGenerationContext::AddInstanceField(pVMObject field) {
 	this->instance_fields.Add(field);
 }
 
 
 bool ClassGenerationContext::FindField(const StdString& field) {
 
-	ExtendedList<VMObject*> fields = IsClassSide() ?
+	ExtendedList<pVMObject> fields = IsClassSide() ?
         class_fields :
         instance_fields;
-    return fields.IndexOf( (VMObject*)_UNIVERSE->SymbolFor(field)) != -1;
+    return fields.IndexOf( (pVMObject)_UNIVERSE->SymbolFor(field)) != -1;
 
 }
 
 
 
-void ClassGenerationContext::AddInstanceMethod(VMObject* method) {
+void ClassGenerationContext::AddInstanceMethod(pVMObject method) {
 	this->instance_methods.Add(method);
 }
 
 
 
-void ClassGenerationContext::AddClassMethod(VMObject* method) {
+void ClassGenerationContext::AddClassMethod(pVMObject method) {
 	this->class_methods.Add(method);
 }
 
 
-VMClass* ClassGenerationContext::Assemble() {
+pVMClass ClassGenerationContext::Assemble() {
     // build class class name
     StdString ccname = string(name->GetStdString()) + " class";
     
     // Load the super class
-    VMClass* super_class = _UNIVERSE->LoadClass(super_name);
+    pVMClass super_class = _UNIVERSE->LoadClass(super_name);
     
     // Allocate the class of the resulting class
-    VMClass* result_class = _UNIVERSE->NewClass(Globals::MetaClassClass());
+    pVMClass result_class = _UNIVERSE->NewClass(Globals::MetaClassClass());
 
     // Initialize the class of the resulting class
     result_class->SetInstanceFields(_UNIVERSE->NewArrayList(class_fields));
     result_class->SetInstanceInvokables(_UNIVERSE->NewArrayList(class_methods));
     result_class->SetName(_UNIVERSE->SymbolFor(ccname));
 
-    VMClass* super_mclass = super_class->GetClass();
+    pVMClass super_mclass = super_class->GetClass();
     result_class->SetSuperClass(super_mclass);
     
     // Allocate the resulting class
-    VMClass* result = _UNIVERSE->NewClass(result_class);
+    pVMClass result = _UNIVERSE->NewClass(result_class);
     
     // Initialize the resulting class
     result->SetInstanceFields(_UNIVERSE->NewArrayList(instance_fields));
@@ -82,12 +82,12 @@ VMClass* ClassGenerationContext::Assemble() {
 
 
 
-void ClassGenerationContext::AssembleSystemClass( VMClass* system_class ) {
+void ClassGenerationContext::AssembleSystemClass( pVMClass system_class ) {
     system_class->SetInstanceInvokables(_UNIVERSE->NewArrayList
                                                         (instance_methods));
     system_class->SetInstanceFields(_UNIVERSE->NewArrayList(instance_fields));
     // class-bound == class-instance-bound 
-    VMClass* super_mclass = system_class->GetClass();
+    pVMClass super_mclass = system_class->GetClass();
     super_mclass->SetInstanceInvokables(_UNIVERSE->NewArrayList(class_methods));
     super_mclass->SetInstanceFields(_UNIVERSE->NewArrayList(class_fields));
 }

@@ -11,54 +11,54 @@ class VMClass;
 #else
 #define DLL_EXPORT __declspec(dllexport)
 #endif
-
+#include "../vmobjects/ObjectFormats.h"
 class DLL_EXPORT Globals {
 public:
     static void InitializeGlobals();
 
-    static VMObject* NilObject();//Globals::NilObject();
-    static VMObject* TrueObject();//Globals::TrueObject();
-    static VMObject* FalseObject();//Globals::FalseObject();
+    static pVMObject NilObject();//Globals::NilObject();
+    static pVMObject TrueObject();//Globals::TrueObject();
+    static pVMObject FalseObject();//Globals::FalseObject();
       
-    static VMClass* ObjectClass();//Globals::ObjectClass();
-    static VMClass* ClassClass();//Globals::ClassClass();
-    static VMClass* MetaClassClass();//Globals::MetaClassClass();
+    static pVMClass ObjectClass();//Globals::ObjectClass();
+    static pVMClass ClassClass();//Globals::ClassClass();
+    static pVMClass MetaClassClass();//Globals::MetaClassClass();
   
-    static VMClass* NilClass();//Globals::NilClass();
-    static VMClass* IntegerClass();//Globals::IntegerClass();
-    static VMClass* BigIntegerClass();//Globals::BigIntegerClass();
-    static VMClass* ArrayClass();//Globals::ArrayClass();
-    static VMClass* MethodClass();//Globals::MethodClass();
-    static VMClass* SymbolClass();//Globals::SymbolClass();
-    static VMClass* FrameClass();//Globals::FrameClass();
-    static VMClass* PrimitiveClass();//Globals::PrimitiveClass()();
-    static VMClass* StringClass();//Globals::StringClass();
-    static VMClass* SystemClass();//Globals::SystemClass();
-    static VMClass* BlockClass();//Globals::BlockClass();
-    static VMClass* DoubleClass();//Globals::DoubleClass();
+    static pVMClass NilClass();//Globals::NilClass();
+    static pVMClass IntegerClass();//Globals::IntegerClass();
+    static pVMClass BigIntegerClass();//Globals::BigIntegerClass();
+    static pVMClass ArrayClass();//Globals::ArrayClass();
+    static pVMClass MethodClass();//Globals::MethodClass();
+    static pVMClass SymbolClass();//Globals::SymbolClass();
+    static pVMClass FrameClass();//Globals::FrameClass();
+    static pVMClass PrimitiveClass();//Globals::PrimitiveClass()();
+    static pVMClass StringClass();//Globals::StringClass();
+    static pVMClass SystemClass();//Globals::SystemClass();
+    static pVMClass BlockClass();//Globals::BlockClass();
+    static pVMClass DoubleClass();//Globals::DoubleClass();
 
 private:
     
-    static VMObject* nilObject;
-    static VMObject* trueObject;
-    static VMObject* falseObject;
+    static pVMObject nilObject;
+    static pVMObject trueObject;
+    static pVMObject falseObject;
       
-    static VMClass* objectClass;
-    static VMClass* classClass;
-    static VMClass* metaClassClass;
+    static pVMClass objectClass;
+    static pVMClass classClass;
+    static pVMClass metaClassClass;
   
-    static VMClass* nilClass;
-    static VMClass* integerClass;
-    static VMClass* bigIntegerClass;
-    static VMClass* arrayClass;
-    static VMClass* methodClass;
-    static VMClass* symbolClass;
-    static VMClass* frameClass;
-    static VMClass* primitiveClass;
-    static VMClass* stringClass;
-    static VMClass* systemClass;
-    static VMClass* blockClass;
-    static VMClass* doubleClass;
+    static pVMClass nilClass;
+    static pVMClass integerClass;
+    static pVMClass bigIntegerClass;
+    static pVMClass arrayClass;
+    static pVMClass methodClass;
+    static pVMClass symbolClass;
+    static pVMClass frameClass;
+    static pVMClass primitiveClass;
+    static pVMClass stringClass;
+    static pVMClass systemClass;
+    static pVMClass blockClass;
+    static pVMClass doubleClass;
 };
 
 #endif GLOBALS_H_

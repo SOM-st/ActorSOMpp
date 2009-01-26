@@ -14,22 +14,22 @@ VMArray::VMArray(int size, int nof) : VMObject(nof) {
         //this->SetIndexableField(i, Globals::NilObject());
     }
     _HEAP->EndUninterruptableAllocation();
-	//objectSize += size * sizeof(VMObject*); 
+	//objectSize += size * sizeof(pVMObject); 
     //calculate actual object size including the entries
     //done by the Heap on allocation (TODO: fix!)
 }
 
 
-VMArray* VMArray::CopyAndExtendWith(VMObject* item) const {
+pVMArray VMArray::CopyAndExtendWith(pVMObject item) const {
     size_t fields = GetNumberOfIndexableFields();
-	VMArray* result = _UNIVERSE->NewArray(fields+1);
+	pVMArray result = _UNIVERSE->NewArray(fields+1);
     this->CopyIndexableFieldsTo(result);
 	(*result)[fields] = item; //->SetIndexableField(fields, item);
 	return result;
 }
 
 
-VMObject*& VMArray::operator[](int idx) const {
+pVMObject& VMArray::operator[](int idx) const {
     /*if (idx > GetNumberOfIndexableFields()-1 || idx < 0) {
         cout << "Array index out of bounds: Accessing " << idx 
              << ", but array size is only " << GetNumberOfIndexableFields()-1 
@@ -41,7 +41,7 @@ VMObject*& VMArray::operator[](int idx) const {
 }
 
 
-void VMArray::CopyIndexableFieldsTo(VMArray* to) const {
+void VMArray::CopyIndexableFieldsTo(pVMArray to) const {
 	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
         (*to)[i] = (*this)[i];
 	}
@@ -51,13 +51,13 @@ void VMArray::CopyIndexableFieldsTo(VMArray* to) const {
 int VMArray::GetNumberOfIndexableFields() const {
     //cout << "(objSize - sizeof(VMArray))/4: " << (objectSize - sizeof(VMArray))/4 << endl;
     //cout << "size: " << size->GetEmbeddedInteger() << endl;
-    /*if ((objectSize - (sizeof(VMObject)+sizeof(VMObject*)*(this->GetNumberOfFields()-1)))/4 != size->GetEmbeddedInteger()) {
+    /*if ((objectSize - (sizeof(VMObject)+sizeof(pVMObject)*(this->GetNumberOfFields()-1)))/4 != size->GetEmbeddedInteger()) {
         cout << "(objSize - sizeof(VMArray))/4: " << (objectSize - sizeof(VMArray))/4 << endl;
         cout << "size: " << size->GetEmbeddedInteger() << endl;
         cout << "(objectSize - sizeof(VMObject)*(this->GetNumberOfFields()-1))/4: "
-             << (objectSize - (sizeof(VMObject)+sizeof(VMObject*)*(this->GetNumberOfFields()-1)))/4 << endl;
+             << (objectSize - (sizeof(VMObject)+sizeof(pVMObject)*(this->GetNumberOfFields()-1)))/4 << endl;
     }*/
-    return this->GetAdditionalSpaceConsumption() / sizeof(VMObject*);//size->GetEmbeddedInteger();
+    return this->GetAdditionalSpaceConsumption() / sizeof(pVMObject);//size->GetEmbeddedInteger();
 }
 
 void VMArray::MarkReferences() {

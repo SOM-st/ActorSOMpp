@@ -45,13 +45,13 @@ THE SOFTWARE.
  * This function coerces any right-hand parameter to a double, regardless of its
  * true nature. This is to make sure that all Double operations return Doubles.
  */
-double coerce_double(VMObject* x) {
-    if(dynamic_cast<VMDouble*>(x) != NULL)
-        return ((VMDouble*)x)->GetEmbeddedDouble();
-    else if(dynamic_cast<VMInteger*>(x) != NULL)
-        return (double)((VMInteger*)x)->GetEmbeddedInteger();
-    else if(dynamic_cast<VMBigInteger*>(x) != NULL)
-        return (double)((VMBigInteger*)x)->GetEmbeddedInteger();
+double coerce_double(pVMObject x) {
+    if(dynamic_cast<pVMDouble>(x) != NULL)
+        return ((pVMDouble)x)->GetEmbeddedDouble();
+    else if(dynamic_cast<pVMInteger>(x) != NULL)
+        return (double)((pVMInteger)x)->GetEmbeddedInteger();
+    else if(dynamic_cast<pVMBigInteger>(x) != NULL)
+        return (double)((pVMBigInteger)x)->GetEmbeddedInteger();
     else
         _UNIVERSE->ErrorExit("Attempt to apply Double operation to non-number.");
 
@@ -67,40 +67,40 @@ double coerce_double(VMObject* x) {
  */
 #define PREPARE_OPERANDS \
     double right = coerce_double(frame->Pop()); \
-    VMDouble* leftObj = (VMDouble*)frame->Pop(); \
+    pVMDouble leftObj = (pVMDouble)frame->Pop(); \
     double left = leftObj->GetEmbeddedDouble();
 
 
-void  _Double::Plus(VMObject* /*object*/, VMFrame* frame) {
+void  _Double::Plus(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(left + right));
+    frame->Push((pVMObject)_UNIVERSE->NewDouble(left + right));
 }
 
 
-void  _Double::Minus(VMObject* /*object*/, VMFrame* frame) {
+void  _Double::Minus(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(left - right));
+    frame->Push((pVMObject)_UNIVERSE->NewDouble(left - right));
 }
 
 
-void  _Double::Star(VMObject* /*object*/, VMFrame* frame) {
+void  _Double::Star(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(left * right));
+    frame->Push((pVMObject)_UNIVERSE->NewDouble(left * right));
 }
 
 
-void  _Double::Slashslash(VMObject* /*object*/, VMFrame* frame) {
+void  _Double::Slashslash(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
-    frame->Push((VMObject*)_UNIVERSE->NewDouble(left / right));
+    frame->Push((pVMObject)_UNIVERSE->NewDouble(left / right));
 }
 
 
-void  _Double::Percent(VMObject* /*object*/, VMFrame* frame) {
+void  _Double::Percent(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
     frame->Push(_UNIVERSE->NewDouble((double)((int64_t)left % 
                                               (int64_t)right)));
 }
-void  _Double::And(VMObject* /*object*/, VMFrame* frame) {
+void  _Double::And(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
     frame->Push(_UNIVERSE->NewDouble((double)((int64_t)left & 
                                               (int64_t)right)));
@@ -112,7 +112,7 @@ void  _Double::And(VMObject* /*object*/, VMFrame* frame) {
  * This function implements strict (bit-wise) equality and is therefore
  * inaccurate.
  */
-void  _Double::Equal(VMObject* /*object*/, VMFrame* frame) {
+void  _Double::Equal(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
     if(left == right)
         frame->Push(Globals::TrueObject());
@@ -121,7 +121,7 @@ void  _Double::Equal(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _Double::Lowerthan(VMObject* /*object*/, VMFrame* frame) {
+void  _Double::Lowerthan(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
     if(left < right)
         frame->Push(Globals::TrueObject());
@@ -130,22 +130,22 @@ void  _Double::Lowerthan(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _Double::AsString(VMObject* /*object*/, VMFrame* frame) {
-    VMDouble* self = (VMDouble*)frame->Pop();
+void  _Double::AsString(pVMObject /*object*/, pVMFrame frame) {
+    pVMDouble self = (pVMDouble)frame->Pop();
     // temporary storage for the number string
     // use c99 snprintf-goodie
     double dbl = self->GetEmbeddedDouble();
     ostringstream Str;
     Str.precision(17);
     Str << dbl;
-    frame->Push( (VMObject*)_UNIVERSE->NewString( Str.str().c_str() ) );
+    frame->Push( (pVMObject)_UNIVERSE->NewString( Str.str().c_str() ) );
 }
 
 
-void _Double::Sqrt(VMObject* /*object*/, VMFrame* frame) {
-    VMDouble* self = (VMDouble*)frame->Pop();
-    VMDouble* result = _UNIVERSE->NewDouble( sqrt(self->GetEmbeddedDouble()) );
-    frame->Push((VMObject*)result);
+void _Double::Sqrt(pVMObject /*object*/, pVMFrame frame) {
+    pVMDouble self = (pVMDouble)frame->Pop();
+    pVMDouble result = _UNIVERSE->NewDouble( sqrt(self->GetEmbeddedDouble()) );
+    frame->Push((pVMObject)result);
 }
 
 _Double::_Double( ) : PrimitiveContainer() {

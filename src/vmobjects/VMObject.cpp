@@ -13,7 +13,7 @@
 const int VMObject::VMObjectNumberOfFields = 1; 
 
 VMObject::VMObject( int numberOfFields ) {
-    //fields = (VMObject**)&clazz;//fields + sizeof(VMObject**); 
+    //fields = (pVMObject*)&clazz;//fields + sizeof(pVMObject*); 
     this->SetNumberOfFields(numberOfFields + VMObjectNumberOfFields);//+1 because of the clazz field
     gcfield = 0; 
 	hash = (int32_t)this;
@@ -38,17 +38,17 @@ void VMObject::SetNumberOfFields(int nof) {
 
 
 
-void VMObject::Send(StdString selector_string, VMObject** arguments, int argc) {
-    VMSymbol* selector = _UNIVERSE->SymbolFor(selector_string);
-    VMFrame* frame = _UNIVERSE->GetInterpreter()->GetFrame();
+void VMObject::Send(StdString selector_string, pVMObject* arguments, int argc) {
+    pVMSymbol selector = _UNIVERSE->SymbolFor(selector_string);
+    pVMFrame frame = _UNIVERSE->GetInterpreter()->GetFrame();
     frame->Push(this);
 
     for(int i = 0; i < argc; ++i) {
         frame->Push(arguments[i]);
     }
 
-    VMClass* cl = this->GetClass();
-    VMInvokable* invokable = dynamic_cast<VMInvokable*>(
+    pVMClass cl = this->GetClass();
+    pVMInvokable invokable = dynamic_cast<pVMInvokable>(
                                             cl->LookupInvokable(selector));
     (*invokable)(frame);
 }
@@ -58,19 +58,19 @@ int VMObject::GetDefaultNumberOfFields() const {
 	return VMObjectNumberOfFields; 
 }
 
-VMClass* VMObject::GetClass() const {
+pVMClass VMObject::GetClass() const {
 	return clazz;
 }
 
-void VMObject::SetClass(VMClass* cl) {
+void VMObject::SetClass(pVMClass cl) {
 	clazz = cl;
 }
 
-VMSymbol* VMObject::GetFieldName(int index) const {
+pVMSymbol VMObject::GetFieldName(int index) const {
     return this->clazz->GetInstanceFieldName(index);
 }
 
-int VMObject::GetFieldIndex(VMSymbol* fieldName) const {
+int VMObject::GetFieldIndex(pVMSymbol fieldName) const {
     return this->clazz->LookupFieldIndex(fieldName);
 }
 
@@ -98,12 +98,12 @@ void VMObject::Assert(bool value) const {
 }
 
 
-VMObject* VMObject::GetField(int index) const {
+pVMObject VMObject::GetField(int index) const {
     return FIELDS[index]; 
 }
 
 
-void VMObject::SetField(int index, VMObject* value) {
+void VMObject::SetField(int index, pVMObject value) {
      FIELDS[index] = value;
 }
 
@@ -112,9 +112,9 @@ int VMObject::GetAdditionalSpaceConsumption() const
 {
     //The VM*-Object's additional memory used needs to be calculated.
     //It's      the total object size   MINUS   sizeof(VMObject) for basic
-    //VMObject  MINUS   the number of fields times sizeof(VMObject*)
+    //VMObject  MINUS   the number of fields times sizeof(pVMObject)
     return (objectSize - (sizeof(VMObject) + 
-                          sizeof(VMObject*) * (this->GetNumberOfFields() - 1)));
+                          sizeof(pVMObject) * (this->GetNumberOfFields() - 1)));
 }
 
 

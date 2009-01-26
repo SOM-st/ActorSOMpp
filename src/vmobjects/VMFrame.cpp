@@ -9,10 +9,10 @@
 //when doesNotUnderstand or UnknownGlobal is sent, additional stack slots might
 //be necessary, as these cases are not taken into account when the stack
 //depth is calculated. In that case this method is called.
-VMFrame* VMFrame::EmergencyFrameFrom( VMFrame* from, int extraLength ) {
+pVMFrame VMFrame::EmergencyFrameFrom( pVMFrame from, int extraLength ) {
     int length = from->GetNumberOfIndexableFields() + extraLength;
-    int additionalBytes = length * sizeof(VMObject*);
-    VMFrame* result = new (_HEAP, additionalBytes) VMFrame(length);
+    int additionalBytes = length * sizeof(pVMObject);
+    pVMFrame result = new (_HEAP, additionalBytes) VMFrame(length);
     
     result->SetClass(from->GetClass());
     //copy arguments, locals and the stack
@@ -55,8 +55,8 @@ bool     VMFrame::HasContext() const {
 }
 
 
-VMFrame* VMFrame::GetContextLevel(int lvl) {
-    VMFrame* current = this;
+pVMFrame VMFrame::GetContextLevel(int lvl) {
+    pVMFrame current = this;
     while (lvl > 0) {
         current = current->GetContext();
         --lvl;
@@ -65,8 +65,8 @@ VMFrame* VMFrame::GetContextLevel(int lvl) {
 }
 
 
-VMFrame* VMFrame::GetOuterContext() {
-    VMFrame* current = this;
+pVMFrame VMFrame::GetOuterContext() {
+    pVMFrame current = this;
     while (current->HasContext()) {
         current = current->GetContext();
     }
@@ -82,14 +82,14 @@ int VMFrame::RemainingStackSize() const {
            stack_pointer->GetEmbeddedInteger() - 1;
 }
 
-VMObject* VMFrame::Pop() {
+pVMObject VMFrame::Pop() {
     int32_t sp = this->stack_pointer->GetEmbeddedInteger();
     this->stack_pointer->SetEmbeddedInteger(sp-1);
     return (*this)[sp];
 }
 
 
-void      VMFrame::Push(VMObject* obj) {
+void      VMFrame::Push(pVMObject obj) {
     int32_t sp = this->stack_pointer->GetEmbeddedInteger() + 1;
     this->stack_pointer->SetEmbeddedInteger(sp);
     (*this)[sp] = obj; //->SetIndexableField(sp, obj);
@@ -99,7 +99,7 @@ void      VMFrame::Push(VMObject* obj) {
 void VMFrame::PrintStack() const {
     cout << "SP: " << this->stack_pointer->GetEmbeddedInteger() << endl;
     for (int i = 0; i < this->GetNumberOfIndexableFields()+1; ++i) {
-        VMObject* vmo = (*this)[i];
+        pVMObject vmo = (*this)[i];
         cout << i << ": ";
         if (vmo == NULL) 
             cout << "NULL" << endl;
@@ -118,7 +118,7 @@ void VMFrame::PrintStack() const {
 
 void      VMFrame::ResetStackPointer() {
     // arguments are stored in front of local variables
-    VMMethod* meth = this->GetMethod();
+    pVMMethod meth = this->GetMethod();
     size_t lo = meth->GetNumberOfArguments();
     this->local_offset->SetEmbeddedInteger(lo);
   
@@ -139,42 +139,42 @@ void      VMFrame::SetBytecodeIndex(int index) {
 }
 
 
-VMObject* VMFrame::GetStackElement(int index) const {
+pVMObject VMFrame::GetStackElement(int index) const {
     int sp = this->stack_pointer->GetEmbeddedInteger();
     return (*this)[sp-index];
 }
 
 
-void      VMFrame::SetStackElement(int index, VMObject* obj) {
+void      VMFrame::SetStackElement(int index, pVMObject obj) {
     int sp = this->stack_pointer->GetEmbeddedInteger();
     (*this)[sp-index] = obj; //->SetIndexableField(sp-index, obj);
 }
 
 
-VMObject* VMFrame::GetLocal(int index, int contextLevel) {
-    VMFrame* context = this->GetContextLevel(contextLevel);
+pVMObject VMFrame::GetLocal(int index, int contextLevel) {
+    pVMFrame context = this->GetContextLevel(contextLevel);
     int32_t lo = context->local_offset->GetEmbeddedInteger();
     return (*context)[lo+index];
 }
 
 
-void      VMFrame::SetLocal(int index, int contextLevel, VMObject* value) {
-    VMFrame* context = this->GetContextLevel(contextLevel);
+void      VMFrame::SetLocal(int index, int contextLevel, pVMObject value) {
+    pVMFrame context = this->GetContextLevel(contextLevel);
     size_t lo = context->local_offset->GetEmbeddedInteger();
     (*context)[lo+index] = value; //->SetIndexableField(lo+index, value);
 }
 
 
 
-VMObject* VMFrame::GetArgument(int index, int contextLevel) {
+pVMObject VMFrame::GetArgument(int index, int contextLevel) {
     // get the context
-    VMFrame* context = this->GetContextLevel(contextLevel);
+    pVMFrame context = this->GetContextLevel(contextLevel);
     return (*context)[index];
 }
 
 
-void      VMFrame::SetArgument(int index, int contextLevel, VMObject* value) {
-    VMFrame* context = this->GetContextLevel(contextLevel);
+void      VMFrame::SetArgument(int index, int contextLevel, pVMObject value) {
+    pVMFrame context = this->GetContextLevel(contextLevel);
     (*context)[index] = value; //->SetIndexableField(index, value);
 }
 
@@ -184,19 +184,19 @@ void      VMFrame::PrintStackTrace() const {
 }
 
 int       VMFrame::ArgumentStackIndex(int index) const {
-    VMMethod* meth = this->GetMethod();
+    pVMMethod meth = this->GetMethod();
     return meth->GetNumberOfArguments() - index - 1;
 }
 
 
-void      VMFrame::CopyArgumentsFrom(VMFrame* frame) {
+void      VMFrame::CopyArgumentsFrom(pVMFrame frame) {
     // copy arguments from frame:
     // - arguments are at the top of the stack of frame.
     // - copy them into the argument area of the current frame
-    VMMethod* meth = this->GetMethod();
+    pVMMethod meth = this->GetMethod();
     int num_args = meth->GetNumberOfArguments();
     for(int i=0; i < num_args; ++i) {
-        VMObject* stackElem = frame->GetStackElement(num_args - 1 - i);
+        pVMObject stackElem = frame->GetStackElement(num_args - 1 - i);
         (*this)[i] = stackElem;
     }
 }
@@ -204,7 +204,7 @@ void      VMFrame::CopyArgumentsFrom(VMFrame* frame) {
 //
 //size_t VMFrame::GetOffset()
 //{
-//    return VMArray::GetOffset() + sizeof(VMFrame*)*2 + sizeof(VMMethod*) + sizeof(VMInteger*)*3;
+//    return VMArray::GetOffset() + sizeof(pVMFrame)*2 + sizeof(pVMMethod) + sizeof(pVMInteger)*3;
 //}
 
 

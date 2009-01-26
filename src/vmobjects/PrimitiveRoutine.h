@@ -13,7 +13,7 @@ public:
   // two possible functions to call member function. virtual cause derived
   // classes will use a pointer to an object and a pointer to a member function
   // to make the function call
-  virtual void operator()(VMObject*, VMFrame*)=0;  // call using operator
+  virtual void operator()(pVMObject, pVMFrame)=0;  // call using operator
  
   
   //virtual void MarkReferences() {

@@ -21,7 +21,7 @@ public:
     //name and the corresponding functor object. The abstract functor object
     //class is defined in vmobjects/PrimitiveRoutine. Basically, the only
     //requirement for those objects is to implement:
-    //  virtual void operator()(VMObject*, VMFrame*)
+    //  virtual void operator()(pVMObject, pVMFrame)
     virtual void SetPrimitive(const char* name, PrimitiveRoutine* routine);
 
     virtual PrimitiveRoutine* GetPrimitive(const std::string& routineName);

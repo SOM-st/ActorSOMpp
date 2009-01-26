@@ -50,35 +50,35 @@ THE SOFTWARE.
 
 _System* System_;
 
-void  _System::Global_(VMObject* /*object*/, VMFrame* frame) {
-    VMSymbol* arg = (VMSymbol*)frame->Pop();
-    /*VMObject* self = */
+void  _System::Global_(pVMObject /*object*/, pVMFrame frame) {
+    pVMSymbol arg = (pVMSymbol)frame->Pop();
+    /*pVMObject self = */
     frame->Pop();
-    VMObject* result = _UNIVERSE->GetGlobal(arg);
+    pVMObject result = _UNIVERSE->GetGlobal(arg);
     
     frame->Push( result ? result : Globals::NilObject());    
 }
 
 
-void  _System::Global_put_(VMObject* /*object*/, VMFrame* frame) {
-    VMObject* value = frame->Pop();
-    VMSymbol* arg = (VMSymbol*)frame->Pop();
+void  _System::Global_put_(pVMObject /*object*/, pVMFrame frame) {
+    pVMObject value = frame->Pop();
+    pVMSymbol arg = (pVMSymbol)frame->Pop();
     _UNIVERSE->SetGlobal(arg, value);    
 }
 
 
-void  _System::Load_(VMObject* /*object*/, VMFrame* frame) {
-    VMSymbol* arg = (VMSymbol*)frame->Pop();
-    /*VMObject* self = */
+void  _System::Load_(pVMObject /*object*/, pVMFrame frame) {
+    pVMSymbol arg = (pVMSymbol)frame->Pop();
+    /*pVMObject self = */
     frame->Pop();
-    VMClass* result = _UNIVERSE->LoadClass(arg);
+    pVMClass result = _UNIVERSE->LoadClass(arg);
 
-    frame->Push( result? (VMObject*)result : Globals::NilObject());
+    frame->Push( result? (pVMObject)result : Globals::NilObject());
 }
 
 
-void  _System::Exit_(VMObject* /*object*/, VMFrame* frame) {
-    VMInteger* err = (VMInteger*)frame->Pop();
+void  _System::Exit_(pVMObject /*object*/, pVMFrame frame) {
+    pVMInteger err = (pVMInteger)frame->Pop();
     int32_t err_no = err->GetEmbeddedInteger();
 
     if(err_no != ERR_SUCCESS)
@@ -87,20 +87,20 @@ void  _System::Exit_(VMObject* /*object*/, VMFrame* frame) {
 }
 
 
-void  _System::PrintString_(VMObject* /*object*/, VMFrame* frame) {
-    VMString* arg = (VMString*)frame->Pop();
+void  _System::PrintString_(pVMObject /*object*/, pVMFrame frame) {
+    pVMString arg = (pVMString)frame->Pop();
     std::string str = arg->GetStdString();
     cout << str;
 }
 
 
-void  _System::PrintNewline(VMObject* /*object*/, VMFrame* /*frame*/) {
+void  _System::PrintNewline(pVMObject /*object*/, pVMFrame /*frame*/) {
     cout << endl;   
 }
 
 
-void  _System::Time(VMObject* /*object*/, VMFrame* frame) {
-    /*VMObject* self = */
+void  _System::Time(pVMObject /*object*/, pVMFrame frame) {
+    /*pVMObject self = */
     frame->Pop();
     timeval* now = new timeval();
 
@@ -110,7 +110,7 @@ void  _System::Time(VMObject* /*object*/, VMFrame* frame) {
         ((now->tv_sec - start_time->tv_sec) * 1000) + //seconds
         ((now->tv_usec - start_time->tv_usec) / 1000); // µseconds
 
-    frame->Push((VMObject*)_UNIVERSE->NewInteger((int32_t)diff));
+    frame->Push((pVMObject)_UNIVERSE->NewInteger((int32_t)diff));
 
     delete(now);
 }

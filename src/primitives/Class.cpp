@@ -38,7 +38,7 @@ _Class::_Class( ) : PrimitiveContainer() {
     this->SetPrimitive("new", new Routine<_Class>(this, &_Class::New));
 }
 
-void  _Class::New(VMObject* /*object*/, VMFrame* frame) {
-    VMClass* self = (VMClass*)frame->Pop();
+void  _Class::New(pVMObject /*object*/, pVMFrame frame) {
+    pVMClass self = (pVMClass)frame->Pop();
     frame->Push(_UNIVERSE->NewInstance(self));
 }

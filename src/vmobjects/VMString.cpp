@@ -4,7 +4,7 @@
 #include <iostream>
 
 //this macro could replace the chars member variable
-//#define CHARS ((char*)&clazz+sizeof(VMObject*))
+//#define CHARS ((char*)&clazz+sizeof(pVMObject))
 
 
 VMString::VMString(const char* str) : VMObject(0) { //, StdString()
