@@ -121,31 +121,31 @@ _System::_System(void) : PrimitiveContainer() {
     gettimeofday(start_time, NULL);
 
     this->SetPrimitive("global_", 
-        static_cast<PrimitiveRoutine*>(new (_HEAP) 
+        static_cast<PrimitiveRoutine*>(new 
         Routine<_System>(this, &_System::Global_)));
 
     this->SetPrimitive("global_put_", 
-        static_cast<PrimitiveRoutine*>(new (_HEAP) 
+        static_cast<PrimitiveRoutine*>(new 
         Routine<_System>(this, &_System::Global_put_)));
 
     this->SetPrimitive("load_", 
-        static_cast<PrimitiveRoutine*>(new (_HEAP) 
+        static_cast<PrimitiveRoutine*>(new 
         Routine<_System>(this, &_System::Load_)));
 
     this->SetPrimitive("exit_", 
-        static_cast<PrimitiveRoutine*>(new (_HEAP) 
+        static_cast<PrimitiveRoutine*>(new 
         Routine<_System>(this, &_System::Exit_)));
 
     this->SetPrimitive("printString_", 
-        static_cast<PrimitiveRoutine*>(new (_HEAP) 
+        static_cast<PrimitiveRoutine*>(new 
         Routine<_System>(this, &_System::PrintString_)));
 
     this->SetPrimitive("printNewline", 
-        static_cast<PrimitiveRoutine*>(new (_HEAP) 
+        static_cast<PrimitiveRoutine*>(new 
         Routine<_System>(this, &_System::PrintNewline)));
 
     this->SetPrimitive("time", 
-        static_cast<PrimitiveRoutine*>(new (_HEAP) 
+        static_cast<PrimitiveRoutine*>(new 
         Routine<_System>(this, &_System::Time)));
     
 }

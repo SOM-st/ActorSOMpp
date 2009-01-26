@@ -19,7 +19,7 @@ public:
   // constructor - takes pointer to an object and pointer to a member and stores
   // them in two private variables
    Routine(TClass* _pt2Object, void(TClass::*_fpt)(VMObject*, VMFrame*)) : 
-       PrimitiveRoutine(2) { 
+       PrimitiveRoutine() { 
        pt2Object = _pt2Object;  
        fpt=_fpt; 
    };

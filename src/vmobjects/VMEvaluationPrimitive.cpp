@@ -13,7 +13,7 @@
 VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) : 
                        VMPrimitive(computeSignatureString(argc)) {
     _HEAP->StartUninterruptableAllocation();
-    this->SetRoutine(new (_HEAP) Routine<VMEvaluationPrimitive>(this, 
+    this->SetRoutine(new Routine<VMEvaluationPrimitive>(this, 
                                &VMEvaluationPrimitive::evaluationRoutine));
     this->SetEmpty(false);
     this->numberOfArguments = _UNIVERSE->NewInteger(argc);
@@ -25,7 +25,6 @@ VMEvaluationPrimitive::VMEvaluationPrimitive(int argc) :
 //{
 //}
 void VMEvaluationPrimitive::MarkReferences() {
-    if (gcfield) return;
     VMPrimitive::MarkReferences();
     this->numberOfArguments->MarkReferences();
 }

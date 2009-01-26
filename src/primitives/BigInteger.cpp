@@ -64,34 +64,34 @@ THE SOFTWARE.
 
 _BigInteger::_BigInteger( ) : PrimitiveContainer(){
     this->SetPrimitive("plus", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Plus)));
+        new Routine<_BigInteger>(this, &_BigInteger::Plus)));
 
     this->SetPrimitive("minus", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Minus)));
+        new Routine<_BigInteger>(this, &_BigInteger::Minus)));
 
     this->SetPrimitive("star", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Star)));
+        new Routine<_BigInteger>(this, &_BigInteger::Star)));
 
     this->SetPrimitive("slash", static_cast<PrimitiveRoutine*>( 
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Slash)));
+        new Routine<_BigInteger>(this, &_BigInteger::Slash)));
 
     this->SetPrimitive("percent", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Percent)));
+        new Routine<_BigInteger>(this, &_BigInteger::Percent)));
 
     this->SetPrimitive("and", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::And)));
+        new Routine<_BigInteger>(this, &_BigInteger::And)));
 
     this->SetPrimitive("equal", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Equal)));
+        new Routine<_BigInteger>(this, &_BigInteger::Equal)));
 
     this->SetPrimitive("lowerthan", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Lowerthan)));
+        new Routine<_BigInteger>(this, &_BigInteger::Lowerthan)));
 
     this->SetPrimitive("asString", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::AsString)));
+        new Routine<_BigInteger>(this, &_BigInteger::AsString)));
 
     this->SetPrimitive("sqrt", static_cast<PrimitiveRoutine*>(
-        new (_HEAP) Routine<_BigInteger>(this, &_BigInteger::Sqrt)));
+        new Routine<_BigInteger>(this, &_BigInteger::Sqrt)));
 
 }
 

@@ -33,13 +33,13 @@ THE SOFTWARE.
 #include "Object.h"
 
 _Object::_Object( ) : PrimitiveContainer() {
-    this->SetPrimitive("equalequal", new (_HEAP) 
+    this->SetPrimitive("equalequal", new 
         Routine<_Object>(this, &_Object::Equalequal));
 
-    this->SetPrimitive("objectSize", new (_HEAP) 
+    this->SetPrimitive("objectSize", new 
         Routine<_Object>(this, &_Object::ObjectSize));
 
-    this->SetPrimitive("hashcode", new (_HEAP) 
+    this->SetPrimitive("hashcode", new 
         Routine<_Object>(this, &_Object::Hashcode));
 }
 

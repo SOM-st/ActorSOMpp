@@ -12,7 +12,7 @@ VMPrimitive* VMPrimitive::GetEmptyPrimitive( VMSymbol* sig ) {
     
     VMPrimitive* prim = new (_HEAP) VMPrimitive(sig);
     prim->empty = (bool*)1;
-    prim->SetRoutine(new (_HEAP) Routine<VMPrimitive>(prim, &VMPrimitive::EmptyRoutine));
+    prim->SetRoutine(new Routine<VMPrimitive>(prim, &VMPrimitive::EmptyRoutine));
     return prim;
 }
 
@@ -48,8 +48,9 @@ void VMPrimitive::MarkReferences() {
         //HACK to avoid calling MarkReferences() for the bool*
         if ((void*)FIELDS[i] == (void*)this->empty) 
             continue;
+        //HACK to avoid calling MarkReferences() for the routine*
         if ((void*)FIELDS[i] == (void*)this->routine)
-            ;//cout << "routine" << endl;
+            continue;//cout << "routine" << endl;
         FIELDS[i]->MarkReferences();
     }
 }

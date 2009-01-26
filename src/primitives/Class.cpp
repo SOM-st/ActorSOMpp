@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "../primitivesCore/Routine.h"
 
 _Class::_Class( ) : PrimitiveContainer() {
-    this->SetPrimitive("new", new (_HEAP) Routine<_Class>(this, &_Class::New));
+    this->SetPrimitive("new", new Routine<_Class>(this, &_Class::New));
 }
 
 void  _Class::New(VMObject* /*object*/, VMFrame* frame) {

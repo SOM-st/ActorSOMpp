@@ -37,13 +37,13 @@ THE SOFTWARE.
 _Array::_Array() : PrimitiveContainer()
 {
     this->SetPrimitive("new_", static_cast<PrimitiveRoutine*>(
-                        new (_HEAP) Routine<_Array>(this, &_Array::New_)));
+                        new Routine<_Array>(this, &_Array::New_)));
     this->SetPrimitive("at_", static_cast<PrimitiveRoutine*>(
-                        new (_HEAP) Routine<_Array>(this, &_Array::At_)));
+                        new Routine<_Array>(this, &_Array::At_)));
     this->SetPrimitive("at_put_", static_cast<PrimitiveRoutine*>(
-                        new (_HEAP) Routine<_Array>(this, &_Array::At_Put_)));
+                        new Routine<_Array>(this, &_Array::At_Put_)));
     this->SetPrimitive("length",  static_cast<PrimitiveRoutine*>(
-                        new (_HEAP) Routine<_Array>(this, &_Array::Length)));
+                        new Routine<_Array>(this, &_Array::Length)));
 }
 
 void _Array::At_(VMObject* /*object*/, VMFrame* frame) {

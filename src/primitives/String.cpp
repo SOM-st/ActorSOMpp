@@ -39,22 +39,22 @@ THE SOFTWARE.
 #include "../primitivesCore/Routine.h"
 
 _String::_String( ) : PrimitiveContainer() {
-    this->SetPrimitive("concatenate_", new (_HEAP) 
+    this->SetPrimitive("concatenate_", new 
         Routine<_String>(this, &_String::Concatenate_));
 
-    this->SetPrimitive("asSymbol", new (_HEAP) 
+    this->SetPrimitive("asSymbol", new 
         Routine<_String>(this, &_String::AsSymbol));
 
-    this->SetPrimitive("hashcode", new (_HEAP) 
+    this->SetPrimitive("hashcode", new 
         Routine<_String>(this, &_String::Hashcode));
 
-    this->SetPrimitive("length", new (_HEAP) 
+    this->SetPrimitive("length", new 
         Routine<_String>(this, &_String::Length));
 
-    this->SetPrimitive("equal", new (_HEAP) 
+    this->SetPrimitive("equal", new 
         Routine<_String>(this, &_String::Equal));
 
-    this->SetPrimitive("primSubstringFrom_To_", new (_HEAP)
+    this->SetPrimitive("primSubstringFrom_To_", new 
         Routine<_String>(this, &_String::PrimSubstringFrom_To_));
 }
 

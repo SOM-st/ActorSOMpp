@@ -149,34 +149,34 @@ void _Double::Sqrt(VMObject* /*object*/, VMFrame* frame) {
 }
 
 _Double::_Double( ) : PrimitiveContainer() {
-    this->SetPrimitive("plus", new (_HEAP) 
+    this->SetPrimitive("plus", new 
         Routine<_Double>(this, &_Double::Plus));
 
-    this->SetPrimitive("minus", new (_HEAP) 
+    this->SetPrimitive("minus", new 
         Routine<_Double>(this, &_Double::Minus));
 
-    this->SetPrimitive("star", new (_HEAP) 
+    this->SetPrimitive("star", new 
         Routine<_Double>(this, &_Double::Star));
 
-    this->SetPrimitive("slashslash", new (_HEAP) 
+    this->SetPrimitive("slashslash", new 
         Routine<_Double>(this, &_Double::Slashslash));
 
-    this->SetPrimitive("percent", new (_HEAP) 
+    this->SetPrimitive("percent", new 
         Routine<_Double>(this, &_Double::Percent));
 
-    this->SetPrimitive("and", new (_HEAP) 
+    this->SetPrimitive("and", new 
         Routine<_Double>(this, &_Double::And));
 
-    this->SetPrimitive("equal", new (_HEAP) 
+    this->SetPrimitive("equal", new 
         Routine<_Double>(this, &_Double::Equal));
 
-    this->SetPrimitive("lowerthan", new (_HEAP) 
+    this->SetPrimitive("lowerthan", new 
         Routine<_Double>(this, &_Double::Lowerthan));
 
-    this->SetPrimitive("asString", new (_HEAP) 
+    this->SetPrimitive("asString", new 
         Routine<_Double>(this, &_Double::AsString));
 
-    this->SetPrimitive("sqrt", new (_HEAP) 
+    this->SetPrimitive("sqrt", new 
         Routine<_Double>(this, &_Double::Sqrt));
 }
 

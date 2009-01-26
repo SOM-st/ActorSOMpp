@@ -62,39 +62,39 @@ THE SOFTWARE.
 
 _Integer::_Integer( ) : PrimitiveContainer() {
     srand((unsigned) time(NULL)) ;
-    this->SetPrimitive("plus", new (_HEAP) 
+    this->SetPrimitive("plus", new 
         Routine<_Integer>(this, &_Integer::Plus));
 
-    this->SetPrimitive("minus", new (_HEAP) 
+    this->SetPrimitive("minus", new 
         Routine<_Integer>(this, &_Integer::Minus));
 
-    this->SetPrimitive("star", new (_HEAP) 
+    this->SetPrimitive("star", new 
         Routine<_Integer>(this, &_Integer::Star));
 
-    this->SetPrimitive("slash", new (_HEAP) 
+    this->SetPrimitive("slash", new 
         Routine<_Integer>(this, &_Integer::Slash));
 
     this->SetPrimitive("slashslash", new 
-        (_HEAP) Routine<_Integer>(this, &_Integer::Slashslash));
+        Routine<_Integer>(this, &_Integer::Slashslash));
 
     this->SetPrimitive("percent", new 
-        (_HEAP) Routine<_Integer>(this, &_Integer::Percent));
+        Routine<_Integer>(this, &_Integer::Percent));
 
     this->SetPrimitive("and", new 
-        (_HEAP) Routine<_Integer>(this, &_Integer::And));
+        Routine<_Integer>(this, &_Integer::And));
     this->SetPrimitive("equal", new 
-        (_HEAP) Routine<_Integer>(this, &_Integer::Equal));
+        Routine<_Integer>(this, &_Integer::Equal));
 
     this->SetPrimitive("lowerthan", 
-        new (_HEAP) Routine<_Integer>(this, &_Integer::Lowerthan));
+        new Routine<_Integer>(this, &_Integer::Lowerthan));
     this->SetPrimitive("asString", 
-        new (_HEAP) Routine<_Integer>(this, &_Integer::AsString));
+        new Routine<_Integer>(this, &_Integer::AsString));
 
     this->SetPrimitive("sqrt", 
-        new (_HEAP) Routine<_Integer>(this, &_Integer::Sqrt));
+        new Routine<_Integer>(this, &_Integer::Sqrt));
 
     this->SetPrimitive("atRandom", 
-        new (_HEAP) Routine<_Integer>(this, &_Integer::AtRandom));
+        new Routine<_Integer>(this, &_Integer::AtRandom));
 }
 
 //
