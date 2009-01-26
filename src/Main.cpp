@@ -60,12 +60,11 @@ int main(int argc, char** argv) {
 
     cout << "pVMObject size: " << sizeof(VMPointer<VMObject>) << endl;
     VMArray* o = _UNIVERSE->NewArray(5);
-    pVMArray array(o);
+    pVMArray array;
+    array = o;
     pVMObject object;
     object = array;
-    VMString* c = _UNIVERSE->NewString("testString");
-    pVMString string(c);
-    object = c;
+    pVMString string = _UNIVERSE->NewString("testString");
     object = string;
     cout << "Accessing testString via cast from pVMObject<VMObject> "
          << "to pVMObject<VMString>: " <<((VMPointer<VMString>)object)->GetChars()
@@ -85,7 +84,7 @@ int main(int argc, char** argv) {
     pVMInteger ti3((VMInteger*)(*array)[0]);
     cout << "(int32_t)ti3 + 9 = " << (int32_t)ti3 + 9 << endl;
     cout << "4 + (int32_t)ti = " << 4 + (int32_t)ti << endl;
-
+    cout << "ti->GetObjectSize(): " << ti->GetObjectSize() << endl;
     Universe::Quit(ERR_SUCCESS);
 }
 

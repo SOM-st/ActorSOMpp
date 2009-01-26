@@ -27,7 +27,7 @@
 # THE SOFTWARE.
 
 CC			=g++
-CFLAGS		=-Wno-endif-labels -O2 $(DBG_FLAGS) $(INCLUDES)
+CFLAGS		=-Wno-endif-labels -O3 $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=--enable-auto-import $(LIBRARIES)
 
 INSTALL		=install
@@ -141,12 +141,8 @@ all: $(CSOM_NAME).exe \
 debug : DBG_FLAGS=-DDEBUG -g
 debug: all
 
-profiling : DBG_FLAGS=-g -pg
-profiling : LDFLAGS+=-pg
-profiling: all
-	
 .cpp.pic.o:
-	$(CC) $(CFLAGS) -g -c $< -o $*.pic.o
+	$(CC) $(CFLAGS) -c $< -o $*.pic.o
 
 
 .cpp.o:

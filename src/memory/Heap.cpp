@@ -7,6 +7,11 @@
 #include "../vmobjects/VMObject.h"
 #include "../vm/Universe.h"
 
+/*
+ * macro for padding - only word-aligned memory must be allocated
+ */
+#define PAD_BYTES(N) ((sizeof(void*) - ((N) % sizeof(void*))) % sizeof(void*))
+
 Heap* Heap::theHeap = NULL;
 
 Heap* Heap::GetHeap() {
@@ -73,11 +78,12 @@ Heap::~Heap() {
 }
 
 VMObject* Heap::AllocateObject(size_t size) {
-    VMObject* vmo = (VMObject*) Allocate(size);
-    vmo->SetObjectSize(size);
+    int paddedSize = size + PAD_BYTES(size);
+    VMObject* vmo = (VMObject*) Allocate(paddedSize);
+    vmo->SetObjectSize(paddedSize);
     ++num_alloc;
     ++num_alloc_total;
-    spc_alloc += size;
+    spc_alloc += paddedSize;
     return vmo;
 }
 

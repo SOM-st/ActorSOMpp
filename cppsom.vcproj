@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\Users\abraxas\hpi\CPPSOM\trunk\src"
+				AdditionalIncludeDirectories="C:\Users\abraxas\hpi\Masterarbeit\trunk\src"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -115,7 +115,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="0"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="C:\Users\abraxas\hpi\CPPSOM\trunk\src"
+				AdditionalIncludeDirectories="C:\Users\abraxas\hpi\Masterarbeit\trunk\src"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"

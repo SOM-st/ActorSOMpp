@@ -16,6 +16,7 @@ public:
     VMPointer<T>() { pointer = NULL; };
     VMPointer<T>(T* o) { pointer = o; if (!IsTaggedInteger()) pointer->IncreaseGCCount(); };
     VMPointer<T>(VMPointer<T>& o) { (pointer = o.pointer)->IncreaseGCCount(); };
+    VMPointer<T>(const int32_t val) { SetIntegerValue(val); };
     ~VMPointer<T>() { if (pointer) pointer->DecreaseGCCount(); };
     
     template<class U>
@@ -47,6 +48,7 @@ public:
 
     T* operator ->() {
         if (IsTaggedInteger()) {
+            return dynamic_cast<T*>(_UNIVERSE->NewInteger(0));
             //return SomeGlobalIntegerObjectThatAnswersMethodCallsForAllTaggedIntegers;
         }
         return pointer;
