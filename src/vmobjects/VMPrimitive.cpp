@@ -25,6 +25,7 @@ VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(), VMObject(4) {
     this->SetSignature(signature);
     this->routine = NULL;
     this->empty = (bool*)0;
+
     _HEAP->EndUninterruptableAllocation();
 }
 

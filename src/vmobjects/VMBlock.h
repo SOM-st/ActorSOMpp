@@ -14,25 +14,18 @@ public:
     //virtual ~VMBlock();
     virtual void MarkReferences();
 
-    inline void        SetMethod(pVMMethod);
-    inline pVMMethod   GetMethod() const;
+    void        SetMethod(pVMMethod);
+    pVMMethod   GetMethod() const;
     inline void        SetContext(pVMFrame);
     inline pVMFrame    GetContext() const;
 
     static pVMEvaluationPrimitive GetEvaluationPrimitive(int);
 private:
-    pVMMethod   blockMethod;
+    pVMObject   blockMethod;
     pVMFrame    context;
 };
 
-void VMBlock::SetMethod(pVMMethod bMethod) {
-    blockMethod = bMethod;
-}
 
-
-pVMMethod VMBlock::GetMethod() const {
-    return blockMethod;
-}
 
 
 void VMBlock::SetContext(pVMFrame contxt) {

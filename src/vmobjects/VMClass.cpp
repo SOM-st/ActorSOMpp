@@ -55,9 +55,10 @@ bool VMClass::AddInstanceInvokable(VMObject *ptr) {
         cout << "Error: trying to add non-invokable to invokables array" << endl;
         throw std::bad_typeid();//("Trying to add non-invokable to invokables array");
     }
+    //Check whether an invokable with the same signature exists and replace it if that's the case
 	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i) {
         pVMInvokable inv = dynamic_cast<pVMInvokable>( (*instance_invokables)[i] );
-		if (inv != 0) {
+		if (inv != NULL) {
             if (newInvokable->GetSignature() == inv->GetSignature()) {
                 this->SetInstanceInvokable(i, ptr);
                 return false;
@@ -71,9 +72,8 @@ bool VMClass::AddInstanceInvokable(VMObject *ptr) {
             throw std::bad_typeid();//"Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
         }
 	}
-	//if (instance_invokables->GetNumberOfIndexableFields() >= instance_invokables->GetArraySize())
-		instance_invokables = instance_invokables->CopyAndExtendWith(ptr);
-	//else instance_invokables->SetIndexableField(ptr);
+    //it's a new invokable so we need to expand the invokables array.
+    instance_invokables = instance_invokables->CopyAndExtendWith(ptr);
 
 	return true;
 }
@@ -107,7 +107,6 @@ void      VMClass::SetInstanceInvokables(pVMArray invokables) {
         //check for Nil object
         if (invo != Globals::NilObject()) {
             //not Nil, so this actually is an invokable
-            //this fails if VMInvokable and VMObject are in the wrong order
             pVMInvokable inv = dynamic_cast<pVMInvokable>(invo);
             inv->SetHolder(this);
         }
@@ -362,7 +361,7 @@ void VMClass::set_primitives(void* dlhandle, const StdString& cname) {
 #ifdef __DEBUG
             cout << "... is a primitive, and is going to be loaded now" << endl;
 #endif
-            the_primitive = (pVMPrimitive) an_invokable;
+            the_primitive = dynamic_cast<pVMPrimitive>( an_invokable );
             //
             // we have a primitive to load
             // get it's selector

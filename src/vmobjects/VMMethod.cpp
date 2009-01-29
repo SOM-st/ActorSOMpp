@@ -15,7 +15,6 @@
 //this method's literals (-> VMArray)
 #define theEntries(i) FIELDS[this->GetNumberOfFields()+i]
 
-
 VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) 
                     : VMInvokable() , VMArray(number_of_constants, nof + 7){
     _HEAP->StartUninterruptableAllocation();

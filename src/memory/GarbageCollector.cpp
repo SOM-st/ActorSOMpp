@@ -6,7 +6,7 @@
 #include "Heap.h"
 
 #include "../vm/Universe.h"
-
+#include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMSymbol.h"
 
@@ -53,9 +53,19 @@ void GarbageCollector::Collect() {
 		} else if (pointer == (void*)currentEntry->next)  {
 			bytesToSkip = currentEntry->next->size;
 		} else { //we found a VMObject
+            //PROBLEM: needs dynamic_cast<pVMObject> for VMMethod/VMPrimitive
+            //but void* is an invalid type for dynamic_cast (multiple inheritance sucks)
 			pVMObject object = (pVMObject) pointer;
 			bytesToSkip = object->GetObjectSize();
-
+            if (bytesToSkip > 1000000) {
+                //HACK: if this is a Method or Primitive the normal cast will
+                //cause all fields to move up one (because of the ignored VMInvokable VMT).
+                //In that case accessing the objectSize field will yield the hash field instead.
+                pVMMethod m = (pVMMethod)pointer; 
+                //uint8_t bc = m->GetBytecode(0);
+                object = dynamic_cast<pVMObject>(m);
+                bytesToSkip = object->GetObjectSize();
+            }
 			if (object->GetGCField() == 1)  {
                 ++num_live;
 			    spc_live += object->GetObjectSize();

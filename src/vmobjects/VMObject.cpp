@@ -122,7 +122,11 @@ void VMObject::MarkReferences() {
     if (this->gcfield) return;
 	this->SetGCField(1);
     for( int i = 0; i < this->GetNumberOfFields(); ++i) {
-        FIELDS[i]->MarkReferences();
+       /* if (i == 3 && this->clazz->GetName()->GetStdString() == "Frame") {
+            cout << "hier" << endl;
+        }*/
+        pVMObject o = dynamic_cast<pVMObject>(FIELDS[i]);
+        o->MarkReferences();
     }
 //	clazz->MarkReferences();
 }

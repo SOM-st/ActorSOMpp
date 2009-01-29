@@ -42,6 +42,14 @@ VMFrame::VMFrame(int size, int nof) : VMArray(size,
 //VMFrame::~VMFrame()
 //{
 //}
+pVMMethod VMFrame::GetMethod() const {
+  
+    return dynamic_cast<pVMMethod>(this->method);
+}
+
+void      VMFrame::SetMethod(pVMMethod method) {
+    this->method = dynamic_cast<pVMObject>(method);
+}
 
 bool     VMFrame::HasPreviousFrame() const {
     return this->previous_frame != Globals::NilObject();

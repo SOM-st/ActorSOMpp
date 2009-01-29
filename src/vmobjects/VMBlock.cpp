@@ -11,7 +11,14 @@ VMBlock::VMBlock() : VMObject(2) {
      context = (pVMFrame) Globals::NilObject();
 }
 
+void VMBlock::SetMethod(pVMMethod bMethod) {
+    blockMethod = dynamic_cast<pVMObject>(bMethod);
+}
 
+
+pVMMethod VMBlock::GetMethod() const {
+    return dynamic_cast<pVMMethod>(blockMethod);
+}
 //VMBlock::~VMBlock()
 //{
 //}

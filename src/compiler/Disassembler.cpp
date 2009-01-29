@@ -80,7 +80,7 @@ void Disassembler::Dump(pVMClass cl) {
             continue;
         }
         // output actual method
-        DumpMethod((pVMMethod)inv, "\t");
+        DumpMethod(dynamic_cast<pVMMethod>(inv), "\t");
     }
 }
 

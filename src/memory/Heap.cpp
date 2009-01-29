@@ -77,13 +77,17 @@ Heap::~Heap() {
     
 }
 
-pVMObject Heap::AllocateObject(size_t size) {
-    int paddedSize = size + PAD_BYTES(size);
+pVMObject Heap::AllocateObject(size_t size, size_t* realSize) {
+    //add padding, so objects are word aligned
+    size_t paddedSize = size + PAD_BYTES(size);
     pVMObject vmo = (pVMObject) Allocate(paddedSize);
+    //Problem: setting the objectSize here doesn't work if the allocated
+    //object is either VMMethode or VMPrimitive because of the multiple inheritance
     vmo->SetObjectSize(paddedSize);
     ++num_alloc;
     ++num_alloc_total;
     spc_alloc += paddedSize;
+    if (realSize != NULL) *realSize = paddedSize;
     return vmo;
 }
 

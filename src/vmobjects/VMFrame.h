@@ -27,8 +27,8 @@ public:
     virtual bool       HasContext() const;
     virtual pVMFrame   GetContextLevel(int);
     virtual pVMFrame   GetOuterContext();
-    virtual inline pVMMethod  GetMethod() const;
-    virtual inline void       SetMethod(pVMMethod);
+    virtual pVMMethod  GetMethod() const;
+    virtual void       SetMethod(pVMMethod);
     virtual pVMObject  Pop();
     virtual void       Push(pVMObject);
     virtual void       ResetStackPointer();
@@ -52,7 +52,7 @@ private:
 #define FRAME_NUMBER_OF_FIELDS 6
     pVMFrame   previous_frame;
     pVMFrame   context;
-    pVMMethod  method;
+    pVMObject  method;
     pVMInteger stack_pointer;
     pVMInteger bytecode_index;
     pVMInteger local_offset;
@@ -74,14 +74,7 @@ pVMInteger VMFrame::GetStackPointer() const {
     return stack_pointer;
 }
 
-pVMMethod VMFrame::GetMethod() const {
-  
-    return this->method;
-}
 
-void      VMFrame::SetMethod(pVMMethod method) {
-    this->method = method;
-}
 
 pVMFrame VMFrame::GetPreviousFrame() const {
     return (pVMFrame) this->previous_frame;

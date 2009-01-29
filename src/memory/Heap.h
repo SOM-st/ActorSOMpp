@@ -28,7 +28,7 @@ public:
     static void DestroyHeap();
 	Heap(int object_space_size = 1048576);
 	~Heap();
-    pVMObject AllocateObject(size_t size);
+    pVMObject AllocateObject(size_t size, size_t* realSize = NULL);
 	void* Allocate(size_t size);
     void Free(void* ptr);
 	void Free(void* ptr, int size);
