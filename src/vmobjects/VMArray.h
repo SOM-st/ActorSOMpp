@@ -13,7 +13,7 @@ public:
 	//virtual ~VMArray();
 	virtual void MarkReferences();
 
-	int         GetNumberOfIndexableFields() const;
+	virtual int         GetNumberOfIndexableFields() const;
 	pVMArray    CopyAndExtendWith(pVMObject) const;
 	void        CopyIndexableFieldsTo(pVMArray) const;
 

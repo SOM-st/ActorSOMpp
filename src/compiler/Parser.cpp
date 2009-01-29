@@ -29,6 +29,8 @@ THE SOFTWARE.
 //#include "GenerationContexts.h"
 //#include "BytecodeGeneration.h"
 #include "../vmobjects/VMMethod.h"
+#include "../vmobjects/VMPrimitive.h"
+#include "../vmobjects/VMObject.h"
 #include <iostream>
 #include <cctype>
 #include <sstream>
@@ -238,10 +240,10 @@ void Parser::Classdef(ClassGenerationContext* cgenc) {
         method(mgenc);
         
 		if(mgenc->IsPrimitive())
-            cgenc->AddInstanceMethod((pVMObject)mgenc->AssemblePrimitive());
+            cgenc->AddInstanceMethod(dynamic_cast<pVMObject>(mgenc->AssemblePrimitive()));
             //SEND(cgenc->instance_methods, add, VMPrimitive_assemble(&mgenc));
         else
-			cgenc->AddInstanceMethod((pVMObject)mgenc->Assemble());
+			cgenc->AddInstanceMethod(dynamic_cast<pVMObject>(mgenc->Assemble()));
             //SEND(cgenc->instance_methods, add, VMMethod_assemble(&mgenc));
         delete(mgenc);
         //method_genc_release(&mgenc);

@@ -223,5 +223,8 @@ bool MethodGenerationContext::IsFinished() {
 }
 
 void MethodGenerationContext::AddBytecode(uint8_t bc) {
+    if (bc == 255) {
+        cout << "bla" << endl;
+    }
 	bytecode.push_back(bc);
 }

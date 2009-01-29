@@ -103,8 +103,12 @@ void      VMClass::SetInstanceInvokables(pVMArray invokables) {
 	instance_invokables = invokables;
 
     for (int i = 0; i < this->GetNumberOfInstanceInvokables(); ++i) {
-        pVMInvokable inv = (pVMInvokable)(*instance_invokables)[i];
-        if (inv != Globals::NilObject()) {
+        pVMObject invo = (*instance_invokables)[i];
+        //check for Nil object
+        if (invo != Globals::NilObject()) {
+            //not Nil, so this actually is an invokable
+            //this fails if VMInvokable and VMObject are in the wrong order
+            pVMInvokable inv = dynamic_cast<pVMInvokable>(invo);
             inv->SetHolder(this);
         }
     }
@@ -125,7 +129,7 @@ VMObject *VMClass::GetInstanceInvokable(int index) const {
 void      VMClass::SetInstanceInvokable(int index, pVMObject invokable) {
 	(*instance_invokables)[index] = invokable;
     if (invokable != Globals::NilObject()) {
-        pVMInvokable inv = (pVMInvokable) invokable;
+        pVMInvokable inv = dynamic_cast<pVMInvokable>( invokable );
         inv->SetHolder(this);
     }
 	//instance_invokables[index] = invokable;
@@ -135,16 +139,16 @@ void      VMClass::SetInstanceInvokable(int index, pVMObject invokable) {
 pVMObject VMClass::LookupInvokable(pVMSymbol name) const {
     pVMInvokable invokable = NULL;
     for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
-        invokable = (pVMInvokable)(GetInstanceInvokable(i));
+        invokable = dynamic_cast<pVMInvokable>(GetInstanceInvokable(i));
         if (invokable->GetSignature() == name) 
-            return (pVMObject)invokable;
+            return dynamic_cast<pVMObject>(invokable);
     }
     invokable = NULL;
     //look in super class
     if (this->HasSuperClass())  {
-        invokable = (pVMInvokable)this->super_class->LookupInvokable(name);
+        invokable = dynamic_cast<pVMInvokable>(this->super_class->LookupInvokable(name));
     }
-	return (pVMObject)invokable;
+	return dynamic_cast<pVMObject>(invokable);
 }
 
 
@@ -167,7 +171,7 @@ int       VMClass::GetNumberOfInstanceFields() const {
 
 bool      VMClass::HasPrimitives() const {
 	for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
-        pVMInvokable invokable = (pVMInvokable)(GetInstanceInvokable(i));
+        pVMInvokable invokable = dynamic_cast<pVMInvokable>(GetInstanceInvokable(i));
         if (invokable->IsPrimitive()) return true;
     }
     return false;
@@ -349,7 +353,7 @@ void VMClass::set_primitives(void* dlhandle, const StdString& cname) {
     // iterate invokables
     for(int i = 0; i < this->GetNumberOfInstanceInvokables(); i++)  {
         
-        an_invokable = (pVMInvokable)this->GetInstanceInvokable(i);
+        an_invokable = dynamic_cast<pVMInvokable>(this->GetInstanceInvokable(i));
 #ifdef __DEBUG
         cout << "cname: >" << cname << "<"<< endl;
         cout << an_invokable->GetSignature()->GetStdString() << endl;

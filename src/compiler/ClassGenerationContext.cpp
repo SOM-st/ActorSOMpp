@@ -3,14 +3,15 @@
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMClass.h"
 
-ClassGenerationContext::ClassGenerationContext() {
+ClassGenerationContext::ClassGenerationContext() :
+    instance_fields(), instance_methods(), class_fields(), class_methods(){
 	name = NULL;
 	super_name = NULL;
     class_side = false;
-	instance_fields.Clear();
+	/*instance_fields.Clear();
     instance_methods.Clear();
 	class_fields.Clear();
-    class_methods.Clear();
+    class_methods.Clear();*/
 }
 
 

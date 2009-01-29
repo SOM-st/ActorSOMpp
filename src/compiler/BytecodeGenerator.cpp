@@ -1,5 +1,6 @@
 #include "BytecodeGenerator.h"
-
+#include "../vmobjects/VMObject.h"
+#include "../vmobjects/VMMethod.h"
 #define EMIT1(BC) \
     mgenc->AddBytecode(BC)
 
@@ -45,7 +46,7 @@ void BytecodeGenerator::emit_PUSH_FIELD(
 
 void BytecodeGenerator::emit_PUSH_BLOCK(
                 MethodGenerationContext* mgenc, pVMMethod block ) {
-    EMIT2(BC_PUSH_BLOCK, mgenc->FindLiteralIndex((pVMObject)block));
+    EMIT2(BC_PUSH_BLOCK, mgenc->FindLiteralIndex(dynamic_cast<pVMObject>(block)));
 }
 
 

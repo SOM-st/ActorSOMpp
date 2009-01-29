@@ -40,7 +40,7 @@ void Interpreter::Start() {
         int bytecode_index = _FRAME->GetBytecodeIndex();
 
         pVMMethod method = this->GetMethod();
-        uint8_t bytecode = (*method)[bytecode_index];
+        uint8_t bytecode = method->GetBytecode(bytecode_index);//(*method)[bytecode_index];
 
         int bytecode_length = Bytecode::GetBytecodeLength(bytecode);
 
@@ -137,7 +137,7 @@ void Interpreter::popFrameAndPushResult( pVMObject result ) {
 
 void Interpreter::send( pVMSymbol signature, pVMClass receiver_class) {
     pVMInvokable invokable = 
-                (pVMInvokable) receiver_class->LookupInvokable(signature);
+                dynamic_cast<pVMInvokable>( receiver_class->LookupInvokable(signature) );
 
     if (invokable != NULL) {
         (*invokable)(_FRAME);
@@ -182,8 +182,8 @@ void Interpreter::do_dup() {
 
 void Interpreter::do_push_local( int bytecode_index ) {
     pVMMethod method = _METHOD;
-    uint8_t bc1 = (*method)[bytecode_index + 1];
-    uint8_t bc2 = (*method)[bytecode_index + 2];
+    uint8_t bc1 = method->GetBytecode(bytecode_index + 1);//(*method)[bytecode_index + 1];
+    uint8_t bc2 = method->GetBytecode(bytecode_index + 2);//(*method)[bytecode_index + 2];
 
     pVMObject local = _FRAME->GetLocal(bc1, bc2);
 
@@ -193,8 +193,8 @@ void Interpreter::do_push_local( int bytecode_index ) {
 
 void Interpreter::do_push_argument( int bytecode_index ) {
     pVMMethod method = _METHOD;
-    uint8_t bc1 = (*method)[bytecode_index + 1];
-    uint8_t bc2 = (*method)[bytecode_index + 2];
+    uint8_t bc1 = method->GetBytecode(bytecode_index + 1);//(*method)[bytecode_index + 1];
+    uint8_t bc2 = method->GetBytecode(bytecode_index + 2);//(*method)[bytecode_index + 2];
 
     pVMObject argument = _FRAME->GetArgument(bc1, bc2);
 
@@ -219,7 +219,7 @@ void Interpreter::do_push_field( int bytecode_index ) {
 void Interpreter::do_push_block( int bytecode_index ) {
     pVMMethod method = _METHOD;
 
-    pVMMethod blockMethod = (pVMMethod)method->GetConstant(bytecode_index);
+    pVMMethod blockMethod = dynamic_cast<pVMMethod>(method->GetConstant(bytecode_index));
 
     int num_of_args = blockMethod->GetNumberOfArguments();
 
@@ -280,9 +280,8 @@ void Interpreter::do_pop() {
 
 void Interpreter::do_pop_local( int bytecode_index ) {
     pVMMethod method = _METHOD;
-
-    uint8_t bc1 = (*method)[bytecode_index + 1];
-    uint8_t bc2 = (*method)[bytecode_index + 2];
+    uint8_t bc1 = method->GetBytecode(bytecode_index + 1);//(*method)[bytecode_index + 1];
+    uint8_t bc2 = method->GetBytecode(bytecode_index + 2);//(*method)[bytecode_index + 2];
 
     pVMObject o = _FRAME->Pop();
 
@@ -293,8 +292,8 @@ void Interpreter::do_pop_local( int bytecode_index ) {
 void Interpreter::do_pop_argument( int bytecode_index ) {
     pVMMethod method = _METHOD;
 
-    uint8_t bc1 = (*method)[bytecode_index + 1];
-    uint8_t bc2 = (*method)[bytecode_index + 2];
+    uint8_t bc1 = method->GetBytecode(bytecode_index + 1);//(*method)[bytecode_index + 1];
+    uint8_t bc2 = method->GetBytecode(bytecode_index + 2);//(*method)[bytecode_index + 2];
 
     pVMObject o = _FRAME->Pop();
     _FRAME->SetArgument(bc1, bc2, o);
@@ -339,7 +338,7 @@ void Interpreter::do_super_send( int bytecode_index ) {
     pVMMethod real_method = ctxt->GetMethod();
     pVMClass holder = real_method->GetHolder();
     pVMClass super = holder->GetSuperClass();
-    pVMInvokable invokable = (pVMInvokable) super->LookupInvokable(signature);
+    pVMInvokable invokable = dynamic_cast<pVMInvokable>( super->LookupInvokable(signature) );
 
     if (invokable != NULL)
         (*invokable)(_FRAME);

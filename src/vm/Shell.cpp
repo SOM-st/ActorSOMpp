@@ -125,8 +125,8 @@ void Shell::Start() {
         
         // Lookup the run: method
         pVMInvokable initialize = 
-            (pVMInvokable)runClass->LookupInvokable(
-                                    _UNIVERSE->SymbolFor("run:"));
+            dynamic_cast<pVMInvokable>(runClass->LookupInvokable(
+                                    _UNIVERSE->SymbolFor("run:")));
         
         // Invoke the run method
         (*initialize)(current_frame);

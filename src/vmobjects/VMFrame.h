@@ -46,7 +46,7 @@ public:
     //virtual size_t GetOffset();
     virtual void       MarkReferences();
     virtual void       PrintStack() const;
-    virtual inline pVMInteger GetStackPointer() const;
+    virtual inline     pVMInteger GetStackPointer() const;
     virtual int        RemainingStackSize() const;
 private:
 #define FRAME_NUMBER_OF_FIELDS 6

@@ -68,7 +68,7 @@ void Disassembler::dispatch(pVMObject o) {
  */
 void Disassembler::Dump(pVMClass cl) {
     for(int i = 0; i < cl->GetNumberOfInstanceInvokables(); ++i) {
-        pVMInvokable inv = (pVMInvokable)cl->GetInstanceInvokable(i);
+        pVMInvokable inv = dynamic_cast<pVMInvokable>(cl->GetInstanceInvokable(i));
         // output header and skip if the Invokable is a Primitive
         pVMSymbol sig = inv->GetSignature();
         //StdString sig_s = SEND(sig, get_string);
@@ -88,9 +88,9 @@ void Disassembler::Dump(pVMClass cl) {
 /**
  * Bytecode Index Accessor macros
  */
-#define BC_0 (*method)[bc_idx]
-#define BC_1 (*method)[bc_idx+1]
-#define BC_2 (*method)[bc_idx+2]
+#define BC_0 method->GetBytecode(bc_idx)
+#define BC_1 method->GetBytecode(bc_idx+1)
+#define BC_2 method->GetBytecode(bc_idx+2)
 
 
 /**
@@ -114,7 +114,7 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
     // output bytecodes
     for(int bc_idx = 0; 
         bc_idx < method->GetNumberOfBytecodes(); 
-        bc_idx += Bytecode::GetBytecodeLength((*method)[bc_idx]) ) {
+        bc_idx += Bytecode::GetBytecodeLength(method->GetBytecode(bc_idx)) ) { //(*method)[bc_idx]) ) {
         // the bytecode.
         uint8_t bytecode = BC_0;
         // indent, bytecode index, bytecode mnemonic
