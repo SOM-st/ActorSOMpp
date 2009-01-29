@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "../vmobjects/VMFrame.h"
 #include "../vmobjects/VMClass.h"
 
-#include "../vm/universe.h"
+#include "../vm/Universe.h"
 
 #include "Class.h"
  

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <vmobjects/VMString.h>
 #include <vmobjects/VMInteger.h>
 
-#include <vm/universe.h>
+#include <vm/Universe.h>
  
 #include "System.h"
 #include "../primitivesCore/Routine.h"

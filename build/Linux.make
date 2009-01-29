@@ -37,6 +37,8 @@ CORE_LIBS	=-lm
 
 CSOM_NAME	=CPPSOM
 CORE_NAME	=SOMCore
+PRIMITIVESCORE_NAME  =PrimitiveCore
+SHARED_EXTENSION    =a
 
 ############ global stuff -- overridden by ../Makefile
 
@@ -77,6 +79,12 @@ MAIN_SRC		= $(wildcard $(SRC_DIR)/*.cpp)
 MAIN_OBJ		= $(MAIN_SRC:.cpp=.o)
 #$(SRC_DIR)/main.o
 
+############# primitives loading
+
+PRIMITIVESCORE_DIR = $(SRC_DIR)/primitivesCore
+PRIMITIVESCORE_SRC = $(wildcard $(PRIMITIVESCORE_DIR)/*.cpp)
+PRIMITIVESCORE_OBJ = $(PRIMITIVESCORE_SRC:.cpp=.pic.o)
+
 ############# primitives location etc.
 
 PRIMITIVES_DIR	= $(SRC_DIR)/primitives
@@ -94,11 +102,11 @@ LIBRARIES		=-L$(ROOT_DIR)
 CSOM_OBJ		=  $(MEMORY_OBJ) $(MISC_OBJ) $(VMOBJECTS_OBJ) \
 				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) $(MAIN_OBJ)
 
-OBJECTS			= $(CSOM_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ)
+OBJECTS			= $(CSOM_OBJ) $(PRIMITIVESCORE_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ)
 
 SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 				$(MISC_SRC) $(VM_SRC) $(VMOBJECTS_SRC)  \
-				$(PRIMITIVES_SRC) $(MAIN_SRC)
+				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(MAIN_SRC)
 
 ############# Things to clean
 
@@ -114,11 +122,12 @@ CLEAN			= $(OBJECTS) \
 #  metarules
 #
 
-.SUFFIXES: .pic.o
+.SUFFIXES: .pic.o .fpic.o
 
 .PHONY: clean clobber test
 
 all: $(CSOM_NAME)\
+	$(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
 	CORE
 
 
@@ -131,7 +140,7 @@ profiling: all
 
 
 .cpp.pic.o:
-	$(CC) $(CFLAGS) -g -c $< -o $*.pic.o
+	$(CC) $(CFLAGS) -c $< -o $*.pic.o
 
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $*.o
@@ -149,16 +158,24 @@ clean:
 
 $(CSOM_NAME): $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) loader
-	$(CC) $(LDFLAGS) \
+	$(CC) $(LDFLAGS) -shared \
 		-o $(CSOM_NAME) $(CSOM_OBJ) $(CSOM_LIBS) -ldl
 	@echo CSOM done.
 
-CORE: $(CSOM_NAME) $(PRIMITIVES_OBJ)
+$(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME) $(PRIMITIVESCORE_OBJ)
+	@echo Linking PrimitivesCore lib
+	$(CC) $(LDFLAGS) -shared \
+		-o $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
+		$(PRIMITIVESCORE_OBJ) 
+	@touch $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION)
+	@echo PrimitivesCore done.
+
+CORE: $(CSOM_NAME) $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) $(PRIMITIVES_OBJ)
 	@echo Linking SOMCore lib
 	$(CC) $(LDFLAGS)  \
 		-shared -o $(CORE_NAME).csp \
 		$(PRIMITIVES_OBJ) \
-		$(CORE_LIBS) 
+		$(CORE_LIBS)
 	mv $(CORE_NAME).csp $(ST_DIR)
 	@touch CORE
 	@echo SOMCore done.

@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "../vmobjects/VMFrame.h"
 #include "../vmobjects/VMSymbol.h"
 
-#include "../vm/universe.h"
+#include "../vm/Universe.h"
 #include "../primitivesCore/Routine.h"
 #include "Symbol.h"
  

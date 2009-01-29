@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "../vmobjects/VMInteger.h"
 #include "../vmobjects/VMBigInteger.h"
 
-#include "../vm/universe.h"
+#include "../vm/Universe.h"
 
 #include "../primitivesCore/Routine.h"
  

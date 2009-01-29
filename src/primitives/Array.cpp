@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include <vmobjects/VMObject.h>
 #include <vmobjects/VMFrame.h>
 
-#include <vm/universe.h>
+#include <vm/Universe.h>
  
 #include "Array.h"
 #include "../primitivesCore/Routine.h"

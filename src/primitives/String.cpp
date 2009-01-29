@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "../vmobjects/VMString.h"
 #include "../vmobjects/VMInteger.h"
 
-#include "../vm/universe.h"
+#include "../vm/Universe.h"
 
 #include "../misc/defs.h"
  
