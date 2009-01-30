@@ -17,7 +17,10 @@ public:
 	pVMArray    CopyAndExtendWith(pVMObject) const;
 	void        CopyIndexableFieldsTo(pVMArray) const;
 
-	pVMObject& operator[](int idx) const;	
+	pVMObject& operator[](int idx) const;
+
+private:
+    static const int VMArrayNumberOfFields;
 };
 
 

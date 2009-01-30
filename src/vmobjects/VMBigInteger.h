@@ -17,6 +17,8 @@ public:
 
 private:
     int64_t embeddedInteger;
+
+    static const int VMBigIntegerNumberOfFields;
 };
 
 int64_t VMBigInteger::GetEmbeddedInteger() const {

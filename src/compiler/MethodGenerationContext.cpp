@@ -1,5 +1,7 @@
 #include "MethodGenerationContext.h"
+
 #include "../interpreter/bytecodes.h"
+
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/Signature.h"

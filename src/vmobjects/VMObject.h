@@ -1,15 +1,16 @@
 #pragma once
 #ifndef VMOBJECT_H_
 #define VMOBJECT_H_
-//#include "OOObject.h"
-#include "../misc/defs.h"
+
 #include <vector>
 #include <iostream>
+
+#include "../misc/defs.h"
 #include "../memory/Heap.h"
 #include "../vm/Universe.h"
 
 #include "ObjectFormats.h"
-//#include "VMClass.h"
+
 class VMSymbol;
 class VMClass;
 

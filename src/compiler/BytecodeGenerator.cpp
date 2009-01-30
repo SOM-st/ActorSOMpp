@@ -1,6 +1,8 @@
 #include "BytecodeGenerator.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMMethod.h"
+
+
 #define EMIT1(BC) \
     mgenc->AddBytecode(BC)
 

@@ -49,13 +49,14 @@ public:
     virtual inline     pVMInteger GetStackPointer() const;
     virtual int        RemainingStackSize() const;
 private:
-#define FRAME_NUMBER_OF_FIELDS 6
     pVMFrame   previous_frame;
     pVMFrame   context;
     pVMObject  method;
     pVMInteger stack_pointer;
     pVMInteger bytecode_index;
     pVMInteger local_offset;
+
+    static const int VMFrameNumberOfFields;
 };
 
 bool     VMFrame::IsBootstrapFrame() const {

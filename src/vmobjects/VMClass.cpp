@@ -34,12 +34,14 @@
 // as in AClass::anInstanceMethod_
 
 
-VMClass::VMClass() : VMObject(4) {
+const int VMClass::VMClassNumberOfFields = 4; 
+
+VMClass::VMClass() : VMObject(VMClassNumberOfFields) {
     //this->objectSize = sizeof(VMClass);
 }
 
 
-VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + 4) {
+VMClass::VMClass( int number_of_fields ) : VMObject(number_of_fields + VMClassNumberOfFields) {
     //this->objectSize = sizeof(VMClass) + number_of_fields*sizeof(pVMObject);
 }
 
@@ -177,7 +179,7 @@ bool      VMClass::HasPrimitives() const {
 }
 
 
-void      VMClass::LoadPrimitives(const vector<StdString>& cp,int cp_count) {
+void      VMClass::LoadPrimitives(const vector<StdString>& cp) {
 
     // the library handle
     //ifstream* dlhandle = NULL;

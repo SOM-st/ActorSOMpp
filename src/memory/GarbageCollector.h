@@ -3,10 +3,12 @@
 #ifndef GARBAGECOLLECTOR_H_
 #define GARBAGECOLLECTOR_H_
 
-class Heap;
+
 #include "../vmobjects/ObjectFormats.h"
-class VMObject;
 #include "../misc/defs.h"
+
+class VMObject;
+class Heap;
 
 class GarbageCollector {
 public:

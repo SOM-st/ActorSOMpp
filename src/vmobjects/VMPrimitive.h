@@ -2,10 +2,13 @@
 
 #ifndef VMPRIMITVE_H_
 #define VMPRIMITVE_H_
+
 #include "VMObject.h"
 #include "PrimitiveRoutine.h"
-#include "../compiler/MethodGenerationContext.h"
 #include "VMInvokable.h"
+
+//#include "../compiler/MethodGenerationContext.h"
+
 class VMSymbol;
 
 class VMPrimitive : public VMInvokable, public VMObject {
@@ -64,8 +67,11 @@ private:
 
     PrimitiveRoutine* routine;
     bool* empty;
+
+    static const int VMPrimitiveNumberOfFields;
     
 };
+
 bool VMPrimitive::IsEmpty() const {
     return (bool)empty;
 }

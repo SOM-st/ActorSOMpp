@@ -18,6 +18,7 @@ private:
     static pVMSymbol computeSignatureString(int argc);
     void evaluationRoutine(pVMObject object, pVMFrame frame);
     pVMInteger numberOfArguments;
+
 };
 
 #endif

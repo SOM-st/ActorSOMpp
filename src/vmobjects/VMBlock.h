@@ -3,10 +3,11 @@
 #ifndef VMBLOCK_H_
 #define VMBLOCK_H_
 
+#include "VMObject.h"
+
 class VMMethod;
 class VMFrame;
 class VMEvaluationPrimitive;
-#include "VMObject.h"
 
 class VMBlock : public VMObject {
 public:
@@ -23,6 +24,8 @@ public:
 private:
     pVMObject   blockMethod;
     pVMFrame    context;
+
+    static const int VMBlockNumberOfFields;
 };
 
 

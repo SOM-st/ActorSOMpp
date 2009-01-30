@@ -9,8 +9,10 @@ class VMMethod;
 class VMObject;
 class VMSymbol;
 class VMClass;
+
 #include "../misc/defs.h"
 #include "../vmobjects/ObjectFormats.h"
+
 class Interpreter {
 public:
     Interpreter();

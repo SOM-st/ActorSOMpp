@@ -16,6 +16,8 @@ public:
     inline int32_t         GetEmbeddedInteger() const;
 private:
     int32_t embeddedInteger;
+
+    static const int VMIntegerNumberOfFields;
 };
 
 void VMInteger::SetEmbeddedInteger(int32_t val) {

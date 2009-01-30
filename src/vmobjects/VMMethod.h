@@ -1,13 +1,14 @@
 #pragma once
 #ifndef VMMETHOD_H_
 #define VMMETHOD_H_
-//#include "OOObject.h"
+
+#include <iostream>
+
+#include "VMArray.h"
+#include "VMInvokable.h"
 
 class VMObject;
 class VMInteger;
-#include "VMArray.h"
-#include "VMInvokable.h"
-#include <iostream>
 class MethodGenerationContext;
 //#include "../memory/Heap.h"
 
@@ -94,6 +95,8 @@ private:
     pVMInteger maximum_number_of_stack_elements;
     pVMInteger bc_length;
     pVMInteger number_of_arguments;
+
+    static const int VMMethodNumberOfFields;
 };
 
 

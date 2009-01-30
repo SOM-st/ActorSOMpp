@@ -4,7 +4,9 @@
 #define TIMEHELPER_H_
 #include <Windows.h>
 #include < time.h >
-     
+
+//This file is only necessary for Visual Studio compatibility
+//as sys/time.h is not available using MSVS
 #if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
   #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
 #else

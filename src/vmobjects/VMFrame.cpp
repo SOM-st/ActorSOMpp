@@ -30,8 +30,10 @@ pVMFrame VMFrame::EmergencyFrameFrom( pVMFrame from, int extraLength ) {
 }
 
 
+const int VMFrame::VMFrameNumberOfFields = 6; 
+
 VMFrame::VMFrame(int size, int nof) : VMArray(size, 
-                                              nof + FRAME_NUMBER_OF_FIELDS) {
+                                              nof + VMFrameNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
     this->local_offset = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
     this->bytecode_index = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);

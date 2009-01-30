@@ -16,8 +16,9 @@ pVMPrimitive VMPrimitive::GetEmptyPrimitive( pVMSymbol sig ) {
     return prim;
 }
 
+const int VMPrimitive::VMPrimitiveNumberOfFields = 4; 
 
-VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(), VMObject(4) {
+VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(), VMObject(VMPrimitiveNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
     //the only class that explicitly does this.
     this->SetClass(Globals::PrimitiveClass());

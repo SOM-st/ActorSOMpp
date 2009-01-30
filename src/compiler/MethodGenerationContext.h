@@ -1,13 +1,13 @@
 #pragma once
 #ifndef METHODGENERATIONCONTEXT_H_
-#define METHODGeNERATIONCONTEXT_H_
+#define METHODGENERATIONCONTEXT_H_
 
 #include <vector>
 
 #include "../misc/defs.h"
-#include "ClassGenerationContext.h"
-//#include "../misc/ExtendedVector.h"
 #include "../misc/ExtendedList.h"
+#include "ClassGenerationContext.h"
+
 class VMMethod;
 class VMArray;
 class VMPrimitive;

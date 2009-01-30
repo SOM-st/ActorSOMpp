@@ -15,6 +15,8 @@ public:
     inline double  GetEmbeddedDouble() const;
 private:
     double embeddedDouble;
+
+    static const int VMDoubleNumberOfFields;
 };
 
 void VMDouble::SetEmbeddedDouble(double val) {

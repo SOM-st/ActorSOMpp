@@ -1,7 +1,5 @@
 #include "VMMethod.h"
-#include "../vm/Universe.h"
 #include "VMFrame.h"
-#include "../compiler/MethodGenerationContext.h"
 #include "VMClass.h"
 #include "VMSymbol.h"
 #include "VMArray.h"
@@ -9,14 +7,19 @@
 #include "VMInteger.h"
 #include "Signature.h"
 
+#include "../vm/Universe.h"
+#include "../compiler/MethodGenerationContext.h"
+
 //this method's bytecodes
 #define _BC ((uint8_t*)&FIELDS[this->GetNumberOfFields() + this->GetNumberOfIndexableFields()])
 
 //this method's literals (-> VMArray)
 #define theEntries(i) FIELDS[this->GetNumberOfFields()+i]
 
+const int VMMethod::VMMethodNumberOfFields = 7; 
+
 VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) 
-                    : VMInvokable() , VMArray(number_of_constants, nof + 7){
+                    : VMInvokable() , VMArray(number_of_constants, nof + VMMethodNumberOfFields){
     _HEAP->StartUninterruptableAllocation();
     //objectSize += bc_count + number_of_constants*sizeof(pVMObject);
     bc_length = _UNIVERSE->NewInteger( bc_count );

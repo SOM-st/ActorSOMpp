@@ -4,8 +4,9 @@
 #include "VMEvaluationPrimitive.h"
 #include "../vm/Universe.h"
 
+const int VMBlock::VMBlockNumberOfFields = 2; 
 
-VMBlock::VMBlock() : VMObject(2) {
+VMBlock::VMBlock() : VMObject(VMBlockNumberOfFields) {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
      blockMethod = (pVMMethod) Globals::NilObject();
      context = (pVMFrame) Globals::NilObject();

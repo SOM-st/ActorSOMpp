@@ -1,7 +1,7 @@
+#include <sstream>
+
 #include "VMSymbol.h"
 #include "VMInteger.h"
-#include "VMString.h"
-#include <sstream>
 
 
 VMSymbol::VMSymbol(const char* str) : VMString(str) {

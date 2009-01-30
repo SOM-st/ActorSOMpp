@@ -31,12 +31,14 @@ THE SOFTWARE.
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMPrimitive.h"
 #include "../vmobjects/VMObject.h"
-#include <iostream>
-#include <cctype>
-#include <sstream>
+
 #include "BytecodeGenerator.h"
 #include "../vmobjects/VMSymbol.h"
 #include "../vm/Universe.h"
+
+#include <iostream>
+#include <cctype>
+#include <sstream>
 #include <stdlib.h>
 #include <string.h>
 //#include <memory/gc.h>

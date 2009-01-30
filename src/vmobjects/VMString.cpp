@@ -1,13 +1,15 @@
-#include "VMString.h"
-#include "VMInteger.h"
 #include <string.h>
 #include <iostream>
+
+#include "VMString.h"
+#include "VMInteger.h"
 
 //this macro could replace the chars member variable
 //#define CHARS ((char*)&clazz+sizeof(pVMObject))
 
+const int VMString::VMStringNumberOfFields = 0; 
 
-VMString::VMString(const char* str) : VMObject(0) { //, StdString()
+VMString::VMString(const char* str) : VMObject(VMStringNumberOfFields) { //, StdString()
 	chars = (char*)&chars+sizeof(char*);
 	//objectSize += sizeof(char*) + strlen(str) + 1; //set actual object_size
 	//string_length = _UNIVERSE->NewInteger(strlen(str));
@@ -20,7 +22,7 @@ VMString::VMString(const char* str) : VMObject(0) { //, StdString()
 }
 
 
-VMString::VMString( const string& s ): VMObject(0) {
+VMString::VMString( const string& s ): VMObject(VMStringNumberOfFields) {
 	chars = (char*)&chars+sizeof(char*);
 	//objectSize += sizeof(char*) + s.length() + 1;
 	//string_length = _UNIVERSE->NewInteger(s.length());

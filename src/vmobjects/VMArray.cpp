@@ -5,8 +5,9 @@
 
 #define theEntries(i) FIELDS[this->GetNumberOfFields()+i]
 
+const int VMArray::VMArrayNumberOfFields = 0; 
 
-VMArray::VMArray(int size, int nof) : VMObject(nof) {
+VMArray::VMArray(int size, int nof) : VMObject(nof + VMArrayNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
 	
     for (int i = 0; i < size ; ++i) {

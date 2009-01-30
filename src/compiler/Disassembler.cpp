@@ -24,6 +24,7 @@
 #include "../vmobjects/VMString.h"
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/Signature.h"
+
 #include "../misc/debug.h"
 #include "../misc/defs.h"
 /** 

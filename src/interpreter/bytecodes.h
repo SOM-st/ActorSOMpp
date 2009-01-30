@@ -30,13 +30,6 @@ THE SOFTWARE.
  
 //#include <stdint.h>
  
-// It's unfortunate to have to include these here but 
-// access to super instruction definitions is required in order
-// for the 2 inline functions defined in here to work properly in the
-// case of threaded interpretation.
-//#include "Interpreter_threaded.h"
-//#include "vm/Universe.h"
-
 // bytecode constants used by CSOM
 
 #define BC_HALT              0

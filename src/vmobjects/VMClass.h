@@ -43,7 +43,7 @@ public:
     virtual pVMSymbol GetInstanceFieldName(int)const; 
     virtual int       GetNumberOfInstanceFields() const; 
     virtual bool      HasPrimitives() const; 
-    virtual void      LoadPrimitives(const vector<StdString>&,int);
+    virtual void      LoadPrimitives(const vector<StdString>&);
 
 	//virtual void MarkReferences();
 	
@@ -61,13 +61,7 @@ private:
     void* loadLib(const StdString& path) const;
     bool isResponsible(void* handle, const StdString& cl) const;
     void set_primitives(void* handle, const StdString& cname);
-//#else
-//    HMODULE loadLib(const StdString& path) const;
-//    bool isResponsible(HMODULE handle, const StdString& cl) const;
-//    void set_primitives(HMODULE handle, const StdString& cname);
-//#endif
-
-    
+   
     
     int numberOfSuperInstanceFields() const;
 
@@ -75,6 +69,8 @@ private:
     pVMSymbol name; 
     pVMArray  instance_fields; 
     pVMArray  instance_invokables;
+
+    static const int VMClassNumberOfFields;
 };
 
 
