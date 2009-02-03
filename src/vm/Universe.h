@@ -54,7 +54,7 @@ public:
 
     //Globals accessor (only for GC, could be considered to either
     //be moved there or declared as a private friend method for the GC
-	map<StdString, pVMObject>  GetGlobals() {return globals;}
+	map<pVMSymbol, pVMObject>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
     Interpreter* GetInterpreter() {return interpreter;}
 
@@ -122,7 +122,7 @@ private:
     
 	Heap *heap;
     int heapSize;
-	map<StdString, pVMObject> globals;
+	map<pVMSymbol, pVMObject> globals;
     vector<StdString> class_path;
     int cp_count;
     Symboltable* symboltable;

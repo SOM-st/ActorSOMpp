@@ -113,9 +113,9 @@ void GarbageCollector::Collect() {
 
 
 void GarbageCollector::markReachableObjects() {
-	map<StdString, pVMObject> globals = Universe::GetUniverse()->GetGlobals();
-    map<StdString, pVMObject>::iterator it = globals.begin();
-    for (map<StdString, pVMObject>::iterator it = globals.begin(); 
+	map<pVMSymbol, pVMObject> globals = Universe::GetUniverse()->GetGlobals();
+    map<pVMSymbol, pVMObject>::iterator it = globals.begin();
+    for (map<pVMSymbol, pVMObject>::iterator it = globals.begin(); 
                                         it!= globals.end(); ++it) {
 		markObject(&(*it->second));
 	}

@@ -8,7 +8,7 @@ const int VMBlock::VMBlockNumberOfFields = 2;
 
 VMBlock::VMBlock() : VMObject(VMBlockNumberOfFields) {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
-     blockMethod = (pVMMethod) Globals::NilObject();
+     blockMethod = Globals::NilObject();
      context = (pVMFrame) Globals::NilObject();
 }
 

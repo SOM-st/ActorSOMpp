@@ -337,14 +337,14 @@ pVMClass Universe::GetBlockClassWithArgs( int number_of_arguments) {
 
 pVMObject Universe::GetGlobal( pVMSymbol name) {
     if (HasGlobal(name))
-        return (pVMObject)globals[name->GetStdString()];
+        return (pVMObject)globals[name];
 
     return NULL;
 }
 
 
 bool Universe::HasGlobal( pVMSymbol name) {
-    if (globals[name->GetStdString()] != NULL) return true;
+    if (globals[name] != NULL) return true;
     else return false;
 }
 
@@ -395,7 +395,7 @@ pVMClass Universe::LoadClass( pVMSymbol name) {
    }
 
    if (result->HasPrimitives() || result->GetClass()->HasPrimitives())
-       result->LoadPrimitives(class_path, cp_count);
+       result->LoadPrimitives(class_path);
     
    return result;
 }
@@ -441,7 +441,7 @@ void Universe::LoadSystemClass( pVMClass system_class) {
     }
 
     if (result->HasPrimitives() || result->GetClass()->HasPrimitives())
-        result->LoadPrimitives(class_path, cp_count);
+        result->LoadPrimitives(class_path);
 }
 
 
@@ -642,9 +642,9 @@ pVMSymbol Universe::SymbolForChars( const char* str) {
 void Universe::SetGlobal(pVMSymbol name, VMObject *val) {
     StdString str =  name->GetStdString();
 
-    globals[str] = val;
+    globals[name] = val;
 	//globals.insert(pair<StdString, pVMObject>(name->GetStdString(), val));
-    pVMObject p = globals[str];
+    pVMObject p = globals[name];
     if (p == NULL) {
         cout << "Global " << str << " just added, but globals[" << str << "] == NULL" << endl;
     }
