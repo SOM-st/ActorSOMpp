@@ -69,7 +69,7 @@ void Disassembler::dispatch(pVMObject o) {
  */
 void Disassembler::Dump(pVMClass cl) {
     for(int i = 0; i < cl->GetNumberOfInstanceInvokables(); ++i) {
-        pVMInvokable inv = dynamic_cast<pVMInvokable>(cl->GetInstanceInvokable(i));
+        pVMInvokable inv = (pVMInvokable)(cl->GetInstanceInvokable(i));
         // output header and skip if the Invokable is a Primitive
         pVMSymbol sig = inv->GetSignature();
         //StdString sig_s = SEND(sig, get_string);
@@ -81,7 +81,7 @@ void Disassembler::Dump(pVMClass cl) {
             continue;
         }
         // output actual method
-        DumpMethod(dynamic_cast<pVMMethod>(inv), "\t");
+        DumpMethod((pVMMethod)(inv), "\t");
     }
 }
 

@@ -8,17 +8,17 @@ const int VMBlock::VMBlockNumberOfFields = 2;
 
 VMBlock::VMBlock() : VMObject(VMBlockNumberOfFields) {
     //this->SetNumberOfFields(this->GetNumberOfFields() + 2);
-     blockMethod = Globals::NilObject();
+     blockMethod = (pVMMethod)Globals::NilObject();
      context = (pVMFrame) Globals::NilObject();
 }
 
 void VMBlock::SetMethod(pVMMethod bMethod) {
-    blockMethod = dynamic_cast<pVMObject>(bMethod);
+    blockMethod = (bMethod);
 }
 
 
 pVMMethod VMBlock::GetMethod() const {
-    return dynamic_cast<pVMMethod>(blockMethod);
+    return (blockMethod);
 }
 //VMBlock::~VMBlock()
 //{

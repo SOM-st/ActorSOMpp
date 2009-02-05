@@ -22,7 +22,7 @@ public:
 
     static pVMEvaluationPrimitive GetEvaluationPrimitive(int);
 private:
-    pVMObject   blockMethod;
+    pVMMethod   blockMethod;
     pVMFrame    context;
 
     static const int VMBlockNumberOfFields;

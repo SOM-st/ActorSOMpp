@@ -77,7 +77,7 @@ Heap::~Heap() {
     
 }
 
-pVMObject Heap::AllocateObject(size_t size, size_t* realSize) {
+pVMObject Heap::AllocateObject(size_t size) {
     //add padding, so objects are word aligned
     size_t paddedSize = size + PAD_BYTES(size);
     pVMObject vmo = (pVMObject) Allocate(paddedSize);
@@ -87,7 +87,6 @@ pVMObject Heap::AllocateObject(size_t size, size_t* realSize) {
     ++num_alloc;
     ++num_alloc_total;
     spc_alloc += paddedSize;
-    if (realSize != NULL) *realSize = paddedSize;
     return vmo;
 }
 

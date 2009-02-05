@@ -816,14 +816,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\misc\SymbolCompare.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\misc\SymbolCompare.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\vmobjects\Symboltable.cpp"
 				>
 			</File>

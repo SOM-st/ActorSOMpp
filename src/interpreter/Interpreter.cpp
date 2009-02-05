@@ -219,7 +219,7 @@ void Interpreter::do_push_field( int bytecode_index ) {
 void Interpreter::do_push_block( int bytecode_index ) {
     pVMMethod method = _METHOD;
 
-    pVMMethod blockMethod = dynamic_cast<pVMMethod>(method->GetConstant(bytecode_index));
+    pVMMethod blockMethod = (pVMMethod)(method->GetConstant(bytecode_index));
 
     int num_of_args = blockMethod->GetNumberOfArguments();
 

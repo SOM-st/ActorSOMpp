@@ -51,7 +51,7 @@ public:
 private:
     pVMFrame   previous_frame;
     pVMFrame   context;
-    pVMObject  method;
+    pVMMethod  method;
     pVMInteger stack_pointer;
     pVMInteger bytecode_index;
     pVMInteger local_offset;

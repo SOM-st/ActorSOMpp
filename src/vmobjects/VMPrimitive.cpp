@@ -16,9 +16,9 @@ pVMPrimitive VMPrimitive::GetEmptyPrimitive( pVMSymbol sig ) {
     return prim;
 }
 
-const int VMPrimitive::VMPrimitiveNumberOfFields = 4; 
+const int VMPrimitive::VMPrimitiveNumberOfFields = 2; 
 
-VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(), VMObject(VMPrimitiveNumberOfFields) {
+VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(VMPrimitiveNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
     //the only class that explicitly does this.
     this->SetClass(Globals::PrimitiveClass());
@@ -59,28 +59,9 @@ void VMPrimitive::MarkReferences() {
 
 
 void VMPrimitive::EmptyRoutine( pVMObject _self, pVMFrame /*frame*/ ) {
-    pVMInvokable self = dynamic_cast<pVMInvokable>( _self );
+    pVMInvokable self = (pVMInvokable)( _self );
     pVMSymbol sig = self->GetSignature();
     cout << "undefined primitive called: " << sig->GetChars() << endl;
 }
 
-pVMSymbol VMPrimitive::GetSignature() const
-{
-    return signature;
-}
-
-void VMPrimitive::SetSignature( pVMSymbol sig )
-{
-    signature = sig;
-}
-
-pVMClass VMPrimitive::GetHolder() const
-{
-    return holder;
-}
-
-void VMPrimitive::SetHolder( pVMClass hld )
-{
-    holder = hld;
-}
 

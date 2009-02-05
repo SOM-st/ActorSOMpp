@@ -54,8 +54,9 @@ bool VMClass::HasSuperClass() const {
 bool VMClass::AddInstanceInvokable(VMObject *ptr) {
     pVMInvokable newInvokable = dynamic_cast<pVMInvokable>(ptr);
     if (newInvokable == NULL) {
-        cout << "Error: trying to add non-invokable to invokables array" << endl;
-        throw std::bad_typeid();//("Trying to add non-invokable to invokables array");
+        //cout << "Error: trying to add non-invokable to invokables array" << endl;
+        _UNIVERSE->ErrorExit("Error: trying to add non-invokable to invokables array");
+        //throw std::bad_typeid();//("Trying to add non-invokable to invokables array");
     }
     //Check whether an invokable with the same signature exists and replace it if that's the case
 	for (int i = 0; i < instance_invokables->GetNumberOfIndexableFields(); ++i) {
@@ -70,8 +71,8 @@ bool VMClass::AddInstanceInvokable(VMObject *ptr) {
 			//	  return false;
 			//}
         } else {
-            cout << "Invokables array corrupted. Either NULL pointer added or pointer to non-invokable." << endl;
-            throw std::bad_typeid();//"Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
+            _UNIVERSE->ErrorExit("Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
+            //throw std::bad_typeid();//"Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
         }
 	}
     //it's a new invokable so we need to expand the invokables array.
@@ -140,16 +141,16 @@ void      VMClass::SetInstanceInvokable(int index, pVMObject invokable) {
 pVMObject VMClass::LookupInvokable(pVMSymbol name) const {
     pVMInvokable invokable = NULL;
     for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
-        invokable = dynamic_cast<pVMInvokable>(GetInstanceInvokable(i));
+        invokable = (pVMInvokable)(GetInstanceInvokable(i));
         if (invokable->GetSignature() == name) 
-            return dynamic_cast<pVMObject>(invokable);
+            return (pVMObject)(invokable);
     }
     invokable = NULL;
     //look in super class
     if (this->HasSuperClass())  {
-        invokable = dynamic_cast<pVMInvokable>(this->super_class->LookupInvokable(name));
+        invokable = (pVMInvokable)(this->super_class->LookupInvokable(name));
     }
-	return dynamic_cast<pVMObject>(invokable);
+	return (pVMObject)(invokable);
 }
 
 
@@ -172,7 +173,7 @@ int       VMClass::GetNumberOfInstanceFields() const {
 
 bool      VMClass::HasPrimitives() const {
 	for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
-        pVMInvokable invokable = dynamic_cast<pVMInvokable>(GetInstanceInvokable(i));
+        pVMInvokable invokable = (pVMInvokable)(GetInstanceInvokable(i));
         if (invokable->IsPrimitive()) return true;
     }
     return false;
@@ -354,7 +355,7 @@ void VMClass::set_primitives(void* dlhandle, const StdString& cname) {
     // iterate invokables
     for(int i = 0; i < this->GetNumberOfInstanceInvokables(); i++)  {
         
-        an_invokable = dynamic_cast<pVMInvokable>(this->GetInstanceInvokable(i));
+        an_invokable = (pVMInvokable)(this->GetInstanceInvokable(i));
 #ifdef __DEBUG
         cout << "cname: >" << cname << "<"<< endl;
         cout << an_invokable->GetSignature()->GetStdString() << endl;
@@ -363,7 +364,7 @@ void VMClass::set_primitives(void* dlhandle, const StdString& cname) {
 #ifdef __DEBUG
             cout << "... is a primitive, and is going to be loaded now" << endl;
 #endif
-            the_primitive = dynamic_cast<pVMPrimitive>( an_invokable );
+            the_primitive = (pVMPrimitive)( an_invokable );
             //
             // we have a primitive to load
             // get it's selector

@@ -48,7 +48,7 @@ void BytecodeGenerator::emit_PUSH_FIELD(
 
 void BytecodeGenerator::emit_PUSH_BLOCK(
                 MethodGenerationContext* mgenc, pVMMethod block ) {
-    EMIT2(BC_PUSH_BLOCK, mgenc->FindLiteralIndex(dynamic_cast<pVMObject>(block)));
+    EMIT2(BC_PUSH_BLOCK, mgenc->FindLiteralIndex((pVMObject)(block)));
 }
 
 

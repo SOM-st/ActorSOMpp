@@ -46,11 +46,11 @@ VMFrame::VMFrame(int size, int nof) : VMArray(size,
 //}
 pVMMethod VMFrame::GetMethod() const {
   
-    return dynamic_cast<pVMMethod>(this->method);
+    return this->method;
 }
 
 void      VMFrame::SetMethod(pVMMethod method) {
-    this->method = dynamic_cast<pVMObject>(method);
+    this->method = method;
 }
 
 bool     VMFrame::HasPreviousFrame() const {

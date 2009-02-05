@@ -242,10 +242,10 @@ void Parser::Classdef(ClassGenerationContext* cgenc) {
         method(mgenc);
         
 		if(mgenc->IsPrimitive())
-            cgenc->AddInstanceMethod(dynamic_cast<pVMObject>(mgenc->AssemblePrimitive()));
+            cgenc->AddInstanceMethod((pVMObject)(mgenc->AssemblePrimitive()));
             //SEND(cgenc->instance_methods, add, VMPrimitive_assemble(&mgenc));
         else
-			cgenc->AddInstanceMethod(dynamic_cast<pVMObject>(mgenc->Assemble()));
+			cgenc->AddInstanceMethod((pVMObject)(mgenc->Assemble()));
             //SEND(cgenc->instance_methods, add, VMMethod_assemble(&mgenc));
         delete(mgenc);
         //method_genc_release(&mgenc);

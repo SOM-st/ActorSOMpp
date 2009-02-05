@@ -16,10 +16,10 @@
 //this method's literals (-> VMArray)
 #define theEntries(i) FIELDS[this->GetNumberOfFields()+i]
 
-const int VMMethod::VMMethodNumberOfFields = 7; 
+const int VMMethod::VMMethodNumberOfFields = 5; 
 
 VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) 
-                    : VMInvokable() , VMArray(number_of_constants, nof + VMMethodNumberOfFields){
+                    : VMInvokable(nof + VMMethodNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
     //objectSize += bc_count + number_of_constants*sizeof(pVMObject);
     bc_length = _UNIVERSE->NewInteger( bc_count );
@@ -34,18 +34,18 @@ VMMethod::VMMethod(int bc_count, int number_of_constants, int nof)
 }
 
 void      VMMethod::SetSignature(pVMSymbol sig) { 
-    signature = sig;
+    VMInvokable::SetSignature(sig);
     
     SetNumberOfArguments(Signature::GetNumberOfArguments(signature));
 }
 
 void VMMethod::MarkReferences() {
     if (gcfield) return;
-    VMArray::MarkReferences();
-    /*for (int i = 0 ; i < size->GetEmbeddedInteger() ; ++i) {
+    VMInvokable::MarkReferences();
+    for (int i = 0 ; i < GetNumberOfIndexableFields() ; ++i) {
 		if (theEntries(i) != NULL)
 			theEntries(i)->MarkReferences();
-	}*/
+	}
     /*number_of_locals->MarkReferences();
     maximum_number_of_stack_elements->MarkReferences();
     number_of_arguments->MarkReferences();
@@ -114,9 +114,9 @@ pVMObject VMMethod::GetConstant(int indx) const {
     return this->GetIndexableField(bc);
 }
 
-//uint8_t& VMMethod::operator[](int indx) const {
-//	return _BC[indx];
-//}
+uint8_t& VMMethod::operator[](int indx) const {
+	return _BC[indx];
+}
 
 uint8_t VMMethod::GetBytecode(int indx) const {
     return _BC[indx];
@@ -129,68 +129,46 @@ void VMMethod::SetBytecode(int indx, uint8_t val) {
 
 
 //VMArray Methods
-//pVMArray VMMethod::CopyAndExtendWith(pVMObject item) const {
-//    size_t fields = this->size->GetEmbeddedInteger();
-//	pVMArray result = _UNIVERSE->NewArray(fields+1);
-//    this->CopyIndexableFieldsTo(result);
-//	(*result)[fields] = item; //SetIndexableField(fields, item);
-//	return result;
-//}
-
-
-pVMObject VMMethod::GetIndexableField(int idx) const {
-    return VMArray::operator[] (idx);
-    //if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
-    //    cout << "Array index out of bounds: Accessing " << idx
-    //         << ", but only " << size->GetEmbeddedInteger()-1;
-    //    cout << " entries are available\n";
-    //    _UNIVERSE->ErrorExit("Array index out of bounds exception");
-    //    //throw std::bad_exception();
-    //}
-    //return theEntries(idx);
+pVMArray VMMethod::CopyAndExtendWith(pVMObject item) const {
+    size_t fields = this->GetNumberOfIndexableFields();
+	pVMArray result = _UNIVERSE->NewArray(fields+1);
+    this->CopyIndexableFieldsTo(result);
+	(*result)[fields] = item; //SetIndexableField(fields, item);
+	return result;
 }
 
 
-//void VMMethod::CopyIndexableFieldsTo(pVMArray to) const {
-//	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
-//        (*to)[i] = this->GetIndexableField(i);
-//	}
-//	
-//}
+pVMObject VMMethod::GetIndexableField(int idx) const {
+    if (idx > this->GetNumberOfIndexableFields()-1 || idx < 0) {
+        cout << "Array index out of bounds: Accessing " << idx
+             << ", but only " << GetNumberOfIndexableFields()-1;
+        cout << " entries are available\n";
+        _UNIVERSE->ErrorExit("Array index out of bounds exception");
+        //throw std::bad_exception();
+    }
+    return theEntries(idx);
+}
 
 
-//int VMMethod::GetNumberOfIndexableFields() const {
-//    return size->GetEmbeddedInteger();
-//}
-
+void VMMethod::CopyIndexableFieldsTo(pVMArray to) const {
+	for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
+        (*to)[i] = this->GetIndexableField(i);
+	}
+	
+}
 
 void VMMethod::SetIndexableField(int idx, pVMObject item) {
-    VMArray::operator[](idx) = item;
-    //if (idx > size->GetEmbeddedInteger()-1 || idx < 0) {
-    //    cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << size->GetEmbeddedInteger();
-    //    cout << " entries available\n";
-    //    _UNIVERSE->ErrorExit("Array index out of bounds exception");
-    //    //throw std::bad_exception();
-    //}
-   	//theEntries(idx) = item;
+    if (idx > this->GetNumberOfIndexableFields()-1 || idx < 0) {
+        cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << this->GetNumberOfIndexableFields();
+        cout << " entries available\n";
+        _UNIVERSE->ErrorExit("Array index out of bounds exception");
+        //throw std::bad_exception();
+    }
+   	theEntries(idx) = item;
 }
 
 //VMMethod::~VMMethod() {}
 
-pVMSymbol VMMethod::GetSignature() const
-{
-   return signature;
-}
-
-pVMClass VMMethod::GetHolder() const
-{
-    return holder;
-}
-
-void VMMethod::SetHolder( pVMClass hld )
-{
-    holder = hld;
-}
 
 int VMMethod::GetNumberOfIndexableFields() const
 {

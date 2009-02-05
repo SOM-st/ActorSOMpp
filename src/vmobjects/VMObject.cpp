@@ -48,7 +48,7 @@ void VMObject::Send(StdString selector_string, pVMObject* arguments, int argc) {
     }
 
     pVMClass cl = this->GetClass();
-    pVMInvokable invokable = dynamic_cast<pVMInvokable>(
+    pVMInvokable invokable = (pVMInvokable)(
                                             cl->LookupInvokable(selector));
     (*invokable)(frame);
 }
@@ -125,7 +125,7 @@ void VMObject::MarkReferences() {
        /* if (i == 3 && this->clazz->GetName()->GetStdString() == "Frame") {
             cout << "hier" << endl;
         }*/
-        pVMObject o = dynamic_cast<pVMObject>(FIELDS[i]);
+        pVMObject o = (FIELDS[i]);
         o->MarkReferences();
     }
 //	clazz->MarkReferences();
