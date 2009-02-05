@@ -104,7 +104,7 @@ void VMClass::SetInstanceFields(pVMArray inst_fields) {
 }
 
 
-VMArray  *VMClass::GetInstanceInvokables() const {
+pVMArray VMClass::GetInstanceInvokables() const {
 	return instance_invokables;
 }
 

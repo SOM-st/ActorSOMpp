@@ -10,7 +10,7 @@ bool      VMInvokable::IsPrimitive() const {
 }
 
 
-VMSymbol *VMInvokable::GetSignature() const { 
+pVMSymbol VMInvokable::GetSignature() const { 
     return signature; 
 }
 
@@ -20,7 +20,7 @@ void      VMInvokable::SetSignature(pVMSymbol sig)  {
 }
 
 
-VMClass  *VMInvokable::GetHolder()  const {
+pVMClass VMInvokable::GetHolder()  const {
     return holder; 
 }
 

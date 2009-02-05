@@ -56,7 +56,7 @@ pVMSymbol VMEvaluationPrimitive::computeSignatureString(int argc){
     return _UNIVERSE->SymbolFor(signature_string);
 }
 
-void VMEvaluationPrimitive::evaluationRoutine(VMObject *object, VMFrame *frame){
+void VMEvaluationPrimitive::evaluationRoutine(pVMObject object, pVMFrame frame){
     pVMEvaluationPrimitive self = (pVMEvaluationPrimitive) object;
 
      // Get the block (the receiver) from the stack

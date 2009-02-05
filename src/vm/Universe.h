@@ -107,7 +107,7 @@ private:
     vector<StdString>  handleArguments(int argc, char** argv) ;
     int getClassPathExt(vector<StdString>& tokens, const StdString& arg) const;
     
-    static Universe *theUniverse;
+    static Universe* theUniverse;
     
     int setupClassPath(const StdString& cp);
     int addClassPath(const StdString& cp);
@@ -120,11 +120,11 @@ private:
 
 
     
-	Heap *heap;
+	Heap* heap;
     int heapSize;
 	map<pVMSymbol, pVMObject> globals;
     vector<StdString> class_path;
-    int cp_count;
+    
     Symboltable* symboltable;
     SourcecodeCompiler* compiler;
     Interpreter* interpreter;

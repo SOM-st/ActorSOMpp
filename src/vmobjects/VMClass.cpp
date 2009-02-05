@@ -51,7 +51,7 @@ bool VMClass::HasSuperClass() const {
 }
 
 
-bool VMClass::AddInstanceInvokable(VMObject *ptr) {
+bool VMClass::AddInstanceInvokable(pVMObject ptr) {
     pVMInvokable newInvokable = dynamic_cast<pVMInvokable>(ptr);
     if (newInvokable == NULL) {
         //cout << "Error: trying to add non-invokable to invokables array" << endl;
@@ -82,7 +82,7 @@ bool VMClass::AddInstanceInvokable(VMObject *ptr) {
 }
 
 
-void VMClass::AddInstancePrimitive(VMPrimitive *ptr) {
+void VMClass::AddInstancePrimitive(pVMPrimitive ptr) {
 	if (AddInstanceInvokable((pVMObject)ptr)) {
 		//cout << "Warn: Primitive "<<ptr->GetSignature<<" is not in class definition for class " << name->GetStdString() << endl;
 	}
@@ -123,7 +123,7 @@ int       VMClass::GetNumberOfInstanceInvokables() const {
 }
 
 
-VMObject *VMClass::GetInstanceInvokable(int index) const {
+pVMObject VMClass::GetInstanceInvokable(int index) const {
     return (*instance_invokables)[index];
 }
 

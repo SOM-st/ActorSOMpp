@@ -174,7 +174,6 @@ int Universe::setupClassPath( const StdString& cp ) {
             class_path.push_back(token);
             ++i;
         }
-        this->cp_count = i;
 
         return ERR_SUCCESS;
     } catch(std::exception e){ 
@@ -185,7 +184,6 @@ int Universe::setupClassPath( const StdString& cp ) {
 
 int Universe::addClassPath( const StdString& cp ) {
     class_path.push_back(cp);
-    ++this->cp_count;
     return ERR_SUCCESS;
 }
 

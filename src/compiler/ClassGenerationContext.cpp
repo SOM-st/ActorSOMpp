@@ -8,10 +8,6 @@ ClassGenerationContext::ClassGenerationContext() :
 	name = NULL;
 	super_name = NULL;
     class_side = false;
-	/*instance_fields.Clear();
-    instance_methods.Clear();
-	class_fields.Clear();
-    class_methods.Clear();*/
 }
 
 

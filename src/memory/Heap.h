@@ -55,7 +55,7 @@ private:
 	int uninterruptable_counter;
 	int size_of_free_heap;
 
-	GarbageCollector *gc;
+	GarbageCollector* gc;
 
     uint32_t num_alloc;
     uint32_t spc_alloc;
