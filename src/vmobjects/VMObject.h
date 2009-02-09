@@ -81,10 +81,6 @@ public:
         return mem;
 	}
 
-	void* operator new[](size_t num_bytes, Heap* heap) {
-		return heap->Allocate(num_bytes);
-	}
-
 	void operator delete(void* self, Heap* heap, 
                          unsigned int /*additional_bytes*/) {
         int size = ((pVMObject)self)->GetObjectSize();
@@ -96,14 +92,6 @@ public:
 		 heap->Free(self, size); 
 	 } 
 
-	 void operator delete[]( void* self, Heap* heap ) {
-		 heap->Free(self); 
-	 }
-
-     pVMObject operator->() {
-         cout << "->" << endl;
-         return this;
-     }
 	
 protected:
     int GetAdditionalSpaceConsumption() const;

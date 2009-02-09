@@ -13,7 +13,7 @@
 const int VMObject::VMObjectNumberOfFields = 1; 
 
 VMObject::VMObject( int numberOfFields ) {
-    //fields = (pVMObject*)&clazz;//fields + sizeof(pVMObject*); 
+    //FIELDS = (pVMObject*)&clazz;
     this->SetNumberOfFields(numberOfFields + VMObjectNumberOfFields);//+1 because of the clazz field
     gcfield = 0; 
 	hash = (int32_t)this;
