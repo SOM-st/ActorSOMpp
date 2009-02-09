@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\Users\abraxas\hpi\CPPSOM\back\trunk\src"
+				AdditionalIncludeDirectories="$(ProjectDir)/src"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -115,7 +115,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="0"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="C:\Users\abraxas\hpi\CPPSOM\back\trunk\src"
+				AdditionalIncludeDirectories="$(ProjectDir)/src"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
