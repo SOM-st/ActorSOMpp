@@ -27,7 +27,7 @@
 # THE SOFTWARE.
 
 CC			=g++
-CFLAGS		=-Wno-endif-labels -O2 $(DBG_FLAGS) $(INCLUDES)
+CFLAGS		=-Wno-endif-labels -O3 $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
 
 INSTALL		=install
@@ -38,7 +38,7 @@ CORE_LIBS	=-lm
 CSOM_NAME	=CPPSOM
 CORE_NAME	=SOMCore
 PRIMITIVESCORE_NAME  =PrimitiveCore
-SHARED_EXTENSION    =a
+SHARED_EXTENSION    =so
 
 ############ global stuff -- overridden by ../Makefile
 
@@ -127,6 +127,7 @@ CLEAN			= $(OBJECTS) \
 .PHONY: clean clobber test
 
 all: $(CSOM_NAME)\
+	$(CSOM_NAME).$(SHARED_EXTENSION) \
 	$(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
 	CORE
 
@@ -140,7 +141,7 @@ profiling: all
 
 
 .cpp.pic.o:
-	$(CC) $(CFLAGS) -c $< -o $*.pic.o
+	$(CC) $(CFLAGS) -fPIC -c $< -o $*.pic.o
 
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $*.o
@@ -156,10 +157,16 @@ clean:
 # product rules
 #
 
-$(CSOM_NAME): $(CSOM_OBJ)
+$(CSOM_NAME): $(CSOM_NAME).$(SHARED_EXTENSION) $(MAIN_OBJ)
 	@echo Linking $(CSOM_NAME) loader
+	$(CC) $(LDFLAGS) \
+		-o $(CSOM_NAME) $(MAIN_OBJ) $(CSOM_NAME).$(SHARED_EXTENSION) -ldl
+	@echo CSOM done.
+
+$(CSOM_NAME).$(SHARED_EXTENSION): $(CSOM_OBJ)
+	@echo Linking $(CSOM_NAME) Dynamic Library
 	$(CC) $(LDFLAGS) -shared \
-		-o $(CSOM_NAME) $(CSOM_OBJ) $(CSOM_LIBS) -ldl
+		-o $(CSOM_NAME).$(SHARED_EXTENSION) $(CSOM_OBJ) $(CSOM_LIBS)
 	@echo CSOM done.
 
 $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME) $(PRIMITIVESCORE_OBJ)
@@ -170,11 +177,12 @@ $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME) $(PRIMITIVESCORE_OBJ)
 	@touch $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION)
 	@echo PrimitivesCore done.
 
-CORE: $(CSOM_NAME) $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) $(PRIMITIVES_OBJ)
+CORE: $(CSOM_NAME) $(PRIMITIVESCORE_OBJ) $(PRIMITIVES_OBJ)
 	@echo Linking SOMCore lib
 	$(CC) $(LDFLAGS)  \
 		-shared -o $(CORE_NAME).csp \
 		$(PRIMITIVES_OBJ) \
+		$(PRIMITIVESCORE_OBJ) \
 		$(CORE_LIBS)
 	mv $(CORE_NAME).csp $(ST_DIR)
 	@touch CORE
@@ -199,7 +207,7 @@ console: all
 # test: run the standard test suite
 #
 test: all
-	./$(CSOM_NAME) -cp ./Smalltalk ./Testsuite/TestHarness.som
+	./$(CSOM_NAME) -cp ./Smalltalk ./TestSuite/TestHarness.som
 
 #
 # bench: run the benchmarks
