@@ -912,10 +912,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\vmobjects\VMPointer.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\vmobjects\VMPrimitive.cpp"
 				>
 			</File>
