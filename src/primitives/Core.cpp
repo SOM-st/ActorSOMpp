@@ -23,6 +23,7 @@
 #include "Core.h"
 #endif
 
+
 static PrimitiveLoader* loader = NULL;
 //map<StdString, PrimitiveContainer*> primitiveObjects;
 //"Constructor"
@@ -88,3 +89,35 @@ extern "C" PrimitiveRoutine* create(const StdString& cname, const StdString& fna
     return loader->GetPrimitiveRoutine(cname, fname);
 }
 
+/* Lib initialization */
+#ifdef __GNUC__
+void init(void) __attribute__((constructor));
+void fini(void) __attribute__((destructor));
+#else
+void _init(void);
+void _fini(void);
+#pragma init _init
+#pragma fini _fini
+#endif __GNUC__
+
+
+#ifdef __GNUC__
+void init(void)
+#else
+void _init(void)
+#endif __GNUC__
+{
+    // Call init funcions.
+    setup();
+    
+}
+
+
+#ifdef __GNUC__
+void fini(void)
+#else
+void _fini(void)
+#endif __GNUC__
+{
+    tearDown();
+}

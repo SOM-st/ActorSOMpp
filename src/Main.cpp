@@ -45,7 +45,6 @@ THE SOFTWARE.
 #include "vmobjects/VMMethod.h"
 #include "vmobjects/VMString.h"
 #include "vmobjects/VMArray.h"
-#include "vmobjects/VMPointer.h"
 #include "vmobjects/ObjectFormats.h"
 
 int main(int argc, char** argv) {
