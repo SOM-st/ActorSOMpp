@@ -27,7 +27,7 @@
 # THE SOFTWARE.
 
 CC			=g++
-CFLAGS		=-O3 $(DBG_FLAGS) $(INCLUDES)
+CFLAGS		=-Wno-endif-labels -O3 $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
 
 INSTALL		=install
@@ -35,7 +35,7 @@ INSTALL		=install
 CSOM_LIBS	=
 CORE_LIBS	=-lm
 
-CSOM_NAME	=CPPSOM
+CSOM_NAME	=SOM++
 CORE_NAME	=SOMCore
 
 ############ global stuff -- overridden by ../Makefile
@@ -77,6 +77,12 @@ MAIN_SRC		= $(wildcard $(SRC_DIR)/*.cpp)
 MAIN_OBJ		= $(MAIN_SRC:.cpp=.o)
 #$(SRC_DIR)/main.o
 
+############# primitives loading
+
+PRIMITIVESCORE_DIR = $(SRC_DIR)/primitivesCore
+PRIMITIVESCORE_SRC = $(wildcard $(PRIMITIVESCORE_DIR)/*.cpp)
+PRIMITIVESCORE_OBJ = $(PRIMITIVESCORE_SRC:.cpp=.pic.o)
+
 ############# primitives location etc.
 
 PRIMITIVES_DIR	= $(SRC_DIR)/primitives
@@ -92,13 +98,13 @@ LIBRARIES		=-L$(ROOT_DIR)
 ############## Collections.
 
 CSOM_OBJ		=  $(MEMORY_OBJ) $(MISC_OBJ) $(VMOBJECTS_OBJ) \
-				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ) 
+				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) $(MAIN_OBJ)
 
-OBJECTS			= $(CSOM_OBJ) 
+OBJECTS			= $(CSOM_OBJ) $(PRIMITIVESCORE_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ)
 
 SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 				$(MISC_SRC) $(VM_SRC) $(VMOBJECTS_SRC)  \
-				$(PRIMITIVES_SRC) $(MAIN_SRC)
+				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(MAIN_SRC)
 
 ############# Things to clean
 
@@ -114,14 +120,14 @@ CLEAN			= $(OBJECTS) \
 #  metarules
 #
 
-.SUFFIXES: .pic.o
+.SUFFIXES: .pic.o .fpic.o
 
 .PHONY: clean clobber test
 
-all: $(CSOM_NAME)
-#\
-#	$(CSOM_NAME).dll \
-#	CORE
+all: $(CSOM_NAME)\
+	$(CSOM_NAME).$(SHARED_EXTENSION) \
+	$(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
+	CORE
 
 
 debug : DBG_FLAGS=-DDEBUG -g
@@ -133,7 +139,7 @@ profiling: all
 
 
 .c.pic.o:
-	$(CC) $(CFLAGS) -g -c $< -o $*.pic.o
+	$(CC) $(CFLAGS) -fPIC -c $< -o $*.pic.o
 
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $*.o
@@ -149,26 +155,36 @@ clean:
 # product rules
 #
 
-$(CSOM_NAME): $(CSOM_OBJ)
+$(CSOM_NAME): $(CSOM_NAME).$(SHARED_EXTENSION) $(MAIN_OBJ)
 	@echo Linking $(CSOM_NAME) loader
 	$(CC) $(LDFLAGS) \
-		-o $(CSOM_NAME) $(CSOM_OBJ)
+		-o $(CSOM_NAME) $(MAIN_OBJ) $(CSOM_NAME).$(SHARED_EXTENSION) -ldl
+	@echo CSOM done.
 
-#$(CSOM_NAME).dll: $(CSOM_OBJ)
-#	@echo Linking $(CSOM_NAME) Dynamic Library
-#	$(CC) $(LDFLAGS) \
-#		-o $(CSOM_NAME).dll 
-#	@echo CSOM done.
-#
-#CORE: $(CSOM_NAME).dll $(PRIMITIVES_OBJ)
-#	@echo Linking SOMCore lib
-#	$(CC) $(LDFLAGS) \
-#		-o $(CORE_NAME) \
-#		$(PRIMITIVES_OBJ) \
-#		$(CORE_LIBS) -l$(CSOM_NAME)
-#	mv $(CORE_NAME) $(ST_DIR)
-#	@touch CORE
-#	@echo SOMCore done.
+$(CSOM_NAME).$(SHARED_EXTENSION): $(CSOM_OBJ)
+	@echo Linking $(CSOM_NAME) Dynamic Library
+	$(CC) $(LDFLAGS) -shared \
+		-o $(CSOM_NAME).$(SHARED_EXTENSION) $(CSOM_OBJ) $(CSOM_LIBS)
+	@echo CSOM done.
+
+$(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME) $(PRIMITIVESCORE_OBJ)
+	@echo Linking PrimitivesCore lib
+	$(CC) $(LDFLAGS) -shared \
+		-o $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
+		$(PRIMITIVESCORE_OBJ) 
+	@touch $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION)
+	@echo PrimitivesCore done.
+
+CORE: $(CSOM_NAME) $(PRIMITIVESCORE_OBJ) $(PRIMITIVES_OBJ)
+	@echo Linking SOMCore lib
+	$(CC) $(LDFLAGS)  \
+		-shared -o $(CORE_NAME).csp \
+		$(PRIMITIVES_OBJ) \
+		$(PRIMITIVESCORE_OBJ) \
+		$(CORE_LIBS)
+	mv $(CORE_NAME).csp $(ST_DIR)
+	@touch CORE
+	@echo SOMCore done.
 
 install: all
 	@echo installing CSOM into build
@@ -180,15 +196,19 @@ install: all
 	@echo done.
 
 #
+# console: start the console
+#
+console: all
+	./$(CSOM_NAME) -cp ./Smalltalk
+
+#
 # test: run the standard test suite
 #
-test: install
-	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME) -cp Smalltalk TestSuite/TestHarness;)
+test: all
+	./$(CSOM_NAME) -cp ./Smalltalk ./TestSuite/TestHarness.som
 
 #
 # bench: run the benchmarks
 #
-bench: install
-	@(cd $(DEST_DIR); \
-	./$(CSOM_NAME) -cp Smalltalk Examples/Benchmarks/All;)
+bench: all
+	./$(CSOM_NAME) -cp ./Smalltalk ./Examples/Benchmarks/All.som
