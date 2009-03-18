@@ -37,6 +37,8 @@ CORE_LIBS	=-lm
 
 CSOM_NAME	=SOM++
 CORE_NAME	=SOMCore
+PRIMITIVESCORE_NAME  =PrimitiveCore
+SHARED_EXTENSION    =dll
 
 ############ global stuff -- overridden by ../Makefile
 
@@ -159,7 +161,7 @@ $(CSOM_NAME): $(CSOM_NAME).$(SHARED_EXTENSION) $(MAIN_OBJ)
 	@echo Linking $(CSOM_NAME) loader
 	$(CC) $(LDFLAGS) \
 		-o $(CSOM_NAME) $(MAIN_OBJ) $(CSOM_NAME).$(SHARED_EXTENSION) -ldl
-	@echo CSOM done.
+	@echo loader done.
 
 $(CSOM_NAME).$(SHARED_EXTENSION): $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) Dynamic Library
@@ -171,7 +173,7 @@ $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME) $(PRIMITIVESCORE_OBJ)
 	@echo Linking PrimitivesCore lib
 	$(CC) $(LDFLAGS) -shared \
 		-o $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
-		$(PRIMITIVESCORE_OBJ) 
+		$(PRIMITIVESCORE_OBJ)
 	@touch $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION)
 	@echo PrimitivesCore done.
 
