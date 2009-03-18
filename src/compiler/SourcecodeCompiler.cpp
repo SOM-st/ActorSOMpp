@@ -23,13 +23,11 @@ SourcecodeCompiler::~SourcecodeCompiler() {
 
 pVMClass SourcecodeCompiler::CompileClass( const StdString& path, 
                                           const StdString& file, 
-                                          pVMClass system_class ) {
-    pVMClass result = system_class;
+                                          pVMClass systemClass ) {
+    pVMClass result = systemClass;
 
-    StdString fname = path + file_separator + file + ".som";
-#ifdef COMPILER_DEBUG
-    std::cout << "compiling " << fname << endl;
-#endif
+    StdString fname = path + fileSeparator + file + ".som";
+
     ifstream* fp = new ifstream();
     fp->open(fname.c_str(), std::ios_base::in);
 	if (!fp->is_open()) {
@@ -38,15 +36,15 @@ pVMClass SourcecodeCompiler::CompileClass( const StdString& path,
 
     if (parser != NULL) delete(parser);
     parser = new Parser(*fp);
-    result = compile(system_class);
+    result = compile(systemClass);
 
     pVMSymbol cname = result->GetName();
-    StdString cname_c = cname->GetStdString();
+    StdString cnameC = cname->GetStdString();
 
-    if (file != cname_c) {
+    if (file != cnameC) {
         
         ostringstream Str;
-        Str << "Filename: " << file << " does not match class name " << cname_c;
+        Str << "Filename: " << file << " does not match class name " << cnameC;
 
         showCompilationError(file, Str.str().c_str());
         return NULL;
@@ -62,12 +60,12 @@ pVMClass SourcecodeCompiler::CompileClass( const StdString& path,
 
 
 pVMClass SourcecodeCompiler::CompileClassString( const StdString& stream, 
-                                                pVMClass system_class ) {
+                                                pVMClass systemClass ) {
     istringstream* ss = new istringstream(stream);
     if (parser != NULL) delete(parser);
     parser = new Parser(*ss);
     
-    pVMClass result = compile(system_class);
+    pVMClass result = compile(systemClass);
     delete(parser);
     parser = NULL;
     delete(ss);
@@ -83,18 +81,18 @@ void SourcecodeCompiler::showCompilationError( const StdString& filename,
 }
 
 
-pVMClass SourcecodeCompiler::compile( pVMClass system_class ) {
+pVMClass SourcecodeCompiler::compile( pVMClass systemClass ) {
     if (parser == NULL) {
         cout << "Parser not initiated" << endl;
         _UNIVERSE->ErrorExit("Compiler error");
     }
     ClassGenerationContext* cgc = new ClassGenerationContext();
 
-    pVMClass result = system_class;
+    pVMClass result = systemClass;
 
     parser->Classdef(cgc);
 
-    if (system_class == NULL) result = cgc->Assemble();
+    if (systemClass == NULL) result = cgc->Assemble();
     else cgc->AssembleSystemClass(result);
 
     delete(cgc);

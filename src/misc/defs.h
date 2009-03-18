@@ -49,14 +49,11 @@ THE SOFTWARE.
 
 #endif
 //
-// macro for freeing an array
+// defs for classpath extraction
 //
-#define path_separator ':'
-#define file_separator '/'
+#define pathSeparator ':'
+#define fileSeparator '/'
 
-//typedef int MethodGenerationContext;
-//typedef int ClassGenerationContext;
-//typedef string pVMSymbol;
 typedef std::string StdString;
 
 #if defined(_MSC_VER)

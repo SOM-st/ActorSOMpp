@@ -25,29 +25,29 @@ public:
     pVMObject GetSelf();
 private:
     pVMFrame frame;
-    pVMFrame popFrame();
     StdString uG;
     StdString dnu;
     StdString eB;
 
+    pVMFrame popFrame();
     void popFrameAndPushResult(pVMObject result);
-    void send(pVMSymbol signature, pVMClass receiver_class);
+    void send(pVMSymbol signature, pVMClass receiverClass);
     
-    void do_dup();
-    void do_push_local(int bytecode_index);
-    void do_push_argument(int bytecode_index);
-    void do_push_field(int bytecode_index);
-    void do_push_block(int bytecode_index);
-    void do_push_constant(int bytecode_index);
-    void do_push_global(int bytecode_index);
-    void do_pop(void);
-    void do_pop_local(int bytecode_index);
-    void do_pop_argument(int bytecode_index);
-    void do_pop_field(int bytecode_index);
-    void do_send(int bytecode_index);
-    void do_super_send(int bytecode_index);
-    void do_return_local();
-    void do_return_non_local();
+    void doDup();
+    void doPushLocal(int bytecodeIndex);
+    void doPushArgument(int bytecodeIndex);
+    void doPushField(int bytecodeIndex);
+    void doPushBlock(int bytecodeIndex);
+    void doPushConstant(int bytecodeIndex);
+    void doPushGlobal(int bytecodeIndex);
+    void doPop(void);
+    void doPopLocal(int bytecodeIndex);
+    void doPopArgument(int bytecodeIndex);
+    void doPopField(int bytecodeIndex);
+    void doSend(int bytecodeIndex);
+    void doSuperSend(int bytecodeIndex);
+    void doReturnLocal();
+    void doReturnNonLocal();
 };
 
 #endif

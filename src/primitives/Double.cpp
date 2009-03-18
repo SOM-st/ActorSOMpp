@@ -45,7 +45,7 @@ THE SOFTWARE.
  * This function coerces any right-hand parameter to a double, regardless of its
  * true nature. This is to make sure that all Double operations return Doubles.
  */
-double coerce_double(pVMObject x) {
+double _Double::coerceDouble(pVMObject x) {
     if(dynamic_cast<pVMDouble>(x) != NULL)
         return ((pVMDouble)x)->GetEmbeddedDouble();
     else if(dynamic_cast<pVMInteger>(x) != NULL)
@@ -66,7 +66,7 @@ double coerce_double(pVMObject x) {
  * right are prepared for the operation.
  */
 #define PREPARE_OPERANDS \
-    double right = coerce_double(frame->Pop()); \
+    double right = coerceDouble(frame->Pop()); \
     pVMDouble leftObj = (pVMDouble)frame->Pop(); \
     double left = leftObj->GetEmbeddedDouble();
 

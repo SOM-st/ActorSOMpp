@@ -11,9 +11,9 @@
 //#include "../misc/HashMap.h"
 class VMObject;
 
-struct free_list_entry 
+struct FreeListEntry 
 {
-    free_list_entry* next;
+    FreeListEntry* next;
     size_t size;
 } ;
 
@@ -26,15 +26,15 @@ public:
     static Heap* GetHeap();
     static void InitializeHeap(int objectSpaceSize = 1048576);
     static void DestroyHeap();
-	Heap(int object_space_size = 1048576);
+	Heap(int objectSpaceSize = 1048576);
 	~Heap();
     pVMObject AllocateObject(size_t size);
 	void* Allocate(size_t size);
     void Free(void* ptr);
 	void Free(void* ptr, int size);
 	
-    void StartUninterruptableAllocation() { ++uninterruptable_counter; } ;
-    void EndUninterruptableAllocation() { --uninterruptable_counter; } ;
+    void StartUninterruptableAllocation() { ++uninterruptableCounter; } ;
+    void EndUninterruptableAllocation() { --uninterruptableCounter; } ;
 
 	//void SetGlobal(StdString name, void* val);
     
@@ -44,22 +44,22 @@ private:
     void internalFree(void* ptr);
 	void* internalAllocate(size_t size);
 
-	void* object_space;
+	void* objectSpace;
 
-	free_list_entry* free_list_start;
+	FreeListEntry* freeListStart;
     
     
 	
-    int object_space_size;
-	int buffersize_for_uninterruptable;
-	int uninterruptable_counter;
-	int size_of_free_heap;
+    int objectSpaceSize;
+	int buffersizeForUninterruptable;
+	int uninterruptableCounter;
+	int sizeOfFreeHeap;
 
 	GarbageCollector* gc;
 
-    uint32_t num_alloc;
-    uint32_t spc_alloc;
-    uint32_t num_alloc_total;
+    uint32_t numAlloc;
+    uint32_t spcAlloc;
+    uint32_t numAllocTotal;
 	//HashMap<StdString, void*, OOObject> globals;
 };
 

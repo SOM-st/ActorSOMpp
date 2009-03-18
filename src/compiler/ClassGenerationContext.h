@@ -14,7 +14,7 @@ public:
 	ClassGenerationContext();
 	~ClassGenerationContext();
     pVMClass Assemble();
-    void AssembleSystemClass(pVMClass system_class);
+    void AssembleSystemClass(pVMClass systemClass);
 
 	bool FindField(const StdString&);
 	void AddInstanceField(pVMObject);
@@ -22,20 +22,20 @@ public:
 	void AddInstanceMethod(pVMObject);
 	void AddClassMethod(pVMObject);
 	void SetName(pVMSymbol n) { name = n; }
-	void SetSuperName(pVMSymbol sn) { super_name = sn; }
-	void SetClassSide(bool cs) { class_side = cs; }
+	void SetSuperName(pVMSymbol sn) { superName = sn; }
+	void SetClassSide(bool cs) { classSide = cs; }
 	pVMSymbol GetName(void) { return name; };
-	pVMSymbol GetSuperName(void) { return super_name; };
-	bool IsClassSide(void) { return class_side;};
+	pVMSymbol GetSuperName(void) { return superName; };
+	bool IsClassSide(void) { return classSide;};
 
 private:
     pVMSymbol name;
-    pVMSymbol super_name;
-    bool      class_side;
-    ExtendedList<pVMObject>     instance_fields;
-    ExtendedList<pVMObject>     instance_methods;
-    ExtendedList<pVMObject>     class_fields;
-    ExtendedList<pVMObject>     class_methods;
+    pVMSymbol superName;
+    bool      classSide;
+    ExtendedList<pVMObject>     instanceFields;
+    ExtendedList<pVMObject>     instanceMethods;
+    ExtendedList<pVMObject>     classFields;
+    ExtendedList<pVMObject>     classMethods;
 
 };
 

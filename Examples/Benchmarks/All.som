@@ -1,6 +1,6 @@
 "
 
-$Id: All.som 92 2007-09-06 09:23:43Z tobias.pape $
+$Id: All.som 286 2008-05-09 22:38:14Z daniel.richter $
 
 Copyright (c) 2001-2007 see AUTHORS file
 
@@ -28,9 +28,8 @@ All = (
     run = ( 
         | total |
         total := 0.
-        '!!!!!!!!!!!!!!!!!!!' println.
         
-        Fibonacci, Dispatch, Bounce, Permute, Queens, List, Recurse,
+        IntegerLoop, Fibonacci, Dispatch, Bounce, Loop, Permute, Queens, List, Recurse,
         Storage, Sieve, BubbleSort, QuickSort, Sum, Towers, TreeSort
             do: [ :benchmark | total := total + benchmark new run ].
         

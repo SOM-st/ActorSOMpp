@@ -20,20 +20,20 @@ public:
 	void Add(const T& ptr);
 	void AddIfAbsent(const T& ptr);
 	void AddAll(const ExtendedList<T>* list);
-    void push_back(const T& ptr);
+    void PushBack(const T& ptr);
 	void Clear();
 	int Size() const;
-	T get(int index);
+	T Get(int index);
 	int IndexOf(const T& needle);
 
     typedef typename list<T>::iterator iterator_t;
     typedef typename list<T>::const_iterator const_iterator_t;
     
-    iterator_t begin() {
+    iterator_t Begin() {
         return theList.begin();
     }
     // implement for const objects...
-    const_iterator_t begin() const { return theList.begin(); }
+    const_iterator_t Begin() const { return theList.begin(); }
 
 private:
 	list<T> theList;
@@ -76,7 +76,7 @@ void ExtendedList<T>::Clear() {
 
 
 template <class T>
-T ExtendedList<T>::get(int index) {
+T ExtendedList<T>::Get(int index) {
     for (iterator_t it = theList.begin(); it!=theList.end(); ++it){
 		if (index == 0) return *it;
 		--index;
@@ -103,7 +103,7 @@ int ExtendedList<T>::IndexOf(const T& needle) {
 
 
 template < class T >
-void ExtendedList<T>::push_back( const T& ptr ) {
+void ExtendedList<T>::PushBack( const T& ptr ) {
     theList.push_back(ptr);
 }
 

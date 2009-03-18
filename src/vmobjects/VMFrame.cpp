@@ -22,9 +22,9 @@ pVMFrame VMFrame::EmergencyFrameFrom( pVMFrame from, int extraLength ) {
     result->SetPreviousFrame(from->GetPreviousFrame());
     result->SetMethod(from->GetMethod());
     result->SetContext(from->GetContext());
-    result->stack_pointer = from->GetStackPointer();
-    result->bytecode_index = from->bytecode_index;
-    result->local_offset = from->local_offset;
+    result->stackPointer = from->GetStackPointer();
+    result->bytecodeIndex = from->bytecodeIndex;
+    result->localOffset = from->localOffset;
 
     return result;
 }
@@ -35,9 +35,9 @@ const int VMFrame::VMFrameNumberOfFields = 6;
 VMFrame::VMFrame(int size, int nof) : VMArray(size, 
                                               nof + VMFrameNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
-    this->local_offset = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
-    this->bytecode_index = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
-    this->stack_pointer = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
+    this->localOffset = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
+    this->bytecodeIndex = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
+    this->stackPointer = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
     _HEAP->EndUninterruptableAllocation();
 }
 //
@@ -54,7 +54,7 @@ void      VMFrame::SetMethod(pVMMethod method) {
 }
 
 bool     VMFrame::HasPreviousFrame() const {
-    return this->previous_frame != Globals::NilObject();
+    return this->previousFrame != Globals::NilObject();
 }
 
 
@@ -87,27 +87,27 @@ pVMFrame VMFrame::GetOuterContext() {
 
 int VMFrame::RemainingStackSize() const {
     // - 1 because the stack pointer points at the top entry,
-    // so the next entry would be put at stack_pointer+1
+    // so the next entry would be put at stackPointer+1
     return this->GetNumberOfIndexableFields() - 
-           stack_pointer->GetEmbeddedInteger() - 1;
+           stackPointer->GetEmbeddedInteger() - 1;
 }
 
 pVMObject VMFrame::Pop() {
-    int32_t sp = this->stack_pointer->GetEmbeddedInteger();
-    this->stack_pointer->SetEmbeddedInteger(sp-1);
+    int32_t sp = this->stackPointer->GetEmbeddedInteger();
+    this->stackPointer->SetEmbeddedInteger(sp-1);
     return (*this)[sp];
 }
 
 
 void      VMFrame::Push(pVMObject obj) {
-    int32_t sp = this->stack_pointer->GetEmbeddedInteger() + 1;
-    this->stack_pointer->SetEmbeddedInteger(sp);
+    int32_t sp = this->stackPointer->GetEmbeddedInteger() + 1;
+    this->stackPointer->SetEmbeddedInteger(sp);
     (*this)[sp] = obj; //->SetIndexableField(sp, obj);
 }
 
 
 void VMFrame::PrintStack() const {
-    cout << "SP: " << this->stack_pointer->GetEmbeddedInteger() << endl;
+    cout << "SP: " << this->stackPointer->GetEmbeddedInteger() << endl;
     for (int i = 0; i < this->GetNumberOfIndexableFields()+1; ++i) {
         pVMObject vmo = (*this)[i];
         cout << i << ": ";
@@ -130,47 +130,47 @@ void      VMFrame::ResetStackPointer() {
     // arguments are stored in front of local variables
     pVMMethod meth = this->GetMethod();
     size_t lo = meth->GetNumberOfArguments();
-    this->local_offset->SetEmbeddedInteger(lo);
+    this->localOffset->SetEmbeddedInteger(lo);
   
     // Set the stack pointer to its initial value thereby clearing the stack
-    size_t num_lo = meth->GetNumberOfLocals();
-    this->stack_pointer->SetEmbeddedInteger(lo + num_lo - 1);
+    size_t numLocals = meth->GetNumberOfLocals();
+    this->stackPointer->SetEmbeddedInteger(lo + numLocals - 1);
     //cout << "lo: " << lo << ", num_lo: " << num_lo << ", sp: "<<(lo+num_lo-1)<<endl;
 }
 
 
 int       VMFrame::GetBytecodeIndex() const {
-    return this->bytecode_index->GetEmbeddedInteger();
+    return this->bytecodeIndex->GetEmbeddedInteger();
 }
 
 
 void      VMFrame::SetBytecodeIndex(int index) {
-    this->bytecode_index->SetEmbeddedInteger(index);
+    this->bytecodeIndex->SetEmbeddedInteger(index);
 }
 
 
 pVMObject VMFrame::GetStackElement(int index) const {
-    int sp = this->stack_pointer->GetEmbeddedInteger();
+    int sp = this->stackPointer->GetEmbeddedInteger();
     return (*this)[sp-index];
 }
 
 
 void      VMFrame::SetStackElement(int index, pVMObject obj) {
-    int sp = this->stack_pointer->GetEmbeddedInteger();
+    int sp = this->stackPointer->GetEmbeddedInteger();
     (*this)[sp-index] = obj; //->SetIndexableField(sp-index, obj);
 }
 
 
 pVMObject VMFrame::GetLocal(int index, int contextLevel) {
     pVMFrame context = this->GetContextLevel(contextLevel);
-    int32_t lo = context->local_offset->GetEmbeddedInteger();
+    int32_t lo = context->localOffset->GetEmbeddedInteger();
     return (*context)[lo+index];
 }
 
 
 void      VMFrame::SetLocal(int index, int contextLevel, pVMObject value) {
     pVMFrame context = this->GetContextLevel(contextLevel);
-    size_t lo = context->local_offset->GetEmbeddedInteger();
+    size_t lo = context->localOffset->GetEmbeddedInteger();
     (*context)[lo+index] = value; //->SetIndexableField(lo+index, value);
 }
 
@@ -221,12 +221,4 @@ void      VMFrame::CopyArgumentsFrom(pVMFrame frame) {
 void VMFrame::MarkReferences() {
     if (gcfield) return;
      VMArray::MarkReferences();
-
-     //previous_frame->MarkReferences();
-    
-     //context->MarkReferences();
-     //method->MarkReferences();
-     //stack_pointer->MarkReferences();
-     //bytecode_index->MarkReferences();
-     //local_offset->MarkReferences();
 }

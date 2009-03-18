@@ -36,8 +36,8 @@ class SourcecodeCompiler;
 
 
 // for runtime debug
-extern short dump_bytecodes;
-extern short gc_verbosity;
+extern short dumpBytecodes;
+extern short gcVerbosity;
 
 using namespace std;
 class Universe
@@ -83,8 +83,6 @@ public:
     pVMString     NewString(const char*) const;
     pVMSymbol     NewSymbol(const char*);
     pVMClass      NewSystemClass(void) const;
-    
-    pVMObject     NewTaggedInteger(int32_t);
 
     void          InitializeSystemClass(pVMClass, pVMClass, const char*);
 
@@ -123,7 +121,7 @@ private:
 	Heap* heap;
     int heapSize;
 	map<pVMSymbol, pVMObject> globals;
-    vector<StdString> class_path;
+    vector<StdString> classPath;
     
     Symboltable* symboltable;
     SourcecodeCompiler* compiler;

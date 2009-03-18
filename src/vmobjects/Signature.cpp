@@ -9,17 +9,17 @@ int Signature::GetNumberOfArguments(pVMSymbol sig) {
         StdString str = sig->GetStdString();
         
         // colons in str
-        int num_colons =0;
+        int numColons =0;
         
         // search the str
         for(unsigned int i=0 ; i<=str.length(); ++i) 
             if(str[i]==':')
                 // additional colon found
-                num_colons++;
+                numColons++;
         
         // The number of arguments is equal to the number of colons plus one
         // (->> SELF)
-        return num_colons + 1;        
+        return numColons + 1;        
     }    
 }
 

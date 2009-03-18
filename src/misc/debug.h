@@ -34,76 +34,76 @@ THE SOFTWARE.
 #include <stdarg.h>
 
 
-#define fprintf_pass(f,x) \
+#define FprintfPass(f,x) \
     va_list ap; \
     va_start(ap, (x)); \
     (void)vfprintf((f), (x), ap); \
     va_end(ap)
 
 
-static inline void debug_print(const char* fmt, ...) {
-    fprintf_pass(stderr, fmt);
+static inline void DebugPrint(const char* fmt, ...) {
+    FprintfPass(stderr, fmt);
 }
 
 
-static inline void debug_prefix(const char* prefix) {
-    debug_print("%-6s ", prefix);
+static inline void DebugPrefix(const char* prefix) {
+    DebugPrint("%-6s ", prefix);
 }
 
 
-#define debug_pass(x) \
+#define DebugPass(x) \
     va_list ap; \
     va_start(ap, (x)); \
     (void)vfprintf(stderr, (x), ap); \
     va_end(ap)
 
 
-static inline void debug_info(const char* fmt, ...) {
+static inline void DebugInfo(const char* fmt, ...) {
     #ifdef DEBUG
-        debug_prefix("INFO:"); 
-        debug_pass(fmt);
+        DebugPrefix("INFO:"); 
+        DebugPass(fmt);
     #else
         (void)fmt;
     #endif DEBUG
 }
 
 
-static inline void debug_log(const char* fmt, ...) {
+static inline void DebugLog(const char* fmt, ...) {
     #ifdef DEBUG
-        debug_prefix("LOG:"); 
-        debug_pass(fmt);
+        DebugPrefix("LOG:"); 
+        DebugPass(fmt);
     #else
     (void)fmt;
     #endif DEBUG
 }
 
 
-static inline void debug_warn(const char* fmt, ...) {
-    debug_prefix("WARN:"); 
-    debug_pass(fmt);
+static inline void DebugWarn(const char* fmt, ...) {
+    DebugPrefix("WARN:"); 
+    DebugPass(fmt);
 }
 
 
-static inline void debug_error(const char* fmt, ...) {
-    debug_prefix("ERROR:"); 
-    debug_pass(fmt);
+static inline void DebugError(const char* fmt, ...) {
+    DebugPrefix("ERROR:"); 
+    DebugPass(fmt);
 }
 
 
-static inline void debug_dump(const char* fmt, ...) {
-    debug_prefix("DUMP:"); 
-    debug_pass(fmt);    
+static inline void DebugDump(const char* fmt, ...) {
+    DebugPrefix("DUMP:"); 
+    DebugPass(fmt);    
 }
 
 
-static inline void debug_trace(const char* fmt, ...) {
-    debug_prefix("TRACE:"); 
-    debug_pass(fmt);
+static inline void DebugTrace(const char* fmt, ...) {
+    DebugPrefix("TRACE:"); 
+    DebugPass(fmt);
 }
 
 
-#undef fprintf_pass
-#undef debug_pass 
+#undef FprintfPass
+#undef DebugPass 
 
 
 #endif DEBUG_H_

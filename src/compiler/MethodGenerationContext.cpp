@@ -10,52 +10,39 @@
 
 MethodGenerationContext::MethodGenerationContext() {
 	//signature = 0;
-	holder_genc = 0;
-	outer_genc = 0;
+	holderGenc = 0;
+	outerGenc = 0;
 	this->arguments.Clear();
 	this->literals.Clear();
 	this->locals.Clear();
     this->bytecode.clear();
 	primitive = false;
-	block_method = false;
+	blockMethod = false;
 	finished = false;
 }
 
 pVMMethod MethodGenerationContext::Assemble() {
     // create a method instance with the given number of bytecodes and literals
-    int num_literals = this->literals.Size();
+    int numLiterals = this->literals.Size();
     
     pVMMethod meth = _UNIVERSE->NewMethod(this->signature, bytecode.size(),
-                                                                num_literals);
+                                                                numLiterals);
     
     // populate the fields that are immediately available
-    int num_locals = this->locals.Size();
-    meth->SetNumberOfLocals(num_locals);
+    int numLocals = this->locals.Size();
+    meth->SetNumberOfLocals(numLocals);
 
     meth->SetMaximumNumberOfStackElements(this->ComputeStackDepth());
-#ifdef __DEBUG
-    cout << "num_locals: " << num_locals << endl;
-    cout << "num_literals: " << num_literals << endl;
-#endif
+
     // copy literals into the method
-    for(int i = 0; i < num_literals; i++) {
-        pVMObject l = literals.get(i);
+    for(int i = 0; i < numLiterals; i++) {
+        pVMObject l = literals.Get(i);
         meth->SetIndexableField(i, l);
     }
-#ifdef __DEBUG
-    cout << "bp: " << bytecode.size();
-    cout << "bcs ";
-#endif
     // copy bytecodes into method
     for(size_t i = 0; i < bytecode.size(); i++){
         meth->SetBytecode(i, bytecode[i]);
-#ifdef __DEBUG
-        cout << (int)bytecode[i] << " ";
-#endif
     }
-#ifdef __DEBUG
-    cout << endl;
-#endif
     // return the method - the holder field is to be set later on!
     return meth;
 }
@@ -73,25 +60,25 @@ int8_t MethodGenerationContext::FindLiteralIndex(pVMObject lit) {
 }
 
 bool MethodGenerationContext::FindVar(const StdString& var, int* index, 
-                                        int* context, bool* is_argument) {
+                                        int* context, bool* isArgument) {
 	if((*index = locals.IndexOf( var)) == -1) {
         if((*index = arguments.IndexOf( var)) == -1) {
-            if(!outer_genc)
+            if(!outerGenc)
                 return false;
             else {
                 (*context)++;
-				return outer_genc->FindVar(var, index,
-                    context, is_argument);
+				return outerGenc->FindVar(var, index,
+                    context, isArgument);
             }
         } else
-            *is_argument = true;
+            *isArgument = true;
     }
     
     return true;
 }
 
 bool MethodGenerationContext::FindField(const StdString& field) {
-	return holder_genc->FindField(field);
+	return holderGenc->FindField(field);
 }
 
 int MethodGenerationContext::GetNumberOfArguments() { 
@@ -100,7 +87,7 @@ int MethodGenerationContext::GetNumberOfArguments() {
 
 uint8_t MethodGenerationContext::ComputeStackDepth() {
 	uint8_t depth = 0;
-    uint8_t max_depth = 0;
+    uint8_t maxDepth = 0;
     unsigned int i = 0;
     
     while(i < bytecode.size()) {
@@ -121,8 +108,7 @@ uint8_t MethodGenerationContext::ComputeStackDepth() {
             case BC_SUPER_SEND       : {
                 // these are special: they need to look at the number of
                 // arguments (extractable from the signature)
-                pVMSymbol sig = (pVMSymbol)literals.get(bytecode[i + 1]);
-                    //SEND(mgenc->literals, get, mgenc->bytecode[i + 1]);
+                pVMSymbol sig = (pVMSymbol)literals.Get(bytecode[i + 1]);
                 
                 depth -= Signature::GetNumberOfArguments(sig);
                 
@@ -133,30 +119,28 @@ uint8_t MethodGenerationContext::ComputeStackDepth() {
             case BC_RETURN_LOCAL     :
             case BC_RETURN_NON_LOCAL :          i++;    break;
             default                  :
-               // debug_error("Illegal bytecode %d.\n", bytecode[i]);
-                //Universe_exit(1);
                 cout << "Illegal bytecode: " << bytecode[i];
                 _UNIVERSE->Quit(1);
         }
         
-        if(depth > max_depth)
-            max_depth = depth;
+        if(depth > maxDepth)
+            maxDepth = depth;
     }
     
-    return max_depth;
+    return maxDepth;
 }
 
 
 void MethodGenerationContext::SetHolder(ClassGenerationContext* holder) {
-	holder_genc = holder;
+	holderGenc = holder;
 }
 
 void MethodGenerationContext::SetOuter(MethodGenerationContext* outer) {
-	outer_genc = outer;
+	outerGenc = outer;
 }
 
-void MethodGenerationContext::SetIsBlockMethod(bool is_block) {
-	block_method = is_block;
+void MethodGenerationContext::SetIsBlockMethod(bool isBlock) {
+	blockMethod = isBlock;
 }
 
 void MethodGenerationContext::SetSignature(pVMSymbol sig) {
@@ -168,32 +152,32 @@ void MethodGenerationContext::SetPrimitive(bool prim) {
 }
 
 void MethodGenerationContext::AddArgument(const StdString& arg) {
-	arguments.push_back(arg);
+	arguments.PushBack(arg);
 }
 
 void MethodGenerationContext::AddLocal(const StdString& local) {
-	locals.push_back(local);
+	locals.PushBack(local);
 }
 
 void MethodGenerationContext::AddLiteral(pVMObject lit) {
-	literals.push_back(lit);
+	literals.PushBack(lit);
 }
 
 bool MethodGenerationContext::AddArgumentIfAbsent(const StdString& arg) {
 	if (locals.IndexOf( arg) != -1) return false;
-	arguments.push_back(arg);
+	arguments.PushBack(arg);
 	return true;
 }
 
 bool MethodGenerationContext::AddLocalIfAbsent(const StdString& local) {
 	if (locals.IndexOf( local) != -1) return false;
-	locals.push_back(local);
+	locals.PushBack(local);
 	return true;
 }
 
 bool MethodGenerationContext::AddLiteralIfAbsent(pVMObject lit) {
 	if (literals.IndexOf( lit) != -1) return false;
-	literals.push_back(lit);
+	literals.PushBack(lit);
 	return true;
 }
 void MethodGenerationContext::SetFinished(bool finished) {
@@ -201,11 +185,11 @@ void MethodGenerationContext::SetFinished(bool finished) {
 }
 
 ClassGenerationContext* MethodGenerationContext::GetHolder() {
-	return holder_genc;
+	return holderGenc;
 }
 
-MethodGenerationContext* MethodGenerationContext::get_outer() {
-	return outer_genc;
+MethodGenerationContext* MethodGenerationContext::GetOuter() {
+	return outerGenc;
 }
 
 pVMSymbol MethodGenerationContext::GetSignature() {
@@ -217,7 +201,7 @@ bool MethodGenerationContext::IsPrimitive() {
 }
 
 bool MethodGenerationContext::IsBlockMethod() {
-	return block_method;
+	return blockMethod;
 }
 
 bool MethodGenerationContext::IsFinished() {
@@ -225,8 +209,5 @@ bool MethodGenerationContext::IsFinished() {
 }
 
 void MethodGenerationContext::AddBytecode(uint8_t bc) {
-    if (bc == 255) {
-        cout << "bla" << endl;
-    }
 	bytecode.push_back(bc);
 }

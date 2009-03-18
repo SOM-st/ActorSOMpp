@@ -16,11 +16,11 @@ public:
     ~SourcecodeCompiler();
 
     pVMClass CompileClass(const StdString& path, const StdString& file,
-                                  pVMClass system_class);
-    pVMClass CompileClassString(const StdString& stream, pVMClass system_class);
+                                  pVMClass systemClass);
+    pVMClass CompileClassString(const StdString& stream, pVMClass systemClass);
 private:
     void showCompilationError(const StdString& filename, const char* message);
-    pVMClass compile(pVMClass system_class);
+    pVMClass compile(pVMClass systemClass);
     Parser* parser;
 };
 

@@ -28,4 +28,3 @@ pVMClass VMInvokable::GetHolder()  const {
 void      VMInvokable::SetHolder(pVMClass hld) {
     holder = hld; 
 }
-//virtual void invoke_method(pVMFrame) = 0;

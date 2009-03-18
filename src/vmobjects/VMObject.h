@@ -71,13 +71,18 @@ public:
      *   - array size in VMArray; a_b must be set to (size_of_array*sizeof(VMObect*))
      *   - fields in VMMethod, a_b must be set to (number_of_bc + number_of_csts*sizeof(pVMObject))
      */
-	void* operator new( size_t num_bytes, Heap* heap, 
-                        unsigned int additional_bytes = 0) {
+	void* operator new( size_t numBytes, Heap* heap, 
+                        unsigned int additionalBytes = 0) {
         /*if (num_bytes == 24) {
             cout << "hier";
         }
         cout << "Allocating " << num_bytes << "+" << additional_bytes << " = " << num_bytes + additional_bytes << "Bytes" <<endl;*/
-        void* mem = (void*)heap->AllocateObject(num_bytes + additional_bytes);
+                            /*void* mem = malloc(num_bytes + additional_bytes);
+                            if (mem == 0) throw std::bad_alloc();
+                            pVMObject o = (pVMObject)mem;
+                            o->SetObjectSize(num_bytes + additional_bytes);
+                            return mem;*/
+        void* mem = (void*)heap->AllocateObject(numBytes + additionalBytes);
         return mem;
 	}
 
@@ -85,11 +90,13 @@ public:
                          unsigned int /*additional_bytes*/) {
         int size = ((pVMObject)self)->GetObjectSize();
 		heap->Free(self, size);
+                             //free(self);
 	}
 
 	 void operator delete( void* self, Heap* heap) {
          int size = ((pVMObject)self)->GetObjectSize();
 		 heap->Free(self, size); 
+         //free(self);
 	 } 
 
 	

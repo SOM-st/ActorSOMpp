@@ -17,7 +17,7 @@ class VMFrame;
 class VMMethod :  public VMInvokable {
 
 public:
-	VMMethod(int bc_count, int number_of_constants, int nof = 0);
+	VMMethod(int bcCount, int numberOfConstants, int nof = 0);
    // VMMethod(MethodGenerationContext* mgenc);
 	//virtual ~VMMethod();
     virtual int       GetNumberOfLocals() const;
@@ -56,11 +56,11 @@ public:
 private:
     pVMObject   GetIndexableField(int idx) const;
 
-    pVMInteger number_of_constants;
-    pVMInteger number_of_locals;
-    pVMInteger maximum_number_of_stack_elements;
-    pVMInteger bc_length;
-    pVMInteger number_of_arguments;
+    pVMInteger numberOfConstants;
+    pVMInteger numberOfLocals;
+    pVMInteger maximumNumberOfStackElements;
+    pVMInteger bcLength;
+    pVMInteger numberOfArguments;
 
     static const int VMMethodNumberOfFields;
 };

@@ -21,12 +21,12 @@ class ClassGenerationContext;
 class VMClass : public VMObject {
 public:
 	VMClass();
-    VMClass(int number_of_fields);
+    VMClass(int numberOfFields);
 	//virtual ~VMClass() {}
 
 	virtual inline pVMClass  GetSuperClass() const; 
     virtual inline void      SetSuperClass(pVMClass); 
-    virtual bool      HasSuperClass() const;  
+    virtual bool             HasSuperClass() const;  
     virtual inline pVMSymbol GetName() const; 
     virtual inline void      SetName(pVMSymbol);  
     virtual inline pVMArray  GetInstanceFields() const; 
@@ -60,27 +60,27 @@ private:
     //void* loadLib(const StdString& path);
     void* loadLib(const StdString& path) const;
     bool isResponsible(void* handle, const StdString& cl) const;
-    void set_primitives(void* handle, const StdString& cname);
+    void setPrimitives(void* handle, const StdString& cname);
    
     
     int numberOfSuperInstanceFields() const;
 
-	pVMClass  super_class; 
+	pVMClass  superClass; 
     pVMSymbol name; 
-    pVMArray  instance_fields; 
-    pVMArray  instance_invokables;
+    pVMArray  instanceFields; 
+    pVMArray  instanceInvokables;
 
     static const int VMClassNumberOfFields;
 };
 
 
 pVMClass VMClass::GetSuperClass() const {
-	return super_class;
+	return superClass;
 }
 
 
 void VMClass::SetSuperClass(pVMClass sup) {
-	super_class = sup;
+	superClass = sup;
 }
 
 
@@ -95,17 +95,17 @@ void VMClass::SetName(pVMSymbol nam) {
 
 
 pVMArray VMClass::GetInstanceFields() const {
-	return instance_fields;
+	return instanceFields;
 }
 
 
-void VMClass::SetInstanceFields(pVMArray inst_fields) {
-	instance_fields = inst_fields;
+void VMClass::SetInstanceFields(pVMArray instFields) {
+	instanceFields = instFields;
 }
 
 
 pVMArray VMClass::GetInstanceInvokables() const {
-	return instance_invokables;
+	return instanceInvokables;
 }
 
 #endif

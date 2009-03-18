@@ -38,8 +38,8 @@ void VMObject::SetNumberOfFields(int nof) {
 
 
 
-void VMObject::Send(StdString selector_string, pVMObject* arguments, int argc) {
-    pVMSymbol selector = _UNIVERSE->SymbolFor(selector_string);
+void VMObject::Send(StdString selectorString, pVMObject* arguments, int argc) {
+    pVMSymbol selector = _UNIVERSE->SymbolFor(selectorString);
     pVMFrame frame = _UNIVERSE->GetInterpreter()->GetFrame();
     frame->Push(this);
 
@@ -48,8 +48,7 @@ void VMObject::Send(StdString selector_string, pVMObject* arguments, int argc) {
     }
 
     pVMClass cl = this->GetClass();
-    pVMInvokable invokable = (pVMInvokable)(
-                                            cl->LookupInvokable(selector));
+    pVMInvokable invokable = (pVMInvokable)(cl->LookupInvokable(selector));
     (*invokable)(frame);
 }
 

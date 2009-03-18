@@ -6,7 +6,7 @@
 #include "../vmobjects/PrimitiveRoutine.h"
 #include <map>
 
-///Base class for all container objects holding CPPSOM primitives.
+///Base class for all container objects holding SOM++ primitives.
 //Primitive container classes need to initialize a std::map<StdString,
 //PrimitiveRoutine*> in order to map smalltalk message names to the method
 //to call.

@@ -63,11 +63,6 @@ StdString VMSymbol::GetPlainString() const {
             case ':':
                 str << '_';
                 break;
-        #ifdef EXPERIMENTAL
-            case ' ':
-                SEND(self->plain_string, concatChar, '_';
-                break;
-        #endif
             default:
                 if (c != 0) {
                     str << c;

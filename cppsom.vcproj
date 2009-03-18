@@ -596,6 +596,10 @@
 			Name="Interpreter"
 			>
 			<File
+				RelativePath=".\src\interpreter\bytecodes.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\interpreter\bytecodes.h"
 				>
 			</File>

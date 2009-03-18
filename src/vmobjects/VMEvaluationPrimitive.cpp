@@ -38,30 +38,30 @@ pVMSymbol VMEvaluationPrimitive::computeSignatureString(int argc){
 #define WITH_LEN (4+1)
 #define COLON_S ":"
     
-    StdString signature_string;
+    StdString signatureString;
     
     // Compute the signature string
     if(argc==1) {
-        signature_string += VALUE_S;
+        signatureString += VALUE_S;
     } else {
-        signature_string += VALUE_S ;
-        signature_string += COLON_S; 
+        signatureString += VALUE_S ;
+        signatureString += COLON_S; 
         --argc;
         while(--argc) 
             // Add extra value: selector elements if necessary
-            signature_string + WITH_S;
+            signatureString + WITH_S;
     }
 
     // Return the signature string
-    return _UNIVERSE->SymbolFor(signature_string);
+    return _UNIVERSE->SymbolFor(signatureString);
 }
 
 void VMEvaluationPrimitive::evaluationRoutine(pVMObject object, pVMFrame frame){
     pVMEvaluationPrimitive self = (pVMEvaluationPrimitive) object;
 
      // Get the block (the receiver) from the stack
-    int num_args = self->numberOfArguments->GetEmbeddedInteger();
-    pVMBlock block = (pVMBlock) frame->GetStackElement(num_args - 1);
+    int numArgs = self->numberOfArguments->GetEmbeddedInteger();
+    pVMBlock block = (pVMBlock) frame->GetStackElement(numArgs - 1);
     
     // Get the context of the block...
     pVMFrame context = block->GetContext();

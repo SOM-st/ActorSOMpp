@@ -1,6 +1,6 @@
 "
 
-$Id: Sum.som 92 2007-09-06 09:23:43Z tobias.pape $
+$Id: Sum.som 515 2008-05-28 15:18:49Z robert.timm $
 
 Copyright (c) 2001-2007 see AUTHORS file
 
@@ -39,5 +39,4 @@ Sum = Benchmark (
         start to: end do: [ :i | sum := sum + i ].
         ^sum
     )
-    
 )

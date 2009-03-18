@@ -13,11 +13,11 @@
 
 GarbageCollector::GarbageCollector(Heap* h) {
 	heap = h;
-    num_collections = 0;
-	num_live = 0;
-	spc_live = 0;
-	num_freed = 0;
-	spc_freed = 0;
+    numCollections = 0;
+	numLive = 0;
+	spcLive = 0;
+	numFreed = 0;
+	spcFreed = 0;
     
 }
 
@@ -28,14 +28,14 @@ GarbageCollector::~GarbageCollector() {
 
 
 void GarbageCollector::Collect() {
-    ++num_collections;
-	num_live = 0;
-	spc_live = 0;
-	num_freed = 0;
-	spc_freed = 0;
+    ++numCollections;
+	numLive = 0;
+	spcLive = 0;
+	numFreed = 0;
+	spcFreed = 0;
 	markReachableObjects();
-	void* pointer = heap->object_space;
-	free_list_entry* currentEntry = heap->free_list_start;
+	void* pointer = heap->objectSpace;
+	FreeListEntry* currentEntry = heap->freeListStart;
 	long bytesToSkip = 0;
 #ifdef __DEBUG
     cout << "Starting garbage collection." << endl;
@@ -57,8 +57,8 @@ void GarbageCollector::Collect() {
 			bytesToSkip = object->GetObjectSize();
             
 			if (object->GetGCField() == 1)  {
-                ++num_live;
-			    spc_live += object->GetObjectSize();
+                ++numLive;
+			    spcLive += object->GetObjectSize();
 				object->SetGCField(0);
 				//std::cout << "Found alive object, keeping" << std::endl;
 			} else {
@@ -67,14 +67,14 @@ void GarbageCollector::Collect() {
                 //doesn't really do anything for managed objects
 				//add freed space as a new entry of the free list
 				memset(pointer, 0, bytesToSkip);
-				free_list_entry* newEntry = 
-                    reinterpret_cast<free_list_entry*>(pointer);
-				++num_freed;
-				spc_freed += bytesToSkip;
+				FreeListEntry* newEntry = 
+                    reinterpret_cast<FreeListEntry*>(pointer);
+				++numFreed;
+				spcFreed += bytesToSkip;
 				newEntry->size = bytesToSkip;
-				if (newEntry < heap->free_list_start)  {
-					newEntry->next = heap->free_list_start;
-					heap->free_list_start = newEntry;
+				if (newEntry < heap->freeListStart)  {
+					newEntry->next = heap->freeListStart;
+					heap->freeListStart = newEntry;
 					currentEntry = newEntry;
 				} else {
 					newEntry->next = currentEntry->next;
@@ -86,18 +86,15 @@ void GarbageCollector::Collect() {
 
 		pointer = (void*)((long)pointer + bytesToSkip);
 
-	} while((long)pointer < ((long)(void*)heap->object_space) + 
-                                          heap->object_space_size);
+	} while((long)pointer < ((long)(void*)heap->objectSpace) + 
+                                          heap->objectSpaceSize);
 
 	mergeFreeSpaces();
 
-    if(gc_verbosity > 1)
+    if(gcVerbosity > 1)
         this->PrintCollectStat();
-    if(gc_verbosity > 2) {
+    if(gcVerbosity > 2) {
         cerr << "TODO: dump heap" << endl;
-        //cerr << "-- post-collection heap dump --" << endl;
-
-        //gc_show_memory();
     }
 }
 
@@ -112,19 +109,19 @@ void GarbageCollector::markReachableObjects() {
     // Get the current frame and mark it.
 	// Since marking is done recursively, this automatically
 	// marks the whole stack
-    pVMFrame current_frame = _UNIVERSE->GetInterpreter()->GetFrame();
-    if (current_frame != NULL) {
-        markObject((pVMObject)current_frame);
+    pVMFrame currentFrame = _UNIVERSE->GetInterpreter()->GetFrame();
+    if (currentFrame != NULL) {
+        markObject((pVMObject)currentFrame);
     }
 }
 
 
 void GarbageCollector::markObject(pVMObject obj) {
-	if (   ((void*) obj >= (void*)  heap->object_space) 
-		&& ((void*) obj <= (void*) heap->object_space) + heap->object_space_size) {
+	if (   ((void*) obj >= (void*)  heap->objectSpace) 
+		&& ((void*) obj <= (void*) heap->objectSpace) + heap->objectSpaceSize) {
 		if (obj->GetGCField() != 1) {
-			//++num_live;
-			//spc_live += obj->GetObjectSize();
+			//++numLive;
+			//spcLive += obj->GetObjectSize();
 
 			/*obj->SetGCField(1);*/
 			//for now the Objects have to mark the referenced objects themselves.
@@ -136,27 +133,21 @@ void GarbageCollector::markObject(pVMObject obj) {
 
 
 void GarbageCollector::mergeFreeSpaces() {
-#ifdef __DEBUG
-	std::cout << "free heap before collecting: " << heap->size_of_free_heap << std::endl;
-#endif __DEBUG
 
-	free_list_entry* currentEntry = heap->free_list_start;
-	heap->size_of_free_heap = 0;
+	FreeListEntry* currentEntry = heap->freeListStart;
+	heap->sizeOfFreeHeap = 0;
 	while (currentEntry->next != NULL) {
 		if((int)currentEntry + (int)currentEntry->size == 
                                         (int)currentEntry->next) {
 			currentEntry->size += currentEntry->next->size; 
 			currentEntry->next = currentEntry->next->next;
 		} else {
-			heap->size_of_free_heap += currentEntry->size;
+			heap->sizeOfFreeHeap += currentEntry->size;
 			currentEntry = currentEntry->next;
 		}
 	}
-	heap->size_of_free_heap += currentEntry->size;
+	heap->sizeOfFreeHeap += currentEntry->size;
 
-#ifdef __DEBUG
-	std::cout << "free heap after collecting: " << heap->size_of_free_heap << std::endl;
-#endif
 }
 
 #define _KB(B) (B/1024)
@@ -164,17 +155,17 @@ void GarbageCollector::mergeFreeSpaces() {
 
 void GarbageCollector::PrintGCStat() const {
     cerr << "-- GC statistics --" << endl;
-    cerr << "* heap size " << heap->object_space_size << " B (" << 
-        _KB(heap->object_space_size) << " kB, " << 
-        _MB(heap->object_space_size) << " MB)" << endl;
-    cerr << "* performed " << num_collections << " collections" << endl;
+    cerr << "* heap size " << heap->objectSpaceSize << " B (" << 
+        _KB(heap->objectSpaceSize) << " kB, " << 
+        _MB(heap->objectSpaceSize) << " MB)" << endl;
+    cerr << "* performed " << numCollections << " collections" << endl;
 }
 
 void GarbageCollector::PrintCollectStat() const {
-    cerr << endl << "[GC " << num_collections << ", " << 
-        heap->num_alloc << " alloc (" << _KB(heap->spc_alloc) <<
-        " kB), " << num_live << " live (" << _KB(spc_live) <<
-        " kB), " << num_freed << " freed (" <<  _KB(spc_freed) <<
+    cerr << endl << "[GC " << numCollections << ", " << 
+        heap->numAlloc << " alloc (" << _KB(heap->spcAlloc) <<
+        " kB), " << numLive << " live (" << _KB(spcLive) <<
+        " kB), " << numFreed << " freed (" <<  _KB(spcFreed) <<
         " kB)]" << endl;
 }
 

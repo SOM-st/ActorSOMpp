@@ -28,9 +28,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
-//#include <stdint.h>
+#include "../misc/defs.h"
  
-// bytecode constants used by CSOM
+// bytecode constants used by SOM++
 
 #define BC_HALT              0
 #define BC_DUP               1
@@ -51,56 +51,26 @@ THE SOFTWARE.
 
 // bytecode lengths
 
-//TODO: put into own module.
-
-static const uint8_t bytecode_lengths[] = {
-    1, // BC_HALT
-    1, // BC_DUP
-    3, // BC_PUSH_LOCAL
-    3, // BC_PUSH_ARGUMENT
-    2, // BC_PUSH_FIELD
-    2, // BC_PUSH_BLOCK
-    2, // BC_PUSH_CONSTANT
-    2, // BC_PUSH_GLOBAL
-    1, // BC_POP
-    3, // BC_POP_LOCAL
-    3, // BC_POP_ARGUMENT
-    2, // BC_POP_FIELD
-    2, // BC_SEND
-    2, // BC_SUPER_SEND
-    1, // BC_RETURN_LOCAL
-    1  // BC_RETURN_NON_LOCAL
-};
-
-static const char* bytecode_names[] = {
-    "HALT            ",
-    "DUP             ",
-    "PUSH_LOCAL      ",
-    "PUSH_ARGUMENT   ",
-    "PUSH_FIELD      ",
-    "PUSH_BLOCK      ",
-    "PUSH_CONSTANT   ",
-    "PUSH_GLOBAL     ",
-    "POP             ",
-    "POP_LOCAL       ",
-    "POP_ARGUMENT    ",
-    "POP_FIELD       ",
-    "SEND            ",
-    "SUPER_SEND      ",
-    "RETURN_LOCAL    ",
-    "RETURN_NON_LOCAL"
-};
 
 class Bytecode {
 
 public:
     static char* GetBytecodeName(uint8_t bc) {
-        return (char*)bytecode_names[bc];
+        return (char*)bytecodeNames[bc];
     }
 
     static uint8_t GetBytecodeLength(uint8_t bc) {
 
-        return bytecode_lengths[bc];// Return the length of the given bytecode
+        return bytecodeLengths[bc];// Return the length of the given bytecode
     }
+
+private:
+    
+static const uint8_t bytecodeLengths[];
+
+static const char* bytecodeNames[];
 };
+
+
+
 #endif

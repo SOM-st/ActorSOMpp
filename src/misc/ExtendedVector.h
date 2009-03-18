@@ -21,11 +21,11 @@ public:
     
     typedef typename vector<T>::iterator iterator_t;
     typedef typename vector<T>::const_iterator const_iterator_t;
-    iterator_t begin() {
+    iterator_t Begin() {
         return theVector.begin();
     }
     // implement for const objects...
-    const_iterator_t begin() const { return theVector.begin(); }
+    const_iterator_t Begin() const { return theVector.begin(); }
 
 private:
 	vector<T> theVector;
@@ -40,7 +40,7 @@ ExtendedVector<T>::ExtendedVector() {
 
 template <class T>
 void ExtendedVector<T>::Add(const T& ptr) {
-	theVector.push_back(ptr);
+	theVector.PushBack(ptr);
 }
 
 template <class T>

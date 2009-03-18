@@ -14,24 +14,24 @@ class VMString;
 
 class BytecodeGenerator {
 public:
-	void emit_HALT(MethodGenerationContext* mgenc);
-	void emit_DUP(MethodGenerationContext* mgenc);
-	void emit_PUSH_LOCAL(MethodGenerationContext* mgenc, int idx, int ctx);
-	void emit_PUSH_ARGUMENT(MethodGenerationContext* mgenc, int idx, int ctx);
-	void emit_PUSH_FIELD(MethodGenerationContext* mgenc, pVMSymbol field);
-	void emit_PUSH_BLOCK(MethodGenerationContext* mgenc, pVMMethod block);
-	void emit_PUSH_CONSTANT(MethodGenerationContext* mgenc, pVMObject cst);
-	void emit_PUSH_CONSTANT_String(
+	void EmitHALT(MethodGenerationContext* mgenc);
+	void EmitDUP(MethodGenerationContext* mgenc);
+	void EmitPUSHLOCAL(MethodGenerationContext* mgenc, int idx, int ctx);
+	void EmitPUSHARGUMENT(MethodGenerationContext* mgenc, int idx, int ctx);
+	void EmitPUSHFIELD(MethodGenerationContext* mgenc, pVMSymbol field);
+	void EmitPUSHBLOCK(MethodGenerationContext* mgenc, pVMMethod block);
+	void EmitPUSHCONSTANT(MethodGenerationContext* mgenc, pVMObject cst);
+	void EmitPUSHCONSTANTString(
         MethodGenerationContext* mgenc, pVMString str);
-	void emit_PUSH_GLOBAL(MethodGenerationContext* mgenc, pVMSymbol global);
-	void emit_POP(MethodGenerationContext* mgenc);
-	void emit_POP_LOCAL(MethodGenerationContext* mgenc, int idx, int ctx);
-	void emit_POP_ARGUMENT(MethodGenerationContext* mgenc, int idx, int ctx);
-	void emit_POP_FIELD(MethodGenerationContext* mgenc, pVMSymbol field);
-	void emit_SEND(MethodGenerationContext* mgenc, pVMSymbol msg);
-	void emit_SUPER_SEND(MethodGenerationContext* mgenc, pVMSymbol msg);
-	void emit_RETURN_LOCAL(MethodGenerationContext* mgenc);
-	void emit_RETURN_NON_LOCAL(MethodGenerationContext* mgenc);
+	void EmitPUSHGLOBAL(MethodGenerationContext* mgenc, pVMSymbol global);
+	void EmitPOP(MethodGenerationContext* mgenc);
+	void EmitPOPLOCAL(MethodGenerationContext* mgenc, int idx, int ctx);
+	void EmitPOPARGUMENT(MethodGenerationContext* mgenc, int idx, int ctx);
+	void EmitPOPFIELD(MethodGenerationContext* mgenc, pVMSymbol field);
+	void EmitSEND(MethodGenerationContext* mgenc, pVMSymbol msg);
+	void EmitSUPERSEND(MethodGenerationContext* mgenc, pVMSymbol msg);
+	void EmitRETURNLOCAL(MethodGenerationContext* mgenc);
+	void EmitRETURNNONLOCAL(MethodGenerationContext* mgenc);
 };
 
 #endif

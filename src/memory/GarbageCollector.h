@@ -28,11 +28,11 @@ private:
     //
     // values for GC statistics
     //
-    uint32_t num_collections;
-	uint32_t num_live;
-	uint32_t spc_live;
-	uint32_t num_freed;
-	uint32_t spc_freed;
+    uint32_t numCollections;
+	uint32_t numLive;
+	uint32_t spcLive;
+	uint32_t numFreed;
+	uint32_t spcFreed;
 
 	
 

@@ -49,12 +49,12 @@ public:
     virtual inline     pVMInteger GetStackPointer() const;
     virtual int        RemainingStackSize() const;
 private:
-    pVMFrame   previous_frame;
+    pVMFrame   previousFrame;
     pVMFrame   context;
     pVMMethod  method;
-    pVMInteger stack_pointer;
-    pVMInteger bytecode_index;
-    pVMInteger local_offset;
+    pVMInteger stackPointer;
+    pVMInteger bytecodeIndex;
+    pVMInteger localOffset;
 
     static const int VMFrameNumberOfFields;
 };
@@ -72,22 +72,22 @@ void     VMFrame::SetContext(pVMFrame frm) {
 }
 
 pVMInteger VMFrame::GetStackPointer() const {
-    return stack_pointer;
+    return stackPointer;
 }
 
 
 
 pVMFrame VMFrame::GetPreviousFrame() const {
-    return (pVMFrame) this->previous_frame;
+    return (pVMFrame) this->previousFrame;
 }
 
 
 void     VMFrame::SetPreviousFrame(pVMObject frm) {
-    this->previous_frame = (pVMFrame)frm;
+    this->previousFrame = (pVMFrame)frm;
 }
 
 void     VMFrame::ClearPreviousFrame() {
-    this->previous_frame = (pVMFrame)Globals::NilObject();
+    this->previousFrame = (pVMFrame)Globals::NilObject();
 }
 
 

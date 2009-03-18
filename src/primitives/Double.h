@@ -47,6 +47,8 @@ public:
     void  Lowerthan(pVMObject object, pVMFrame frame);
     void  AsString(pVMObject object, pVMFrame frame);
     void  Sqrt(pVMObject object, pVMFrame frame);
+private:
+    double coerceDouble(pVMObject x);
 };
 
 

@@ -36,44 +36,44 @@ void Heap::DestroyHeap() {
 
 
 
-Heap::Heap(int object_space_size) {
-	object_space = (void*) malloc(object_space_size);
-	if (!object_space) {
-		std::cout << "Failed to allocate the initial "<< object_space_size 
+Heap::Heap(int objectSpaceSize) {
+	objectSpace = (void*) malloc(objectSpaceSize);
+	if (!objectSpace) {
+		std::cout << "Failed to allocate the initial "<< objectSpaceSize 
                   << " bytes for the GC. Panic.\n" << std::endl;
 		exit(1);
 	}
-	memset(object_space, 0, object_space_size);
-	size_of_free_heap = object_space_size;
-	this->object_space_size = object_space_size;
-	this->buffersize_for_uninterruptable = (int) (object_space_size * 0.1);
+	memset(objectSpace, 0, objectSpaceSize);
+	sizeOfFreeHeap = objectSpaceSize;
+	this->objectSpaceSize = objectSpaceSize;
+	this->buffersizeForUninterruptable = (int) (objectSpaceSize * 0.1);
     
-    uninterruptable_counter = 0;
-	num_alloc = 0;
-    spc_alloc = 0;
-    num_alloc_total = 0;
+    uninterruptableCounter = 0;
+	numAlloc = 0;
+    spcAlloc = 0;
+    numAllocTotal = 0;
 
-	free_list_start = (free_list_entry*) object_space;
-	free_list_start->size = object_space_size;
-	free_list_start->next = NULL;
+	freeListStart = (FreeListEntry*) objectSpace;
+	freeListStart->size = objectSpaceSize;
+	freeListStart->next = NULL;
 	gc = new GarbageCollector(this);
 }
 
 Heap::~Heap() {
-    if (gc_verbosity > 0) {
+    if (gcVerbosity > 0) {
         cout << "-- Heap statistics --" << endl;
-        cout << "Total number of allocations: " << num_alloc_total << endl;
+        cout << "Total number of allocations: " << numAllocTotal << endl;
         cout << "Number of allocations since last collection: " 
-             << num_alloc << endl;
+             << numAlloc << endl;
         std::streamsize p = cout.precision();
         cout.precision(3);
-        cout << "Used memory: " << spc_alloc << "/" 
-             << this->object_space_size << " (" 
-             << ((double)spc_alloc/(double)this->object_space_size)*100 << "%)" << endl;
+        cout << "Used memory: " << spcAlloc << "/" 
+             << this->objectSpaceSize << " (" 
+             << ((double)spcAlloc/(double)this->objectSpaceSize)*100 << "%)" << endl;
         cout.precision(p);
         gc->PrintGCStat();
     }
-	free(object_space);
+	free(objectSpace);
     
 }
 
@@ -84,24 +84,24 @@ pVMObject Heap::AllocateObject(size_t size) {
     //Problem: setting the objectSize here doesn't work if the allocated
     //object is either VMMethode or VMPrimitive because of the multiple inheritance
     vmo->SetObjectSize(paddedSize);
-    ++num_alloc;
-    ++num_alloc_total;
-    spc_alloc += paddedSize;
+    ++numAlloc;
+    ++numAllocTotal;
+    spcAlloc += paddedSize;
     return vmo;
 }
 
 void* Heap::Allocate(size_t size) {
 	if (size == 0) return NULL;
-    if (size < sizeof(free_list_entry))  {
+    if (size < sizeof(FreeListEntry))  {
         return internalAllocate(size);
     }
 #ifdef HEAPDEBUG 
     std::cout << "allocating: " << (int)size << "bytes" << std::endl;
 #endif
-	if (size_of_free_heap <= buffersize_for_uninterruptable &&
-		uninterruptable_counter <= 0)  {
+	if (sizeOfFreeHeap <= buffersizeForUninterruptable &&
+		uninterruptableCounter <= 0)  {
 #ifdef HEAPDEBUG
-        cout << "Not enough free memory, only: " << size_of_free_heap 
+        cout << "Not enough free memory, only: " << sizeOfFreeHeap 
              << " bytes left." << endl
              << "Starting Garbage Collection" << endl;
 #endif
@@ -110,20 +110,20 @@ void* Heap::Allocate(size_t size) {
         //
         //reset allocation stats
         //
-        num_alloc = 0;
-        spc_alloc = 0;
+        numAlloc = 0;
+        spcAlloc = 0;
 	}
 	
 	void* result = NULL;
-	free_list_entry* current_entry = free_list_start;
-	free_list_entry* before_entry = NULL;
+	FreeListEntry* current_entry = freeListStart;
+	FreeListEntry* before_entry = NULL;
 
     //
 	//find first fit
     //
 	while (! ((current_entry->size == size) 
                || (current_entry->next == NULL) 
-               || (current_entry->size >= (size + sizeof(free_list_entry))))) { 
+               || (current_entry->size >= (size + sizeof(FreeListEntry))))) { 
         before_entry = current_entry;
         current_entry = current_entry->next;
     }
@@ -133,10 +133,10 @@ void* Heap::Allocate(size_t size) {
 	// if so, we simply remove this entry from the list
     //
     if (current_entry->size == size) {
-        if (current_entry == free_list_start) { 
+        if (current_entry == freeListStart) { 
 			// first one fitted - adjust the 'first-entry' pointer
             
-            free_list_start = current_entry->next; 
+            freeListStart = current_entry->next; 
 			//PROBLEM (also in CSOM?): 
             //what if last possible allocate is a perfect fit?
         } else {
@@ -148,20 +148,20 @@ void* Heap::Allocate(size_t size) {
     } else {
 		// did we find an entry big enough for the request and a new
 		// free_entry?
-        if (current_entry->size >= (size + sizeof(free_list_entry))) {
+        if (current_entry->size >= (size + sizeof(FreeListEntry))) {
             // save data from found entry
             int old_entry_size = current_entry->size;
-            free_list_entry* old_next = current_entry->next;
+            FreeListEntry* old_next = current_entry->next;
             
             result = current_entry;
             // create new entry and assign data
-            free_list_entry* replace_entry =  
-                            (free_list_entry*) ((int)current_entry + size);
+            FreeListEntry* replace_entry =  
+                            (FreeListEntry*) ((int)current_entry + size);
             
             replace_entry->size = old_entry_size - size;
             replace_entry->next = old_next;
-            if (current_entry == free_list_start) {
-                free_list_start = replace_entry;
+            if (current_entry == freeListStart) {
+                freeListStart = replace_entry;
             } else {
                 before_entry->next = replace_entry;
             }
@@ -170,14 +170,14 @@ void* Heap::Allocate(size_t size) {
 			// running the GC here will most certainly result in data loss!
 //#ifdef HEAPDEBUG 
             cout << "Not enough heap! Data loss is possible" << endl
-			          << "FREE-Size: " << size_of_free_heap 
-                      << ", uninterruptable_counter: " 
-                      << uninterruptable_counter << endl;
+			          << "FREE-Size: " << sizeOfFreeHeap 
+                      << ", uninterruptableCounter: " 
+                      << uninterruptableCounter << endl;
 //#endif
             
 			gc->Collect();
-            num_alloc = 0;
-            spc_alloc = 0;
+            numAlloc = 0;
+            spcAlloc = 0;
 
             //fulfill initial request
             result = Allocate(size);
@@ -192,22 +192,22 @@ void* Heap::Allocate(size_t size) {
     memset(result, 0, size);
 
 #ifdef HEAPDEBUG 
-    cout << "available heap size before alloc: " << size_of_free_heap << endl;
+    cout << "available heap size before alloc: " << sizeOfFreeHeap << endl;
 #endif
 	// update the available size
-    size_of_free_heap -= size;
+    sizeOfFreeHeap -= size;
 
 #ifdef HEAPDEBUG 
-    cout << "available heap size after alloc: " << size_of_free_heap << endl;
-    cout << "heap-start: " << hex  << object_space << endl;
+    cout << "available heap size after alloc: " << sizeOfFreeHeap << endl;
+    cout << "heap-start: " << hex  << objectSpace << endl;
     cout << "allocated at address: " << hex << result << endl;
 #endif
     return result;
 }
 
 void Heap::Free(void* ptr) {
-    if ( ((int)ptr < (int) this->object_space) &&
-        ((int)ptr > (int) this->object_space + this->object_space_size)) {
+    if ( ((int)ptr < (int) this->objectSpace) &&
+        ((int)ptr > (int) this->objectSpace + this->objectSpaceSize)) {
         internalFree(ptr);
     }
 }

@@ -18,16 +18,16 @@
 
 const int VMMethod::VMMethodNumberOfFields = 5; 
 
-VMMethod::VMMethod(int bc_count, int number_of_constants, int nof) 
+VMMethod::VMMethod(int bcCount, int numberOfConstants, int nof) 
                     : VMInvokable(nof + VMMethodNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
     //objectSize += bc_count + number_of_constants*sizeof(pVMObject);
-    bc_length = _UNIVERSE->NewInteger( bc_count );
-    number_of_locals = _UNIVERSE->NewInteger(0);
-    maximum_number_of_stack_elements = _UNIVERSE->NewInteger(0);
-    number_of_arguments = _UNIVERSE->NewInteger(0);
-    this->number_of_constants = _UNIVERSE->NewInteger(number_of_constants);
-    for (int i = 0; i < number_of_constants ; ++i) {
+    bcLength = _UNIVERSE->NewInteger( bcCount );
+    numberOfLocals = _UNIVERSE->NewInteger(0);
+    maximumNumberOfStackElements = _UNIVERSE->NewInteger(0);
+    numberOfArguments = _UNIVERSE->NewInteger(0);
+    this->numberOfConstants = _UNIVERSE->NewInteger(numberOfConstants);
+    for (int i = 0; i < numberOfConstants ; ++i) {
         this->SetIndexableField(i, Globals::NilObject());
     }
     _HEAP->EndUninterruptableAllocation();
@@ -54,37 +54,37 @@ void VMMethod::MarkReferences() {
 }
 
 int VMMethod::GetNumberOfLocals() const {
-    return number_of_locals->GetEmbeddedInteger(); 
+    return numberOfLocals->GetEmbeddedInteger(); 
 }
 
 
 void VMMethod::SetNumberOfLocals(int nol) {
-    number_of_locals->SetEmbeddedInteger(nol); 
+    numberOfLocals->SetEmbeddedInteger(nol); 
 }
 
 
 int VMMethod::GetMaximumNumberOfStackElements() const {
-    return maximum_number_of_stack_elements->GetEmbeddedInteger(); 
+    return maximumNumberOfStackElements->GetEmbeddedInteger(); 
 }
 
 
 void VMMethod::SetMaximumNumberOfStackElements(int stel) {
-    maximum_number_of_stack_elements->SetEmbeddedInteger(stel); 
+    maximumNumberOfStackElements->SetEmbeddedInteger(stel); 
 }
 
 
 int VMMethod::GetNumberOfArguments() const {
-    return number_of_arguments->GetEmbeddedInteger(); 
+    return numberOfArguments->GetEmbeddedInteger(); 
 }
 
 
 void VMMethod::SetNumberOfArguments(int noa) {
-    number_of_arguments->SetEmbeddedInteger(noa); 
+    numberOfArguments->SetEmbeddedInteger(noa); 
 }
 
 
 int VMMethod::GetNumberOfBytecodes() const {
-    return bc_length->GetEmbeddedInteger();
+    return bcLength->GetEmbeddedInteger();
 }
 
 
@@ -172,6 +172,6 @@ void VMMethod::SetIndexableField(int idx, pVMObject item) {
 
 int VMMethod::GetNumberOfIndexableFields() const
 {
-    return this->number_of_constants->GetEmbeddedInteger();
+    return this->numberOfConstants->GetEmbeddedInteger();
 }
 

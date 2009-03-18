@@ -10,11 +10,11 @@ public:
     Shell();
     Shell(pVMMethod);
     ~Shell();
-    void SetBootstrapMethod(pVMMethod bsm) { bootstrap_method = bsm; } ;
-    pVMMethod GetBootstrapMethod() const { return bootstrap_method; } ;
+    void SetBootstrapMethod(pVMMethod bsm) { bootstrapMethod = bsm; } ;
+    pVMMethod GetBootstrapMethod() const { return bootstrapMethod; } ;
     void Start();
 private:
-    pVMMethod bootstrap_method;
+    pVMMethod bootstrapMethod;
 };
 
 #endif

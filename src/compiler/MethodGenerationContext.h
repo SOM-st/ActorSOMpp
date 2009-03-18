@@ -22,13 +22,13 @@ public:
 
 	int8_t          FindLiteralIndex(pVMObject lit);//pVMObject lit);
 	bool            FindVar(const StdString& var, int* index, 
-                            int* context, bool* is_argument);
+                            int* context, bool* isArgument);
 	bool            FindField(const StdString& field);
 	uint8_t         ComputeStackDepth();
 
 	void            SetHolder(ClassGenerationContext* holder);
 	void            SetOuter(MethodGenerationContext* outer);
-	void            SetIsBlockMethod(bool is_block = true);
+	void            SetIsBlockMethod(bool isBlock = true);
 	void            SetSignature(pVMSymbol sig);
 	void            AddArgument(const StdString& arg);
 	void            SetPrimitive(bool prim = true);
@@ -40,7 +40,7 @@ public:
 	void            SetFinished(bool finished = true);
 
 	ClassGenerationContext*     GetHolder();
-	MethodGenerationContext*    get_outer();
+	MethodGenerationContext*    GetOuter();
 
 	pVMSymbol       GetSignature();
 	bool            IsPrimitive();
@@ -50,14 +50,14 @@ public:
 	int             GetNumberOfArguments();
 	void            AddBytecode(uint8_t bc);
 private:
-	ClassGenerationContext*    holder_genc;
-    MethodGenerationContext*   outer_genc;
-    bool                       block_method;
+	ClassGenerationContext*    holderGenc;
+    MethodGenerationContext*   outerGenc;
+    bool                       blockMethod;
     pVMSymbol                  signature;
-    ExtendedList<StdString>  arguments;
+    ExtendedList<StdString>    arguments;
     bool                       primitive;
-    ExtendedList<StdString>  locals;
-    ExtendedList<pVMObject>                      literals;
+    ExtendedList<StdString>    locals;
+    ExtendedList<pVMObject>    literals;
     bool                       finished;
 	vector<uint8_t>            bytecode;
 };
