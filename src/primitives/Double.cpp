@@ -1,7 +1,7 @@
 /*
- * $Id: Double.c 248 2008-04-28 07:33:27Z michael.haupt $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -28,15 +28,14 @@ THE SOFTWARE.
 #include <iostream>
 #include <math.h>
 #include <sstream>
-//#include "../memory/gc.h"
 
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
-#include "../vmobjects/VMDouble.h"
-#include "../vmobjects/VMInteger.h"
-#include "../vmobjects/VMBigInteger.h"
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
+#include <vmobjects/VMDouble.h>
+#include <vmobjects/VMInteger.h>
+#include <vmobjects/VMBigInteger.h>
 
-#include "../vm/Universe.h"
+#include <vm/Universe.h>
  
 #include "Double.h"
 #include "../primitivesCore/Routine.h"

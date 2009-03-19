@@ -1,7 +1,7 @@
 /*
- * $Id: Array.c 223 2008-04-21 11:48:41Z michael.haupt $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -24,15 +24,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
+#include "Array.h"
+ 
+#include "../primitivesCore/Routine.h"
+
 #include <vmobjects/VMInteger.h>
 #include <vmobjects/VMArray.h>
 #include <vmobjects/VMObject.h>
 #include <vmobjects/VMFrame.h>
 
 #include <vm/Universe.h>
- 
-#include "Array.h"
-#include "../primitivesCore/Routine.h"
 
 _Array::_Array() : PrimitiveContainer()
 {

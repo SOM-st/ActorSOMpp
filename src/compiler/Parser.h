@@ -3,9 +3,9 @@
 #define PARSER_H_
 
 /*
- * $Id: Parser.h 143 2007-11-19 21:00:42Z michael.haupt $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -37,11 +37,6 @@ THE SOFTWARE.
 #include "ClassGenerationContext.h"
 #include "MethodGenerationContext.h"
 #include "BytecodeGenerator.h"
-//#include <vm/Universe.h>
-//using namespace std;
-//#include "GenerationContexts.h"
-
-
 
 
 class Parser {

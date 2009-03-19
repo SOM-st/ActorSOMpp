@@ -6,10 +6,15 @@
 #define HEAP_H_
 
 #include "GarbageCollector.h"
+
 #include "../misc/defs.h"
+
 #include "../vmobjects/ObjectFormats.h"
-//#include "../misc/HashMap.h"
+
 class VMObject;
+
+//macro to access the heap
+#define _HEAP Heap::GetHeap()
 
 struct FreeListEntry 
 {
@@ -60,7 +65,6 @@ private:
     uint32_t numAlloc;
     uint32_t spcAlloc;
     uint32_t numAllocTotal;
-	//HashMap<StdString, void*, OOObject> globals;
 };
 
 #endif

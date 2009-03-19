@@ -25,27 +25,6 @@
 #include "../compiler/SourcecodeCompiler.h"
 
 // Here we go:
-// externally refenced variables:
-//pVMObject Globals::NilObject() = NULL;
-//pVMObject Globals::TrueObject() = NULL;
-//pVMObject Globals::FalseObject() = NULL;
-//
-//pVMClass Globals::ObjectClass() = NULL;
-//pVMClass Globals::ClassClass() = NULL;
-//pVMClass Globals::MetaClassClass() = NULL;
-//
-//pVMClass Globals::NilClass() = NULL;
-//pVMClass Globals::IntegerClass() = NULL;
-//pVMClass Globals::BigIntegerClass() = NULL;
-//pVMClass Globals::ArrayClass() = NULL;
-//pVMClass Globals::MethodClass() = NULL;
-//pVMClass Globals::SymbolClass() = NULL;
-//pVMClass Globals::FrameClass() = NULL;
-//pVMClass Globals::PrimitiveClass()() = NULL;
-//pVMClass Globals::StringClass() = NULL;
-//pVMClass Globals::SystemClass() = NULL;
-//pVMClass Globals::BlockClass() = NULL;
-//pVMClass Globals::DoubleClass() = NULL;
 
 short dumpBytecodes;
 short gcVerbosity;
@@ -72,10 +51,6 @@ Universe* Universe::operator->() {
 
 
 void Universe::Start(int argc, char** argv) {
-    /*int vm_argc = 0;
-    
-    vector<StdString> vm_argv = handleArguments(&vm_argc, argc, argv);*/
-   // Core::setup();
 	theUniverse = new Universe();
     theUniverse->initialize(argc, argv);
 }
@@ -83,8 +58,7 @@ void Universe::Start(int argc, char** argv) {
 
 void Universe::Quit(int err) {
     if (theUniverse) delete(theUniverse);
-    
-    //Core::tearDown();
+
     exit(err);
 }
 
@@ -141,7 +115,7 @@ int Universe::getClassPathExt(vector<StdString>& tokens,const StdString& arg ) c
     int result = ERR_SUCCESS;
     int fpIndex = arg.find_last_of(fileSeparator);
     int ssepIndex = arg.find(".som");
-    //cout << "fp: " << fp_index << " ssep: " << ssep_index << endl;
+
     if (fpIndex == StdString::npos) { //no new path
         //different from CSOM (see also HandleArguments):
         //we still want to strip the suffix from the filename, so
@@ -168,7 +142,7 @@ int Universe::setupClassPath( const StdString& cp ) {
         StdString token;
 
         int i = 0;
-        while( getline(ss, token, pathSeparator) ) {//ss >> token) {
+        while( getline(ss, token, pathSeparator) ) {
             classPath.push_back(token);
             ++i;
         }
@@ -208,12 +182,6 @@ void Universe::printUsageAndExit( char* executable ) const {
 Universe::Universe(){};
 
 
-//void Universe::prepareNilObject()
-//{
-//    Globals::NilObject().SetField(0, Globals::NilObject());
-//}
-
-
 void Universe::initialize(int _argc, char** _argv) {
     heapSize = 1048576;
 
@@ -221,12 +189,10 @@ void Universe::initialize(int _argc, char** _argv) {
 
     Heap::InitializeHeap(heapSize);
     heap = _HEAP;
-	//_HEAP = new Heap(heapSize);
+
     symboltable = new Symboltable();
     compiler = new SourcecodeCompiler();
     interpreter = new Interpreter();
-    
-    //Allocate and initialize the global objects
     Globals::InitializeGlobals();
 
     pVMObject systemObject = NewInstance(Globals::SystemClass());
@@ -241,7 +207,7 @@ void Universe::initialize(int _argc, char** _argv) {
     pVMMethod bootstrapMethod = NewMethod(SymbolForChars("bootstrap"), 1, 0);
     bootstrapMethod->SetBytecode(0, BC_HALT);
     bootstrapMethod->SetNumberOfLocals(0);
-    //bootstrapMethod->SetNumberOfArguments(0);
+
     bootstrapMethod->SetMaximumNumberOfStackElements(2);
     bootstrapMethod->SetHolder(Globals::SystemClass());
     
@@ -627,7 +593,7 @@ void Universe::SetGlobal(pVMSymbol name, VMObject *val) {
     StdString str =  name->GetStdString();
 
     globals[name] = val;
-	//globals.insert(pair<StdString, pVMObject>(name->GetStdString(), val));
+	
     pVMObject p = globals[name];
     if (p == NULL) {
         cout << "Global " << str << " just added, but globals[" << str << "] == NULL" << endl;

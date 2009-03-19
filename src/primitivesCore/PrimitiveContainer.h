@@ -2,8 +2,9 @@
 
 #ifndef PRIMITIVECONTAINER_H_
 #define PRIMITIVECONTAINER_H_
-#include "../misc/defs.h"
-#include "../vmobjects/PrimitiveRoutine.h"
+#include <misc/defs.h>
+#include <vmobjects/PrimitiveRoutine.h>
+
 #include <map>
 
 ///Base class for all container objects holding SOM++ primitives.

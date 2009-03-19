@@ -5,6 +5,8 @@
 
 class VMSymbol;
 #include "../vmobjects/ObjectFormats.h"
+
+
 class Signature {
 public:
     static int GetNumberOfArguments(pVMSymbol sig);

@@ -1,5 +1,4 @@
 #include "VMInvokable.h"
-
 #include "VMSymbol.h"
 #include "VMClass.h"
 

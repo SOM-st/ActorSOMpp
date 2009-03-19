@@ -4,6 +4,7 @@
 #define SOURCECODECOMPILER_H_
 
 #include "../misc/defs.h"
+
 #include "../vmobjects/ObjectFormats.h"
 
 class VMClass;

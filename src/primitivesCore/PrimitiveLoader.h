@@ -3,7 +3,7 @@
 #ifndef PRIMITIVESLOADER_H_
 #define PRIMITIVESLOADER_H_
 #include <map>
-#include "../misc/defs.h"
+#include <misc/defs.h>
 
 class PrimitiveContainer;
 class PrimitiveRoutine;

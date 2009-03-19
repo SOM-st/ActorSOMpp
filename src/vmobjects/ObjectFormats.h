@@ -2,21 +2,6 @@
 
 #ifndef OBJECTFORMATS_H_
 #define OBJECTFORMATS_H_
-//class VMArray;
-//class VMBigInteger;
-//class VMSymbol;
-//class VMDouble;
-//class VMEvaluationPrimitive;
-//class VMFrame;
-//class VMInteger;
-//class VMInvokable;
-//class VMMethod;
-//class VMObject;
-//class VMPrimitive;
-//class VMString;
-//class VMSymbol;
-//class PrimitiveRoutine;
-//#include <vmobjects/VMPointer.h>
 
 #define pVMArray VMArray*
 #define pVMBigInteger VMBigInteger*

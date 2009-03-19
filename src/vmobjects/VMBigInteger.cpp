@@ -11,8 +11,3 @@ VMBigInteger::VMBigInteger(int64_t val) : VMObject(VMBigIntegerNumberOfFields) {
     this->embeddedInteger = val;
 }
 
-
-
-//VMBigInteger::~VMBigInteger()
-//{
-//}

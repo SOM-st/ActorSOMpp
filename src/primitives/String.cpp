@@ -1,7 +1,7 @@
 /*
- * $Id: String.c 116 2007-09-20 13:29:40Z tobias.pape $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -26,14 +26,14 @@ THE SOFTWARE.
 
 #include <stdio.h>
 
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
-#include "../vmobjects/VMString.h"
-#include "../vmobjects/VMInteger.h"
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
+#include <vmobjects/VMString.h>
+#include <vmobjects/VMInteger.h>
 
-#include "../vm/Universe.h"
+#include <vm/Universe.h>
 
-#include "../misc/defs.h"
+#include <misc/defs.h>
  
 #include "String.h"
 #include "../primitivesCore/Routine.h"

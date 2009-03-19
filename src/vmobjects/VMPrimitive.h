@@ -4,10 +4,9 @@
 #define VMPRIMITVE_H_
 
 #include "VMObject.h"
-#include "PrimitiveRoutine.h"
 #include "VMInvokable.h"
+#include "PrimitiveRoutine.h"
 
-//#include "../compiler/MethodGenerationContext.h"
 
 class VMSymbol;
 

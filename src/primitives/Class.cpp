@@ -1,7 +1,7 @@
 /*
- * $Id: Class.c 116 2007-09-20 13:29:40Z tobias.pape $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -24,15 +24,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
-#include "../vmobjects/VMClass.h"
-
-#include "../vm/Universe.h"
-
 #include "Class.h"
  
 #include "../primitivesCore/Routine.h"
+
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
+#include <vmobjects/VMClass.h>
+
+#include <vm/Universe.h>
+
+
 
 _Class::_Class( ) : PrimitiveContainer() {
     this->SetPrimitive("new", new Routine<_Class>(this, &_Class::New));

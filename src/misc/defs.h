@@ -3,9 +3,9 @@
 #define DEFS_H_
 
 /*
- * $Id: defs.h 111 2007-09-18 09:21:40Z tobias.pape $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 

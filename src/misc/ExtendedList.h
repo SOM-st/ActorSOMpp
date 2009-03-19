@@ -7,10 +7,6 @@
 #include <iterator>
 #include <iostream>
 
-using namespace std;
-
-
-
 template <class T>
 class ExtendedList {
 public:
@@ -26,8 +22,8 @@ public:
 	T Get(int index);
 	int IndexOf(const T& needle);
 
-    typedef typename list<T>::iterator iterator_t;
-    typedef typename list<T>::const_iterator const_iterator_t;
+    typedef typename std::list<T>::iterator iterator_t;
+    typedef typename std::list<T>::const_iterator const_iterator_t;
     
     iterator_t Begin() {
         return theList.begin();
@@ -36,7 +32,7 @@ public:
     const_iterator_t Begin() const { return theList.begin(); }
 
 private:
-	list<T> theList;
+	std::list<T> theList;
 };
 
 
@@ -44,11 +40,6 @@ template <class T>
 ExtendedList<T>::ExtendedList() {
 	theList.clear();
 }
-
-//template <class T>
-//ExtendedList<T>::~ExtendedList()
-//{
-//}
 
 
 template <class T>

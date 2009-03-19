@@ -1,10 +1,13 @@
 #pragma once
 #ifndef CLASSGENERATIONCONTEXT_H_
 #define CLASSGENERATIONCONTEXT_H_
+
 class VMSymbol;
 class VMObject;
 class VMClass;
+
 #include "../vmobjects/ObjectFormats.h"
+
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
 

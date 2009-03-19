@@ -1,7 +1,7 @@
 /*
- * $Id: Object.c 176 2008-03-19 10:21:59Z michael.haupt $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -24,10 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
 
-#include "../vm/Universe.h"
+#include <vm/Universe.h>
  
 #include "../primitivesCore/Routine.h"
 #include "Object.h"

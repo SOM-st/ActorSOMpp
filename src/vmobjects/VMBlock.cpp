@@ -2,6 +2,7 @@
 #include "VMMethod.h"
 #include "VMFrame.h"
 #include "VMEvaluationPrimitive.h"
+
 #include "../vm/Universe.h"
 
 const int VMBlock::VMBlockNumberOfFields = 2; 

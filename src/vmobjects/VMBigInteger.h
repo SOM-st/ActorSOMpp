@@ -2,7 +2,10 @@
 
 #ifndef VMBIGINTEGER_H_
 #define VMBIGINTEGER_H_
+
+
 #include "../misc/defs.h"
+
 #include "VMObject.h"
 
 

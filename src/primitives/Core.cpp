@@ -1,8 +1,6 @@
 #include <string.h>
 
-//#include "../misc/defs.h"
-//#include "../vmobjects/VMObject.h"
-#include "../vmobjects/PrimitiveRoutine.h"
+#include <vmobjects/PrimitiveRoutine.h>
 
 #include "Array.h"
 #include "BigInteger.h"
@@ -25,7 +23,7 @@
 
 
 static PrimitiveLoader* loader = NULL;
-//map<StdString, PrimitiveContainer*> primitiveObjects;
+
 //"Constructor"
 //#define __DEBUG
 extern "C" void setup() {
@@ -80,6 +78,7 @@ extern "C" void tearDown() {
     //if (primitiveObjects) delete primitiveObjects;
 }
 
+//"Factory method"
 extern "C" PrimitiveRoutine* create(const StdString& cname, const StdString& fname) {
 
 #ifdef __DEBUG

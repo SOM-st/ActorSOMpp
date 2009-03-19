@@ -3,7 +3,6 @@
 #ifndef VMARRAY_H_
 #define VMARRAY_H_
 
-//#include <vector>
 #include "VMObject.h"
 #include "VMInteger.h"
 

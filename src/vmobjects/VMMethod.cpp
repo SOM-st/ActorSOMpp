@@ -8,6 +8,7 @@
 #include "Signature.h"
 
 #include "../vm/Universe.h"
+
 #include "../compiler/MethodGenerationContext.h"
 
 //this method's bytecodes
@@ -21,7 +22,6 @@ const int VMMethod::VMMethodNumberOfFields = 5;
 VMMethod::VMMethod(int bcCount, int numberOfConstants, int nof) 
                     : VMInvokable(nof + VMMethodNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
-    //objectSize += bc_count + number_of_constants*sizeof(pVMObject);
     bcLength = _UNIVERSE->NewInteger( bcCount );
     numberOfLocals = _UNIVERSE->NewInteger(0);
     maximumNumberOfStackElements = _UNIVERSE->NewInteger(0);
@@ -46,11 +46,6 @@ void VMMethod::MarkReferences() {
 		if (theEntries(i) != NULL)
 			theEntries(i)->MarkReferences();
 	}
-    /*number_of_locals->MarkReferences();
-    maximum_number_of_stack_elements->MarkReferences();
-    number_of_arguments->MarkReferences();
-    size->MarkReferences();
-    bc_length->MarkReferences();*/
 }
 
 int VMMethod::GetNumberOfLocals() const {
@@ -133,7 +128,7 @@ pVMArray VMMethod::CopyAndExtendWith(pVMObject item) const {
     size_t fields = this->GetNumberOfIndexableFields();
 	pVMArray result = _UNIVERSE->NewArray(fields+1);
     this->CopyIndexableFieldsTo(result);
-	(*result)[fields] = item; //SetIndexableField(fields, item);
+	(*result)[fields] = item;
 	return result;
 }
 
@@ -141,10 +136,9 @@ pVMArray VMMethod::CopyAndExtendWith(pVMObject item) const {
 pVMObject VMMethod::GetIndexableField(int idx) const {
     if (idx > this->GetNumberOfIndexableFields()-1 || idx < 0) {
         cout << "Array index out of bounds: Accessing " << idx
-             << ", but only " << GetNumberOfIndexableFields()-1;
-        cout << " entries are available\n";
+             << ", but only " << GetNumberOfIndexableFields()-1
+             << " entries are available\n";
         _UNIVERSE->ErrorExit("Array index out of bounds exception");
-        //throw std::bad_exception();
     }
     return theEntries(idx);
 }
@@ -159,19 +153,19 @@ void VMMethod::CopyIndexableFieldsTo(pVMArray to) const {
 
 void VMMethod::SetIndexableField(int idx, pVMObject item) {
     if (idx > this->GetNumberOfIndexableFields()-1 || idx < 0) {
-        cout << "Array index out of bounds: Accessing " << idx << ", but there is only space for " << this->GetNumberOfIndexableFields();
-        cout << " entries available\n";
+        cout << "Array index out of bounds: Accessing " << idx 
+             << ", but there is only space for " 
+             << this->GetNumberOfIndexableFields() 
+             << " entries available\n";
         _UNIVERSE->ErrorExit("Array index out of bounds exception");
-        //throw std::bad_exception();
     }
    	theEntries(idx) = item;
 }
 
-//VMMethod::~VMMethod() {}
 
-
-int VMMethod::GetNumberOfIndexableFields() const
-{
+int VMMethod::GetNumberOfIndexableFields() const {
+    //cannot be done using GetAdditionalSpaceConsumption,
+    //as bytecodes need space, too, and there might be padding
     return this->numberOfConstants->GetEmbeddedInteger();
 }
 

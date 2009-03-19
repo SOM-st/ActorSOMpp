@@ -10,8 +10,6 @@ class VMArray;
 class VMObject;
 class VMInteger;
 class MethodGenerationContext;
-//#include "../memory/Heap.h"
-
 class VMFrame;
 
 class VMMethod :  public VMInvokable {
@@ -56,11 +54,11 @@ public:
 private:
     pVMObject   GetIndexableField(int idx) const;
 
-    pVMInteger numberOfConstants;
     pVMInteger numberOfLocals;
     pVMInteger maximumNumberOfStackElements;
     pVMInteger bcLength;
     pVMInteger numberOfArguments;
+    pVMInteger numberOfConstants;
 
     static const int VMMethodNumberOfFields;
 };

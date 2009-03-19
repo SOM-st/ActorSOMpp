@@ -6,6 +6,7 @@
 
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
+
 #include "ClassGenerationContext.h"
 
 class VMMethod;
@@ -59,7 +60,7 @@ private:
     ExtendedList<StdString>    locals;
     ExtendedList<pVMObject>    literals;
     bool                       finished;
-	vector<uint8_t>            bytecode;
+    std::vector<uint8_t>            bytecode;
 };
 
 #endif

@@ -4,9 +4,9 @@
 #define CORE_INTEGER_H_
 
 /*
- * $Id: Integer.h 109 2007-09-17 20:39:52Z tobias.pape $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -34,6 +34,7 @@ class VMFrame;
 class VMInteger;
 class VMBigInteger;
 class VMDouble;
+
 #include "../primitivesCore/PrimitiveContainer.h"
  
 class _Integer : public PrimitiveContainer

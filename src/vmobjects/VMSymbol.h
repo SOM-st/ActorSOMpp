@@ -9,12 +9,11 @@
 
 class VMInteger;
 
-class VMSymbol : public VMString { //, public StdString{
+class VMSymbol : public VMString {
 
 public:
 	VMSymbol( const char* str );
 	VMSymbol( const StdString& s );
-	//virtual void SetString(const StdString&);
     virtual StdString GetPlainString() const;
 
 };

@@ -4,6 +4,7 @@
 #include "VMInteger.h"
 #include "VMClass.h"
 #include "VMSymbol.h"
+
 #include "../vm/Universe.h"
 
 //when doesNotUnderstand or UnknownGlobal is sent, additional stack slots might

@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "Universe.h"
 #include "Shell.h"
 
@@ -6,8 +8,6 @@
 #include "../vmobjects/VMFrame.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMInvokable.h"
-
-#include <sstream>
 
 // maximal length of an input line from the shell
 #define INPUT_MAX_SIZE BUFSIZ

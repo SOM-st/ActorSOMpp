@@ -3,9 +3,11 @@
 #ifndef VMCLASS_H_
 #define VMCLASS_H_
 #include <vector>
+
 #include "VMObject.h"
+
 #include "../misc/defs.h"
-//#include "../primitives/Core.h"
+
 
 #if defined(_MSC_VER)   //Visual Studio
     #include <windows.h> 

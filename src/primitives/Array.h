@@ -4,9 +4,9 @@
 #define CORE_ARRAY_H_
 
 /*
- * $Id: Array.h 144 2007-11-19 23:32:02Z michael.haupt $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 

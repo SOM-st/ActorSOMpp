@@ -1,4 +1,5 @@
 #include "ClassGenerationContext.h"
+
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMClass.h"

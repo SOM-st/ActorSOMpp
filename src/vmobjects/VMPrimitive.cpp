@@ -48,12 +48,12 @@ void VMPrimitive::MarkReferences() {
     this->SetGCField(1);
     for( int i = 0; i < this->GetNumberOfFields(); ++i) {
         //HACK to avoid calling MarkReferences() for the bool*
-        if ((void*)FIELDS[i] == (void*)this->empty) 
+        if ((void*)GetField(i) == (void*)this->empty) 
             continue;
         //HACK to avoid calling MarkReferences() for the routine*
-        if ((void*)FIELDS[i] == (void*)this->routine)
+        if ((void*)GetField(i) == (void*)this->routine)
             continue;//cout << "routine" << endl;
-        FIELDS[i]->MarkReferences();
+        GetField(i)->MarkReferences();
     }
 }
 

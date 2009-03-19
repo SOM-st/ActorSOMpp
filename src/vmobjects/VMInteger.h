@@ -4,6 +4,7 @@
 #define VMINTEGER_H_
 
 #include "VMObject.h"
+
 #include "../misc/defs.h"
 
 

@@ -1,7 +1,7 @@
 /*
- * $Id: BigInteger.c 210 2008-04-16 12:54:12Z michael.haupt $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -28,18 +28,17 @@ THE SOFTWARE.
 #include <stdio.h>
 #include <math.h>
 #include <sstream> 
-//#include "../memory/gc.h"
-
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
-#include "../vmobjects/VMInteger.h"
-#include "../vmobjects/VMBigInteger.h"
-
-#include "../vm/Universe.h"
 
 #include "../primitivesCore/Routine.h"
  
 #include "BigInteger.h"
+
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
+#include <vmobjects/VMInteger.h>
+#include <vmobjects/VMBigInteger.h>
+
+#include <vm/Universe.h>
 
 
 #define CHECK_BIGINT(object, result) { \

@@ -3,15 +3,16 @@
 #ifndef INTERPRETER_H_
 #define INTERPRETER_H_
 
+#include "../misc/defs.h"
+
+#include "../vmobjects/ObjectFormats.h"
+
 class VMMethod;
 class VMFrame;
 class VMMethod;
 class VMObject;
 class VMSymbol;
 class VMClass;
-
-#include "../misc/defs.h"
-#include "../vmobjects/ObjectFormats.h"
 
 class Interpreter {
 public:

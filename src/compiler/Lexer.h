@@ -28,6 +28,7 @@ THE SOFTWARE.
   */
 #include <istream>
 #include <string>
+
 #include "../misc/defs.h"
 
 using namespace std;
@@ -58,7 +59,7 @@ public:
 	StdString     GetText(void);
 	StdString     GetNextText(void);
 	StdString     GetRawBuffer(void);
-
+    int GetCurrentLineNumber() { return lineNumber; };
 
 private:
 	int         fillBuffer(void);
@@ -74,9 +75,10 @@ private:
 
 	Symbol sym;
 	char symc;
-    //TODO: change this to a stream or something
+
 	char text[BUFSIZ];
 
+    int lineNumber;
 	bool peekDone;
 	Symbol nextSym;
 	char nextSymc;

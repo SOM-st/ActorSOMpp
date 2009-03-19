@@ -5,6 +5,7 @@
 #include "Heap.h"
 
 #include "../vmobjects/VMObject.h"
+
 #include "../vm/Universe.h"
 
 /*

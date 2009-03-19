@@ -2,6 +2,7 @@
 
 #ifndef TIMEHELPER_H_
 #define TIMEHELPER_H_
+
 #include <Windows.h>
 #include < time.h >
 

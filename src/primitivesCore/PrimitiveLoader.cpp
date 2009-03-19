@@ -1,6 +1,7 @@
 #include "PrimitiveLoader.h"
 #include "PrimitiveContainer.h"
-#include "../vmobjects/PrimitiveRoutine.h"
+
+#include <vmobjects/PrimitiveRoutine.h>
 
 
 PrimitiveLoader::PrimitiveLoader() {

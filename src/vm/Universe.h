@@ -9,9 +9,13 @@
 
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
+
 #include "../vmobjects/ObjectFormats.h"
+
 #include "../interpreter/Interpreter.h"
+
 #include "../memory/Heap.h"
+
 #include "Globals.h"
 
 class VMObject;
@@ -30,10 +34,6 @@ class SourcecodeCompiler;
 
 //Convenience macro for Singleton access
 #define _UNIVERSE Universe::GetUniverse()
-//macro to access the heap
-#define _HEAP Heap::GetHeap()
-
-
 
 // for runtime debug
 extern short dumpBytecodes;
@@ -114,10 +114,6 @@ private:
 
     void initialize(int, char**);
 
-    //void prepareNilObject();
-
-
-    
 	Heap* heap;
     int heapSize;
 	map<pVMSymbol, pVMObject> globals;

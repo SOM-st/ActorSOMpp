@@ -4,9 +4,9 @@
 #define CORE_DOUBLE_H_
 
 /*
- * $Id: Double.h 109 2007-09-17 20:39:52Z tobias.pape $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -33,6 +33,7 @@ class VMObject;
 class VMFrame;
  
 #include "../primitivesCore/PrimitiveContainer.h"
+
 class _Double : public PrimitiveContainer
 {
 public:

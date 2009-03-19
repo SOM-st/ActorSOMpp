@@ -5,6 +5,7 @@
 
 //This header file is only necessary for Visual Studio compilation
 #include "../primitivesCore/Routine.h"
+
 extern "C" void setup();
 extern "C" bool supportsClass(const char* name);
 extern "C" void tearDown();

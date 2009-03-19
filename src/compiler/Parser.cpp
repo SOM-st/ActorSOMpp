@@ -1,7 +1,7 @@
 /*
- * $Id: Parser.c 378 2008-05-17 00:46:39Z arne.bergmann $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -25,15 +25,13 @@ THE SOFTWARE.
   */
 
 #include "Parser.h"
+#include "BytecodeGenerator.h"
 
-//#include "GenerationContexts.h"
-//#include "BytecodeGeneration.h"
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMPrimitive.h"
 #include "../vmobjects/VMObject.h"
-
-#include "BytecodeGenerator.h"
 #include "../vmobjects/VMSymbol.h"
+
 #include "../vm/Universe.h"
 
 #include <iostream>
@@ -41,8 +39,6 @@ THE SOFTWARE.
 #include <sstream>
 #include <stdlib.h>
 #include <string.h>
-//#include <memory/gc.h>
-//#include <vmobjects/VMString.h>
 
 
 #define GETSYM sym = lexer->GetSym(); \
@@ -124,8 +120,8 @@ bool Parser::acceptOneOf(Symbol* ss) {
 bool Parser::expect(Symbol s) {
     if(accept(s))
         return true;
-    fprintf(stderr, "Error: unexpected symbol. Expected %s, but found %s", 
-            symnames[s], symnames[sym]);
+    fprintf(stderr, "Error: unexpected symbol in line %d. Expected %s, but found %s", 
+            lexer->GetCurrentLineNumber(), symnames[s], symnames[sym]);
     if(_PRINTABLE_SYM)
         fprintf(stderr, " (%s)", text.c_str());
 	fprintf(stderr, ": %s\n", lexer->GetRawBuffer().c_str());
@@ -136,7 +132,8 @@ bool Parser::expect(Symbol s) {
 bool Parser::expectOneOf(Symbol* ss) {
     if(acceptOneOf(ss))
         return true;
-    fprintf(stderr, "Error: unexpected symbol. Expected one of ");
+    fprintf(stderr, "Error: unexpected symbol in line %d. Expected one of ",
+            lexer->GetCurrentLineNumber());
     while(*ss)
         fprintf(stderr, "%s, ", symnames[*ss++]);
     fprintf(stderr, "but found %s", symnames[sym]);

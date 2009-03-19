@@ -3,7 +3,7 @@
 #ifndef ROUTINE_H_
 #define ROUTINE_H_
 
-#include "../vmobjects/PrimitiveRoutine.h"
+#include <vmobjects/PrimitiveRoutine.h>
 
 ///Implementation for a functor class with PrimitiveRoutine as base class.
 //It stores an object and a pointer to one of its methods. It is invoked

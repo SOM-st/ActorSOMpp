@@ -648,10 +648,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\misc\ExtendedVector.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\misc\gettimeofday.h"
 				>
 			</File>

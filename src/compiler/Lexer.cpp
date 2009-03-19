@@ -1,9 +1,12 @@
-#include "Lexer.h"
 #include <string.h>
+
+#include "Lexer.h"
+
 
 Lexer::Lexer(istream &file) : infile(file) {
 	peekDone = false;
 	bufp = 0;
+    lineNumber = 0;
 }
 
 Lexer::~Lexer() {
@@ -31,6 +34,7 @@ int Lexer::fillBuffer(void) {
         return 0;
     
     std::getline(infile, buf);
+    ++lineNumber;
     bufp = 0;
     return buf.length();
 }

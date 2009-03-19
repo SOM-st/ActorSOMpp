@@ -1,7 +1,7 @@
 /*
- * $Id: Integer.c 249 2008-04-28 08:17:23Z michael.haupt $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -31,13 +31,13 @@ THE SOFTWARE.
 #include <limits.h>
 #include <sstream>
 
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
-#include "../vmobjects/VMDouble.h"
-#include "../vmobjects/VMInteger.h"
-#include "../vmobjects/VMBigInteger.h"
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
+#include <vmobjects/VMDouble.h>
+#include <vmobjects/VMInteger.h>
+#include <vmobjects/VMBigInteger.h>
 
-#include "../vm/Universe.h"
+#include <vm/Universe.h>
  
 #include "Integer.h"
 #include "../primitivesCore/Routine.h"

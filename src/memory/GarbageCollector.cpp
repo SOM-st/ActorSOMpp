@@ -6,6 +6,7 @@
 #include "Heap.h"
 
 #include "../vm/Universe.h"
+
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMSymbol.h"
@@ -60,12 +61,8 @@ void GarbageCollector::Collect() {
                 ++numLive;
 			    spcLive += object->GetObjectSize();
 				object->SetGCField(0);
-				//std::cout << "Found alive object, keeping" << std::endl;
+				
 			} else {
-				//std::cout << "Found trash, deleting" << std::endl;
-				//delete(object, heap);
-                //doesn't really do anything for managed objects
-				//add freed space as a new entry of the free list
 				memset(pointer, 0, bytesToSkip);
 				FreeListEntry* newEntry = 
                     reinterpret_cast<FreeListEntry*>(pointer);
@@ -120,10 +117,6 @@ void GarbageCollector::markObject(pVMObject obj) {
 	if (   ((void*) obj >= (void*)  heap->objectSpace) 
 		&& ((void*) obj <= (void*) heap->objectSpace) + heap->objectSpaceSize) {
 		if (obj->GetGCField() != 1) {
-			//++numLive;
-			//spcLive += obj->GetObjectSize();
-
-			/*obj->SetGCField(1);*/
 			//for now the Objects have to mark the referenced objects themselves.
 			obj->MarkReferences();
 			

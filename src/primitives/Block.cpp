@@ -1,7 +1,7 @@
 /*
- * $Id: Block.c 145 2007-11-19 23:50:24Z michael.haupt $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -26,12 +26,12 @@ THE SOFTWARE.
 
 #include "Block.h"
 
-#include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMFrame.h"
-
-#include "../vm/Universe.h"
-
 #include "../primitivesCore/Routine.h"
+
+#include <vmobjects/VMObject.h>
+#include <vmobjects/VMFrame.h>
+
+#include <vm/Universe.h>
  
 
 

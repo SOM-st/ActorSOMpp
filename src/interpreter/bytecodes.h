@@ -3,9 +3,9 @@
 #define BYTECODES_H_
 
 /*
- * $Id: bytecodes.h 571 2008-05-30 08:41:36Z stefan.marr $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2009 Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 

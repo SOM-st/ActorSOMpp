@@ -4,27 +4,17 @@
 #include "VMFrame.h"
 #include "VMInvokable.h"
 
-//VMObject::VMObject()
-//{
-//    VMObject::VMObject(0);
-//}
 
 //clazz is the only field of VMObject so
 const int VMObject::VMObjectNumberOfFields = 1; 
 
 VMObject::VMObject( int numberOfFields ) {
     //FIELDS = (pVMObject*)&clazz;
-    this->SetNumberOfFields(numberOfFields + VMObjectNumberOfFields);//+1 because of the clazz field
+    this->SetNumberOfFields(numberOfFields + VMObjectNumberOfFields);
     gcfield = 0; 
 	hash = (int32_t)this;
     //Object size is set by the heap
-   
 }
-
-
-//VMObject::~VMObject() {}
-
-
 
 
 void VMObject::SetNumberOfFields(int nof) {
