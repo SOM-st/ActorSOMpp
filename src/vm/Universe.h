@@ -52,8 +52,8 @@ public:
     static void Quit(int);
     static void ErrorExit(const char*);
 
-    //Globals accessor (only for GC, could be considered to either
-    //be moved there or declared as a private friend method for the GC
+    //Globals accessor (only for GC, could be considered be 
+    //declared as a private friend method for the GC)
 	map<pVMSymbol, pVMObject>  GetGlobals() {return globals;}
 	Heap* GetHeap() {return heap;}
     Interpreter* GetInterpreter() {return interpreter;}

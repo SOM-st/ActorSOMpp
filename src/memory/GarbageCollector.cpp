@@ -101,29 +101,24 @@ void GarbageCollector::markReachableObjects() {
     map<pVMSymbol, pVMObject>::iterator it = globals.begin();
     for (map<pVMSymbol, pVMObject>::iterator it = globals.begin(); 
                                         it!= globals.end(); ++it) {
-		markObject(&(*it->second));
+        (&(*it->first))->MarkReferences();
+
+        //The NULL check for the second entry is necessary because for
+        //some reason the True, False, Boolean, and System classes
+        //get into the globals map although they shouldn't. Although 
+        //I tried to find out why, I never did... :( They are not entered
+        //into the map using Universe::SetGlobal and there is no other way
+        //to enter them into that map....
+        if (&(*it->second) != NULL) (&(*it->second))->MarkReferences();
 	}
     // Get the current frame and mark it.
 	// Since marking is done recursively, this automatically
 	// marks the whole stack
     pVMFrame currentFrame = _UNIVERSE->GetInterpreter()->GetFrame();
     if (currentFrame != NULL) {
-        markObject((pVMObject)currentFrame);
+        ((pVMObject)currentFrame)->MarkReferences();
     }
 }
-
-
-void GarbageCollector::markObject(pVMObject obj) {
-	if (   ((void*) obj >= (void*)  heap->objectSpace) 
-		&& ((void*) obj <= (void*) heap->objectSpace) + heap->objectSpaceSize) {
-		if (obj->GetGCField() != 1) {
-			//for now the Objects have to mark the referenced objects themselves.
-			obj->MarkReferences();
-			
-		}
-	}
-}
-
 
 void GarbageCollector::mergeFreeSpaces() {
 

@@ -21,7 +21,6 @@ public:
 
 private:
 	void markReachableObjects();
-	void markObject(pVMObject obj);
 	void mergeFreeSpaces();
 	Heap* heap;
 
