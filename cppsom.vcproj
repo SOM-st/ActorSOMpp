@@ -772,14 +772,6 @@
 			Name="VM"
 			>
 			<File
-				RelativePath=".\src\vm\Globals.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\vm\Globals.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\vm\Shell.cpp"
 				>
 			</File>
