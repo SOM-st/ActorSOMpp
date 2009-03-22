@@ -28,7 +28,7 @@ VMMethod::VMMethod(int bcCount, int numberOfConstants, int nof)
     numberOfArguments = _UNIVERSE->NewInteger(0);
     this->numberOfConstants = _UNIVERSE->NewInteger(numberOfConstants);
     for (int i = 0; i < numberOfConstants ; ++i) {
-        this->SetIndexableField(i, Globals::NilObject());
+        this->SetIndexableField(i, nilObject);
     }
     _HEAP->EndUninterruptableAllocation();
 }

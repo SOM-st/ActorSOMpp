@@ -263,21 +263,21 @@ void  _Integer::Equal(pVMObject object, pVMFrame frame) {
         
         if(left->GetEmbeddedInteger()
             == right->GetEmbeddedInteger())
-            frame->Push(Globals::TrueObject());
+            frame->Push(trueObject);
         else
-            frame->Push(Globals::FalseObject());
+            frame->Push(falseObject);
     } else if(dynamic_cast<pVMDouble>(rightObj) != NULL) {
         // Second operand was Double:
         pVMDouble right = (pVMDouble)rightObj;
         
         if((double)left->GetEmbeddedInteger()
             == right->GetEmbeddedDouble())
-            frame->Push(Globals::TrueObject());
+            frame->Push(trueObject);
         else
-            frame->Push(Globals::FalseObject());
+            frame->Push(falseObject);
     }
     else
-        frame->Push(Globals::FalseObject());
+        frame->Push(falseObject);
 }
 
 
@@ -290,9 +290,9 @@ void  _Integer::Lowerthan(pVMObject object, pVMFrame frame) {
     pVMInteger right = (pVMInteger)rightObj;
     
     if(left->GetEmbeddedInteger() < right->GetEmbeddedInteger())
-        frame->Push(Globals::TrueObject());
+        frame->Push(trueObject);
     else
-        frame->Push(Globals::FalseObject());
+        frame->Push(falseObject);
 }
 
 

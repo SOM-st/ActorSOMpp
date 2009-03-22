@@ -32,6 +32,26 @@ short gcVerbosity;
 
 Universe* Universe::theUniverse = NULL;
 
+pVMObject nilObject;
+pVMObject trueObject;
+pVMObject falseObject;
+      
+pVMClass objectClass;
+pVMClass classClass;
+pVMClass metaClassClass;
+  
+pVMClass nilClass;
+pVMClass integerClass;
+pVMClass bigIntegerClass;
+pVMClass arrayClass;
+pVMClass methodClass;
+pVMClass symbolClass;
+pVMClass frameClass;
+pVMClass primitiveClass;
+pVMClass stringClass;
+pVMClass systemClass;
+pVMClass blockClass;
+pVMClass doubleClass;
 
 //Singleton accessor
 Universe* Universe::GetUniverse() {
@@ -193,23 +213,24 @@ void Universe::initialize(int _argc, char** _argv) {
     symboltable = new Symboltable();
     compiler = new SourcecodeCompiler();
     interpreter = new Interpreter();
-    Globals::InitializeGlobals();
+    
+    InitializeGlobals();
 
-    pVMObject systemObject = NewInstance(Globals::SystemClass());
+    pVMObject systemObject = NewInstance(systemClass);
 
-    this->SetGlobal(SymbolForChars("nil"), Globals::NilObject());
-    this->SetGlobal(SymbolForChars("true"), Globals::TrueObject());
-    this->SetGlobal(SymbolForChars("false"), Globals::FalseObject());
+    this->SetGlobal(SymbolForChars("nil"), nilObject);
+    this->SetGlobal(SymbolForChars("true"), trueObject);
+    this->SetGlobal(SymbolForChars("false"), falseObject);
     this->SetGlobal(SymbolForChars("system"), systemObject);
-    this->SetGlobal(SymbolForChars("System"), Globals::SystemClass());
-    this->SetGlobal(SymbolForChars("Block"), Globals::BlockClass());
+    this->SetGlobal(SymbolForChars("System"), systemClass);
+    this->SetGlobal(SymbolForChars("Block"), blockClass);
     
     pVMMethod bootstrapMethod = NewMethod(SymbolForChars("bootstrap"), 1, 0);
     bootstrapMethod->SetBytecode(0, BC_HALT);
     bootstrapMethod->SetNumberOfLocals(0);
 
     bootstrapMethod->SetMaximumNumberOfStackElements(2);
-    bootstrapMethod->SetHolder(Globals::SystemClass());
+    bootstrapMethod->SetHolder(systemClass);
     
     if (argv.size() == 0) {
         Shell* shell = new Shell(bootstrapMethod);
@@ -228,7 +249,7 @@ void Universe::initialize(int _argc, char** _argv) {
     bootstrapFrame->Push((pVMObject)argumentsArray);
 
     pVMInvokable initialize = 
-        dynamic_cast<pVMInvokable>(Globals::SystemClass()->LookupInvokable(this->SymbolForChars("initialize:")));
+        dynamic_cast<pVMInvokable>(systemClass->LookupInvokable(this->SymbolForChars("initialize:")));
     (*initialize)(bootstrapFrame);
     
     // reset "-d" indicator
@@ -249,6 +270,67 @@ Universe::~Universe() {
         delete(symboltable);
 }
 
+void Universe::InitializeGlobals() {
+    //
+    //allocate nil object
+    //
+    nilObject = new (_HEAP) VMObject;
+    nilObject->SetField(0, nilObject);
+
+    metaClassClass = NewMetaclassClass();
+
+    objectClass     = NewSystemClass();
+    nilClass        = NewSystemClass();
+    classClass      = NewSystemClass();
+    arrayClass      = NewSystemClass();
+    symbolClass     = NewSystemClass();
+    methodClass     = NewSystemClass();
+    integerClass    = NewSystemClass();
+    bigIntegerClass = NewSystemClass();
+    frameClass      = NewSystemClass();
+    primitiveClass  = NewSystemClass();
+    stringClass     = NewSystemClass();
+    doubleClass     = NewSystemClass();
+    
+    nilObject->SetClass(nilClass);
+
+    InitializeSystemClass(objectClass, NULL, "Object");
+    InitializeSystemClass(classClass, objectClass, "Class");
+    InitializeSystemClass(metaClassClass, classClass, "Metaclass");
+    InitializeSystemClass(nilClass, objectClass, "Nil");
+    InitializeSystemClass(arrayClass, objectClass, "Array");
+    InitializeSystemClass(methodClass, arrayClass, "Method");
+    InitializeSystemClass(symbolClass, objectClass, "Symbol");
+    InitializeSystemClass(integerClass, objectClass, "Integer");
+    InitializeSystemClass(bigIntegerClass, objectClass,
+                                     "BigInteger");
+    InitializeSystemClass(frameClass, arrayClass, "Frame");
+    InitializeSystemClass(primitiveClass, objectClass,
+                                     "Primitive");
+    InitializeSystemClass(stringClass, objectClass, "String");
+    InitializeSystemClass(doubleClass, objectClass, "Double");
+
+    LoadSystemClass(objectClass);
+    LoadSystemClass(classClass);
+    LoadSystemClass(metaClassClass);
+    LoadSystemClass(nilClass);
+    LoadSystemClass(arrayClass);
+    LoadSystemClass(methodClass);
+    LoadSystemClass(symbolClass);
+    LoadSystemClass(integerClass);
+    LoadSystemClass(bigIntegerClass);
+    LoadSystemClass(frameClass);
+    LoadSystemClass(primitiveClass);
+    LoadSystemClass(stringClass);
+    LoadSystemClass(doubleClass);
+
+    blockClass = LoadClass(_UNIVERSE->SymbolForChars("Block"));
+
+    trueObject = NewInstance(_UNIVERSE->LoadClass(_UNIVERSE->SymbolForChars("True")));
+    falseObject = NewInstance(_UNIVERSE->LoadClass(_UNIVERSE->SymbolForChars("False")));
+
+    systemClass = LoadClass(_UNIVERSE->SymbolForChars("System"));
+}
 
 void Universe::Assert( bool value) const {
     if (!value)  {
@@ -259,7 +341,7 @@ void Universe::Assert( bool value) const {
 
 
 pVMClass Universe::GetBlockClass() const {
-    return Globals::BlockClass();
+    return blockClass;
 }
 
 
@@ -310,7 +392,7 @@ void Universe::InitializeSystemClass( pVMClass systemClass,
         sysClassClass->SetSuperClass(superClassClass);
     } else {
         pVMClass sysClassClass = systemClass->GetClass();
-        sysClassClass->SetSuperClass(Globals::ClassClass());
+        sysClassClass->SetSuperClass(classClass);
     }
 
     pVMClass sysClassClass = systemClass->GetClass();
@@ -398,7 +480,7 @@ void Universe::LoadSystemClass( pVMClass systemClass) {
 pVMArray Universe::NewArray( int size) const {
     int additionalBytes = size*sizeof(pVMObject);
     pVMArray result = new (_HEAP, additionalBytes) VMArray(size);
-    result->SetClass(Globals::ArrayClass());
+    result->SetClass(arrayClass);
     return result;
 }
 
@@ -433,7 +515,7 @@ pVMArray Universe::NewArrayList(ExtendedList<pVMObject>& list ) const {
 
 pVMBigInteger Universe::NewBigInteger( int64_t value) const {
     pVMBigInteger result = new (_HEAP) VMBigInteger(value);
-    result->SetClass(Globals::BigIntegerClass());
+    result->SetClass(bigIntegerClass);
 
     return result;
 }
@@ -465,7 +547,7 @@ pVMClass Universe::NewClass( pVMClass classOfClass) const {
 
 pVMDouble Universe::NewDouble( double value) const {
     pVMDouble result = new (_HEAP) VMDouble(value);
-    result->SetClass(Globals::DoubleClass());
+    result->SetClass(doubleClass);
     return result;
 }
 
@@ -477,7 +559,7 @@ pVMFrame Universe::NewFrame( pVMFrame previousFrame, pVMMethod method) const {
    
     int additionalBytes = length * sizeof(pVMObject);
     pVMFrame result = new (_HEAP, additionalBytes) VMFrame(length);
-    result->SetClass(Globals::FrameClass());
+    result->SetClass(frameClass);
 
     result->SetMethod(method);
 
@@ -504,7 +586,7 @@ pVMObject Universe::NewInstance( pVMClass  classOfInstance) const {
 
 pVMInteger Universe::NewInteger( int32_t value) const {
     pVMInteger result = new (_HEAP) VMInteger(value);
-    result->SetClass(Globals::IntegerClass());
+    result->SetClass(integerClass);
     return result;
 }
 
@@ -526,7 +608,7 @@ pVMMethod Universe::NewMethod( pVMSymbol signature,
                 numberOfConstants*sizeof(pVMObject);
     pVMMethod result = new (_HEAP,additionalBytes) 
                 VMMethod(numberOfBytecodes, numberOfConstants);
-    result->SetClass(Globals::MethodClass());
+    result->SetClass(methodClass);
 
     result->SetSignature(signature);
 
@@ -541,7 +623,7 @@ pVMString Universe::NewString( const char* str) const {
     //string needs space for str.length characters plus one byte for '\0'
     int additionalBytes = strlen(str) + 1;// str.length() + 1;
     pVMString result = new (_HEAP, additionalBytes) VMString(str);
-    result->SetClass(Globals::StringClass());
+    result->SetClass(stringClass);
 
     return result;
 }
@@ -554,7 +636,7 @@ pVMSymbol Universe::NewSymbol( const char* str ) {
     //symbol needs space for str.length characters plus one byte for '\0'
     int additionalBytes = strlen(str) + 1; // str.length() + 1;
     pVMSymbol result = new (_HEAP, additionalBytes) VMSymbol(str);
-    result->SetClass(Globals::SymbolClass());
+    result->SetClass(symbolClass);
 
     symboltable->insert(result);
 
@@ -568,7 +650,7 @@ pVMClass Universe::NewSystemClass() const {
     systemClass->SetClass(new (_HEAP) VMClass());
     pVMClass mclass = systemClass->GetClass();
     
-    mclass->SetClass(Globals::MetaClassClass());
+    mclass->SetClass(metaClassClass);
 
     return systemClass;
 }
@@ -590,12 +672,5 @@ pVMSymbol Universe::SymbolForChars( const char* str) {
 
 
 void Universe::SetGlobal(pVMSymbol name, VMObject *val) {
-    StdString str =  name->GetStdString();
-
     globals[name] = val;
-	
-    pVMObject p = globals[name];
-    if (p == NULL) {
-        cout << "Global " << str << " just added, but globals[" << str << "] == NULL" << endl;
-    }
 }

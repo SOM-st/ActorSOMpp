@@ -21,7 +21,7 @@ const int VMPrimitive::VMPrimitiveNumberOfFields = 2;
 VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(VMPrimitiveNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
     //the only class that explicitly does this.
-    this->SetClass(Globals::PrimitiveClass());
+    this->SetClass(primitiveClass);
     //this->empty = (bool*)_HEAP->Allocate(sizeof(bool));
     this->SetSignature(signature);
     this->routine = NULL;

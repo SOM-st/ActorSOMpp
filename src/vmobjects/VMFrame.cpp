@@ -55,14 +55,14 @@ void      VMFrame::SetMethod(pVMMethod method) {
 }
 
 bool     VMFrame::HasPreviousFrame() const {
-    return this->previousFrame != Globals::NilObject();
+    return this->previousFrame != nilObject;
 }
 
 
 
 
 bool     VMFrame::HasContext() const {
-    return this->context !=  Globals::NilObject(); //Globals::NilObject();
+    return this->context !=  nilObject; //nilObject;
 }
 
 
@@ -114,11 +114,11 @@ void VMFrame::PrintStack() const {
         cout << i << ": ";
         if (vmo == NULL) 
             cout << "NULL" << endl;
-        if (vmo == Globals::NilObject()) 
+        if (vmo == nilObject) 
             cout << "NIL_OBJECT" << endl;
         if (vmo->GetClass() == NULL) 
             cout << "VMObject with Class == NULL" << endl;
-        if (vmo->GetClass() == Globals::NilObject()) 
+        if (vmo->GetClass() == nilObject) 
             cout << "VMObject with Class == NIL_OBJECT" << endl;
         else 
             cout << "index: " << i << " object:" 

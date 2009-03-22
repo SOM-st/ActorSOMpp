@@ -110,6 +110,7 @@ void GarbageCollector::markReachableObjects() {
         //into the map using Universe::SetGlobal and there is no other way
         //to enter them into that map....
         if (&(*it->second) != NULL) (&(*it->second))->MarkReferences();
+        else cout << "immernoch: " << (*it->first).GetStdString() << endl;
 	}
     // Get the current frame and mark it.
 	// Since marking is done recursively, this automatically

@@ -114,18 +114,18 @@ void  _Double::And(pVMObject /*object*/, pVMFrame frame) {
 void  _Double::Equal(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
     if(left == right)
-        frame->Push(Globals::TrueObject());
+        frame->Push(trueObject);
     else
-        frame->Push(Globals::FalseObject());
+        frame->Push(falseObject);
 }
 
 
 void  _Double::Lowerthan(pVMObject /*object*/, pVMFrame frame) {
     PREPARE_OPERANDS;
     if(left < right)
-        frame->Push(Globals::TrueObject());
+        frame->Push(trueObject);
     else
-        frame->Push(Globals::FalseObject());
+        frame->Push(falseObject);
 }
 
 

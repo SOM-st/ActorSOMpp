@@ -56,7 +56,7 @@ void  _System::Global_(pVMObject /*object*/, pVMFrame frame) {
     frame->Pop();
     pVMObject result = _UNIVERSE->GetGlobal(arg);
     
-    frame->Push( result ? result : Globals::NilObject());    
+    frame->Push( result ? result : nilObject);    
 }
 
 
@@ -73,7 +73,7 @@ void  _System::Load_(pVMObject /*object*/, pVMFrame frame) {
     frame->Pop();
     pVMClass result = _UNIVERSE->LoadClass(arg);
 
-    frame->Push( result? (pVMObject)result : Globals::NilObject());
+    frame->Push( result? (pVMObject)result : nilObject);
 }
 
 

@@ -47,7 +47,7 @@ void  _Object::Equalequal(pVMObject /*object*/, pVMFrame frame) {
     pVMObject op1 = frame->Pop();
     pVMObject op2 = frame->Pop();
     
-    frame->Push( op1 == op2 ? Globals::TrueObject() : Globals::FalseObject() );
+    frame->Push( op1 == op2 ? trueObject : falseObject );
 }
 
 

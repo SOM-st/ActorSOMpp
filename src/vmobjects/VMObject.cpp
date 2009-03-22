@@ -21,7 +21,7 @@ void VMObject::SetNumberOfFields(int nof) {
     this->numberOfFields = nof;
 
     for (int i = 0; i < nof ; ++i) {
-        this->SetField(i, Globals::NilObject());
+        this->SetField(i, nilObject);
     }
 }
 

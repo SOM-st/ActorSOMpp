@@ -46,7 +46,7 @@ VMClass::VMClass( int numberOfFields ) : VMObject(numberOfFields + VMClassNumber
 
 
 bool VMClass::HasSuperClass() const {
-    return (superClass != NULL && superClass != Globals::NilObject());
+    return (superClass != NULL && superClass != nilObject);
 }
 
 
@@ -102,7 +102,7 @@ void      VMClass::SetInstanceInvokables(pVMArray invokables) {
     for (int i = 0; i < this->GetNumberOfInstanceInvokables(); ++i) {
         pVMObject invo = (*instanceInvokables)[i];
         //check for Nil object
-        if (invo != Globals::NilObject()) {
+        if (invo != nilObject) {
             //not Nil, so this actually is an invokable
             pVMInvokable inv = dynamic_cast<pVMInvokable>(invo);
             inv->SetHolder(this);
@@ -124,7 +124,7 @@ pVMObject VMClass::GetInstanceInvokable(int index) const {
 
 void      VMClass::SetInstanceInvokable(int index, pVMObject invokable) {
 	(*instanceInvokables)[index] = invokable;
-    if (invokable != Globals::NilObject()) {
+    if (invokable != nilObject) {
         pVMInvokable inv = dynamic_cast<pVMInvokable>( invokable );
         inv->SetHolder(this);
     }

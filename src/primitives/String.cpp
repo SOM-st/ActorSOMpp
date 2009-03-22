@@ -103,11 +103,11 @@ void  _String::Equal(pVMObject /*object*/, pVMFrame frame) {
         StdString s2 = op2->GetStdString();
 
         if(s1 == s2) {
-            frame->Push(Globals::TrueObject());
+            frame->Push(trueObject);
             return;
         }
     }
-    frame->Push(Globals::FalseObject());
+    frame->Push(falseObject);
 }
 
 

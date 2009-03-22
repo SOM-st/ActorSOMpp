@@ -34,30 +34,30 @@ void Disassembler::dispatch(pVMObject o) {
     //dispatch
     // can't switch() objects, so:
     if(!o) return; // NULL isn't interesting.
-    else if(o == Globals::NilObject())
+    else if(o == nilObject)
         DebugPrint("{Nil}");
-    else if(o == Globals::TrueObject())
+    else if(o == trueObject)
         DebugPrint("{True}");
-    else if(o == Globals::FalseObject())
+    else if(o == falseObject)
         DebugPrint("{False}"); 
-    else if((pVMClass)o == Globals::SystemClass())
+    else if((pVMClass)o == systemClass)
         DebugPrint("{System Class object}");
-    else if((pVMClass)o == Globals::BlockClass())
+    else if((pVMClass)o == blockClass)
         DebugPrint("{Block Class object}");
     else if(o == _UNIVERSE->GetGlobal(_UNIVERSE->SymbolForChars("system")))
         DebugPrint("{System}");
     else {
         pVMClass c = o->GetClass();
-        if(c == Globals::StringClass()) {
+        if(c == stringClass) {
             //StdString s = ((pVMString)o)->GetStdString();
             DebugPrint("\"%s\"", ((pVMString)o)->GetChars());
-        } else if(c == Globals::DoubleClass())
+        } else if(c == doubleClass)
             DebugPrint("%g", ((pVMDouble)o)->GetEmbeddedDouble());
-        else if(c == Globals::BigIntegerClass())
+        else if(c == bigIntegerClass)
             DebugPrint("%lld", ((pVMBigInteger)o)->GetEmbeddedInteger());
-        else if(c == Globals::IntegerClass())
+        else if(c == integerClass)
             DebugPrint("%d", ((pVMInteger)o)->GetEmbeddedInteger());
-        else if(c == Globals::SymbolClass()) {
+        else if(c == symbolClass) {
             DebugPrint("#%s", ((pVMSymbol)o)->GetChars());
         } else
             DebugPrint("address: %p", (void*)o);

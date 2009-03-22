@@ -16,7 +16,6 @@
 
 #include "../memory/Heap.h"
 
-#include "Globals.h"
 
 class VMObject;
 class VMSymbol;
@@ -38,6 +37,28 @@ class SourcecodeCompiler;
 // for runtime debug
 extern short dumpBytecodes;
 extern short gcVerbosity;
+
+//global VMObjects
+extern pVMObject nilObject;
+extern pVMObject trueObject;
+extern pVMObject falseObject;
+      
+extern pVMClass objectClass;
+extern pVMClass classClass;
+extern pVMClass metaClassClass;
+  
+extern pVMClass nilClass;
+extern pVMClass integerClass;
+extern pVMClass bigIntegerClass;
+extern pVMClass arrayClass;
+extern pVMClass methodClass;
+extern pVMClass symbolClass;
+extern pVMClass frameClass;
+extern pVMClass primitiveClass;
+extern pVMClass stringClass;
+extern pVMClass systemClass;
+extern pVMClass blockClass;
+extern pVMClass doubleClass;
 
 using namespace std;
 class Universe
@@ -89,7 +110,7 @@ public:
     pVMObject     GetGlobal(pVMSymbol);
     void          SetGlobal(pVMSymbol name, pVMObject val);
     bool          HasGlobal(pVMSymbol);
-
+    void          InitializeGlobals();
     pVMClass      GetBlockClass(void) const;
     pVMClass      GetBlockClassWithArgs(int);
 

@@ -87,7 +87,7 @@ void     VMFrame::SetPreviousFrame(pVMObject frm) {
 }
 
 void     VMFrame::ClearPreviousFrame() {
-    this->previousFrame = (pVMFrame)Globals::NilObject();
+    this->previousFrame = (pVMFrame)nilObject;
 }
 
 
