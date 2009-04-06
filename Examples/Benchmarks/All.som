@@ -29,8 +29,9 @@ All = (
         | total |
         total := 0.
         
-        IntegerLoop, Fibonacci, Dispatch, Bounce, Loop, Permute, Queens, List, Recurse,
-        Storage, Sieve, BubbleSort, QuickSort, Sum, Towers, TreeSort
+        Fibonacci, Dispatch, Bounce, Loop, Permute, Queens, List, Recurse,
+        Storage, Sieve, BubbleSort, QuickSort, Sum, Towers, TreeSort,
+        IntegerLoop
             do: [ :benchmark | total := total + benchmark new run ].
         
         ('All tests completed (' + total + ' ms)') println.
