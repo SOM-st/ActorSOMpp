@@ -1,7 +1,7 @@
 /*
- * $Id: main.c 523 2008-05-28 18:08:31Z michael.seegers $
  *
-Copyright (c) 2007 Michael Haupt, Tobias Pape
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -23,11 +23,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
-
-//#include <memory/gc.h>
-
-//#include <vm/Universe.h>
-//#include <stdio.h>
 
 #include <iostream>
 #include <fstream>

@@ -1,7 +1,3 @@
-#pragma once
-#ifndef GARBAGECOLLECTOR_H_
-#define GARBAGECOLLECTOR_H_
-
 /*
  *
  *
@@ -29,37 +25,27 @@ THE SOFTWARE.
   */
 
 
-#include "../vmobjects/ObjectFormats.h"
-#include "../misc/defs.h"
+#include "VMFreeObject.h"
 
-class VMObject;
-class Heap;
 
-class GarbageCollector {
-public:
-	GarbageCollector(Heap* h);
-	~GarbageCollector();
-	void Collect();
-    void PrintGCStat() const;
-    void PrintCollectStat() const;
-	
+VMFreeObject::VMFreeObject() : VMObject(0) {
+    this->gcfield = -1;
+}
 
-private:
-	void markReachableObjects();
-	void mergeFreeSpaces();
-	Heap* heap;
+void VMFreeObject::SetNext(VMFreeObject* next) {
+    this->hash = (int32_t) next;
+}
 
-    //
-    // values for GC statistics
-    //
-    uint32_t numCollections;
-	uint32_t numLive;
-	uint32_t spcLive;
-	uint32_t numFreed;
-	uint32_t spcFreed;
+VMFreeObject* VMFreeObject::GetNext() {
+    return (VMFreeObject*)this->hash;
+}
 
-	
+void VMFreeObject::SetPrevious(VMFreeObject* prev) {
+    this->numberOfFields = (int32_t)prev;
+}
 
-};
+VMFreeObject* VMFreeObject::GetPrevious() {
+    return (VMFreeObject*)this->numberOfFields;
+}
 
-#endif
+

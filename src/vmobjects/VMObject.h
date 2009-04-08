@@ -2,6 +2,33 @@
 #ifndef VMOBJECT_H_
 #define VMOBJECT_H_
 
+/*
+ *
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
+Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
+http://www.hpi.uni-potsdam.de/swa/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+  */
+
+
 #include <vector>
 #include <iostream>
 
@@ -55,10 +82,10 @@ public:
     virtual void        DecreaseGCCount() {};
 
     int32_t     GetHash() const { return hash; };
-    int         GetObjectSize() const;
-	bool        GetGCField() const;
-	void        SetGCField(bool value);
-    void        SetObjectSize(size_t size) {objectSize = size; } ;
+    int32_t     GetObjectSize() const;
+	int32_t     GetGCField() const;
+	void        SetGCField(int32_t value);
+    void        SetObjectSize(size_t size);
 	
     /* Operators */
 
@@ -79,13 +106,11 @@ public:
 
 	void operator delete(void* self, Heap* heap, 
                          unsigned int /*additional_bytes*/) {
-        int size = ((pVMObject)self)->GetObjectSize();
-		heap->Free(self, size);
+		heap->Destroy((VMObject*)self);
 	}
 
 	 void operator delete( void* self, Heap* heap) {
-         int size = ((pVMObject)self)->GetObjectSize();
-		 heap->Free(self, size); 
+		 heap->Destroy((VMObject*)self); 
 	 } 
 
 	
@@ -95,7 +120,7 @@ protected:
 	int32_t     hash;
     int32_t     objectSize; //set by the heap at allocation time
     int32_t     numberOfFields;
-    bool        gcfield;
+    int32_t     gcfield;
 
     //pVMObject* FIELDS;
     //Start of fields. All members beyond this point are indexable 

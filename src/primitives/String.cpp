@@ -1,7 +1,7 @@
 /*
  *
  *
-Copyright (c) 2009 Arne Bergmann
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
+
 
 #include <stdio.h>
 
@@ -62,8 +63,8 @@ void  _String::Concatenate_(pVMObject /*object*/, pVMFrame frame) {
 
     pVMString arg = (pVMString)frame->Pop();
     pVMString self = (pVMString)frame->Pop();
-    StdString a = arg->GetChars();//StdString(arg->GetChars());
-    StdString s = self->GetChars();//StdString(self->GetChars());
+    StdString a = arg->GetChars();
+    StdString s = self->GetChars();
     
     StdString result = s + a;
 
@@ -86,8 +87,7 @@ void  _String::Hashcode(pVMObject /*object*/, pVMFrame frame) {
 
 void  _String::Length(pVMObject /*object*/, pVMFrame frame) {
     pVMString self = (pVMString)frame->Pop();
-    //StdString result = self->GetStdString();
-    //size_t len = result.length();
+    
     size_t len = self->GetStringLength();
     frame->Push(_UNIVERSE->NewInteger((int32_t)len));
 }

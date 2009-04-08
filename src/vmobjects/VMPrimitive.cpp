@@ -1,3 +1,30 @@
+/*
+ *
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
+Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
+http://www.hpi.uni-potsdam.de/swa/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+  */
+
+
 #include "VMPrimitive.h"
 #include "VMSymbol.h"
 #include "VMClass.h"
@@ -22,7 +49,7 @@ VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(VMPrimitiveNumberOfF
     _HEAP->StartUninterruptableAllocation();
     //the only class that explicitly does this.
     this->SetClass(primitiveClass);
-    //this->empty = (bool*)_HEAP->Allocate(sizeof(bool));
+    
     this->SetSignature(signature);
     this->routine = NULL;
     this->empty = (bool*)0;
@@ -31,28 +58,20 @@ VMPrimitive::VMPrimitive(pVMSymbol signature) : VMInvokable(VMPrimitiveNumberOfF
 }
 
 
-//TODO: this is a memory leak. The empty flag is not freed and the routine is not destroyed
-//, but G++ doesn't like the destructor of VMObject classes
-//VMPrimitive::~VMPrimitive(Heap* heap)
-//{
-//    _HEAP->Free(empty, sizeof(bool));
-//    if (routine != NULL) Core::destroy(routine);
-//}
-
-
-
 
 void VMPrimitive::MarkReferences() {
     if (gcfield) return;
-    //VMInvokable::MarkReferences();
+
     this->SetGCField(1);
+    //explicitly implement marking for primitives, as they include fields
+    //that should not be marked!!!
     for( int i = 0; i < this->GetNumberOfFields(); ++i) {
         //HACK to avoid calling MarkReferences() for the bool*
         if ((void*)GetField(i) == (void*)this->empty) 
             continue;
         //HACK to avoid calling MarkReferences() for the routine*
         if ((void*)GetField(i) == (void*)this->routine)
-            continue;//cout << "routine" << endl;
+            continue;
         GetField(i)->MarkReferences();
     }
 }

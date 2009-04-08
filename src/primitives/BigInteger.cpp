@@ -1,7 +1,7 @@
 /*
  *
  *
-Copyright (c) 2009 Arne Bergmann
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -190,7 +191,7 @@ void  _BigInteger::Equal(pVMObject /*object*/, pVMFrame frame) {
     
     // Do operation:
     if(left->GetEmbeddedInteger() == right->GetEmbeddedInteger())
-        frame->Push(trueObject);//trueObject);
+        frame->Push(trueObject);
     else
         frame->Push(falseObject);
 }
@@ -214,8 +215,7 @@ void  _BigInteger::Lowerthan(pVMObject /*object*/, pVMFrame frame) {
 
 void  _BigInteger::AsString(pVMObject /*object*/, pVMFrame frame) {
     pVMBigInteger self = (pVMBigInteger)frame->Pop();
-    // temporary storage for the number string
-    // use c99 snprintf-goodie
+
     int64_t bigint = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << bigint;

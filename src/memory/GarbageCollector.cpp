@@ -1,3 +1,30 @@
+/*
+ *
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
+Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
+http://www.hpi.uni-potsdam.de/swa/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+  */
+
+
 #include <vector>
 #include <map>
 #include <string.h>
@@ -9,6 +36,7 @@
 
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMObject.h"
+#include "../vmobjects/VMFreeObject.h"
 #include "../vmobjects/VMSymbol.h"
 
 
@@ -36,57 +64,58 @@ void GarbageCollector::Collect() {
 	spcFreed = 0;
 	markReachableObjects();
 	void* pointer = heap->objectSpace;
-	FreeListEntry* currentEntry = heap->freeListStart;
+    VMFreeObject* lastUnusedObject = NULL;
 	long bytesToSkip = 0;
-#ifdef __DEBUG
-    cout << "Starting garbage collection." << endl;
-#endif
-	do {
-		//see whether the currentObject is part of the free list
-		while( currentEntry->next != NULL &&
-			pointer > (void*)currentEntry->next) {
-			currentEntry = currentEntry->next;
-		}
 
-		//check if it is in the free list
-		if (pointer == (void*)currentEntry) {
-			bytesToSkip = currentEntry->size;
-		} else if (pointer == (void*)currentEntry->next)  {
-			bytesToSkip = currentEntry->next->size;
-		} else { //we found a VMObject
-			pVMObject object = (pVMObject) pointer;
-			bytesToSkip = object->GetObjectSize();
-            
-			if (object->GetGCField() == 1)  {
+    //reset freeList, will be rebuilt during sweeping
+    heap->freeListStart = NULL;
+
+    //start sweeping
+    //iterate through the whole heap
+    do { //end of heap not reached yet?
+        //everything in the heap is an vmobject
+        VMObject* curObject = (VMObject*) pointer;
+        if (curObject->GetGCField() != -1) {
+            //current object is not marked as being unused
+            if (curObject->GetGCField() == 1) {
+                //found alive object
                 ++numLive;
-			    spcLive += object->GetObjectSize();
-				object->SetGCField(0);
-				
-			} else {
-				memset(pointer, 0, bytesToSkip);
-				FreeListEntry* newEntry = 
-                    reinterpret_cast<FreeListEntry*>(pointer);
-				++numFreed;
-				spcFreed += bytesToSkip;
-				newEntry->size = bytesToSkip;
-				if (newEntry < heap->freeListStart)  {
-					newEntry->next = heap->freeListStart;
-					heap->freeListStart = newEntry;
-					currentEntry = newEntry;
-				} else {
-					newEntry->next = currentEntry->next;
-					currentEntry->next = newEntry;
-				}
+                spcLive += curObject->GetObjectSize();
+                curObject->SetGCField(0);
+            } else {
+                //found trash
+                ++numFreed;
+                int freedBytes = curObject->GetObjectSize();
+                spcFreed += freedBytes;
+                memset(curObject, 0, freedBytes);
 
-			}
-		}
-
-		pointer = (void*)((long)pointer + bytesToSkip);
-
-	} while((long)pointer < ((long)(void*)heap->objectSpace) + 
-                                          heap->objectSpaceSize);
-
-	mergeFreeSpaces();
+                //mark object as unused
+                curObject->SetGCField(-1);
+                curObject->SetObjectSize(freedBytes);
+                VMFreeObject* curFree = (VMFreeObject*) curObject;
+                if (heap->freeListStart == NULL) {
+                    heap->freeListStart = curFree;
+                } else  {
+                    lastUnusedObject->SetNext(curFree);
+                }
+                curFree->SetPrevious(lastUnusedObject);
+                lastUnusedObject = curFree;
+                
+            }
+        } else {
+            VMFreeObject* curFree = (VMFreeObject*)curObject;
+            //store the unused object for merging purposes
+            if (heap->freeListStart == NULL) 
+                heap->freeListStart = curFree;
+            else
+                lastUnusedObject->SetNext(curFree);
+            curFree->SetPrevious(lastUnusedObject);
+            lastUnusedObject = curFree;
+        }
+        pointer = (void*)((long)pointer + curObject->GetObjectSize());
+    }while((long)pointer  < ((long)(void*)heap->objectSpace) + heap->objectSpaceSize);
+    
+    mergeFreeSpaces();
 
     if(gcVerbosity > 1)
         this->PrintCollectStat();
@@ -98,7 +127,6 @@ void GarbageCollector::Collect() {
 
 void GarbageCollector::markReachableObjects() {
 	map<pVMSymbol, pVMObject> globals = Universe::GetUniverse()->GetGlobals();
-    map<pVMSymbol, pVMObject>::iterator it = globals.begin();
     for (map<pVMSymbol, pVMObject>::iterator it = globals.begin(); 
                                         it!= globals.end(); ++it) {
         (&(*it->first))->MarkReferences();
@@ -122,20 +150,26 @@ void GarbageCollector::markReachableObjects() {
 
 void GarbageCollector::mergeFreeSpaces() {
 
-	FreeListEntry* currentEntry = heap->freeListStart;
+	VMFreeObject* currentEntry = heap->freeListStart;
+    VMFreeObject* last = NULL;
 	heap->sizeOfFreeHeap = 0;
-	while (currentEntry->next != NULL) {
-		if((int)currentEntry + (int)currentEntry->size == 
-                                        (int)currentEntry->next) {
-			currentEntry->size += currentEntry->next->size; 
-			currentEntry->next = currentEntry->next->next;
+	while (currentEntry->GetNext() != NULL) {
+		if((int)currentEntry + (int)currentEntry->GetObjectSize() == 
+                                        (int)currentEntry->GetNext()) {
+            int newEntrySize = currentEntry->GetObjectSize() +
+                                        currentEntry->GetNext()->GetObjectSize();
+			currentEntry->SetObjectSize(newEntrySize);
+			currentEntry->SetNext(currentEntry->GetNext()->GetNext());
 		} else {
-			heap->sizeOfFreeHeap += currentEntry->size;
-			currentEntry = currentEntry->next;
+			heap->sizeOfFreeHeap += currentEntry->GetObjectSize();
+            currentEntry->SetPrevious(last);
+            last = currentEntry;
+			currentEntry = currentEntry->GetNext();
 		}
 	}
-	heap->sizeOfFreeHeap += currentEntry->size;
-
+    currentEntry->SetPrevious(last);
+	heap->sizeOfFreeHeap += currentEntry->GetObjectSize();
+    
 }
 
 #define _KB(B) (B/1024)

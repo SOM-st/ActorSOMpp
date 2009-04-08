@@ -1,7 +1,7 @@
 /*
  *
  *
-Copyright (c) 2009 Arne Bergmann
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
+
 
 #include "Parser.h"
 #include "BytecodeGenerator.h"
@@ -48,39 +49,17 @@ THE SOFTWARE.
 			 nextText = lexer->GetNextText()
 
 Parser::Parser(istream& file) {
-	//lexer(file);
     sym = NONE;
     lexer = new Lexer(file);
     bcGen = new BytecodeGenerator();
     nextSym = NONE;
-    //bufp = 0;
 
     GETSYM;
 }
 
-/*
-bool Parser::eob()
-{
-    // TODO
-}
-
-void Parser::SingleOperator()
-{
-    // TODO
-}
-
-void Parser::assignments( MethodGenerationContext* mgenc, list<StdString> l )
-{
-    // TODO
-}
-
-*/
-
 Parser::~Parser() {
     delete(lexer);
     delete(bcGen);
-    //if (lexer) delete(lexer);
-    //if (bcGen) delete(bcGen);
 }
 
 //
@@ -164,13 +143,11 @@ void Parser::genPushVariable(MethodGenerationContext* mgenc, const StdString& va
         pVMSymbol fieldName = _UNIVERSE->SymbolFor(var);
 		mgenc->AddLiteralIfAbsent((pVMObject)fieldName);
         bcGen->EmitPUSHFIELD(mgenc, fieldName);
-		//SEND(mgenc->literals, addIfAbsent, fieldName);
-        //BytecodeGenerator::EmitPUSHFIELD(mgenc, fieldName);
     } else {
         
         pVMSymbol global = _UNIVERSE->SymbolFor(var);
 		mgenc->AddLiteralIfAbsent((pVMObject)global);
-        //SEND(mgenc->literals, addIfAbsent, global);
+        
         bcGen->EmitPUSHGLOBAL(mgenc, global);
     }
 }
@@ -184,7 +161,7 @@ void Parser::genPopVariable(MethodGenerationContext* mgenc, const StdString& var
     int index = 0;
     int context = 0;
     bool is_argument = false;
-	//cout << "emit pop arg/local/field" << endl;
+	
     if(mgenc->FindVar(var, &index, &context, &is_argument)) {
         if(is_argument) bcGen->EmitPOPARGUMENT(mgenc, index, context);
         else bcGen->EmitPOPLOCAL(mgenc, index, context);
@@ -420,9 +397,8 @@ void Parser::blockContents(MethodGenerationContext* mgenc) {
 
 void Parser::locals(MethodGenerationContext* mgenc)
 {
-    while(sym == Identifier) //variable();
+    while(sym == Identifier) 
 		mgenc->AddLocalIfAbsent(variable());
-        //SEND(mgenc->locals, addStringIfAbsent, variable());
 }
 
 
@@ -458,17 +434,17 @@ void Parser::blockBody(MethodGenerationContext* mgenc, bool seen_period) {
 
 void Parser::result(MethodGenerationContext* mgenc) {
     expression(mgenc);
-	//cout << "emit return" << endl;
+	
 	if(mgenc->IsBlockMethod()) bcGen->EmitRETURNNONLOCAL(mgenc);
 	else bcGen->EmitRETURNLOCAL(mgenc);
-    //mgenc->finished = true;
+    
     mgenc->SetFinished(true);
 	accept(Period);
 }
 
 
 void Parser::expression(MethodGenerationContext* mgenc) {
-    PEEK;//Peek();
+    PEEK;
     if(nextSym == Assign)
         assignation(mgenc);
     else
@@ -478,7 +454,7 @@ void Parser::expression(MethodGenerationContext* mgenc) {
 
 void Parser::assignation(MethodGenerationContext* mgenc) {
 	list<StdString> l;
-    //cout << "assignation" << endl;
+    
     assignments(mgenc, l);
     evaluation(mgenc);
     list<StdString>::iterator i;
@@ -504,7 +480,6 @@ StdString Parser::assignment(MethodGenerationContext* mgenc) {
     StdString v = variable();
     pVMSymbol var = _UNIVERSE->SymbolFor(v);
 	mgenc->AddLiteralIfAbsent((pVMObject)var);
-    //SEND(mgenc->literals, addIfAbsent, var);
     
     expect(Assign);
     
@@ -598,17 +573,17 @@ void Parser::messages(MethodGenerationContext* mgenc, bool super) {
 void Parser::unaryMessage(MethodGenerationContext* mgenc, bool super) {
     pVMSymbol msg = unarySelector();
 	mgenc->AddLiteralIfAbsent((pVMObject)msg);
-    //SEND(mgenc->literals, addIfAbsent, msg);
+    
     if(super) bcGen->EmitSUPERSEND(mgenc, msg);
     else bcGen->EmitSEND(mgenc, msg);
-	//cout << endl;
+	
 }
 
 
 void Parser::binaryMessage(MethodGenerationContext* mgenc, bool super) {
     pVMSymbol msg = binarySelector();
 	mgenc->AddLiteralIfAbsent((pVMObject)msg);
-    //SEND(mgenc->literals, addIfAbsent, msg);
+    
     
     bool tmp_bool = false;
     binaryOperand(mgenc, &tmp_bool);
@@ -617,7 +592,7 @@ void Parser::binaryMessage(MethodGenerationContext* mgenc, bool super) {
         bcGen->EmitSUPERSEND(mgenc, msg);
     else
         bcGen->EmitSEND(mgenc, msg);
-	//cout << endl;
+	
 }
 
 
@@ -632,18 +607,18 @@ void Parser::binaryOperand(MethodGenerationContext* mgenc, bool* super) {
 void Parser::keywordMessage(MethodGenerationContext* mgenc, bool super) {
     StdString kw;
     do {
-        kw.append(keyword());// = SEND(kw, concat, keyword());
+        kw.append(keyword());
         formula(mgenc);
     } while(sym == Keyword);
     
     pVMSymbol msg = _UNIVERSE->SymbolFor(kw);
-    //SEND(kw, free);
+    
 	mgenc->AddLiteralIfAbsent((pVMObject)msg);
-    //SEND(mgenc->literals, addIfAbsent, msg);
+    
     
     if(super) bcGen->EmitSUPERSEND(mgenc, msg);
     else bcGen->EmitSEND(mgenc, msg);
-	//cout << endl;
+	
 }
 
 
@@ -718,12 +693,11 @@ void Parser::literalSymbol(MethodGenerationContext* mgenc) {
     if(sym == STString) {
         StdString s = _string();
         symb = _UNIVERSE->SymbolFor(s);
-        //SEND(s, free);
+        
     } else
         symb = selector();
 	mgenc->AddLiteralIfAbsent((pVMObject)symb);
-    //SEND(mgenc->literals, addIfAbsent, symb);
-    //cout << "emit push constant literal symbol" << endl;
+    
     bcGen->EmitPUSHCONSTANT(mgenc, (pVMObject)symb);
 }
 
@@ -733,11 +707,9 @@ void Parser::literalString(MethodGenerationContext* mgenc) {
 	
     pVMString str = _UNIVERSE->NewString(s);
     mgenc->AddLiteralIfAbsent((pVMObject)str);
-    //SEND(s, free);
-    //
-    //SEND(mgenc->literals, addIfAbsent, str);
+    
     bcGen->EmitPUSHCONSTANT(mgenc,(pVMObject)str);
-    //cout << "emit push constant literal string" << endl;
+    
 }
 
 

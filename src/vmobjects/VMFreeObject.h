@@ -1,6 +1,6 @@
 #pragma once
-#ifndef GARBAGECOLLECTOR_H_
-#define GARBAGECOLLECTOR_H_
+#ifndef VMFREEOBJECT_H_
+#define VMFREEOBJECT_H_
 
 /*
  *
@@ -29,37 +29,27 @@ THE SOFTWARE.
   */
 
 
-#include "../vmobjects/ObjectFormats.h"
-#include "../misc/defs.h"
+#include "VMObject.h"
 
-class VMObject;
-class Heap;
-
-class GarbageCollector {
+//This class represents unused memory in the heap.
+//Its objectSize field states the size of the unused memory chunk.
+//In order to build a double linked list of free memory chunks in the
+//heap, some fields are used outside their normal purpose:
+//The hash field is ("ab"-)used as the "next" pointer in the free-list.
+//The numberOfFields field is ("ab"-)used as the "previous" pointer in
+//the double-linked free-list.
+//Unused objects are marked as -1 in the gc_field;
+class VMFreeObject : public VMObject {
 public:
-	GarbageCollector(Heap* h);
-	~GarbageCollector();
-	void Collect();
-    void PrintGCStat() const;
-    void PrintCollectStat() const;
-	
+    VMFreeObject();
 
-private:
-	void markReachableObjects();
-	void mergeFreeSpaces();
-	Heap* heap;
-
-    //
-    // values for GC statistics
-    //
-    uint32_t numCollections;
-	uint32_t numLive;
-	uint32_t spcLive;
-	uint32_t numFreed;
-	uint32_t spcFreed;
-
-	
-
+    void SetNext(VMFreeObject* next);
+    VMFreeObject* GetNext();
+    void SetPrevious(VMFreeObject* prev);
+    VMFreeObject* GetPrevious();
 };
 
+
 #endif
+
+

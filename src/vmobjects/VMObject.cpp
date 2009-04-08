@@ -1,3 +1,30 @@
+/*
+ *
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
+Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
+http://www.hpi.uni-potsdam.de/swa/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+  */
+
+
 #include "VMObject.h"
 #include "VMClass.h"
 #include "VMSymbol.h"
@@ -9,7 +36,8 @@
 const int VMObject::VMObjectNumberOfFields = 1; 
 
 VMObject::VMObject( int numberOfFields ) {
-    //FIELDS = (pVMObject*)&clazz;
+    //this line would be needed if the VMObject** is used instead of the macro:
+    //FIELDS = (pVMObject*)&clazz; 
     this->SetNumberOfFields(numberOfFields + VMObjectNumberOfFields);
     gcfield = 0; 
 	hash = (int32_t)this;
@@ -67,20 +95,23 @@ int VMObject::GetNumberOfFields() const {
     return this->numberOfFields;
 }
 
-int VMObject::GetObjectSize() const {
+int32_t VMObject::GetObjectSize() const {
     return objectSize;
 }
 
 
-bool VMObject::GetGCField() const {
+int32_t VMObject::GetGCField() const {
     return gcfield;
 }
 
 	
-void VMObject::SetGCField(bool value) { 
+void VMObject::SetGCField(int32_t value) { 
     gcfield = value; 
 }
 
+void VMObject::SetObjectSize(size_t size) {
+    objectSize = size; 
+}
 
 void VMObject::Assert(bool value) const {
     _UNIVERSE->Assert(value);
@@ -111,11 +142,8 @@ void VMObject::MarkReferences() {
     if (this->gcfield) return;
 	this->SetGCField(1);
     for( int i = 0; i < this->GetNumberOfFields(); ++i) {
-       /* if (i == 3 && this->clazz->GetName()->GetStdString() == "Frame") {
-            cout << "hier" << endl;
-        }*/
         pVMObject o = (FIELDS[i]);
         o->MarkReferences();
     }
-//	clazz->MarkReferences();
+
 }

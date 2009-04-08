@@ -1,3 +1,29 @@
+/*
+ *
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
+Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
+http://www.hpi.uni-potsdam.de/swa/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+  */
+
 
 #include <stdio.h>
 #include <string.h>
@@ -49,7 +75,6 @@ void Disassembler::dispatch(pVMObject o) {
     else {
         pVMClass c = o->GetClass();
         if(c == stringClass) {
-            //StdString s = ((pVMString)o)->GetStdString();
             DebugPrint("\"%s\"", ((pVMString)o)->GetChars());
         } else if(c == doubleClass)
             DebugPrint("%g", ((pVMDouble)o)->GetEmbeddedDouble());
@@ -113,7 +138,7 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
     // output bytecodes
     for(int bc_idx = 0; 
         bc_idx < method->GetNumberOfBytecodes(); 
-        bc_idx += Bytecode::GetBytecodeLength(method->GetBytecode(bc_idx)) ) { //(*method)[bc_idx]) ) {
+        bc_idx += Bytecode::GetBytecodeLength(method->GetBytecode(bc_idx)) ) { 
         // the bytecode.
         uint8_t bytecode = BC_0;
         // indent, bytecode index, bytecode mnemonic
@@ -132,7 +157,6 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
             case BC_PUSH_FIELD:{
                 pVMObject cst = method->GetConstant(bc_idx);
                 
-                //StdString s_name = SEND(name, get_string);
                 if (cst != NULL) {
                     pVMSymbol name = dynamic_cast<pVMSymbol>(cst);
                     if (name != NULL) {
@@ -157,7 +181,7 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
                 pVMObject constant = method->GetConstant(bc_idx);
                 pVMClass cl = constant->GetClass();
                 pVMSymbol cname = cl->GetName();
-                //StdString s_cname = SEND(cname, get_string);
+                
                 DebugPrint("(index: %d) value: (%s) ", 
                             BC_1, cname->GetChars());
                 dispatch(constant); DebugPrint("\n");
@@ -166,7 +190,6 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
             case BC_PUSH_GLOBAL: {
                 pVMObject cst = method->GetConstant(bc_idx);
                 
-                //StdString s_name = SEND(name, get_string);
                 if (cst != NULL) {
                     pVMSymbol name = dynamic_cast<pVMSymbol>(cst);
                     if (name != NULL) {
@@ -187,20 +210,20 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
                 break;
             case BC_POP_FIELD: {
                 pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
-                //StdString s_name = SEND(name, get_string);
+                
                 DebugPrint("(index: %d) field: %s\n", BC_1, name->GetChars());
                 break;
             }
             case BC_SEND: {
                 pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
-                //StdString s_name = SEND(name, get_string);
+                
                 DebugPrint("(index: %d) signature: %s\n", BC_1,
                     name->GetChars());
                 break;
             }
             case BC_SUPER_SEND: {
                 pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
-                //StdString s_name = SEND(name, get_string);
+                
                 DebugPrint("(index: %d) signature: %s\n", BC_1,
                     name->GetChars());
                 break;
@@ -225,8 +248,6 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
     if(cl != NULL) {
         pVMSymbol cname = cl->GetName();
         pVMSymbol sig = method->GetSignature();
-        //StdString s_cname = SEND(cname, get_string);
-        //StdString s_sig = SEND(sig, get_string);
         
         DebugTrace("%20s>>%-20s% 10lld %c %04d: %s\t",
                     cname->GetChars(), sig->GetChars(),
@@ -234,7 +255,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
                     Bytecode::GetBytecodeName(bc));        
     } else {
         pVMSymbol sig = method->GetSignature();
-        //StdString s_sig = SEND(sig, get_string);
+        
         DebugTrace("%-42s% 10lld %c %04d: %s\t", 
                     sig->GetChars(),
                     indentc, ikind, bc_idx,
@@ -253,7 +274,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             if(o) {
                 pVMClass c = o->GetClass();
                 pVMSymbol cname = c->GetName();
-                //StdString s_cname = SEND(cname, get_string);
+                
                 DebugPrint("<to dup: (%s) ", cname->GetChars());
                 //dispatch
                 dispatch(o);
@@ -267,7 +288,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             pVMObject o = frame->GetLocal(bc1, bc2);
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
-            //StdString s_cname = SEND(cname, get_string);
+            
             DebugPrint("local: %d, context: %d <(%s) ", 
                         BC_1, BC_2, cname->GetChars());
             //dispatch
@@ -282,7 +303,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             if(dynamic_cast<pVMClass>(cl) != NULL) {
                 pVMClass c = o->GetClass();
                 pVMSymbol cname = c->GetName();
-                //StdString s_cname = SEND(cname, get_string);
+                
                 DebugPrint("<(%s) ", cname->GetChars());
                 //dispatch
                 dispatch(o);                
@@ -300,9 +321,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             pVMObject o = arg->GetField(field_index);
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
-            //StdString s_name = SEND(name, get_string);
-            //StdString s_cname = SEND(cname, get_string);
-
+            
             DebugPrint("(index: %d) field: %s <(%s) ", BC_1,
                         name->GetChars(), cname->GetChars());
             //dispatch
@@ -320,7 +339,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             pVMObject constant = method->GetConstant(bc_idx);
             pVMClass c = constant->GetClass();
             pVMSymbol cname = c->GetName();
-            //StdString s_cname = SEND(cname, get_string);
+            
             DebugPrint("(index: %d) value: (%s) ", BC_1, 
                         cname->GetChars());
             dispatch(constant);
@@ -331,17 +350,16 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
             pVMObject o = _UNIVERSE->GetGlobal(name);
             pVMSymbol cname;
-            //StdString s_cname;
+            
             char*   c_cname;
             if(o) {
                 pVMClass c = o->GetClass();
                 cname = c->GetName();
-                //s_cname = SEND(cname, get_string);
+                
                 c_cname = cname->GetChars();
             } else
                 c_cname = "NULL";
             
-            //StdString s_name =SEND(name, get_string);
             DebugPrint("(index: %d)value: %s <(%s) ", BC_1,
                         name->GetChars(), c_cname);
             dispatch(o);
@@ -350,10 +368,10 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         }
         case BC_POP: {
             size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
-            pVMObject o = (*(pVMArray)frame)[sp];//->GetIndexableField(sp);
+            pVMObject o = (*(pVMArray)frame)[sp];
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
-            //StdString s_cname = SEND(cname, get_string);
+            
             DebugPrint("popped <(%s) ", cname->GetChars());
             //dispatch
             dispatch(o);
@@ -362,10 +380,10 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         }            
         case BC_POP_LOCAL: {
             size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
-            pVMObject o = (*(pVMArray)frame)[sp];//->GetIndexableField(sp);
+            pVMObject o = (*(pVMArray)frame)[sp];
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
-            //StdString s_cname = SEND(cname, get_string);
+            
             DebugPrint("popped local: %d, context: %d <(%s) ", BC_1, BC_2,
                         cname->GetChars());
             //dispatch
@@ -375,7 +393,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         }
         case BC_POP_ARGUMENT: {
             size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
-            pVMObject o = (*(pVMArray)frame)[sp];//->GetIndexableField(sp);
+            pVMObject o = (*(pVMArray)frame)[sp];
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
             DebugPrint("argument: %d, context: %d <(%s) ", BC_1, BC_2,
@@ -387,12 +405,11 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         }
         case BC_POP_FIELD: {
             size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
-            pVMObject o = (*(pVMArray)frame)[sp];//->GetIndexableField(sp);
+            pVMObject o = (*(pVMArray)frame)[sp];
             pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
-            //StdString s_name = SEND(name, get_string);
-            //StdString s_cname = SEND(cname, get_string);
+            
             DebugPrint("(index: %d) field: %s <(%s) ",  BC_1,
                         name->GetChars(),
                         cname->GetChars());
@@ -403,7 +420,6 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         case BC_SUPER_SEND:
         case BC_SEND: {
             pVMSymbol sel = (pVMSymbol)(method->GetConstant(bc_idx));
-            //StdString s_sel = SEND(sel, get_string);
 
             DebugPrint("(index: %d) signature: %s (", BC_1,
                         sel->GetChars());

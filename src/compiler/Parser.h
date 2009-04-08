@@ -5,7 +5,7 @@
 /*
  *
  *
-Copyright (c) 2009 Arne Bergmann
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -27,6 +27,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
+
 
 #include <fstream>
 #include <string>
@@ -103,29 +104,15 @@ private:
 	void        genPopVariable(MethodGenerationContext*, const StdString&);
 
 	Lexer* lexer;
-	//ifstream& infile;
-
+	
 	Symbol sym;
-	//char symc;
-	//char text[BUFSIZ];
-	StdString text;
+	
+    StdString text;
 
-	//bool peekDone;
 	Symbol nextSym;
-	//char nextSymc;
-	//char nextText[BUFSIZ];
-	StdString nextText;
-	/**
-	 * input buffer
-	 */
-
-	//char buf[BUFSIZ];
-	/*StdString buf;
-	unsigned int bufp;*/
-
-	/*static Symbol singleOpSyms[];
-	static Symbol binaryOpSyms[];
-	static Symbol keywordSelectorSyms[];*/
+	
+    StdString nextText;
+	
     BytecodeGenerator* bcGen;
 };
 

@@ -1,3 +1,29 @@
+/*
+ *
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
+Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
+http://www.hpi.uni-potsdam.de/swa/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+  */
+
 #include "VMClass.h"
 #include "VMArray.h"
 #include "VMSymbol.h"
@@ -66,7 +92,6 @@ bool VMClass::AddInstanceInvokable(pVMObject ptr) {
 			
         } else {
             _UNIVERSE->ErrorExit("Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
-            //throw std::bad_typeid();//"Invokables array corrupted. Either NULL pointer added or pointer to non-invokable.");
         }
 	}
     //it's a new invokable so we need to expand the invokables array.
@@ -128,7 +153,6 @@ void      VMClass::SetInstanceInvokable(int index, pVMObject invokable) {
         pVMInvokable inv = dynamic_cast<pVMInvokable>( invokable );
         inv->SetHolder(this);
     }
-	//instanceInvokables[index] = invokable;
 }
 
 
@@ -177,12 +201,10 @@ bool      VMClass::HasPrimitives() const {
 void      VMClass::LoadPrimitives(const vector<StdString>& cp) {
 
     // the library handle
-    //ifstream* dlhandle = NULL;
     void* dlhandle=NULL;
     //
     // cached object properties
     StdString cname = this->name->GetStdString();
-    //StdString cname = this->name->GetStdString;
 
 #if defined (__GNUC__)
     //// iterate the classpathes
@@ -274,7 +296,6 @@ StdString VMClass::genCoreLoadstring(const StdString& cp) const {
     #define S_CORE "SOMCore"
     StdString corename = string(S_CORE);
     StdString result = genLoadstring(cp, corename);
-    //SEND(corename, free);
     
     return result;
 }

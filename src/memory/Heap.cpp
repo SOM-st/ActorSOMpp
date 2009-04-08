@@ -1,3 +1,30 @@
+/*
+ *
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
+Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
+http://www.hpi.uni-potsdam.de/swa/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+  */
+
+
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
@@ -5,6 +32,7 @@
 #include "Heap.h"
 
 #include "../vmobjects/VMObject.h"
+#include "../vmobjects/VMFreeObject.h"
 
 #include "../vm/Universe.h"
 
@@ -38,10 +66,10 @@ void Heap::DestroyHeap() {
 
 
 Heap::Heap(int objectSpaceSize) {
-	objectSpace = (void*) malloc(objectSpaceSize);
+	objectSpace = malloc(objectSpaceSize);
 	if (!objectSpace) {
 		std::cout << "Failed to allocate the initial "<< objectSpaceSize 
-                  << " bytes for the GC. Panic.\n" << std::endl;
+                  << " bytes for the Heap. Panic.\n" << std::endl;
 		exit(1);
 	}
 	memset(objectSpace, 0, objectSpaceSize);
@@ -53,10 +81,14 @@ Heap::Heap(int objectSpaceSize) {
 	numAlloc = 0;
     spcAlloc = 0;
     numAllocTotal = 0;
-
-	freeListStart = (FreeListEntry*) objectSpace;
+    freeListStart = (VMFreeObject*) objectSpace;
+    freeListStart->SetObjectSize(objectSpaceSize);
+    freeListStart->SetNext(NULL);
+    freeListStart->SetPrevious(NULL);
+    freeListStart->SetGCField(-1);
+	/*freeListStart = (FreeListEntry*) objectSpace;
 	freeListStart->size = objectSpaceSize;
-	freeListStart->next = NULL;
+	freeListStart->next = NULL;*/
 	gc = new GarbageCollector(this);
 }
 
@@ -78,13 +110,11 @@ Heap::~Heap() {
     
 }
 
-pVMObject Heap::AllocateObject(size_t size) {
+VMObject* Heap::AllocateObject(size_t size) {
     //add padding, so objects are word aligned
     size_t paddedSize = size + PAD_BYTES(size);
-    pVMObject vmo = (pVMObject) Allocate(paddedSize);
-    //Problem: setting the objectSize here doesn't work if the allocated
-    //object is either VMMethode or VMPrimitive because of the multiple inheritance
-    vmo->SetObjectSize(paddedSize);
+    VMObject* vmo = (VMObject*) Allocate(paddedSize);
+
     ++numAlloc;
     ++numAllocTotal;
     spcAlloc += paddedSize;
@@ -93,12 +123,15 @@ pVMObject Heap::AllocateObject(size_t size) {
 
 void* Heap::Allocate(size_t size) {
 	if (size == 0) return NULL;
-    if (size < sizeof(FreeListEntry))  {
+    if (size < sizeof(VMObject))  {
+        //this will never happen, as all allocation is done for VMObjects
         return internalAllocate(size);
     }
 #ifdef HEAPDEBUG 
     std::cout << "allocating: " << (int)size << "bytes" << std::endl;
 #endif
+    //if there is not enough free heap size and we are not inside an uninterruptable
+    //section of allocation, start garbage collection
 	if (sizeOfFreeHeap <= buffersizeForUninterruptable &&
 		uninterruptableCounter <= 0)  {
 #ifdef HEAPDEBUG
@@ -107,7 +140,7 @@ void* Heap::Allocate(size_t size) {
              << "Starting Garbage Collection" << endl;
 #endif
 		gc->Collect();
-
+        
         //
         //reset allocation stats
         //
@@ -115,95 +148,72 @@ void* Heap::Allocate(size_t size) {
         spcAlloc = 0;
 	}
 	
-	void* result = NULL;
-	FreeListEntry* current_entry = freeListStart;
-	FreeListEntry* before_entry = NULL;
-
-    //
-	//find first fit
-    //
-	while (! ((current_entry->size == size) 
-               || (current_entry->next == NULL) 
-               || (current_entry->size >= (size + sizeof(FreeListEntry))))) { 
-        before_entry = current_entry;
-        current_entry = current_entry->next;
+	VMObject* result = NULL;
+    VMFreeObject* cur = freeListStart;
+    VMFreeObject* last = NULL;
+    while(cur->GetObjectSize() != size &&
+          cur->GetObjectSize() < size+sizeof(VMObject) &&
+          cur->GetNext() != NULL) {
+              last = cur;
+              cur = cur->GetNext();
     }
-	
-    //
-	// did we find a perfect fit?
-	// if so, we simply remove this entry from the list
-    //
-    if (current_entry->size == size) {
-        if (current_entry == freeListStart) { 
-			// first one fitted - adjust the 'first-entry' pointer
-            
-            freeListStart = current_entry->next; 
-			//PROBLEM (also in CSOM?): 
-            //what if last possible allocate is a perfect fit?
+    if (cur->GetObjectSize() == size) {
+        //perfect fit
+        if (cur == freeListStart) {
+            freeListStart = cur->GetNext();
+            freeListStart->SetPrevious(NULL);
         } else {
-			// simply remove the reference to the found entry
-            before_entry->next = current_entry->next;
-        } // entry fitted
-        result = current_entry;
-		
-    } else {
-		// did we find an entry big enough for the request and a new
-		// free_entry?
-        if (current_entry->size >= (size + sizeof(FreeListEntry))) {
-            // save data from found entry
-            int old_entry_size = current_entry->size;
-            FreeListEntry* old_next = current_entry->next;
-            
-            result = current_entry;
-            // create new entry and assign data
-            FreeListEntry* replace_entry =  
-                            (FreeListEntry*) ((int)current_entry + size);
-            
-            replace_entry->size = old_entry_size - size;
-            replace_entry->next = old_next;
-            if (current_entry == freeListStart) {
-                freeListStart = replace_entry;
-            } else {
-                before_entry->next = replace_entry;
-            }
-        }  else { 
-			// no space was left
-			// running the GC here will most certainly result in data loss!
-//#ifdef HEAPDEBUG 
-            cout << "Not enough heap! Data loss is possible" << endl
-			          << "FREE-Size: " << sizeOfFreeHeap 
-                      << ", uninterruptableCounter: " 
-                      << uninterruptableCounter << endl;
-//#endif
-            
-			gc->Collect();
-            numAlloc = 0;
-            spcAlloc = 0;
-
-            //fulfill initial request
-            result = Allocate(size);
+            last->SetNext(cur->GetNext());
+            cur->GetNext()->SetPrevious(last);
         }
+        result = cur;
+    } else if (cur->GetObjectSize() >= size + sizeof(VMFreeObject)) {
+        //found an entry that is big enough
+        int oldSize = cur->GetObjectSize();
+        VMFreeObject* oldNext = cur->GetNext();
+        result = cur;
+        VMFreeObject* replaceEntry = (VMFreeObject*) ((int)cur + size);
+        replaceEntry->SetObjectSize(oldSize - size);
+        replaceEntry->SetGCField(-1);
+        replaceEntry->SetNext(oldNext);
+        if (cur == freeListStart) {
+            freeListStart = replaceEntry;
+            freeListStart->SetPrevious(NULL);
+        } else {
+            last->SetNext(replaceEntry);
+            replaceEntry->SetPrevious(last);
+        }
+    } else {
+        //problem... might lose data here
+        cout << "Not enough heap, data loss is possible" << endl;
+        gc->Collect();
+        this->numAlloc = 0;
+        this->spcAlloc = 0;
+        result = (VMObject*)this->Allocate(size);
     }
-           
-    if(!result) {
-		cout << "Failed to allocate "<< (int)size <<" bytes. Panic." << endl;
-        //Universe_exit(-1);
-		exit(1);
+
+    if (result == NULL) {
+        cout << "alloc failed" << endl;
+        PrintFreeList();
+        _UNIVERSE->ErrorExit("Failed to allocate");
     }
+
     memset(result, 0, size);
+    result->SetObjectSize(size);
+    this->sizeOfFreeHeap -= size;
 
-#ifdef HEAPDEBUG 
-    cout << "available heap size before alloc: " << sizeOfFreeHeap << endl;
-#endif
-	// update the available size
-    sizeOfFreeHeap -= size;
-
-#ifdef HEAPDEBUG 
-    cout << "available heap size after alloc: " << sizeOfFreeHeap << endl;
-    cout << "heap-start: " << hex  << objectSpace << endl;
-    cout << "allocated at address: " << hex << result << endl;
-#endif
     return result;
+    
+}
+
+void Heap::PrintFreeList() {
+    VMFreeObject* curEntry = freeListStart;
+    int i =0;
+    while (curEntry != NULL) {
+        cout << "i: " << curEntry->GetObjectSize() << endl;
+        ++i;
+        curEntry = curEntry->GetNext();
+    }
 }
 
 void Heap::Free(void* ptr) {
@@ -213,8 +223,30 @@ void Heap::Free(void* ptr) {
     }
 }
 
-void Heap::Free(void* /*ptr*/, int /*size*/) {
-    //add referenced space to free list
+void Heap::Destroy(VMObject* _object) {
+    
+    int freedBytes = _object->GetObjectSize();
+    memset(_object, 0, freedBytes);
+    VMFreeObject* object = (VMFreeObject*) _object;
+
+    //see if there's an adjoining unused object behind this object
+    VMFreeObject* next = (VMFreeObject*)((int)object + (int)freedBytes);
+    if (next->GetGCField() == -1) {
+        //yes, there is, so we can join them
+        object->SetObjectSize(next->GetObjectSize() + freedBytes);
+        object->SetNext(next->GetNext());
+        next->GetNext()->SetPrevious(object);
+        VMFreeObject* previous = next->GetPrevious();
+        object->SetPrevious(previous);
+        memset(next, 0, next->GetObjectSize());
+    } else {
+        //no, there is not, so we just put the new unused object as the new freeListStart
+        object->SetObjectSize(freedBytes);
+        object->SetNext(freeListStart);
+        freeListStart->SetPrevious(object);
+        freeListStart = object;
+    }
+    //TODO: find a way to merge unused objects that are before this object
 }
 
 void Heap::internalFree(void* ptr) {

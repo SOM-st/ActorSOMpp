@@ -1,3 +1,30 @@
+/*
+ *
+ *
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
+Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
+http://www.hpi.uni-potsdam.de/swa/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+  */
+
+
 #include "VMFrame.h"
 #include "VMMethod.h"
 #include "VMObject.h"
@@ -36,15 +63,12 @@ const int VMFrame::VMFrameNumberOfFields = 6;
 VMFrame::VMFrame(int size, int nof) : VMArray(size, 
                                               nof + VMFrameNumberOfFields) {
     _HEAP->StartUninterruptableAllocation();
-    this->localOffset = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
-    this->bytecodeIndex = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
-    this->stackPointer = _UNIVERSE->NewInteger(0);//new (_HEAP) VMInteger(0);
+    this->localOffset = _UNIVERSE->NewInteger(0);
+    this->bytecodeIndex = _UNIVERSE->NewInteger(0);
+    this->stackPointer = _UNIVERSE->NewInteger(0);
     _HEAP->EndUninterruptableAllocation();
 }
-//
-//VMFrame::~VMFrame()
-//{
-//}
+
 pVMMethod VMFrame::GetMethod() const {
   
     return this->method;
@@ -62,7 +86,7 @@ bool     VMFrame::HasPreviousFrame() const {
 
 
 bool     VMFrame::HasContext() const {
-    return this->context !=  nilObject; //nilObject;
+    return this->context !=  nilObject; 
 }
 
 
@@ -103,7 +127,7 @@ pVMObject VMFrame::Pop() {
 void      VMFrame::Push(pVMObject obj) {
     int32_t sp = this->stackPointer->GetEmbeddedInteger() + 1;
     this->stackPointer->SetEmbeddedInteger(sp);
-    (*this)[sp] = obj; //->SetIndexableField(sp, obj);
+    (*this)[sp] = obj; 
 }
 
 
@@ -136,7 +160,6 @@ void      VMFrame::ResetStackPointer() {
     // Set the stack pointer to its initial value thereby clearing the stack
     size_t numLocals = meth->GetNumberOfLocals();
     this->stackPointer->SetEmbeddedInteger(lo + numLocals - 1);
-    //cout << "lo: " << lo << ", num_lo: " << num_lo << ", sp: "<<(lo+num_lo-1)<<endl;
 }
 
 
@@ -158,7 +181,7 @@ pVMObject VMFrame::GetStackElement(int index) const {
 
 void      VMFrame::SetStackElement(int index, pVMObject obj) {
     int sp = this->stackPointer->GetEmbeddedInteger();
-    (*this)[sp-index] = obj; //->SetIndexableField(sp-index, obj);
+    (*this)[sp-index] = obj; 
 }
 
 
@@ -172,7 +195,7 @@ pVMObject VMFrame::GetLocal(int index, int contextLevel) {
 void      VMFrame::SetLocal(int index, int contextLevel, pVMObject value) {
     pVMFrame context = this->GetContextLevel(contextLevel);
     size_t lo = context->localOffset->GetEmbeddedInteger();
-    (*context)[lo+index] = value; //->SetIndexableField(lo+index, value);
+    (*context)[lo+index] = value; 
 }
 
 
@@ -186,7 +209,7 @@ pVMObject VMFrame::GetArgument(int index, int contextLevel) {
 
 void      VMFrame::SetArgument(int index, int contextLevel, pVMObject value) {
     pVMFrame context = this->GetContextLevel(contextLevel);
-    (*context)[index] = value; //->SetIndexableField(index, value);
+    (*context)[index] = value; 
 }
 
 
@@ -211,12 +234,6 @@ void      VMFrame::CopyArgumentsFrom(pVMFrame frame) {
         (*this)[i] = stackElem;
     }
 }
-
-//
-//size_t VMFrame::GetOffset()
-//{
-//    return VMArray::GetOffset() + sizeof(pVMFrame)*2 + sizeof(pVMMethod) + sizeof(pVMInteger)*3;
-//}
 
 
 void VMFrame::MarkReferences() {

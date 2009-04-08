@@ -1,7 +1,7 @@
 /*
  *
  *
-Copyright (c) 2009 Arne Bergmann
+Copyright (c) 2007 Michael Haupt, Tobias Pape, Arne Bergmann
 Software Architecture Group, Hasso Plattner Institute, Potsdam, Germany
 http://www.hpi.uni-potsdam.de/swa/
 
@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
+
 
 #include <math.h>
 #include <stdlib.h>
@@ -125,7 +126,6 @@ void _Integer::resendAsBigInteger(pVMObject /*object*/,
     
     leftBigInteger->Send(op, operands, 1);
     // no reference
-    //SEND(op, free);
 }
 
 
@@ -298,8 +298,7 @@ void  _Integer::Lowerthan(pVMObject object, pVMFrame frame) {
 
 void  _Integer::AsString(pVMObject /*object*/, pVMFrame frame) {
     pVMInteger self = (pVMInteger)frame->Pop();
-    // temporary storage for the number string
-    // use c99 snprintf-goodie
+    
     int32_t integer = self->GetEmbeddedInteger();
     ostringstream Str;
     Str << integer;
