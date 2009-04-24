@@ -84,7 +84,7 @@ void Shell::Start() {
     /**
      * Main Shell Loop
      */
-    while(true) {
+    while(!cin.eof()) {
         // initialize empty strings
         StdString   statement;
         StdString   inp;
