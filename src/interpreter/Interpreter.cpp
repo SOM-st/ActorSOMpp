@@ -48,8 +48,8 @@ THE SOFTWARE.
 #define _SELF this->GetSelf()
 
 
-Interpreter::Interpreter() {
-    this->frame = NULL;
+Interpreter::Interpreter() : frame() {
+   // this->frame = NULL;
     
     uG = "unknownGlobal:";
     dnu = "doesNotUnderstand:arguments:";
@@ -164,7 +164,7 @@ void Interpreter::send( pVMSymbol signature, pVMClass receiverClass) {
     pVMInvokable invokable = 
                 DynamicConvert<VMInvokable, VMObject>( receiverClass->LookupInvokable(signature) );
 
-    if (invokable != NULL) {
+    if (!invokable.IsNull()) {
         (*invokable)(_FRAME);
     } else {
         //doesNotUnderstand
@@ -265,7 +265,7 @@ void Interpreter::doPushGlobal( int bytecodeIndex) {
 
     pVMObject global = _UNIVERSE->GetGlobal(globalName);
 
-    if(global != NULL)
+    if(!global.IsNull())
         _FRAME->Push(global);
     else {
         pVMObject arguments[] = { (pVMObject) globalName };
@@ -348,7 +348,7 @@ void Interpreter::doSuperSend( int bytecodeIndex ) {
     pVMInvokable invokable = DynamicConvert<VMInvokable, VMObject>( 
                                     super->LookupInvokable(signature) );
 
-    if (invokable != NULL)
+    if (!invokable.IsNull())
         (*invokable)(_FRAME);
     else {
         int numOfArgs = Signature::GetNumberOfArguments(signature);

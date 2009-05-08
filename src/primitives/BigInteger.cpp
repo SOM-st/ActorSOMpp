@@ -46,7 +46,7 @@ THE SOFTWARE.
 #define CHECK_BIGINT(object, result) { \
     /* Check second parameter type: */ \
     pVMInteger ptr;\
-    if((ptr = DynamicConvert<VMInteger, VMObject>(object)) != NULL) { \
+    if(!(ptr = DynamicConvert<VMInteger, VMObject>(object)).IsNull()) { \
         /* Second operand was Integer*/ \
         int32_t i = ptr->GetEmbeddedInteger(); \
         (result) = _UNIVERSE->NewBigInteger((int64_t)i); \
@@ -99,7 +99,7 @@ _BigInteger::_BigInteger( ) : PrimitiveContainer(){
 
 void  _BigInteger::Plus(pVMObject /*object*/, pVMFrame frame) {
     pVMObject rightObj  = frame->Pop();
-    pVMBigInteger right = NULL;
+    pVMBigInteger right;
     pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);
@@ -113,7 +113,7 @@ void  _BigInteger::Plus(pVMObject /*object*/, pVMFrame frame) {
 
 void  _BigInteger::Minus(pVMObject /*object*/, pVMFrame frame) {
     pVMObject rightObj  = frame->Pop();
-    pVMBigInteger right = NULL;
+    pVMBigInteger right;
     pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
@@ -127,7 +127,7 @@ void  _BigInteger::Minus(pVMObject /*object*/, pVMFrame frame) {
 
 void  _BigInteger::Star(pVMObject /*object*/, pVMFrame frame) {
    pVMObject rightObj  = frame->Pop();
-    pVMBigInteger right = NULL;
+    pVMBigInteger right;
     pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
@@ -141,7 +141,7 @@ void  _BigInteger::Star(pVMObject /*object*/, pVMFrame frame) {
 
 void  _BigInteger::Slash(pVMObject /*object*/, pVMFrame frame) {
     pVMObject rightObj  = frame->Pop();
-    pVMBigInteger right = NULL;
+    pVMBigInteger right;
     pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
@@ -155,7 +155,7 @@ void  _BigInteger::Slash(pVMObject /*object*/, pVMFrame frame) {
 
 void  _BigInteger::Percent(pVMObject /*object*/, pVMFrame frame) {
     pVMObject rightObj  = frame->Pop();
-    pVMBigInteger right = NULL;
+    pVMBigInteger right;
     pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
@@ -170,7 +170,7 @@ void  _BigInteger::Percent(pVMObject /*object*/, pVMFrame frame) {
 
 void  _BigInteger::And(pVMObject /*object*/, pVMFrame frame) {
     pVMObject rightObj  = frame->Pop();
-    pVMBigInteger right = NULL;
+    pVMBigInteger right;
     pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
@@ -185,7 +185,7 @@ void  _BigInteger::And(pVMObject /*object*/, pVMFrame frame) {
 
 void  _BigInteger::Equal(pVMObject /*object*/, pVMFrame frame) {
     pVMObject rightObj  = frame->Pop();
-    pVMBigInteger right = NULL;
+    pVMBigInteger right;
     pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   
@@ -200,7 +200,7 @@ void  _BigInteger::Equal(pVMObject /*object*/, pVMFrame frame) {
 
 void  _BigInteger::Lowerthan(pVMObject /*object*/, pVMFrame frame) {
     pVMObject rightObj  = frame->Pop();
-    pVMBigInteger right = NULL;
+    pVMBigInteger right;
     pVMBigInteger left  = (pVMBigInteger)frame->Pop();
     
     CHECK_BIGINT(rightObj, right);   

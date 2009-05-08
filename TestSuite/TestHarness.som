@@ -46,7 +46,7 @@ TestHarness = (
     
     fail: who because: reason = (
         ('Test ' + who + ' failed: ' + reason) println.
-        system exit: 1
+        "system exit: 1"
     )
     
     warn: who = (

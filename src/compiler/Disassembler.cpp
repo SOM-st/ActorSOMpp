@@ -158,9 +158,9 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
             case BC_PUSH_FIELD:{
                 pVMObject cst = method->GetConstant(bc_idx);
                 
-                if (cst != NULL) {
+                if (!cst.IsNull()) {
                     pVMSymbol name = DynamicConvert<VMSymbol, VMObject>(cst);
-                    if (name != NULL) {
+                    if (!name.IsNull()) {
                         DebugPrint("(index: %d) field: %s\n", BC_1, 
                                                             name->GetChars());
                         break;
@@ -191,9 +191,9 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
             case BC_PUSH_GLOBAL: {
                 pVMObject cst = method->GetConstant(bc_idx);
                 
-                if (cst != NULL) {
+                if (!cst.IsNull()) {
                     pVMSymbol name = DynamicConvert<VMSymbol, VMObject>(cst);
-                    if (name != NULL) {
+                    if (!name.IsNull()) {
                         DebugPrint("(index: %d) value: %s\n", BC_1, 
                                                             name->GetChars());
                         break;
@@ -246,7 +246,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
     pVMObject        clo   = method->GetHolder();
     pVMClass cl = DynamicConvert<VMClass, VMObject>(clo);
     // Determine Context: Class or Block?
-    if(cl != NULL) {
+    if(!cl.IsNull()) {
         pVMSymbol cname = cl->GetName();
         pVMSymbol sig = method->GetSignature();
         
@@ -301,7 +301,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             uint8_t bc1 = BC_1, bc2 = BC_2;
             pVMObject o = frame->GetArgument(bc1, bc2);
             DebugPrint("argument: %d, context: %d", bc1, bc2);
-            if(DynamicConvert<VMClass, VMObject>(cl) != NULL) {
+            if(!(DynamicConvert<VMClass, VMObject>(cl)).IsNull()) {
                 pVMClass c = o->GetClass();
                 pVMSymbol cname = c->GetName();
                 
@@ -432,7 +432,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             pVMInvokable inv =  DynamicConvert<VMInvokable, VMObject>(
                                             elemClass->LookupInvokable(sel));
             
-            if(inv != NULL && inv->IsPrimitive()) 
+            if(!inv.IsNull() && inv->IsPrimitive()) 
                 DebugPrint("*)\n");
             else {
                 DebugPrint("\n");    

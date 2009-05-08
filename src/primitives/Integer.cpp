@@ -51,11 +51,11 @@ THE SOFTWARE.
  * of an Integer operation).
  */
 #define CHECK_COERCION(obj,receiver,op) { \
-    if(DynamicConvert<VMBigInteger, VMObject>(obj) != NULL) { \
+    if(!(DynamicConvert<VMBigInteger, VMObject>(obj)).IsNull()) { \
         resendAsBigInteger( \
             object, (op), (receiver), (pVMBigInteger)(obj)); \
         return; \
-    } else if(DynamicConvert<VMDouble, VMObject>(obj) != NULL) { \
+    } else if(!(DynamicConvert<VMDouble, VMObject>(obj)).IsNull()) { \
         resendAsDouble( \
             object, (op), (receiver), (pVMDouble)(obj)); \
         return; \
@@ -260,7 +260,7 @@ void  _Integer::Equal(pVMObject object, pVMFrame frame) {
 
     pVMInteger iright;
     pVMDouble dright;
-    if((iright = DynamicConvert<VMInteger, VMObject>(rightObj)) != NULL) {
+    if(!(iright = DynamicConvert<VMInteger, VMObject>(rightObj)).IsNull()) {
         // Second operand was Integer:
         
         if(left->GetEmbeddedInteger()
@@ -268,7 +268,7 @@ void  _Integer::Equal(pVMObject object, pVMFrame frame) {
             frame->Push(trueObject);
         else
             frame->Push(falseObject);
-    } else if((dright = DynamicConvert<VMDouble, VMObject>(rightObj)) != NULL) {
+    } else if(!(dright = DynamicConvert<VMDouble, VMObject>(rightObj)).IsNull()) {
         
         if((double)left->GetEmbeddedInteger()
             == dright->GetEmbeddedDouble())

@@ -50,14 +50,20 @@ double _Double::coerceDouble(pVMObject x) {
     pVMDouble dx;
     pVMInteger ix;
     pVMBigInteger bix;
-    if((dx = DynamicConvert<VMDouble, VMObject>(x)) != NULL)
+    
+    dx = DynamicConvert<VMDouble, VMObject>(x);
+    if(!dx.IsNull())
         return dx->GetEmbeddedDouble();
-    else if((ix = DynamicConvert<VMInteger, VMObject>(x)) != NULL)
+    
+    ix = DynamicConvert<VMInteger, VMObject>(x);
+    if(!ix.IsNull())
         return (double)ix->GetEmbeddedInteger();
-    else if((bix = DynamicConvert<VMBigInteger, VMObject>(x)) != NULL)
+    
+    bix = DynamicConvert<VMBigInteger, VMObject>(x);
+    if(!bix.IsNull())
         return (double)bix->GetEmbeddedInteger();
-    else
-        _UNIVERSE->ErrorExit("Attempt to apply Double operation to non-number.");
+    
+    _UNIVERSE->ErrorExit("Attempt to apply Double operation to non-number.");
 
     return 0.0f;
 }

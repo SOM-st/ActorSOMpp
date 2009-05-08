@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "VMClass.h"
 #include "VMSymbol.h"
 
+#include "VMPointer.h"
+
 #include "../vm/Universe.h"
 
 //when doesNotUnderstand or UnknownGlobal is sent, additional stack slots might
@@ -40,7 +42,7 @@ THE SOFTWARE.
 pVMFrame VMFrame::EmergencyFrameFrom( pVMFrame from, int extraLength ) {
     int length = from->GetNumberOfIndexableFields() + extraLength;
     int additionalBytes = length * sizeof(pVMObject);
-    pVMFrame result = new (_HEAP, additionalBytes) VMFrame(length);
+    pVMFrame result = VMPointer<VMFrame>(new (_HEAP, additionalBytes) VMFrame(length));
     
     result->SetClass(from->GetClass());
     //copy arguments, locals and the stack
@@ -91,7 +93,7 @@ bool     VMFrame::HasContext() const {
 
 
 pVMFrame VMFrame::GetContextLevel(int lvl) {
-    pVMFrame current = this;
+    pVMFrame current = Self();
     while (lvl > 0) {
         current = current->GetContext();
         --lvl;
@@ -101,7 +103,7 @@ pVMFrame VMFrame::GetContextLevel(int lvl) {
 
 
 pVMFrame VMFrame::GetOuterContext() {
-    pVMFrame current = this;
+    pVMFrame current = Self();
     while (current->HasContext()) {
         current = current->GetContext();
     }
@@ -136,11 +138,11 @@ void VMFrame::PrintStack() const {
     for (int i = 0; i < this->GetNumberOfIndexableFields()+1; ++i) {
         pVMObject vmo = (*this)[i];
         cout << i << ": ";
-        if (vmo == NULL) 
+        if (vmo.IsNull()) 
             cout << "NULL" << endl;
         if (vmo == nilObject) 
             cout << "NIL_OBJECT" << endl;
-        if (vmo->GetClass() == NULL) 
+        if (vmo->GetClass().IsNull()) 
             cout << "VMObject with Class == NULL" << endl;
         if (vmo->GetClass() == nilObject) 
             cout << "VMObject with Class == NIL_OBJECT" << endl;

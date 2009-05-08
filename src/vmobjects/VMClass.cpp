@@ -75,19 +75,19 @@ superClass(nilObject), name(nilObject), instanceFields(nilObject), instanceInvok
 
 
 bool VMClass::HasSuperClass() const {
-    return (superClass != NULL && superClass != nilObject);
+    return (!superClass.IsNull() && superClass != nilObject);
 }
 
 
 bool VMClass::AddInstanceInvokable(pVMObject ptr) {
     pVMInvokable newInvokable = DynamicConvert<VMInvokable, VMObject>(ptr);
-    if (newInvokable == NULL) {
+    if (newInvokable.IsNull()) {
         _UNIVERSE->ErrorExit("Error: trying to add non-invokable to invokables array");
     }
     //Check whether an invokable with the same signature exists and replace it if that's the case
 	for (int i = 0; i < instanceInvokables->GetNumberOfIndexableFields(); ++i) {
         pVMInvokable inv = DynamicConvert<VMInvokable, VMObject>( (*instanceInvokables)[i] );
-		if (inv != NULL) {
+		if (!inv.IsNull()) {
             if (newInvokable->GetSignature() == inv->GetSignature()) {
                 this->SetInstanceInvokable(i, ptr);
                 return false;
@@ -133,7 +133,7 @@ void      VMClass::SetInstanceInvokables(pVMArray invokables) {
         if (invo != nilObject) {
             //not Nil, so this actually is an invokable
             pVMInvokable inv = DynamicConvert<VMInvokable, VMObject>(invo);
-            inv->SetHolder(this);
+            inv->SetHolder(Self());
         }
     }
 
@@ -154,19 +154,19 @@ void      VMClass::SetInstanceInvokable(int index, pVMObject invokable) {
 	(*instanceInvokables)[index] = invokable;
     if (invokable != nilObject) {
         pVMInvokable inv = DynamicConvert<VMInvokable, VMObject>( invokable );
-        inv->SetHolder(this);
+        inv->SetHolder(Self());
     }
 }
 
 
 pVMObject VMClass::LookupInvokable(pVMSymbol name) const {
-    pVMInvokable invokable = NULL;
+    pVMInvokable invokable;
     for (int i = 0; i < GetNumberOfInstanceInvokables(); ++i) {
         invokable = (pVMInvokable)(GetInstanceInvokable(i));
         if (invokable->GetSignature() == name) 
             return (pVMObject)(invokable);
     }
-    invokable = NULL;
+    invokable = pVMObject();
     //look in super class
     if (this->HasSuperClass())  {
         invokable = (pVMInvokable)(this->superClass->LookupInvokable(name));

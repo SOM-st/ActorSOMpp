@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 pVMPrimitive VMPrimitive::GetEmptyPrimitive( pVMSymbol sig ) {
     
-    pVMPrimitive prim = new (_HEAP) VMPrimitive(sig);
+    pVMPrimitive prim = VMPointer<VMPrimitive>(new (_HEAP) VMPrimitive(sig));
     prim->empty = (bool*)1;
     prim->SetRoutine(new Routine<VMPrimitive>(prim, &VMPrimitive::EmptyRoutine));
     return prim;

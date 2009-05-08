@@ -303,7 +303,7 @@ void Universe::InitializeGlobals() {
     //
     //allocate nil object
     //
-    nilObject = new (_HEAP) VMObject;
+    nilObject = VMPointer<VMObject>(new (_HEAP) VMObject);
     nilObject->SetField(0, nilObject);
 
     metaClassClass = NewMetaclassClass();
@@ -323,7 +323,7 @@ void Universe::InitializeGlobals() {
     
     nilObject->SetClass(nilClass);
 
-    InitializeSystemClass(objectClass, NULL, "Object");
+    InitializeSystemClass(objectClass, VMPointer<VMClass>(), "Object");
     InitializeSystemClass(classClass, objectClass, "Class");
     InitializeSystemClass(metaClassClass, classClass, "Metaclass");
     InitializeSystemClass(nilClass, objectClass, "Nil");
@@ -385,9 +385,9 @@ pVMClass Universe::GetBlockClassWithArgs( int numberOfArguments) {
     if (HasGlobal(name))
         return (pVMClass)GetGlobal(name);
 
-    pVMClass result = LoadClassBasic(name, NULL);
+    pVMClass result = LoadClassBasic(name, pVMClass());
 
-    result->AddInstancePrimitive(new (_HEAP) VMEvaluationPrimitive(numberOfArguments) );
+    result->AddInstancePrimitive(NewEvaluationPrimitive(numberOfArguments));
 
     SetGlobal(name, (pVMObject) result);
 
@@ -400,12 +400,12 @@ pVMObject Universe::GetGlobal( pVMSymbol name) {
     if (HasGlobal(name))
         return (pVMObject)globals[name];
 
-    return NULL;
+    return pVMObject();
 }
 
 
 bool Universe::HasGlobal( pVMSymbol name) {
-    if (globals[name] != NULL) return true;
+    if (!globals[name].IsNull()) return true;
     else return false;
 }
 
@@ -414,7 +414,7 @@ void Universe::InitializeSystemClass( pVMClass systemClass,
                                      pVMClass superClass, const char* name) {
     StdString s_name(name);
 
-    if (superClass != NULL) {
+    if (!superClass.IsNull()) {
         systemClass->SetSuperClass(superClass);
         pVMClass sysClassClass = systemClass->GetClass();
         pVMClass superClassClass = superClass->GetClass();
@@ -448,7 +448,7 @@ pVMClass Universe::LoadClass( pVMSymbol name) {
    if (HasGlobal(name))
        return DynamicConvert<VMClass, VMObject>(GetGlobal(name));
 
-   pVMClass result = LoadClassBasic(name, NULL);
+   pVMClass result = LoadClassBasic(name, pVMClass());
 
    if (!result) {
        cout << "can\'t load class " << name->GetStdString() << endl;
@@ -479,12 +479,12 @@ pVMClass Universe::LoadClassBasic( pVMSymbol name, pVMClass systemClass) {
         }
 
     }
-    return NULL;
+    return pVMClass();
 }
 
 
 pVMClass Universe::LoadShellClass( StdString& stmt) {
-    pVMClass result = compiler->CompileClassString(stmt, NULL);
+    pVMClass result = compiler->CompileClassString(stmt, pVMClass());
      if(dumpBytecodes)
          Disassembler::Dump(result);
     return result;
@@ -508,9 +508,9 @@ void Universe::LoadSystemClass( pVMClass systemClass) {
 
 pVMArray Universe::NewArray( int size) const {
     int additionalBytes = size*sizeof(pVMObject);
-    pVMArray result = new (_HEAP, additionalBytes) VMArray(size);
+    VMArray* result = new (_HEAP, additionalBytes) VMArray(size);
     result->SetClass(arrayClass);
-    return result;
+    return VMPointer<VMArray>(result);
 }
 
 
@@ -543,41 +543,41 @@ pVMArray Universe::NewArrayList(ExtendedList<pVMObject>& list ) const {
 
 
 pVMBigInteger Universe::NewBigInteger( int64_t value) const {
-    pVMBigInteger result = new (_HEAP) VMBigInteger(value);
+    VMBigInteger* result = new (_HEAP) VMBigInteger(value);
     result->SetClass(bigIntegerClass);
 
-    return result;
+    return VMPointer<VMBigInteger>(result);
 }
 
 
 pVMBlock Universe::NewBlock( pVMMethod method, pVMFrame context, int arguments) {
-    pVMBlock result = new (_HEAP) VMBlock;
+    VMBlock* result = new (_HEAP) VMBlock;
     result->SetClass(this->GetBlockClassWithArgs(arguments));
 
     result->SetMethod(method);
     result->SetContext(context);
 
-    return result;
+    return VMPointer<VMBlock>(result);
 }
 
 
 pVMClass Universe::NewClass( pVMClass classOfClass) const {
     int numFields = classOfClass->GetNumberOfInstanceFields();
-    pVMClass result;
+    VMClass* result;
     int additionalBytes = numFields * sizeof(pVMObject);
     if (numFields) result = new (_HEAP, additionalBytes) VMClass(numFields);
     else result = new (_HEAP) VMClass;
 
     result->SetClass(classOfClass);
 
-    return result;
+    return VMPointer<VMClass>(result);
 }
 
 
 pVMDouble Universe::NewDouble( double value) const {
-    pVMDouble result = new (_HEAP) VMDouble(value);
+    VMDouble* result = new (_HEAP) VMDouble(value);
     result->SetClass(doubleClass);
-    return result;
+    return VMPointer<VMDouble>(result);
 }
 
 
@@ -587,18 +587,18 @@ pVMFrame Universe::NewFrame( pVMFrame previousFrame, pVMMethod method) const {
                  method->GetMaximumNumberOfStackElements(); 
    
     int additionalBytes = length * sizeof(pVMObject);
-    pVMFrame result = new (_HEAP, additionalBytes) VMFrame(length);
+    VMFrame* result = new (_HEAP, additionalBytes) VMFrame(length);
     result->SetClass(frameClass);
 
     result->SetMethod(method);
 
-    if (previousFrame != NULL) 
+    if (!previousFrame.IsNull()) 
         result->SetPreviousFrame(previousFrame);
 
     result->ResetStackPointer();
     result->SetBytecodeIndex(0);
 
-    return result;
+    return VMPointer<VMFrame>(result);
 }
 
 
@@ -608,20 +608,20 @@ pVMObject Universe::NewInstance( pVMClass  classOfInstance) const {
     int numOfFields = classOfInstance->GetNumberOfInstanceFields() - 1;
     //the additional space needed is calculated from the number of fields
     int additionalBytes = numOfFields * sizeof(pVMObject);
-    pVMObject result = new (_HEAP, additionalBytes) VMObject(numOfFields);
+    VMObject* result = new (_HEAP, additionalBytes) VMObject(numOfFields);
     result->SetClass(classOfInstance);
-    return result;
+    return VMPointer<VMObject>(result);
 }
 
 pVMInteger Universe::NewInteger( int32_t value) const {
-    pVMInteger result = new (_HEAP) VMInteger(value);
+    VMInteger* result = new (_HEAP) VMInteger(value);
     result->SetClass(integerClass);
-    return result;
+    return VMPointer<VMInteger>(result);
 }
 
 pVMClass Universe::NewMetaclassClass() const {
-    pVMClass result = new (_HEAP) VMClass;
-    result->SetClass(new (_HEAP) VMClass);
+    pVMClass result =  VMPointer<VMClass>(new (_HEAP) VMClass);
+    result->SetClass(VMPointer<VMClass>(new (_HEAP) VMClass));
 
     pVMClass mclass = result->GetClass();
     mclass->SetClass(result);
@@ -635,13 +635,13 @@ pVMMethod Universe::NewMethod( pVMSymbol signature,
     //Method needs space for the bytecodes and the pointers to the constants
     int additionalBytes = numberOfBytecodes + 
                 numberOfConstants*sizeof(pVMObject);
-    pVMMethod result = new (_HEAP,additionalBytes) 
+    VMMethod* result = new (_HEAP,additionalBytes) 
                 VMMethod(numberOfBytecodes, numberOfConstants);
     result->SetClass(methodClass);
 
     result->SetSignature(signature);
 
-    return result;
+    return VMPointer<VMMethod>(result);
 }
 
 pVMString Universe::NewString( const StdString& str) const {
@@ -651,10 +651,10 @@ pVMString Universe::NewString( const StdString& str) const {
 pVMString Universe::NewString( const char* str) const {
     //string needs space for str.length characters plus one byte for '\0'
     int additionalBytes = strlen(str) + 1;
-    pVMString result = new (_HEAP, additionalBytes) VMString(str);
+    VMString* result = new (_HEAP, additionalBytes) VMString(str);
     result->SetClass(stringClass);
 
-    return result;
+    return VMPointer<VMString>(result);
 }
 
 pVMSymbol Universe::NewSymbol( const StdString& str) {
@@ -664,7 +664,7 @@ pVMSymbol Universe::NewSymbol( const StdString& str) {
 pVMSymbol Universe::NewSymbol( const char* str ) {
     //symbol needs space for str.length characters plus one byte for '\0'
     int additionalBytes = strlen(str) + 1;
-    pVMSymbol result = new (_HEAP, additionalBytes) VMSymbol(str);
+    pVMSymbol result = VMPointer<VMSymbol>(new (_HEAP, additionalBytes) VMSymbol(str));
     result->SetClass(symbolClass);
 
     symboltable->insert(result);
@@ -674,14 +674,19 @@ pVMSymbol Universe::NewSymbol( const char* str ) {
 
 
 pVMClass Universe::NewSystemClass() const {
-    pVMClass systemClass = new (_HEAP) VMClass();
+    pVMClass systemClass = VMPointer<VMClass>(new (_HEAP) VMClass());
 
-    systemClass->SetClass(new (_HEAP) VMClass());
+    systemClass->SetClass( VMPointer<VMClass>(new (_HEAP) VMClass()));
     pVMClass mclass = systemClass->GetClass();
     
     mclass->SetClass(metaClassClass);
 
     return systemClass;
+}
+
+pVMEvaluationPrimitive Universe::NewEvaluationPrimitive(int numberOfArguments) const {
+    VMEvaluationPrimitive* result = new (_HEAP) VMEvaluationPrimitive(numberOfArguments);
+    return VMPointer<VMEvaluationPrimitive>(result);
 }
 
 
@@ -694,7 +699,7 @@ pVMSymbol Universe::SymbolFor( const StdString& str) {
 pVMSymbol Universe::SymbolForChars( const char* str) {
     pVMSymbol result = symboltable->lookup(str);
     
-    return (result != NULL) ?
+    return (!result.IsNull()) ?
            result :
            NewSymbol(str);
 }

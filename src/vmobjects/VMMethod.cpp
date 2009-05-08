@@ -71,7 +71,7 @@ void VMMethod::MarkReferences() {
     if (gcfield) return;
     VMInvokable::MarkReferences();
     for (int i = 0 ; i < GetNumberOfIndexableFields() ; ++i) {
-		if (theEntries(i) != NULL)
+		if (!theEntries(i).IsNull())
 			theEntries(i)->MarkReferences();
 	}
 }
@@ -112,7 +112,7 @@ int VMMethod::GetNumberOfBytecodes() const {
 
 
 void VMMethod::operator()(pVMFrame frame) {
-    pVMFrame frm = _UNIVERSE->GetInterpreter()->PushNewFrame(this);
+    pVMFrame frm = _UNIVERSE->GetInterpreter()->PushNewFrame(Self());
     frm->CopyArgumentsFrom(frame);
 }
 
@@ -121,7 +121,7 @@ void VMMethod::SetHolderAll(pVMClass hld) {
     for (int i = 0; i < this->GetNumberOfIndexableFields(); ++i) {
         pVMObject o = GetIndexableField(i);
         pVMInvokable vmi = DynamicConvert<VMInvokable, VMObject>(o);
-        if ( vmi != NULL)  {
+        if (!vmi.IsNull())  {
             vmi->SetHolder(hld);
         }
     }
@@ -132,7 +132,7 @@ pVMObject VMMethod::GetConstant(int indx) const {
     uint8_t bc = _BC[indx+1];
     if (bc >= this->GetNumberOfIndexableFields()) {
         cout << "Error: Constant index out of range" << endl;
-        return NULL;
+        return pVMObject(); // NULL
     }
     return this->GetIndexableField(bc);
 }

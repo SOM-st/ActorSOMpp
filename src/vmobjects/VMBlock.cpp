@@ -56,5 +56,6 @@ void VMBlock::MarkReferences() {
 
 
 pVMEvaluationPrimitive VMBlock::GetEvaluationPrimitive(int numberOfArguments) {
-    return new (_HEAP) VMEvaluationPrimitive(numberOfArguments);
+    //return new (_HEAP) VMEvaluationPrimitive(numberOfArguments);
+    return _UNIVERSE->NewEvaluationPrimitive(numberOfArguments);
 }

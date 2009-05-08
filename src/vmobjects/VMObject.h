@@ -37,10 +37,11 @@ THE SOFTWARE.
 #include "../vm/Universe.h"
 
 #include "ObjectFormats.h"
-#include "VMPointer.h"
 
 class VMSymbol;
 class VMClass;
+
+
 
 #define FIELDS ((pVMObject*)&clazz)
 
@@ -87,9 +88,17 @@ public:
 	int32_t     GetGCField() const;
 	void        SetGCField(int32_t value);
     void        SetObjectSize(size_t size);
+    
+    // This actually sets the self_pointer according to the object table index
+    void SetObjectTableIndex(ObjectTable::Index index);
+    
+    // We have to use Self() instead of "this" (except for method calls)
+    VMPointer<VMObject> Self() const {
+        return self_pointer;
+    }
 	
     /* Operators */
-
+    
     /**
      * usage: new( <heap> [, <additional_bytes>] ) VMObject( <constructor params> )
      * num_bytes parameter is set by the compiler.
@@ -104,7 +113,7 @@ public:
         void* mem = (void*)heap->AllocateObject(numBytes + additionalBytes);
         return mem;
 	}
-
+    
 	void operator delete(void* self, Heap* heap, 
                          unsigned int /*additional_bytes*/) {
 		heap->Destroy((VMObject*)self);
@@ -124,6 +133,8 @@ protected:
     int32_t     objectSize; //set by the heap at allocation time
     int32_t     numberOfFields;
     int32_t     gcfield;
+    
+    VMPointer<VMObject> self_pointer;
 
     //pVMObject* FIELDS;
     //Start of fields. All members beyond this point are indexable 

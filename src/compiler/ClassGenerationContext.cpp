@@ -32,9 +32,7 @@ THE SOFTWARE.
 #include "../vmobjects/VMClass.h"
 
 ClassGenerationContext::ClassGenerationContext() :
-    instanceFields(), instanceMethods(), classFields(), classMethods(){
-	name = NULL;
-	superName = NULL;
+    instanceFields(), instanceMethods(), classFields(), classMethods(), name(), superName() {
     classSide = false;
 }
 

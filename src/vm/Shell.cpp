@@ -47,7 +47,7 @@ THE SOFTWARE.
 
 
 Shell::Shell() {
-    bootstrapMethod = NULL;
+ //   bootstrapMethod = NULL;
 }
 
 
@@ -65,7 +65,7 @@ void Shell::Start() {
 #define QUIT_CMD "system exit"
 #define QUIT_CMD_L 11 + 1
 
-    if (bootstrapMethod == NULL) {
+    if (bootstrapMethod.IsNull()) {
         _UNIVERSE->ErrorExit("Shell needs bootstrap method!");
     }
     // the statement to evaluate
@@ -108,7 +108,7 @@ void Shell::Start() {
         ++counter;
         runClass = _UNIVERSE->LoadShellClass(statement);
         // Compile and load the newly generated class
-        if(runClass == NULL) {
+        if(runClass.IsNull()) {
             cout << "can't compile statement.";
             continue;            
         }

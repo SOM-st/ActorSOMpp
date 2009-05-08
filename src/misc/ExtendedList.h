@@ -98,7 +98,8 @@ T ExtendedList<T>::Get(int index) {
 		if (index == 0) return *it;
 		--index;
 	}
-	return NULL;
+    T t;
+	return t; // FIXME
 }
 
 

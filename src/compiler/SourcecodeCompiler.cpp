@@ -58,7 +58,7 @@ pVMClass SourcecodeCompiler::CompileClass( const StdString& path,
     ifstream* fp = new ifstream();
     fp->open(fname.c_str(), std::ios_base::in);
 	if (!fp->is_open()) {
-		return NULL;
+		return pVMClass();
 	}
 
     if (parser != NULL) delete(parser);
@@ -74,7 +74,7 @@ pVMClass SourcecodeCompiler::CompileClass( const StdString& path,
         Str << "Filename: " << file << " does not match class name " << cnameC;
 
         showCompilationError(file, Str.str().c_str());
-        return NULL;
+        return pVMClass();
     }
     delete(parser);
     parser = NULL;
@@ -119,7 +119,7 @@ pVMClass SourcecodeCompiler::compile( pVMClass systemClass ) {
 
     parser->Classdef(cgc);
 
-    if (systemClass == NULL) result = cgc->Assemble();
+    if (systemClass.IsNull()) result = cgc->Assemble();
     else cgc->AssembleSystemClass(result);
 
     delete(cgc);

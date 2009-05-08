@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "../vmobjects/ObjectFormats.h"
 #include "../misc/defs.h"
 
-class VMObject;
+//class VMObject;
 class Heap;
 
 class GarbageCollector {

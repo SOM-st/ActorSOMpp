@@ -49,7 +49,7 @@ public:
 
     //-----------VMInvokable-------//
     //operator "()" to invoke the primitive
-    virtual void    operator()(pVMFrame frm) { (*routine)(this, frm); };
+    virtual void    operator()(pVMFrame frm) { (*routine)(Self(), frm); };
 
     virtual bool      IsPrimitive() const { return true; };
     

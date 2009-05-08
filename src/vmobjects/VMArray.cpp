@@ -80,7 +80,7 @@ void VMArray::MarkReferences() {
     if (gcfield) return;
     VMObject::MarkReferences();
 	for (int i = 0 ; i < GetNumberOfIndexableFields() ; ++i) {
-		if (theEntries(i) != NULL)
+		if (!theEntries(i).IsNull())
 			theEntries(i)->MarkReferences();
 	}
     

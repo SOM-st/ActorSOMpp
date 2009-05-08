@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
+#include "../memory/ObjectTable.h"
 
 #include "VMObject.h"
 #include "VMClass.h"
@@ -45,6 +46,10 @@ VMObject::VMObject( int numberOfFields ) {
 }
 
 
+void VMObject::SetObjectTableIndex(ObjectTable::Index index) {
+    self_pointer = VMPointer<VMObject>(index);
+}
+
 void VMObject::SetNumberOfFields(int nof) {
     this->numberOfFields = nof;
 
@@ -59,7 +64,7 @@ void VMObject::SetNumberOfFields(int nof) {
 void VMObject::Send(StdString selectorString, pVMObject* arguments, int argc) {
     pVMSymbol selector = _UNIVERSE->SymbolFor(selectorString);
     pVMFrame frame = _UNIVERSE->GetInterpreter()->GetFrame();
-    frame->Push(this);
+    frame->Push(Self());
 
     for(int i = 0; i < argc; ++i) {
         frame->Push(arguments[i]);

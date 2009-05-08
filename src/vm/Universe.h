@@ -55,6 +55,7 @@ class VMInteger;
 class VMMethod;
 class VMString;
 class VMBigInteger;
+class VMEvaluationPrimitive;
 class Symboltable;
 class SourcecodeCompiler;
 
@@ -131,6 +132,7 @@ public:
     pVMString     NewString(const char*) const;
     pVMSymbol     NewSymbol(const char*);
     pVMClass      NewSystemClass(void) const;
+    pVMEvaluationPrimitive NewEvaluationPrimitive(int numberOfArguments) const;
 
     void          InitializeSystemClass(pVMClass, pVMClass, const char*);
 
