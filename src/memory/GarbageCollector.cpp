@@ -85,6 +85,10 @@ void GarbageCollector::Collect() {
                 curObject->SetGCField(0);
             } else {
                 //found trash
+                
+                // remove object from object table
+                curObject->Self().unlink();
+                
                 ++numFreed;
                 int freedBytes = curObject->GetObjectSize();
                 spcFreed += freedBytes;

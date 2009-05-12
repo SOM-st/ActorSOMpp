@@ -65,13 +65,13 @@ void VMPrimitive::MarkReferences() {
     this->SetGCField(1);
     //explicitly implement marking for primitives, as they include fields
     //that should not be marked!!!
-    for( int i = 0; i < this->GetNumberOfFields(); ++i) {
+    for( int i = 0; i < this->GetNumberOfFields()-VMPrimitiveNumberOfFields; ++i) {
         //HACK to avoid calling MarkReferences() for the bool*
-        if ((void*)GetField(i) == (void*)this->empty) 
-            continue;
+//        if ((void*)GetField(i) == (void*)this->empty) 
+//            continue;
         //HACK to avoid calling MarkReferences() for the routine*
-        if ((void*)GetField(i) == (void*)this->routine)
-            continue;
+//        if ((void*)GetField(i) == (void*)this->routine)
+//            continue;
         GetField(i)->MarkReferences();
     }
 }

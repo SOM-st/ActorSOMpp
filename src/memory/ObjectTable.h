@@ -60,11 +60,13 @@ private:
     std::vector<ObjectTable::Entry> objectTable;
     // Current size of the object table.
     unsigned long size;
+    // Free entries stack, 0 = empty
+    Index free_stack;
     
     //
     // Private constructor - Singleton
     //
-    ObjectTable() : size(0) {
+    ObjectTable() : size(0), free_stack(0) {
         // At index 0, we store a NULL pointer
         AddObject((VMObject*) NULL);
     }

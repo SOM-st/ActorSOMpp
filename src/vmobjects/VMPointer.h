@@ -129,6 +129,13 @@ public:
     inline ObjectTable::Index GetIndex() const{
         return index;
     }
+    
+    // remove this pointer from the object table, 
+    // converts it to a NULL-pointer
+    inline void unlink() {
+        _OBJECT_TABLE.RemoveObject(index);
+        index = 0;
+    }
 
 protected:
     
