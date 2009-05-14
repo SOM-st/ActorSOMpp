@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include <vmobjects/VMInteger.h>
 
 #include <vm/Universe.h>
+
+#include "memory/ObjectTable.h"
  
 #include "System.h"
 #include "../primitivesCore/Routine.h"
@@ -116,6 +118,12 @@ void  _System::Time(pVMObject /*object*/, pVMFrame frame) {
     delete(now);
 }
 
+void _System::ObjectTableSize(pVMObject /*object*/, pVMFrame frame) {
+    frame->Pop();
+    
+    frame->Push((pVMObject)_UNIVERSE->NewBigInteger((int64_t)_OBJECT_TABLE.GetSize()));
+}
+
 
 _System::_System(void) : PrimitiveContainer() {
     start_time = new timeval();
@@ -148,6 +156,10 @@ _System::_System(void) : PrimitiveContainer() {
     this->SetPrimitive("time", 
         static_cast<PrimitiveRoutine*>(new 
         Routine<_System>(this, &_System::Time)));
+    
+    this->SetPrimitive("objectTableSize", 
+        static_cast<PrimitiveRoutine*>(new 
+        Routine<_System>(this, &_System::ObjectTableSize)));
     
 }
 

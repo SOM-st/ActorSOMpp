@@ -82,18 +82,18 @@ public:
     //member access operator
     inline T* operator ->() {
         T* addr = (T*) _OBJECT_TABLE[index];
-        if (NULL == addr) {
-            std::cout << "[VMPointer] dereferencing null-pointer" << std::endl;
-        }
+//        if (NULL == addr) {
+//            std::cout << "[VMPointer] dereferencing null-pointer" << std::endl;
+//        }
         return addr;
     };
     
     //member access operator for const methods
     inline T* operator ->() const{
         T* addr = (T*) _OBJECT_TABLE[index];
-        if (NULL == addr) {
-            std::cout << "[VMPointer] dereferencing null-pointer" << std::endl;
-        }
+ //       if (NULL == addr) {
+ //           std::cout << "[VMPointer] dereferencing null-pointer" << std::endl;
+ //       }
         return addr;
     };
     

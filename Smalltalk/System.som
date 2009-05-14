@@ -80,6 +80,8 @@ System = (
     
     "Time"
     time = primitive
+
+    objectTableSize = primitive
     
     ----------------------------------
     
