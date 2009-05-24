@@ -48,7 +48,7 @@ THE SOFTWARE.
     pVMInteger ptr;\
     if(!(ptr = DynamicConvert<VMInteger, VMObject>(object)).IsNull()) { \
         /* Second operand was Integer*/ \
-        int32_t i = ptr->GetEmbeddedInteger(); \
+        int32_t i = ptr.GetEmbeddedInteger(); \
         (result) = _UNIVERSE->NewBigInteger((int64_t)i); \
     } else \
         (result) = (pVMBigInteger)(object); \

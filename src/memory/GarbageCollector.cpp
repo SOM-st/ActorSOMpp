@@ -36,6 +36,7 @@ THE SOFTWARE.
 
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMObject.h"
+#include "../vmobjects/VMProtoObject.h"
 #include "../vmobjects/VMFreeObject.h"
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMPointer.h"
@@ -93,6 +94,7 @@ void GarbageCollector::Collect() {
                 int freedBytes = curObject->GetObjectSize();
                 spcFreed += freedBytes;
                 memset(curObject, 0, freedBytes);
+                new (curObject) VMFreeObject();
 
                 //mark object as unused
                 curObject->SetGCField(-1);

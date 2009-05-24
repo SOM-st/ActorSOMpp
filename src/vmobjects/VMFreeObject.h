@@ -42,7 +42,14 @@ THE SOFTWARE.
 class VMFreeObject : public VMObject {
 public:
     VMFreeObject();
-
+    
+    // DH: placement constructor. we need this to initialize FreeObejcts
+    // in pre-allocated memory on the heap. otherwise we cannot access any
+    // virtual method on the FreeObjects.
+    void* operator new( size_t numBytes, void* mem) {
+        return mem;
+	}
+    
     void SetNext(VMFreeObject* next);
     VMFreeObject* GetNext();
     void SetPrevious(VMFreeObject* prev);

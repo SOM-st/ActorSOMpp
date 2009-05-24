@@ -26,10 +26,14 @@ class VMObject;
 class ObjectTable
 {
 public:
-    typedef unsigned long Index;
-    
     // Most stuff is private here, only VMPointer can access it.
     template<class> friend class VMPointer;
+    
+    // We can only use 31 bits, which should be more than enough.
+    typedef struct {
+        unsigned long value: 31;
+        bool is_iint: 1; // assumed to be zero
+    } Index;
     
     // Singleton accessor
     static ObjectTable& getObjectTable() {
@@ -48,10 +52,14 @@ private:
     
     // This is how an object table entry looks. Later we will
     // add the reference count here.
-    struct Entry {
-        Entry(VMObject* object) : object(object) {
+    typedef struct Entry {
+        Entry(VMObject* object) {
+            content.object = object;
         }
-        VMObject* object;
+        union {
+            VMObject* object;
+            Index index;
+        } content;
     };
     
     // The singleton instance.
@@ -66,7 +74,8 @@ private:
     //
     // Private constructor - Singleton
     //
-    ObjectTable() : size(0), free_stack(0) {
+    ObjectTable() : size(0) {
+        free_stack.value = 0;
         // At index 0, we store a NULL pointer
         AddObject((VMObject*) NULL);
     }

@@ -93,7 +93,7 @@ public:
     void SetObjectTableIndex(ObjectTable::Index index);
     
     // We have to use Self() instead of "this" (except for method calls)
-    VMPointer<VMObject> Self() const {
+    pVMObject Self() const {
         return self_pointer;
     }
 	
@@ -134,7 +134,7 @@ protected:
     int32_t     numberOfFields;
     int32_t     gcfield;
     
-    VMPointer<VMObject> self_pointer;
+    pVMObject self_pointer;
 
     //pVMObject* FIELDS;
     //Start of fields. All members beyond this point are indexable 

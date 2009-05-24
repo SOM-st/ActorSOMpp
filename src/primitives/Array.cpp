@@ -51,7 +51,7 @@ _Array::_Array() : PrimitiveContainer()
 void _Array::At_(pVMObject /*object*/, pVMFrame frame) {
     pVMInteger index = (pVMInteger) frame->Pop();
     pVMArray self = (pVMArray) frame->Pop();
-    int i = index->GetEmbeddedInteger();
+    int i = index.GetEmbeddedInteger();
     pVMObject elem = (*self)[i-1];
     frame->Push(elem);
 }
@@ -61,7 +61,7 @@ void _Array::At_Put_(pVMObject /*object*/, pVMFrame frame) {
     pVMObject value = frame->Pop();
     pVMInteger index = (pVMInteger)frame->Pop();
     pVMArray self = (pVMArray)frame->GetStackElement(0);
-    int i = index->GetEmbeddedInteger();
+    int i = index.GetEmbeddedInteger();
     (*self)[i - 1] = value;
 }
 
@@ -78,7 +78,7 @@ void _Array::New_(pVMObject /*object*/, pVMFrame frame) {
     pVMInteger length = (pVMInteger)frame->Pop();
     /*pVMClass self = (pVMClass)*/
     frame->Pop();        
-    int size = length->GetEmbeddedInteger();
+    int size = length.GetEmbeddedInteger();
     frame->Push((pVMObject) _UNIVERSE->NewArray(size));
 }
 

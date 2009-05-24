@@ -97,6 +97,9 @@ _Integer::_Integer( ) : PrimitiveContainer() {
 
     this->SetPrimitive("atRandom", 
         new Routine<_Integer>(this, &_Integer::AtRandom));
+    
+    this->SetPrimitive("isImmediate", 
+        new Routine<_Integer>(this, &_Integer::IsImmediate));
 }
 
 //
@@ -134,7 +137,7 @@ void _Integer::resendAsDouble(pVMObject /*object*/, const char* op,
     pVMInteger left, pVMDouble right
 ) {
     pVMDouble leftDouble =
-        _UNIVERSE->NewDouble((double)left->GetEmbeddedInteger());
+        _UNIVERSE->NewDouble((double)left.GetEmbeddedInteger());
     pVMObject operands[] = { (pVMObject)right };
     
     leftDouble->Send(op, operands, 1);
@@ -156,8 +159,8 @@ void  _Integer::Plus(pVMObject object, pVMFrame frame) {
     // Do operation:
     pVMInteger right = (pVMInteger)rightObj;
     
-    int64_t result = (int64_t)left->GetEmbeddedInteger() + 
-        (int64_t)right->GetEmbeddedInteger();
+    int64_t result = (int64_t)left.GetEmbeddedInteger() + 
+        (int64_t)right.GetEmbeddedInteger();
     pushResult(object, frame, result);
 }
 
@@ -171,8 +174,8 @@ void  _Integer::Minus(pVMObject object, pVMFrame frame) {
     // Do operation:
     pVMInteger right = (pVMInteger)rightObj;
     
-    int64_t result = (int64_t)left->GetEmbeddedInteger() - 
-        (int64_t)right->GetEmbeddedInteger();
+    int64_t result = (int64_t)left.GetEmbeddedInteger() - 
+        (int64_t)right.GetEmbeddedInteger();
     pushResult(object, frame, result);
 }
 
@@ -186,8 +189,8 @@ void  _Integer::Star(pVMObject object, pVMFrame frame) {
     // Do operation:
     pVMInteger right = (pVMInteger)rightObj;
     
-    int64_t result = (int64_t)left->GetEmbeddedInteger() * 
-        (int64_t)right->GetEmbeddedInteger();
+    int64_t result = (int64_t)left.GetEmbeddedInteger() * 
+        (int64_t)right.GetEmbeddedInteger();
     pushResult(object, frame, result); 
 }
 
@@ -201,8 +204,8 @@ void  _Integer::Slashslash(pVMObject object, pVMFrame frame) {
     // Do operation:
     pVMInteger right = (pVMInteger)rightObj;
     
-    double result = (double)left->GetEmbeddedInteger() /
-        (double)right->GetEmbeddedInteger();
+    double result = (double)left.GetEmbeddedInteger() /
+        (double)right.GetEmbeddedInteger();
     frame->Push(_UNIVERSE->NewDouble(result));
 }
 
@@ -216,8 +219,8 @@ void  _Integer::Slash(pVMObject object, pVMFrame frame) {
     // Do operation:
     pVMInteger right = (pVMInteger)rightObj;
     
-    int64_t result = (int64_t)left->GetEmbeddedInteger() / 
-        (int64_t)right->GetEmbeddedInteger();
+    int64_t result = (int64_t)left.GetEmbeddedInteger() / 
+        (int64_t)right.GetEmbeddedInteger();
     pushResult(object, frame, result); 
 }
 
@@ -231,8 +234,8 @@ void  _Integer::Percent(pVMObject object, pVMFrame frame) {
     // Do operation:
     pVMInteger right = (pVMInteger)rightObj;
 
-    int64_t result = (int64_t)left->GetEmbeddedInteger() %
-        (int64_t)right->GetEmbeddedInteger();
+    int64_t result = (int64_t)left.GetEmbeddedInteger() %
+        (int64_t)right.GetEmbeddedInteger();
     pushResult(object, frame, result); 
 }
 
@@ -246,8 +249,8 @@ void  _Integer::And(pVMObject object, pVMFrame frame) {
     // Do operation:
     pVMInteger right = (pVMInteger)rightObj;
     
-    int64_t result = (int64_t)left->GetEmbeddedInteger() & 
-        (int64_t)right->GetEmbeddedInteger();
+    int64_t result = (int64_t)left.GetEmbeddedInteger() & 
+        (int64_t)right.GetEmbeddedInteger();
     pushResult(object, frame, result); 
 }   
 
@@ -263,14 +266,14 @@ void  _Integer::Equal(pVMObject object, pVMFrame frame) {
     if(!(iright = DynamicConvert<VMInteger, VMObject>(rightObj)).IsNull()) {
         // Second operand was Integer:
         
-        if(left->GetEmbeddedInteger()
-            == iright->GetEmbeddedInteger())
+        if(left.GetEmbeddedInteger()
+            == iright.GetEmbeddedInteger())
             frame->Push(trueObject);
         else
             frame->Push(falseObject);
     } else if(!(dright = DynamicConvert<VMDouble, VMObject>(rightObj)).IsNull()) {
         
-        if((double)left->GetEmbeddedInteger()
+        if((double)left.GetEmbeddedInteger()
             == dright->GetEmbeddedDouble())
             frame->Push(trueObject);
         else
@@ -289,7 +292,7 @@ void  _Integer::Lowerthan(pVMObject object, pVMFrame frame) {
 
     pVMInteger right = (pVMInteger)rightObj;
     
-    if(left->GetEmbeddedInteger() < right->GetEmbeddedInteger())
+    if(left.GetEmbeddedInteger() < right.GetEmbeddedInteger())
         frame->Push(trueObject);
     else
         frame->Push(falseObject);
@@ -299,7 +302,7 @@ void  _Integer::Lowerthan(pVMObject object, pVMFrame frame) {
 void  _Integer::AsString(pVMObject /*object*/, pVMFrame frame) {
     pVMInteger self = (pVMInteger)frame->Pop();
     
-    int32_t integer = self->GetEmbeddedInteger();
+    int32_t integer = self.GetEmbeddedInteger();
     ostringstream Str;
     Str << integer;
     frame->Push( (pVMObject)_UNIVERSE->NewString( Str.str() ) );   
@@ -308,16 +311,23 @@ void  _Integer::AsString(pVMObject /*object*/, pVMFrame frame) {
 
 void  _Integer::Sqrt(pVMObject /*object*/, pVMFrame frame) {
     pVMInteger self = (pVMInteger)frame->Pop();
-    double result = sqrt((double)self->GetEmbeddedInteger());
+    double result = sqrt((double)self.GetEmbeddedInteger());
     frame->Push((pVMObject)_UNIVERSE->NewDouble(result));
 }
 
 
 void  _Integer::AtRandom(pVMObject /*object*/, pVMFrame frame) {
     pVMInteger self = (pVMInteger)frame->Pop();
-    int32_t result = (self->GetEmbeddedInteger() * rand())%INT32_MAX;
+    int32_t result = (self.GetEmbeddedInteger() * rand())%INT32_MAX;
     frame->Push((pVMObject) _UNIVERSE->NewInteger(result));
 }
 
-
+void  _Integer::IsImmediate(pVMObject /*object*/, pVMFrame frame) {
+    pVMInteger self = (pVMInteger)frame->Pop();
+    if (self.IsImmediateInteger()) {
+        frame->Push(trueObject);
+    } else {
+        frame->Push(falseObject);
+    }
+}
 

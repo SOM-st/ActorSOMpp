@@ -118,8 +118,8 @@ void  _String::PrimSubstringFrom_To_(pVMObject /*object*/, pVMFrame frame) {
     pVMString self = (pVMString)frame->Pop();
     
     StdString str = self->GetStdString();
-    int s = start->GetEmbeddedInteger();
-    int e = end->GetEmbeddedInteger();
+    int s = start.GetEmbeddedInteger();
+    int e = end.GetEmbeddedInteger();
     
     StdString result = str.substr(s, e - s);
 

@@ -77,37 +77,37 @@ void VMMethod::MarkReferences() {
 }
 
 int VMMethod::GetNumberOfLocals() const {
-    return numberOfLocals->GetEmbeddedInteger(); 
+    return numberOfLocals.GetEmbeddedInteger(); 
 }
 
 
 void VMMethod::SetNumberOfLocals(int nol) {
-    numberOfLocals->SetEmbeddedInteger(nol); 
+    numberOfLocals.SetEmbeddedInteger(nol); 
 }
 
 
 int VMMethod::GetMaximumNumberOfStackElements() const {
-    return maximumNumberOfStackElements->GetEmbeddedInteger(); 
+    return maximumNumberOfStackElements.GetEmbeddedInteger(); 
 }
 
 
 void VMMethod::SetMaximumNumberOfStackElements(int stel) {
-    maximumNumberOfStackElements->SetEmbeddedInteger(stel); 
+    maximumNumberOfStackElements.SetEmbeddedInteger(stel); 
 }
 
 
 int VMMethod::GetNumberOfArguments() const {
-    return numberOfArguments->GetEmbeddedInteger(); 
+    return numberOfArguments.GetEmbeddedInteger(); 
 }
 
 
 void VMMethod::SetNumberOfArguments(int noa) {
-    numberOfArguments->SetEmbeddedInteger(noa); 
+    numberOfArguments.SetEmbeddedInteger(noa); 
 }
 
 
 int VMMethod::GetNumberOfBytecodes() const {
-    return bcLength->GetEmbeddedInteger();
+    return bcLength.GetEmbeddedInteger();
 }
 
 
@@ -194,6 +194,6 @@ void VMMethod::SetIndexableField(int idx, pVMObject item) {
 int VMMethod::GetNumberOfIndexableFields() const {
     //cannot be done using GetAdditionalSpaceConsumption,
     //as bytecodes need space, too, and there might be padding
-    return this->numberOfConstants->GetEmbeddedInteger();
+    return this->numberOfConstants.GetEmbeddedInteger();
 }
 

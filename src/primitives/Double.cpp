@@ -57,7 +57,7 @@ double _Double::coerceDouble(pVMObject x) {
     
     ix = DynamicConvert<VMInteger, VMObject>(x);
     if(!ix.IsNull())
-        return (double)ix->GetEmbeddedInteger();
+        return (double)ix.GetEmbeddedInteger();
     
     bix = DynamicConvert<VMBigInteger, VMObject>(x);
     if(!bix.IsNull())

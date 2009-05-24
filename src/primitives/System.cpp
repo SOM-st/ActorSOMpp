@@ -82,7 +82,7 @@ void  _System::Load_(pVMObject /*object*/, pVMFrame frame) {
 
 void  _System::Exit_(pVMObject /*object*/, pVMFrame frame) {
     pVMInteger err = (pVMInteger)frame->Pop();
-    int32_t err_no = err->GetEmbeddedInteger();
+    int32_t err_no = err.GetEmbeddedInteger();
 
     if(err_no != ERR_SUCCESS)
         frame->PrintStackTrace();

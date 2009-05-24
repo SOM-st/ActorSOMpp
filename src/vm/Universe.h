@@ -52,6 +52,7 @@ class VMArray;
 class VMBlock;
 class VMDouble;
 class VMInteger;
+//class VMProtoInteger;
 class VMMethod;
 class VMString;
 class VMBigInteger;
@@ -87,6 +88,8 @@ extern pVMClass stringClass;
 extern pVMClass systemClass;
 extern pVMClass blockClass;
 extern pVMClass doubleClass;
+
+extern VMInteger* integerProxy;
 
 using namespace std;
 class Universe
@@ -133,6 +136,8 @@ public:
     pVMSymbol     NewSymbol(const char*);
     pVMClass      NewSystemClass(void) const;
     pVMEvaluationPrimitive NewEvaluationPrimitive(int numberOfArguments) const;
+    
+    pVMInteger    NewIntegerVMObject(int32_t value) const;
 
     void          InitializeSystemClass(pVMClass, pVMClass, const char*);
 

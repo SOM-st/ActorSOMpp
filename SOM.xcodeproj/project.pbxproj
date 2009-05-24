@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		34244D0A0FBC1C5D00B97190 /* VMProtoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMProtoObject.h; sourceTree = "<group>"; };
+		34244E1B0FBC497100B97190 /* VMProtoInteger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMProtoInteger.h; sourceTree = "<group>"; };
+		34244F8B0FBC6CA900B97190 /* VMProtoObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMProtoObject.cpp; sourceTree = "<group>"; };
+		349F26DD0FC5933C00BD0A41 /* VMImmediateInteger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMImmediateInteger.h; sourceTree = "<group>"; };
+		349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMPointer.cpp; sourceTree = "<group>"; };
 		34FB20870FAC73020009EE70 /* VMPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMPointer.h; sourceTree = "<group>"; };
 		34FB20880FAC73020009EE70 /* VMPointerConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMPointerConverter.h; sourceTree = "<group>"; };
 		34FB20BE0FAC98430009EE70 /* ObjectTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectTable.h; sourceTree = "<group>"; };
@@ -265,7 +270,12 @@
 			isa = PBXGroup;
 			children = (
 				34FB20870FAC73020009EE70 /* VMPointer.h */,
+				349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */,
 				34FB20880FAC73020009EE70 /* VMPointerConverter.h */,
+				34244D0A0FBC1C5D00B97190 /* VMProtoObject.h */,
+				34244F8B0FBC6CA900B97190 /* VMProtoObject.cpp */,
+				349F26DD0FC5933C00BD0A41 /* VMImmediateInteger.h */,
+				34244E1B0FBC497100B97190 /* VMProtoInteger.h */,
 				3F5203350FA6624C00E75857 /* ObjectFormats.h */,
 				3F5203360FA6624C00E75857 /* PrimitiveRoutine.h */,
 				3F5203370FA6624C00E75857 /* Signature.cpp */,

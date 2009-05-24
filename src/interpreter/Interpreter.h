@@ -38,6 +38,7 @@ class VMMethod;
 class VMFrame;
 class VMMethod;
 class VMObject;
+class VMProtoObject;
 class VMSymbol;
 class VMClass;
 

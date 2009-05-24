@@ -81,7 +81,8 @@ Heap::Heap(int objectSpaceSize) {
 	numAlloc = 0;
     spcAlloc = 0;
     numAllocTotal = 0;
-    freeListStart = (VMFreeObject*) objectSpace;
+//    freeListStart = (VMFreeObject*) objectSpace;
+    freeListStart = new (objectSpace) VMFreeObject();
     freeListStart->SetObjectSize(objectSpaceSize);
     freeListStart->SetNext(NULL);
     freeListStart->SetPrevious(NULL);
@@ -173,7 +174,8 @@ void* Heap::Allocate(size_t size) {
         int oldSize = cur->GetObjectSize();
         VMFreeObject* oldNext = cur->GetNext();
         result = cur;
-        VMFreeObject* replaceEntry = (VMFreeObject*) ((int)cur + size);
+//        VMFreeObject* replaceEntry = (VMFreeObject*) ((int)cur + size);
+        VMFreeObject* replaceEntry = new ((void*) ((int)cur + size)) VMFreeObject();
         replaceEntry->SetObjectSize(oldSize - size);
         replaceEntry->SetGCField(-1);
         replaceEntry->SetNext(oldNext);
@@ -199,7 +201,9 @@ void* Heap::Allocate(size_t size) {
         _UNIVERSE->ErrorExit("Failed to allocate");
     }
 
+    
     memset(result, 0, size);
+    new (result) VMFreeObject();
     result->SetObjectSize(size);
     this->sizeOfFreeHeap -= size;
 
@@ -228,6 +232,7 @@ void Heap::Destroy(VMObject* _object) {
     
     int freedBytes = _object->GetObjectSize();
     memset(_object, 0, freedBytes);
+    // TODO call placement constr here.
     VMFreeObject* object = (VMFreeObject*) _object;
 
     //see if there's an adjoining unused object behind this object

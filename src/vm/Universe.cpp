@@ -81,6 +81,8 @@ pVMClass systemClass;
 pVMClass blockClass;
 pVMClass doubleClass;
 
+VMInteger* integerProxy;
+
 //Singleton accessor
 Universe* Universe::GetUniverse() {
     if (!theUniverse) {
@@ -322,6 +324,12 @@ void Universe::InitializeGlobals() {
     doubleClass     = NewSystemClass();
     
     nilObject->SetClass(nilClass);
+    
+    // the integer proxy will answer all method sends to all immediate signed integers
+    pVMInteger intproxy = NewIntegerVMObject(0);
+    // we need this, otherwise the gc will deallocate the proxy
+    SetGlobal(SymbolFor("integerProxy"), (pVMObject)intproxy);
+    integerProxy = &(*intproxy); // yes, indeed.
 
     InitializeSystemClass(objectClass, VMPointer<VMClass>(), "Object");
     InitializeSystemClass(classClass, objectClass, "Class");
@@ -613,10 +621,15 @@ pVMObject Universe::NewInstance( pVMClass  classOfInstance) const {
     return VMPointer<VMObject>(result);
 }
 
-pVMInteger Universe::NewInteger( int32_t value) const {
+// this will construct an immediate signed integer, if possible
+pVMInteger Universe::NewInteger(int32_t value) const {
+    return VMPointer<VMInteger>(value);
+}
+
+pVMInteger Universe::NewIntegerVMObject( int32_t value) const {
     VMInteger* result = new (_HEAP) VMInteger(value);
     result->SetClass(integerClass);
-    return VMPointer<VMInteger>(result);
+    return VMPointer<VMInteger>((VMObject*) result);
 }
 
 pVMClass Universe::NewMetaclassClass() const {

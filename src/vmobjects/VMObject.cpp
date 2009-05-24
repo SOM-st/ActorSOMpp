@@ -59,11 +59,14 @@ void VMObject::SetNumberOfFields(int nof) {
 }
 
 
-
-
 void VMObject::Send(StdString selectorString, pVMObject* arguments, int argc) {
     pVMSymbol selector = _UNIVERSE->SymbolFor(selectorString);
     pVMFrame frame = _UNIVERSE->GetInterpreter()->GetFrame();
+    
+    // DH:
+    // this only works with immediate signed integers because
+    // each operation creates new integers.
+    // we could also use arguments[0], except for unplanned sends
     frame->Push(Self());
 
     for(int i = 0; i < argc; ++i) {
@@ -122,7 +125,6 @@ void VMObject::Assert(bool value) const {
     _UNIVERSE->Assert(value);
 }
 
-
 pVMObject VMObject::GetField(int index) const {
     return FIELDS[index]; 
 }
@@ -131,6 +133,7 @@ pVMObject VMObject::GetField(int index) const {
 void VMObject::SetField(int index, pVMObject value) {
      FIELDS[index] = value;
 }
+
 
 //returns the Object's additional memory used (e.g. for Array fields)
 int VMObject::GetAdditionalSpaceConsumption() const

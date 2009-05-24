@@ -82,7 +82,7 @@ void Disassembler::dispatch(pVMObject o) {
         else if(c == bigIntegerClass)
             DebugPrint("%lld", ((pVMBigInteger)o)->GetEmbeddedInteger());
         else if(c == integerClass)
-            DebugPrint("%d", ((pVMInteger)o)->GetEmbeddedInteger());
+            DebugPrint("%d", ((pVMInteger)o).GetEmbeddedInteger());
         else if(c == symbolClass) {
             DebugPrint("#%s", ((pVMSymbol)o)->GetChars());
         } else
@@ -368,7 +368,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             break;
         }
         case BC_POP: {
-            size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
+            size_t sp = frame->GetStackPointer().GetEmbeddedInteger();
             pVMObject o = (*(pVMArray)frame)[sp];
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
@@ -380,7 +380,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             break;            
         }            
         case BC_POP_LOCAL: {
-            size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
+            size_t sp = frame->GetStackPointer().GetEmbeddedInteger();
             pVMObject o = (*(pVMArray)frame)[sp];
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
@@ -393,7 +393,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             break;            
         }
         case BC_POP_ARGUMENT: {
-            size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
+            size_t sp = frame->GetStackPointer().GetEmbeddedInteger();
             pVMObject o = (*(pVMArray)frame)[sp];
             pVMClass c = o->GetClass();
             pVMSymbol cname = c->GetName();
@@ -405,7 +405,7 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             break;
         }
         case BC_POP_FIELD: {
-            size_t sp = frame->GetStackPointer()->GetEmbeddedInteger();
+            size_t sp = frame->GetStackPointer().GetEmbeddedInteger();
             pVMObject o = (*(pVMArray)frame)[sp];
             pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
             pVMClass c = o->GetClass();

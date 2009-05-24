@@ -85,7 +85,7 @@ void VMEvaluationPrimitive::evaluationRoutine(pVMObject object, pVMFrame frame){
     pVMEvaluationPrimitive self = (pVMEvaluationPrimitive) object;
 
      // Get the block (the receiver) from the stack
-    int numArgs = self->numberOfArguments->GetEmbeddedInteger();
+    int numArgs = self->numberOfArguments.GetEmbeddedInteger();
     pVMBlock block = (pVMBlock) frame->GetStackElement(numArgs - 1);
     
     // Get the context of the block...

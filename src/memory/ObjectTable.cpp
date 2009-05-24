@@ -16,12 +16,12 @@ ObjectTable* ObjectTable::theObjectTable = NULL;
 
 
 VMObject* ObjectTable::operator[](Index index) const {
-    if (index >= size) {
-        std::cout << "[ObjectTable] Accessing invalid entry " << index << " (size: " 
+    if (index.value >= size) {
+        std::cout << "[ObjectTable] Accessing invalid entry " << index.value << " (size: " 
                     << size << " max capacity: " << objectTable.max_size() << ")" << std::endl;
     }
     // todo: check for free entry
-    return objectTable[index].object;
+    return objectTable[index.value].content.object;
 }
 
 
@@ -33,17 +33,18 @@ ObjectTable::Index ObjectTable::AddObject(VMObject* object) {
     }  */
     
     Index index;
+    index.is_iint = false;
     // check if we can re-use an existing entry
-    if (0 != free_stack) {
-        index = free_stack;
+    if (0 != free_stack.value) {
+        index.value = free_stack.value;
         // pop free stack
-        free_stack = (Index) objectTable[index].object;
+        free_stack.value = objectTable[index.value].content.index.value;
         // add object
-        objectTable[index].object = object;
+        objectTable[index.value].content.object = object;
     } else {
         // extend the object table
         objectTable.push_back(Entry(object));
-        index = size++;
+        index.value = size++;
     }
     
     if (NULL != object) {
@@ -56,13 +57,13 @@ ObjectTable::Index ObjectTable::AddObject(VMObject* object) {
 
 
 void ObjectTable::RemoveObject(Index index) {
-    if (index >= size) {
+    if (index.value >= size) {
         std::cout << "Accessing invalid ObjectTable entry" << std::endl;
     }
 //    std::cout << "[ObjectTabke] removed object at index "<< index << std::endl;
     
     // push entry to free stack
-    objectTable[index].object = (VMObject*) free_stack;
+    objectTable[index.value].content.index.value = free_stack.value;
     free_stack = index;
 }
 
@@ -72,7 +73,7 @@ bool ObjectTable::contains(VMObject* object) {
         return false;
     }
     for (int i=0; i<size; ++i) {
-        if (object == objectTable[i].object) {
+        if (object == objectTable[i].content.object) {
             return true;
         }
     }

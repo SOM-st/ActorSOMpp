@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 class VMSymbol;
 class VMObject;
+class VMProtoObject;
 class VMClass;
 
 #include "../vmobjects/ObjectFormats.h"
