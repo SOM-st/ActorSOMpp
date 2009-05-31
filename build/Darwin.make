@@ -26,7 +26,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-CC		=g++
+CC		=/opt/local/bin/g++
 CFLAGS		=-Wextra -Wno-endif-labels $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
 
@@ -111,6 +111,10 @@ SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 				$(MISC_SRC) $(VM_SRC) $(VMOBJECTS_SRC)  \
 				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(MAIN_SRC)
 
+# pull in dependency info for *existing* .o files
+-include $(CSOM_OBJ:.o=.d)
+
+
 ############# Things to clean
 
 CLEAN			= $(OBJECTS) \
@@ -146,12 +150,14 @@ profiling: all
 
 .cpp.pic.o:
 	$(CC) $(CFLAGS) -fPIC -c $< -o $*.pic.o
+	@$(CC) -MM $(CFLAGS) $< > $*.pic.d
 
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $*.o
+	@$(CC) -MM $(CFLAGS) $< > $*.d
 
 clean:
-	rm -Rf $(CLEAN)
+	rm -Rf $(CLEAN) $(CSOM_OBJ:.o=.d)
 
 
 

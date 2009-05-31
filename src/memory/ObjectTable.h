@@ -60,7 +60,7 @@ private:
             VMObject* object;
             Index index;
         } content;
-    };
+    } Entry;
     
     // The singleton instance.
     static ObjectTable* theObjectTable;
