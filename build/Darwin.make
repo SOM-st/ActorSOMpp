@@ -56,7 +56,7 @@ TEST_DIR	?= $(ROOT_DIR)/TestSuite
 
 ############# "component" directories
 
-
+ACTORS_DIR 		= $(SRC_DIR)/actors
 COMPILER_DIR 	= $(SRC_DIR)/compiler
 INTERPRETER_DIR = $(SRC_DIR)/interpreter
 MEMORY_DIR 		= $(SRC_DIR)/memory
@@ -64,6 +64,8 @@ MISC_DIR 		= $(SRC_DIR)/misc
 VM_DIR 			= $(SRC_DIR)/vm
 VMOBJECTS_DIR 	= $(SRC_DIR)/vmobjects
 
+ACTORS_SRC		= $(wildcard $(ACTORS_DIR)/*.cpp)
+ACTORS_OBJ		= $(ACTORS_SRC:.cpp=.o)
 COMPILER_SRC	= $(wildcard $(COMPILER_DIR)/*.cpp)
 COMPILER_OBJ	= $(COMPILER_SRC:.cpp=.o)
 INTERPRETER_SRC	= $(wildcard $(INTERPRETER_DIR)/*.cpp)
@@ -78,9 +80,7 @@ VMOBJECTS_SRC	= $(wildcard $(VMOBJECTS_DIR)/*.cpp)
 VMOBJECTS_OBJ	= $(VMOBJECTS_SRC:.cpp=.o)
 
 MAIN_SRC		= $(wildcard $(SRC_DIR)/*.cpp)
-#$(SRC_DIR)/Main.cpp
 MAIN_OBJ		= $(MAIN_SRC:.cpp=.o)
-#$(SRC_DIR)/main.o
 
 ############# primitives loading
 
@@ -103,16 +103,14 @@ LIBRARIES		=-L$(ROOT_DIR)
 ############## Collections.
 
 CSOM_OBJ		=  $(MEMORY_OBJ) $(MISC_OBJ) $(VMOBJECTS_OBJ) \
-				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ)
+				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ) $(ACTORS_OBJ)
 
 OBJECTS			= $(CSOM_OBJ) $(PRIMITIVESCORE_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ)
 
 SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 				$(MISC_SRC) $(VM_SRC) $(VMOBJECTS_SRC)  \
-				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(MAIN_SRC)
-
-# pull in dependency info for *existing* .o files
--include $(CSOM_OBJ:.o=.d)
+				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(MAIN_SRC) \
+				$(ACTORS_SRC)
 
 
 ############# Things to clean
@@ -147,14 +145,28 @@ profiling : DBG_FLAGS=-g -pg
 profiling : LDFLAGS+=-pg
 profiling: all
 
+# pull in dependency info for *existing* .o files
+-include $(CSOM_OBJ:.o=.d)
 
 .cpp.pic.o:
 	$(CC) $(CFLAGS) -fPIC -c $< -o $*.pic.o
 	@$(CC) -MM $(CFLAGS) $< > $*.pic.d
+	@mv -f $*.pic.d $*.pic.d.tmp
+	@sed -e 's|.*:|$*.pic.o:|' < $*.pic.d.tmp > $*.pic.d
+	@sed -e 's/.*://' -e 's/\\$$//' < $*.pic.d.tmp | fmt -1 | \
+	  sed -e 's/^ *//' -e 's/$$/:/' >> $*.pic.d
+	@rm -f $*.pic.d.tmp
+
 
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $*.o
 	@$(CC) -MM $(CFLAGS) $< > $*.d
+	@$(CC) -MM $(CFLAGS) $< > $*.d
+	@mv -f $*.d $*.d.tmp
+	@sed -e 's|.*:|$*.o:|' < $*.d.tmp > $*.d
+	@sed -e 's/.*://' -e 's/\\$$//' < $*.d.tmp | fmt -1 | \
+	  sed -e 's/^ *//' -e 's/$$/:/' >> $*.d
+	@rm -f $*.d.tmp
 
 clean:
 	rm -Rf $(CLEAN) $(CSOM_OBJ:.o=.d)

@@ -27,6 +27,8 @@ THE SOFTWARE.
 #include <iostream>
 #include <fstream>
 
+#include "actors/actors.h"
+
 #include "compiler/ClassGenerationContext.h"
 
 #include "memory/Heap.h"
@@ -46,9 +48,9 @@ int main(int argc, char** argv) {
 
     cout << "This is SOM++.\n" << endl;
     
-    /*ilib_init();
+    ilib_init();
     actors_start(argc, argv);
-    actors_init_channels();*/
+    actors_init_channels();
 
     Universe::Start(argc, argv);
 

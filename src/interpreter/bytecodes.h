@@ -75,8 +75,20 @@ THE SOFTWARE.
     CALL_TEMPLATE(template, bc_RETURN_LOCAL    ) \
     CALL_TEMPLATE(template, bc_RETURN_NON_LOCAL)
 
+// add bytecodes for actor VM
+#define bc_SEND_ASYNC       SEND_ASYNC,        16,  1, "SEND_ASYNC      "
+#define bc_YIELD            YIELD,             17,  1, "YIELD           "
+
+// define set of actor bytecodes
+#define ACTOR_BYTECODES(template) \
+    CALL_TEMPLATE(template, bc_SEND_ASYNC     ) \
+    CALL_TEMPLATE(template, bc_YIELD          )
+
+
+// define set of all bytecodes to be used
 #define FOR_ALL_BYTECODES(template) \
-    SOM_BYTECODES(template)
+    SOM_BYTECODES(template) \
+    ACTOR_BYTECODES(template)
 
 // bytecode constants used by SOM++
 #define define_CONSTANTS(MacroName, ConstantValue, Length, StringName) \

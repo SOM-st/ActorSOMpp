@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		0A044B320FD32F07009B284F /* actors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actors.cpp; sourceTree = "<group>"; };
+		0A044B330FD32F07009B284F /* asm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asm.h; sourceTree = "<group>"; };
+		0A044B340FD32F07009B284F /* asm_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = asm_test.cpp; sourceTree = "<group>"; };
+		0A044B350FD32F07009B284F /* asm_test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asm_test.h; sourceTree = "<group>"; };
+		0A044B360FD32F07009B284F /* ilib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ilib.cpp; sourceTree = "<group>"; };
+		0A044B370FD32F07009B284F /* ilib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ilib.h; sourceTree = "<group>"; };
+		0A044B380FD32F07009B284F /* Interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Interpreter.cpp; sourceTree = "<group>"; };
+		0A044B390FD32F07009B284F /* Interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interpreter.h; sourceTree = "<group>"; };
+		0A044B3A0FD32F07009B284F /* synced_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synced_queue.cpp; sourceTree = "<group>"; };
+		0A044B3B0FD32F07009B284F /* synced_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = synced_queue.h; sourceTree = "<group>"; };
+		0A044B3D0FD32F13009B284F /* actors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actors.h; sourceTree = "<group>"; };
 		349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMPointer.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20870FAC73020009EE70 /* VMPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointer.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20880FAC73020009EE70 /* VMPointerConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointerConverter.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
@@ -113,6 +124,24 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		0A044B310FD32F07009B284F /* actors */ = {
+			isa = PBXGroup;
+			children = (
+				0A044B3D0FD32F13009B284F /* actors.h */,
+				0A044B320FD32F07009B284F /* actors.cpp */,
+				0A044B330FD32F07009B284F /* asm.h */,
+				0A044B340FD32F07009B284F /* asm_test.cpp */,
+				0A044B350FD32F07009B284F /* asm_test.h */,
+				0A044B360FD32F07009B284F /* ilib.cpp */,
+				0A044B370FD32F07009B284F /* ilib.h */,
+				0A044B380FD32F07009B284F /* Interpreter.cpp */,
+				0A044B390FD32F07009B284F /* Interpreter.h */,
+				0A044B3A0FD32F07009B284F /* synced_queue.cpp */,
+				0A044B3B0FD32F07009B284F /* synced_queue.h */,
+			);
+			path = actors;
+			sourceTree = "<group>";
+		};
 		3F5202720FA661D900E75857 = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +163,7 @@
 		3F5202EF0FA6624C00E75857 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				0A044B310FD32F07009B284F /* actors */,
 				3F5202F00FA6624C00E75857 /* compiler */,
 				3F5203000FA6624C00E75857 /* interpreter */,
 				3F5203050FA6624C00E75857 /* Main.cpp */,

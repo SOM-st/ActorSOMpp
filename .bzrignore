@@ -1,3 +1,7 @@
 *.d
 *.dylib
 *.csp
+*.DS_Store
+CORE
+SOM++
+build/SOM.build
