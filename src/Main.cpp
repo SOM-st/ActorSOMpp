@@ -45,6 +45,10 @@ THE SOFTWARE.
 int main(int argc, char** argv) {
 
     cout << "This is SOM++.\n" << endl;
+    
+    /*ilib_init();
+    actors_start(argc, argv);
+    actors_init_channels();*/
 
     Universe::Start(argc, argv);
 

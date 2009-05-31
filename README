@@ -1,2 +1,2 @@
-This is my personal version of the ObjectTable implementation.
-Possibly with some adaptations compared to the VENDOR branch.
+This branch is based on the ObjectTable implementation and will implement
+the actor stuff
