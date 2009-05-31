@@ -36,7 +36,6 @@ THE SOFTWARE.
 
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMObject.h"
-#include "../vmobjects/VMProtoObject.h"
 #include "../vmobjects/VMFreeObject.h"
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMPointer.h"
