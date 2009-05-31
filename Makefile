@@ -27,7 +27,7 @@
 # THE SOFTWARE. 
 # 
 
-export ROOT_DIR	:=$(PWD)
+export ROOT_DIR	:=$(shell pwd)
 export BUILD_DIR:=$(ROOT_DIR)/build
 export SRC_DIR	:=$(ROOT_DIR)/src
 export LIB_DIR	:=$(ROOT_DIR)/lib

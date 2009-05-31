@@ -26,11 +26,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-CC			=g++
-CFLAGS		=-Wno-endif-labels -O3 $(DBG_FLAGS) $(INCLUDES)
+CC		=g++
+CFLAGS		=-Wextra -Wno-endif-labels $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
 
-SHAREDFLAGS =-fPIC -mmacosx-version-min=10.4 -undefined dynamic_lookup \
+SHAREDFLAGS	=-fPIC -mmacosx-version-min=10.4 -undefined dynamic_lookup \
                 -dynamiclib -Wl,-single_module -Wl,-Y,1455
 
 INSTALL		=install
@@ -41,11 +41,11 @@ CORE_LIBS	=-lm
 CSOM_NAME	=SOM++
 CORE_NAME	=SOMCore
 PRIMITIVESCORE_NAME  =PrimitiveCore
-SHARED_EXTENSION    =dll
+SHARED_EXTENSION    =dylib
 
 ############ global stuff -- overridden by ../Makefile
 
-ROOT_DIR	?= $(PWD)/..
+ROOT_DIR	?= $(shell pwd)/..
 SRC_DIR		?= $(ROOT_DIR)/src
 BUILD_DIR   ?= $(ROOT_DIR)/build
 DEST_DIR	?= $(ROOT_DIR)/build.out
@@ -92,7 +92,7 @@ PRIMITIVESCORE_OBJ = $(PRIMITIVESCORE_SRC:.cpp=.pic.o)
 
 PRIMITIVES_DIR	= $(SRC_DIR)/primitives
 PRIMITIVES_SRC	= $(wildcard $(PRIMITIVES_DIR)/*.cpp)
-PRIMITIVES_OBJ	= $(PRIMITIVES_SRC:.cpp=.o)
+PRIMITIVES_OBJ	= $(PRIMITIVES_SRC:.cpp=.pic.o)
 
 ############# include path
 
@@ -114,10 +114,8 @@ SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 ############# Things to clean
 
 CLEAN			= $(OBJECTS) \
-				$(DIST_DIR) $(DEST_DIR) CORE SOM++
+				$(DIST_DIR) $(DEST_DIR) CORE $(CSOM_NAME)
 ############# Tools
-
-#OSTOOL			= $(BUILD_DIR)/ostool
 
 #
 #
@@ -135,8 +133,11 @@ all: $(CSOM_NAME)\
 	CORE
 
 
-debug : DBG_FLAGS=-DDEBUG -g
+debug : DBG_FLAGS=-DDEBUG -g3
 debug: all
+
+release : DBG_FLAGS=-O3
+release: all
 
 profiling : DBG_FLAGS=-g -pg
 profiling : LDFLAGS+=-pg

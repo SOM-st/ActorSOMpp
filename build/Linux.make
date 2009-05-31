@@ -26,9 +26,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-CC			=g++
-CFLAGS		=-Wno-endif-labels -O3 $(DBG_FLAGS) $(INCLUDES)
+CC		=ag++
+CFLAGS		=-Wextra -Wno-endif-labels -D__STDC_LIMIT_MACROS --c_compiler /opt/local/bin/g++ --keep_woven $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
+
+SHAREDFLAGS	= -shared
 
 INSTALL		=install
 
@@ -42,7 +44,7 @@ SHARED_EXTENSION    =so
 
 ############ global stuff -- overridden by ../Makefile
 
-ROOT_DIR	?= $(PWD)/..
+ROOT_DIR	?= $(shell pwd)/..
 SRC_DIR		?= $(ROOT_DIR)/src
 BUILD_DIR   ?= $(ROOT_DIR)/build
 DEST_DIR	?= $(ROOT_DIR)/build.out
@@ -111,10 +113,8 @@ SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 ############# Things to clean
 
 CLEAN			= $(OBJECTS) \
-				$(DIST_DIR) $(DEST_DIR) CORE
+				$(DIST_DIR) $(DEST_DIR) CORE $(CSOM_NAME)
 ############# Tools
-
-#OSTOOL			= $(BUILD_DIR)/ostool
 
 #
 #
@@ -132,8 +132,11 @@ all: $(CSOM_NAME)\
 	CORE
 
 
-debug : DBG_FLAGS=-DDEBUG -g
+debug : DBG_FLAGS=-DDEBUG -g3
 debug: all
+
+release : DBG_FLAGS=-O3
+release: all
 
 profiling : DBG_FLAGS=-g -pg
 profiling : LDFLAGS+=-pg
@@ -161,26 +164,26 @@ $(CSOM_NAME): $(CSOM_NAME).$(SHARED_EXTENSION) $(MAIN_OBJ)
 	@echo Linking $(CSOM_NAME) loader
 	$(CC) $(LDFLAGS) \
 		-o $(CSOM_NAME) $(MAIN_OBJ) $(CSOM_NAME).$(SHARED_EXTENSION) -ldl
-	@echo CSOM done.
+	@echo loader done.
 
 $(CSOM_NAME).$(SHARED_EXTENSION): $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) Dynamic Library
-	$(CC) $(LDFLAGS) -shared \
+	$(CC) $(LDFLAGS) $(SHAREDFLAGS) \
 		-o $(CSOM_NAME).$(SHARED_EXTENSION) $(CSOM_OBJ) $(CSOM_LIBS)
 	@echo CSOM done.
 
 $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME) $(PRIMITIVESCORE_OBJ)
 	@echo Linking PrimitivesCore lib
-	$(CC) $(LDFLAGS) -shared \
+	$(CC) $(LDFLAGS) $(SHAREDFLAGS) \
 		-o $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) \
-		$(PRIMITIVESCORE_OBJ) 
+		$(PRIMITIVESCORE_OBJ)
 	@touch $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION)
 	@echo PrimitivesCore done.
 
 CORE: $(CSOM_NAME) $(PRIMITIVESCORE_OBJ) $(PRIMITIVES_OBJ)
 	@echo Linking SOMCore lib
 	$(CC) $(LDFLAGS)  \
-		-shared -o $(CORE_NAME).csp \
+		$(SHAREDFLAGS) -o $(CORE_NAME).csp \
 		$(PRIMITIVES_OBJ) \
 		$(PRIMITIVESCORE_OBJ) \
 		$(CORE_LIBS)
