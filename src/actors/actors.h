@@ -13,6 +13,10 @@
 
 #define NUMBER_OF_ACTORS 2
 
+// this actor id represents all omnipresent objects, usually globals which are
+// imposed by the VM
+#define ACTOR_OMNI 0x7F
+
 typedef uint8_t actor_id_t;
 
 void actors_start(int argc, char** argv);

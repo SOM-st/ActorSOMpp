@@ -26,8 +26,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-CC		=/opt/local/bin/g++
+CC         =/opt/local/bin/g++
 CFLAGS		=-Wextra -Wno-endif-labels $(DBG_FLAGS) $(INCLUDES)
+#CC          =ag++
+#CFLAGS		=-Wextra -Wno-write-strings -Wno-endif-labels $(DBG_FLAGS) $(INCLUDES) -D__STDC_LIMIT_MACROS --c_compiler /opt/local/bin/g++ --keep_woven
 LDFLAGS		=$(LIBRARIES)
 
 SHAREDFLAGS	=-fPIC -mmacosx-version-min=10.4 -undefined dynamic_lookup \
@@ -116,7 +118,10 @@ SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 ############# Things to clean
 
 CLEAN			= $(OBJECTS) \
-				$(DIST_DIR) $(DEST_DIR) CORE $(CSOM_NAME)
+				$(DIST_DIR) $(DEST_DIR) CORE $(CSOM_NAME) \
+                $(CSOM_NAME).$(SHARED_EXTENSION) \
+                $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION)
+                
 ############# Tools
 
 #

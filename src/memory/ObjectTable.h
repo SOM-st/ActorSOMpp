@@ -18,6 +18,8 @@
 
 #include "../misc/defs.h"
 
+#include "../actors/actors.h"
+
 //macro to access the object table
 #define _OBJECT_TABLE ObjectTable::getObjectTable()
 
@@ -55,11 +57,17 @@ private:
     typedef struct Entry {
         Entry(VMObject* object) {
             content.object = object;
+            actor = actors_rank();
+        }        
+        Entry(VMObject* object, actor_id_t actor_id) {
+            content.object = object;
+            actor = actor_id;
         }
         union {
             VMObject* object;
-            Index index;
+            Index     index;
         } content;
+        actor_id_t actor;
     } Entry;
     
     // The singleton instance.
@@ -90,12 +98,24 @@ private:
     // Add object to table
     Index AddObject(VMObject* object);
     
+    // Add remote object to table
+    Index AddRemoteObject(VMObject* object, actor_id_t actor);
+    
+    // Mark object as omnipresent
+    void MarkOmnipresent(Index index);
+    
     // Remove object from table
     void RemoveObject(Index index);
     
     // Helper method for debugging.
-    bool contains(VMObject* object);    
+    bool Contains(VMObject* object);
     
+    // Check whether object is local or omnipresent
+    bool IsLocal(Index index) const;
+
+    // Check whether object is remote
+    bool IsRemote(Index index) const;
+
 };
 
 #endif

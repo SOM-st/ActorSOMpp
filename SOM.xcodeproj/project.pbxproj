@@ -18,14 +18,87 @@
 		0A044B3A0FD32F07009B284F /* synced_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synced_queue.cpp; sourceTree = "<group>"; };
 		0A044B3B0FD32F07009B284F /* synced_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = synced_queue.h; sourceTree = "<group>"; };
 		0A044B3D0FD32F13009B284F /* actors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actors.h; sourceTree = "<group>"; };
+		0AA9E7720FD46E18001F2C47 /* Array.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Array.som; sourceTree = "<group>"; };
+		0AA9E7730FD46E18001F2C47 /* BigInteger.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BigInteger.som; sourceTree = "<group>"; };
+		0AA9E7740FD46E18001F2C47 /* Block.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Block.som; sourceTree = "<group>"; };
+		0AA9E7750FD46E19001F2C47 /* Block1.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Block1.som; sourceTree = "<group>"; };
+		0AA9E7760FD46E19001F2C47 /* Block2.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Block2.som; sourceTree = "<group>"; };
+		0AA9E7770FD46E19001F2C47 /* Block3.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Block3.som; sourceTree = "<group>"; };
+		0AA9E7780FD46E19001F2C47 /* Boolean.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Boolean.som; sourceTree = "<group>"; };
+		0AA9E7790FD46E19001F2C47 /* Class.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Class.som; sourceTree = "<group>"; };
+		0AA9E77A0FD46E19001F2C47 /* Dictionary.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Dictionary.som; sourceTree = "<group>"; };
+		0AA9E77B0FD46E19001F2C47 /* Double.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Double.som; sourceTree = "<group>"; };
+		0AA9E77C0FD46E19001F2C47 /* False.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = False.som; sourceTree = "<group>"; };
+		0AA9E77D0FD46E19001F2C47 /* Frame.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Frame.som; sourceTree = "<group>"; };
+		0AA9E77E0FD46E19001F2C47 /* HashEntry.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HashEntry.som; sourceTree = "<group>"; };
+		0AA9E77F0FD46E19001F2C47 /* Hashtable.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Hashtable.som; sourceTree = "<group>"; };
+		0AA9E7800FD46E19001F2C47 /* Integer.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Integer.som; sourceTree = "<group>"; };
+		0AA9E7810FD46E19001F2C47 /* Metaclass.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Metaclass.som; sourceTree = "<group>"; };
+		0AA9E7820FD46E19001F2C47 /* Method.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Method.som; sourceTree = "<group>"; };
+		0AA9E7830FD46E19001F2C47 /* Nil.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Nil.som; sourceTree = "<group>"; };
+		0AA9E7840FD46E19001F2C47 /* Object.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Object.som; sourceTree = "<group>"; };
+		0AA9E7850FD46E19001F2C47 /* Pair.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Pair.som; sourceTree = "<group>"; };
+		0AA9E7860FD46E19001F2C47 /* Primitive.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Primitive.som; sourceTree = "<group>"; };
+		0AA9E7870FD46E19001F2C47 /* Set.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Set.som; sourceTree = "<group>"; };
+		0AA9E7890FD46E19001F2C47 /* String.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = String.som; sourceTree = "<group>"; };
+		0AA9E78A0FD46E19001F2C47 /* Symbol.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Symbol.som; sourceTree = "<group>"; };
+		0AA9E78B0FD46E19001F2C47 /* System.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = System.som; sourceTree = "<group>"; };
+		0AA9E78C0FD46E19001F2C47 /* Test.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Test.som; sourceTree = "<group>"; };
+		0AA9E78D0FD46E19001F2C47 /* True.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = True.som; sourceTree = "<group>"; };
+		0AA9E78E0FD46E19001F2C47 /* Vector.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Vector.som; sourceTree = "<group>"; };
+		0AA9E7910FD46E33001F2C47 /* All.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = All.som; sourceTree = "<group>"; };
+		0AA9E7920FD46E33001F2C47 /* Ball.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ball.som; sourceTree = "<group>"; };
+		0AA9E7930FD46E33001F2C47 /* Benchmark.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Benchmark.som; sourceTree = "<group>"; };
+		0AA9E7940FD46E33001F2C47 /* Bounce.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Bounce.som; sourceTree = "<group>"; };
+		0AA9E7950FD46E33001F2C47 /* BubbleSort.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BubbleSort.som; sourceTree = "<group>"; };
+		0AA9E7960FD46E33001F2C47 /* Dispatch.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Dispatch.som; sourceTree = "<group>"; };
+		0AA9E7970FD46E33001F2C47 /* Fibonacci.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fibonacci.som; sourceTree = "<group>"; };
+		0AA9E7980FD46E33001F2C47 /* IntegerLoop.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IntegerLoop.som; sourceTree = "<group>"; };
+		0AA9E7990FD46E33001F2C47 /* List.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = List.som; sourceTree = "<group>"; };
+		0AA9E79A0FD46E33001F2C47 /* ListElement.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ListElement.som; sourceTree = "<group>"; };
+		0AA9E79B0FD46E33001F2C47 /* Loop.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Loop.som; sourceTree = "<group>"; };
+		0AA9E79C0FD46E33001F2C47 /* Permute.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Permute.som; sourceTree = "<group>"; };
+		0AA9E79D0FD46E33001F2C47 /* Queens.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Queens.som; sourceTree = "<group>"; };
+		0AA9E79E0FD46E33001F2C47 /* QuickSort.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = QuickSort.som; sourceTree = "<group>"; };
+		0AA9E79F0FD46E33001F2C47 /* Random.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Random.som; sourceTree = "<group>"; };
+		0AA9E7A00FD46E33001F2C47 /* Recurse.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Recurse.som; sourceTree = "<group>"; };
+		0AA9E7A10FD46E33001F2C47 /* Sieve.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Sieve.som; sourceTree = "<group>"; };
+		0AA9E7A20FD46E33001F2C47 /* Sort.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Sort.som; sourceTree = "<group>"; };
+		0AA9E7A30FD46E33001F2C47 /* Storage.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Storage.som; sourceTree = "<group>"; };
+		0AA9E7A40FD46E33001F2C47 /* Sum.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Sum.som; sourceTree = "<group>"; };
+		0AA9E7A50FD46E33001F2C47 /* Towers.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Towers.som; sourceTree = "<group>"; };
+		0AA9E7A60FD46E33001F2C47 /* TowersDisk.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TowersDisk.som; sourceTree = "<group>"; };
+		0AA9E7A70FD46E33001F2C47 /* TreeNode.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TreeNode.som; sourceTree = "<group>"; };
+		0AA9E7A80FD46E33001F2C47 /* TreeSort.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TreeSort.som; sourceTree = "<group>"; };
+		0AA9E7AA0FD46E33001F2C47 /* Echo.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Echo.som; sourceTree = "<group>"; };
+		0AA9E7AC0FD46E33001F2C47 /* Hello.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Hello.som; sourceTree = "<group>"; };
+		0AA9E7AE0FD46E33001F2C47 /* Apple.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Apple.som; sourceTree = "<group>"; };
+		0AA9E7AF0FD46E33001F2C47 /* Board.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Board.som; sourceTree = "<group>"; };
+		0AA9E7B00FD46E33001F2C47 /* BoardView.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BoardView.som; sourceTree = "<group>"; };
+		0AA9E7B10FD46E33001F2C47 /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
+		0AA9E7B20FD46E33001F2C47 /* Element.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Element.som; sourceTree = "<group>"; };
+		0AA9E7B30FD46E33001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
+		0AA9E7B40FD46E33001F2C47 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		0AA9E7B50FD46E33001F2C47 /* Snake.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Snake.som; sourceTree = "<group>"; };
+		0AA9E7B60FD46E33001F2C47 /* SnakeElement.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SnakeElement.som; sourceTree = "<group>"; };
+		0AA9E7B70FD46E33001F2C47 /* Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terminal.cpp; sourceTree = "<group>"; };
+		0AA9E7B80FD46E33001F2C47 /* Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terminal.h; sourceTree = "<group>"; };
+		0AA9E7B90FD46E33001F2C47 /* Terminal.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Terminal.som; sourceTree = "<group>"; };
+		0AA9E7BB0FD46E33001F2C47 /* StringTest.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = StringTest.som; sourceTree = "<group>"; };
+		0AA9E7C90FD47034001F2C47 /* HelloWorld.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HelloWorld.som; sourceTree = "<group>"; };
+		0AA9E7CB0FD47034001F2C47 /* Counter.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Counter.som; sourceTree = "<group>"; };
+		0AA9E7CC0FD47034001F2C47 /* Incrementor */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Incrementor; sourceTree = "<group>"; };
+		0AA9E7CD0FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
+		0AA9E7CF0FD47034001F2C47 /* Counter.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Counter.som; sourceTree = "<group>"; };
+		0AA9E7D00FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
 		349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMPointer.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20870FAC73020009EE70 /* VMPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointer.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20880FAC73020009EE70 /* VMPointerConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointerConverter.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20BE0FAC98430009EE70 /* ObjectTable.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = ObjectTable.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20BF0FAC98430009EE70 /* ObjectTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectTable.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
-		3F5202940FA6624C00E75857 /* Darwin.make */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = text; path = Darwin.make; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
-		3F5202950FA6624C00E75857 /* Linux.make */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = text; path = Linux.make; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
-		3F5202A40FA6624C00E75857 /* windows.make */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = text; path = windows.make; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
+		3F5202940FA6624C00E75857 /* Darwin.make */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; indentWidth = 4; path = Darwin.make; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
+		3F5202950FA6624C00E75857 /* Linux.make */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; indentWidth = 4; path = Linux.make; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
+		3F5202A40FA6624C00E75857 /* windows.make */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; indentWidth = 4; path = windows.make; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		3F5202F10FA6624C00E75857 /* BytecodeGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BytecodeGenerator.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		3F5202F20FA6624C00E75857 /* BytecodeGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = BytecodeGenerator.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		3F5202F30FA6624C00E75857 /* ClassGenerationContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClassGenerationContext.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
@@ -142,11 +215,164 @@
 			path = actors;
 			sourceTree = "<group>";
 		};
+		0A044B790FD34D5A009B284F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0AA9E7710FD46E18001F2C47 /* Smalltalk */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7720FD46E18001F2C47 /* Array.som */,
+				0AA9E7730FD46E18001F2C47 /* BigInteger.som */,
+				0AA9E7740FD46E18001F2C47 /* Block.som */,
+				0AA9E7750FD46E19001F2C47 /* Block1.som */,
+				0AA9E7760FD46E19001F2C47 /* Block2.som */,
+				0AA9E7770FD46E19001F2C47 /* Block3.som */,
+				0AA9E7780FD46E19001F2C47 /* Boolean.som */,
+				0AA9E7790FD46E19001F2C47 /* Class.som */,
+				0AA9E77A0FD46E19001F2C47 /* Dictionary.som */,
+				0AA9E77B0FD46E19001F2C47 /* Double.som */,
+				0AA9E77C0FD46E19001F2C47 /* False.som */,
+				0AA9E77D0FD46E19001F2C47 /* Frame.som */,
+				0AA9E77E0FD46E19001F2C47 /* HashEntry.som */,
+				0AA9E77F0FD46E19001F2C47 /* Hashtable.som */,
+				0AA9E7800FD46E19001F2C47 /* Integer.som */,
+				0AA9E7810FD46E19001F2C47 /* Metaclass.som */,
+				0AA9E7820FD46E19001F2C47 /* Method.som */,
+				0AA9E7830FD46E19001F2C47 /* Nil.som */,
+				0AA9E7840FD46E19001F2C47 /* Object.som */,
+				0AA9E7850FD46E19001F2C47 /* Pair.som */,
+				0AA9E7860FD46E19001F2C47 /* Primitive.som */,
+				0AA9E7870FD46E19001F2C47 /* Set.som */,
+				0AA9E7890FD46E19001F2C47 /* String.som */,
+				0AA9E78A0FD46E19001F2C47 /* Symbol.som */,
+				0AA9E78B0FD46E19001F2C47 /* System.som */,
+				0AA9E78C0FD46E19001F2C47 /* Test.som */,
+				0AA9E78D0FD46E19001F2C47 /* True.som */,
+				0AA9E78E0FD46E19001F2C47 /* Vector.som */,
+			);
+			path = Smalltalk;
+			sourceTree = "<group>";
+		};
+		0AA9E78F0FD46E33001F2C47 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7C90FD47034001F2C47 /* HelloWorld.som */,
+				0AA9E7CA0FD47034001F2C47 /* CounterAct */,
+				0AA9E7CE0FD47034001F2C47 /* CounterST */,
+				0AA9E7900FD46E33001F2C47 /* Benchmarks */,
+				0AA9E7A90FD46E33001F2C47 /* Echo */,
+				0AA9E7AB0FD46E33001F2C47 /* Hello */,
+				0AA9E7AD0FD46E33001F2C47 /* Snake */,
+				0AA9E7BA0FD46E33001F2C47 /* StringTest */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+		0AA9E7900FD46E33001F2C47 /* Benchmarks */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7910FD46E33001F2C47 /* All.som */,
+				0AA9E7920FD46E33001F2C47 /* Ball.som */,
+				0AA9E7930FD46E33001F2C47 /* Benchmark.som */,
+				0AA9E7940FD46E33001F2C47 /* Bounce.som */,
+				0AA9E7950FD46E33001F2C47 /* BubbleSort.som */,
+				0AA9E7960FD46E33001F2C47 /* Dispatch.som */,
+				0AA9E7970FD46E33001F2C47 /* Fibonacci.som */,
+				0AA9E7980FD46E33001F2C47 /* IntegerLoop.som */,
+				0AA9E7990FD46E33001F2C47 /* List.som */,
+				0AA9E79A0FD46E33001F2C47 /* ListElement.som */,
+				0AA9E79B0FD46E33001F2C47 /* Loop.som */,
+				0AA9E79C0FD46E33001F2C47 /* Permute.som */,
+				0AA9E79D0FD46E33001F2C47 /* Queens.som */,
+				0AA9E79E0FD46E33001F2C47 /* QuickSort.som */,
+				0AA9E79F0FD46E33001F2C47 /* Random.som */,
+				0AA9E7A00FD46E33001F2C47 /* Recurse.som */,
+				0AA9E7A10FD46E33001F2C47 /* Sieve.som */,
+				0AA9E7A20FD46E33001F2C47 /* Sort.som */,
+				0AA9E7A30FD46E33001F2C47 /* Storage.som */,
+				0AA9E7A40FD46E33001F2C47 /* Sum.som */,
+				0AA9E7A50FD46E33001F2C47 /* Towers.som */,
+				0AA9E7A60FD46E33001F2C47 /* TowersDisk.som */,
+				0AA9E7A70FD46E33001F2C47 /* TreeNode.som */,
+				0AA9E7A80FD46E33001F2C47 /* TreeSort.som */,
+			);
+			path = Benchmarks;
+			sourceTree = "<group>";
+		};
+		0AA9E7A90FD46E33001F2C47 /* Echo */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7AA0FD46E33001F2C47 /* Echo.som */,
+			);
+			path = Echo;
+			sourceTree = "<group>";
+		};
+		0AA9E7AB0FD46E33001F2C47 /* Hello */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7AC0FD46E33001F2C47 /* Hello.som */,
+			);
+			path = Hello;
+			sourceTree = "<group>";
+		};
+		0AA9E7AD0FD46E33001F2C47 /* Snake */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7AE0FD46E33001F2C47 /* Apple.som */,
+				0AA9E7AF0FD46E33001F2C47 /* Board.som */,
+				0AA9E7B00FD46E33001F2C47 /* BoardView.som */,
+				0AA9E7B10FD46E33001F2C47 /* Core.cpp */,
+				0AA9E7B20FD46E33001F2C47 /* Element.som */,
+				0AA9E7B30FD46E33001F2C47 /* Main.som */,
+				0AA9E7B40FD46E33001F2C47 /* Makefile */,
+				0AA9E7B50FD46E33001F2C47 /* Snake.som */,
+				0AA9E7B60FD46E33001F2C47 /* SnakeElement.som */,
+				0AA9E7B70FD46E33001F2C47 /* Terminal.cpp */,
+				0AA9E7B80FD46E33001F2C47 /* Terminal.h */,
+				0AA9E7B90FD46E33001F2C47 /* Terminal.som */,
+			);
+			path = Snake;
+			sourceTree = "<group>";
+		};
+		0AA9E7BA0FD46E33001F2C47 /* StringTest */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7BB0FD46E33001F2C47 /* StringTest.som */,
+			);
+			path = StringTest;
+			sourceTree = "<group>";
+		};
+		0AA9E7CA0FD47034001F2C47 /* CounterAct */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7CB0FD47034001F2C47 /* Counter.som */,
+				0AA9E7CC0FD47034001F2C47 /* Incrementor */,
+				0AA9E7CD0FD47034001F2C47 /* Main.som */,
+			);
+			path = CounterAct;
+			sourceTree = "<group>";
+		};
+		0AA9E7CE0FD47034001F2C47 /* CounterST */ = {
+			isa = PBXGroup;
+			children = (
+				0AA9E7CF0FD47034001F2C47 /* Counter.som */,
+				0AA9E7D00FD47034001F2C47 /* Main.som */,
+			);
+			path = CounterST;
+			sourceTree = "<group>";
+		};
 		3F5202720FA661D900E75857 = {
 			isa = PBXGroup;
 			children = (
 				3F5202920FA6624C00E75857 /* build */,
 				3F5202EF0FA6624C00E75857 /* src */,
+				0A044B790FD34D5A009B284F /* Products */,
+				0AA9E78F0FD46E33001F2C47 /* Examples */,
+				0AA9E7710FD46E18001F2C47 /* Smalltalk */,
 			);
 			sourceTree = "<group>";
 		};
@@ -358,6 +584,7 @@
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 0;
 			mainGroup = 3F5202720FA661D900E75857;
+			productRefGroup = 0A044B790FD34D5A009B284F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

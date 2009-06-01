@@ -24,6 +24,16 @@ VMObject* ObjectTable::operator[](Index index) const {
     return objectTable[index.value].content.object;
 }
 
+bool ObjectTable::IsLocal(Index index) const {
+    return (objectTable[index.value].actor == actors_rank()
+            || objectTable[index.value].actor == ACTOR_OMNI);
+}
+
+bool ObjectTable::IsRemote(Index index) const {
+    return (objectTable[index.value].actor != actors_rank()
+            && objectTable[index.value].actor != ACTOR_OMNI);
+}
+
 
 ObjectTable::Index ObjectTable::AddObject(VMObject* object) {
     
@@ -55,12 +65,23 @@ ObjectTable::Index ObjectTable::AddObject(VMObject* object) {
     return index;
 }
 
+// Add remote object to table
+ObjectTable::Index ObjectTable::AddRemoteObject(VMObject* object, actor_id_t actor) {
+#warning not implemented
+    Index idx;
+    return idx;
+}
+
+// Mark object as omnipresent
+void ObjectTable::MarkOmnipresent(Index index) {
+#warning not implemented
+}
 
 void ObjectTable::RemoveObject(Index index) {
     if (index.value >= size) {
         std::cout << "Accessing invalid ObjectTable entry" << std::endl;
     }
-//    std::cout << "[ObjectTabke] removed object at index "<< index << std::endl;
+//    std::cout << "[ObjectTable] removed object at index "<< index << std::endl;
     
     // push entry to free stack
     objectTable[index.value].content.index.value = free_stack.value;
@@ -68,7 +89,7 @@ void ObjectTable::RemoveObject(Index index) {
 }
 
 
-bool ObjectTable::contains(VMObject* object) {
+bool ObjectTable::Contains(VMObject* object) {
     if (NULL == object) {
         return false;
     }

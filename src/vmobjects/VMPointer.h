@@ -153,14 +153,18 @@ public:
         _OBJECT_TABLE.RemoveObject(index.index);
         index.index.value = 0;
     }
+    
+    inline bool IsLocalObject() {
+        
+    }
 
 protected:
     // We need this because object table indexes are unsigned
     typedef union {
         ObjectTable::Index index;
-        struct {
-            int32_t value:31;
-            bool is_iint:1;
+        struct immediate_int_value {
+            int32_t   value:31;
+            bool    is_iint: 1;
         } iint;
     } Index;
     
@@ -170,8 +174,8 @@ protected:
     template<class> friend class VMPointer;
 };
 
-template < class T >
-VMPointer<T>& VMPointer<T>::operator =(VMPointer<T> ptr)
+template<class T>
+VMPointer<T>& VMPointer<T>::operator=(VMPointer<T> ptr)
 {
     if(&ptr == this) return *this;
     index = ptr.index;

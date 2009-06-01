@@ -33,7 +33,7 @@ typedef int ilibRawSendPort;
 static const ilibGroup ILIB_GROUP_SIBLINGS = 0;
 
 inline int ilib_msg_broadcast(int, int, void*, int, void*) { return 0; }
-inline char* ilib_debug_strerror(int) {return "";}
+inline char* ilib_debug_strerror(int) {return (char*)"";}
 void ilib_abort();
 
 

@@ -80,7 +80,9 @@ System = (
     
     "Time"
     time = primitive
-
+    
+    "Actors"
+    rank = primitive
     objectTableSize = primitive
     
     ----------------------------------
