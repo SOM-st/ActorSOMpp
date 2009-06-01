@@ -14,7 +14,6 @@
 		0A044B360FD32F07009B284F /* ilib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ilib.cpp; sourceTree = "<group>"; };
 		0A044B370FD32F07009B284F /* ilib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ilib.h; sourceTree = "<group>"; };
 		0A044B380FD32F07009B284F /* Interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Interpreter.cpp; sourceTree = "<group>"; };
-		0A044B390FD32F07009B284F /* Interpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interpreter.h; sourceTree = "<group>"; };
 		0A044B3A0FD32F07009B284F /* synced_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synced_queue.cpp; sourceTree = "<group>"; };
 		0A044B3B0FD32F07009B284F /* synced_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = synced_queue.h; sourceTree = "<group>"; };
 		0A044B3D0FD32F13009B284F /* actors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actors.h; sourceTree = "<group>"; };
@@ -208,7 +207,6 @@
 				0A044B360FD32F07009B284F /* ilib.cpp */,
 				0A044B370FD32F07009B284F /* ilib.h */,
 				0A044B380FD32F07009B284F /* Interpreter.cpp */,
-				0A044B390FD32F07009B284F /* Interpreter.h */,
 				0A044B3A0FD32F07009B284F /* synced_queue.cpp */,
 				0A044B3B0FD32F07009B284F /* synced_queue.h */,
 			);

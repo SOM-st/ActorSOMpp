@@ -62,21 +62,25 @@ private:
     void popFrameAndPushResult(pVMObject result);
     void send(pVMSymbol signature, pVMClass receiverClass);
     
-    void doDup();
-    void doPushLocal(int bytecodeIndex);
-    void doPushArgument(int bytecodeIndex);
-    void doPushField(int bytecodeIndex);
-    void doPushBlock(int bytecodeIndex);
-    void doPushConstant(int bytecodeIndex);
-    void doPushGlobal(int bytecodeIndex);
-    void doPop(void);
-    void doPopLocal(int bytecodeIndex);
-    void doPopArgument(int bytecodeIndex);
-    void doPopField(int bytecodeIndex);
-    void doSend(int bytecodeIndex);
-    void doSuperSend(int bytecodeIndex);
-    void doReturnLocal();
-    void doReturnNonLocal();
+    void do_DUP(int bytecodeIndex);
+    void do_PUSH_LOCAL(int bytecodeIndex);
+    void do_PUSH_ARGUMENT(int bytecodeIndex);
+    void do_PUSH_FIELD(int bytecodeIndex);
+    void do_PUSH_BLOCK(int bytecodeIndex);
+    void do_PUSH_CONSTANT(int bytecodeIndex);
+    void do_PUSH_GLOBAL(int bytecodeIndex);
+    void do_POP(int bytecodeIndex);
+    void do_POP_LOCAL(int bytecodeIndex);
+    void do_POP_ARGUMENT(int bytecodeIndex);
+    void do_POP_FIELD(int bytecodeIndex);
+    void do_SEND(int bytecodeIndex);
+    void do_SUPER_SEND(int bytecodeIndex);
+    void do_RETURN_LOCAL(int bytecodeIndex);
+    void do_RETURN_NON_LOCAL(int bytecodeIndex);
+
+    void do_SEND_ASYNC(int bytecodeIndex);
+    void do_YIELD(int bytecodeIndex);
+
 };
 
 #endif

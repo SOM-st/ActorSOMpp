@@ -7,5 +7,12 @@
  *
  */
 
-#include "Interpreter.h"
+#include "../Interpreter/Interpreter.h"
 
+void Interpreter::do_YIELD(int) {
+#warning not implemented
+}
+
+void Interpreter::do_SEND_ASYNC(int) {
+#warning not implemented
+}

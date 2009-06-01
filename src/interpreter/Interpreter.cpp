@@ -79,25 +79,15 @@ void Interpreter::Start() {
 
         _FRAME->SetBytecodeIndex(nextBytecodeIndex);
 
-// Handle the current bytecode
+        // Handle the current bytecode
         switch(bytecode) {
-            case BC_HALT:             return; // handle the halt bytecode
-            case BC_DUP:              doDup();  break;
-            case BC_PUSH_LOCAL:       doPushLocal(bytecodeIndex); break;
-            case BC_PUSH_ARGUMENT:    doPushArgument(bytecodeIndex); break;
-            case BC_PUSH_FIELD:       doPushField(bytecodeIndex); break;
-            case BC_PUSH_BLOCK:       doPushBlock(bytecodeIndex); break;
-            case BC_PUSH_CONSTANT:    doPushConstant(bytecodeIndex); break;
-            case BC_PUSH_GLOBAL:      doPushGlobal(bytecodeIndex); break;
-            case BC_POP:              doPop(); break;
-            case BC_POP_LOCAL:        doPopLocal(bytecodeIndex); break;
-            case BC_POP_ARGUMENT:     doPopArgument(bytecodeIndex); break;
-            case BC_POP_FIELD:        doPopField(bytecodeIndex); break;
-            case BC_SEND:             doSend(bytecodeIndex); break;
-            case BC_SUPER_SEND:       doSuperSend(bytecodeIndex); break;
-            case BC_RETURN_LOCAL:     doReturnLocal(); break;
-            case BC_RETURN_NON_LOCAL: doReturnNonLocal(); break;
-            default:                  _UNIVERSE->ErrorExit(
+            #define do_HALT(idx) return;
+            #define define_HANDLER(Name, ConstantValue, Length, StringName) \
+                case BC_##Name:     do_##Name(bytecodeIndex); break;
+                
+            FOR_ALL_BYTECODES(define_HANDLER)
+
+            default:                _UNIVERSE->ErrorExit(
                                            "Interpreter: Unexpected bytecode"); 
         } // switch
     } // while
@@ -194,13 +184,13 @@ void Interpreter::send( pVMSymbol signature, pVMClass receiverClass) {
 }
 
 
-void Interpreter::doDup() {
+void Interpreter::do_DUP(int) {
     pVMObject elem = _FRAME->GetStackElement(0);
     _FRAME->Push(elem);
 }
 
 
-void Interpreter::doPushLocal( int bytecodeIndex ) {
+void Interpreter::do_PUSH_LOCAL( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
     uint8_t bc1 = method->GetBytecode(bytecodeIndex + 1);
     uint8_t bc2 = method->GetBytecode(bytecodeIndex + 2);
@@ -211,7 +201,7 @@ void Interpreter::doPushLocal( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doPushArgument( int bytecodeIndex ) {
+void Interpreter::do_PUSH_ARGUMENT( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
     uint8_t bc1 = method->GetBytecode(bytecodeIndex + 1);
     uint8_t bc2 = method->GetBytecode(bytecodeIndex + 2);
@@ -222,7 +212,7 @@ void Interpreter::doPushArgument( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doPushField( int bytecodeIndex ) {
+void Interpreter::do_PUSH_FIELD( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
 
     pVMSymbol fieldName = (pVMSymbol) method->GetConstant(bytecodeIndex);
@@ -236,7 +226,7 @@ void Interpreter::doPushField( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doPushBlock( int bytecodeIndex ) {
+void Interpreter::do_PUSH_BLOCK( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
 
     pVMMethod blockMethod = (pVMMethod)(method->GetConstant(bytecodeIndex));
@@ -248,7 +238,7 @@ void Interpreter::doPushBlock( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doPushConstant( int bytecodeIndex ) {
+void Interpreter::do_PUSH_CONSTANT( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
 
     pVMObject constant = method->GetConstant(bytecodeIndex);
@@ -256,9 +246,7 @@ void Interpreter::doPushConstant( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doPushGlobal( int bytecodeIndex) {
-    
-
+void Interpreter::do_PUSH_GLOBAL( int bytecodeIndex) {
     pVMMethod method = _METHOD;
 
     pVMSymbol globalName = (pVMSymbol) method->GetConstant(bytecodeIndex);
@@ -285,12 +273,12 @@ void Interpreter::doPushGlobal( int bytecodeIndex) {
 }
 
 
-void Interpreter::doPop() {
+void Interpreter::do_POP(int) {
     _FRAME->Pop();
 }
 
 
-void Interpreter::doPopLocal( int bytecodeIndex ) {
+void Interpreter::do_POP_LOCAL( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
     uint8_t bc1 = method->GetBytecode(bytecodeIndex + 1);
     uint8_t bc2 = method->GetBytecode(bytecodeIndex + 2);
@@ -301,7 +289,7 @@ void Interpreter::doPopLocal( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doPopArgument( int bytecodeIndex ) {
+void Interpreter::do_POP_ARGUMENT( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
 
     uint8_t bc1 = method->GetBytecode(bytecodeIndex + 1);
@@ -312,7 +300,7 @@ void Interpreter::doPopArgument( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doPopField( int bytecodeIndex ) {
+void Interpreter::do_POP_FIELD( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
     pVMSymbol field_name = (pVMSymbol) method->GetConstant(bytecodeIndex);
 
@@ -324,7 +312,7 @@ void Interpreter::doPopField( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doSend( int bytecodeIndex ) {
+void Interpreter::do_SEND( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
     
     pVMSymbol signature = (pVMSymbol) method->GetConstant(bytecodeIndex);
@@ -337,7 +325,7 @@ void Interpreter::doSend( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doSuperSend( int bytecodeIndex ) {
+void Interpreter::do_SUPER_SEND( int bytecodeIndex ) {
     pVMMethod method = _METHOD;
     pVMSymbol signature = (pVMSymbol) method->GetConstant(bytecodeIndex);
 
@@ -366,14 +354,14 @@ void Interpreter::doSuperSend( int bytecodeIndex ) {
 }
 
 
-void Interpreter::doReturnLocal() {
+void Interpreter::do_RETURN_LOCAL(int) {
     pVMObject result = _FRAME->Pop();
 
     this->popFrameAndPushResult(result);
 }
 
 
-void Interpreter::doReturnNonLocal() {
+void Interpreter::do_RETURN_NON_LOCAL(int) {
     pVMObject result = _FRAME->Pop();
 
     pVMFrame context = _FRAME->GetOuterContext();
