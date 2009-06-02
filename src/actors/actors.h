@@ -11,6 +11,7 @@
 #define _ACTORS_H_
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define NUMBER_OF_ACTORS 2
 
@@ -22,7 +23,17 @@ typedef uint8_t actor_id_t;
 
 void actors_init();
 void actors_start(int argc, char** argv);
-void actors_init_communication();
+
 actor_id_t actors_id();
+bool actors_is_local(actor_id_t id);
+bool actors_is_remote(actor_id_t id);
+
+
+bool    actors_msgbuffer_holds_data();
+int32_t actors_msgbuffer_read_atom();
+void*   actors_msgbuffer_read_msg();
+
+void    actors_msgbuffer_send_atom(actor_id_t actor_id, int32_t value);
+void    actors_msgbuffer_send_msg(actor_id_t actor_id, void* msg_buffer, size_t size);
 
 #endif

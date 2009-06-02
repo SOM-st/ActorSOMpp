@@ -15,94 +15,260 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <pthread.h>
+#include <sys/mman.h>
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <math.h>
 
 #include "../misc/ExtendedList.h"
 #include "../vmobjects/ObjectFormats.h"
 #include "../vmobjects/VMPointer.h"
+#include "synced_queue.h"
+
+#define ACTOR_QUEUE_BUFFER_SIZE 256
+
+typedef struct actor_globals {
+    pid_t       owner_pid;
+    actor_id_t  last_actor_id;
+    pthread_mutex_t global_lock;
+    syncedqueue queues[NUMBER_OF_ACTORS];
+    int32_t     queue_buffer[NUMBER_OF_ACTORS][ACTOR_QUEUE_BUFFER_SIZE];
+} actor_globals, *p_actor_globals;
 
 // local data for faster access
-int      _rank;
-uint64_t _rank_mask;
-
-// co-routine support
-ExtendedList<pVMObject> activations;  // list of VMFrames representing co-routine activations
+actor_id_t  _local_id;
+bool        _main_actor;
+pid_t       _parent_pid;
+pid_t       _pid;
+// pointer to global information
+p_actor_globals _globals = NULL;
 
 // constant/magic values
-static int main_rank = 0;
-static ilibRawReceivePort receive_port = 0;
+static actor_id_t _main_id = 0;
 
 
+#define SHARED_MEM_ID "/actor_comm_space_I"
 
-#define FOR_ALL_RANKS(rank) \
-  for (size_t rank = 0; rank < NUMBER_OF_ACTORS; ++rank)
-
-#define FOR_ALL_OTHER_RANKS(rank) \
-  FOR_ALL_RANKS(rank) if (rank != _rank)
-
-void _go_parallel(char** argv) {
-  ilibProcParam params;
-  memset(&params, 0, sizeof(params));
-  params.num_procs = NUMBER_OF_ACTORS;
-  params.binary_name = NULL;
-  params.argv = argv;
-  
-  params.tiles.x = params.tiles.y = 0;
-  
-#ifdef TILERA
-#warning Fix this for Tile64
-  params.tiles.width  = width;
-  params.tiles.height = height;
-#endif
-  
-  int err = ilib_proc_exec(1, &params);
-  // TODO: check for error, but actually
-  //       the following code should never be reached
-  abort();
+void _unit() {
+    if (_main_actor) {
+        pthread_mutex_destroy(&_globals->global_lock);
+    }
+    
+    munmap(_globals, sizeof(actor_globals));
+    
+    if (_main_actor) {
+        shm_unlink(SHARED_MEM_ID);
+    }
 }
 
+void _init_global_data_structures() {
+    memset(_globals, 0, sizeof(actor_globals));
+    _globals->last_actor_id = 0;
+    _globals->owner_pid = getpid();
+    
+    pthread_mutexattr_t attr;
+    pthread_mutexattr_init(&attr);
+    pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
+    
+    if (0 != pthread_mutex_init(&_globals->global_lock, &attr)) {
+        // error
+        // TODO: do it properly
+        perror("Error in _init_global_data_structures");
+    }
+}
+
+/**
+ * This function makes sure that each rank of the process group is running on
+ * a dedicated processing unit (PU) reported by the OS.
+ * It does not mean a physical unit, but includes also logical units like hyper
+ * threads.
+ */
+void _init_processor_affinity() {
+#ifdef __APPLE__
+    // NOP
+    // Mac OS X does not support setting explicit affinity to a PU
+    // It only supports expressing cache affinity
+    // and this is only for one process i.e. threads in a process
+    // http://developer.apple.com/ReleaseNotes/Performance/RN-AffinityAPI/index.html
+#else
+    // On Linux, it looks pretty easy:
+    // http://www.linuxjournal.com/article/6799
+    // http://www.ibm.com/developerworks/linux/library/l-affinity.html
+    int rank = ilib_group_rank(0);
+    cpu_set_t affinity_mask;
+    CPU_ZERO(&affinity_mask);
+    CPU_SET(rank, &affinity_mask);
+    
+    if (sched_setaffinity(getpid(), sizeof(affinity_mask), &affinity_mask) < 0) {
+        perror("Failed to set affinity");
+        abort();
+    }
+    
+#endif
+    
+    sleep(0); // make sure the OS schedule has a chance to do as we told him
+}
+
+void _reinit_global_data_structures() {
+    warnx("Some confusion with global data, which is shared system wide. "
+          "Currently there is no support for more then one instance of a "
+          "program using this library!");
+    pthread_mutex_destroy(&_globals->global_lock);
+    _init_global_data_structures();
+}
+
+void _init_process_local_data() {
+    _parent_pid = getppid();
+    _pid        = getpid();
+        
+    if (_globals->owner_pid != _parent_pid
+        && _globals->owner_pid != _pid) {
+        _reinit_global_data_structures();
+    }
+    
+    pthread_mutex_lock(&_globals->global_lock);
+    
+    if (_pid == _globals->owner_pid) {
+        _local_id = 0;
+        _main_actor = true;
+    } else {
+        _main_actor = false;
+        _globals->last_actor_id++;
+        _local_id = _globals->last_actor_id;
+    }
+    
+    pthread_mutex_unlock(&_globals->global_lock);
+    
+    atexit(_unit);  // register clean up hook
+}
+
+void actors_init() {
+    bool initialize_globaly = false;
+    
+    int fd = shm_open(SHARED_MEM_ID, O_RDWR, S_IRUSR | S_IWUSR);
+    if (fd < 0) {
+        switch (errno) {
+            case ENOENT:
+                initialize_globaly = true;
+                fd = shm_open(SHARED_MEM_ID, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+                if (fd < 0) {
+                    // error
+                    // TODO: do it properly
+                    perror("Error in init on shm_open with O_CREAT");
+                }
+                
+                if (-1 == ftruncate(fd, sizeof(actor_globals))) {
+                    // error
+                    // TODO: do it properly
+                    perror("Error in init on ftruncate");
+                }
+                break;
+            default:
+                // error
+                // TODO: do it properly
+                perror("Error in init on shm_open");
+                break;
+        }
+    }
+    
+    if (fd >= 0) {
+        _globals = (p_actor_globals)mmap(NULL, sizeof(actor_globals),
+                                    PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+        if (MAP_FAILED == _globals) {
+            perror("Error in init on mmap");
+        }
+    }
+    
+    // init if necessary
+    if (initialize_globaly) {
+        _init_global_data_structures();
+    }
+    
+    _init_process_local_data();
+    _init_processor_affinity();
+}
+
+void _go_parallel(char** argv) {
+    for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
+        pid_t pid = fork();
+      
+        if (0 == pid) {
+            // child
+            execv(argv[0], argv);
+        } else if (pid > 0) {
+            // master
+            // do not do anything here, just go on with the loop
+        } else {
+            // error
+            // TODO: do it properly
+            perror("Error in ilib_proc_exec");
+        }
+    }
+}
+
+void _init_communication() {
+    for (actor_id_t id = 0; id < NUMBER_OF_ACTORS; id++) {
+        syncedqueue_initialize(&_globals->queues[id], _globals->queue_buffer[id], ACTOR_QUEUE_BUFFER_SIZE);
+    }
+}
+
+
 void actors_start(int argc, char** argv) {  
-  int group_size = ilib_group_size(ILIB_GROUP_SIBLINGS);
-  _rank       = ilib_group_rank(ILIB_GROUP_SIBLINGS);
-  _rank_mask  = 1LL << uint64_t(_rank);
-  
-  if (group_size == 1 && group_size < NUMBER_OF_ACTORS) {
-    _go_parallel(argv);
-  }
-  else {
-    printf("MyRank: %d MyPID: %d Status: %s\n", _rank, getpid(), 
-           (_rank == main_rank) ? "leader" : "follower");
+    if (_main_actor) {
+        _init_communication();
+        _go_parallel(argv);
+    }
+    else {
+        printf("MyActorId: %d MyPID: %d Status: %s\n", _local_id, getpid(), 
+               (_main_actor) ? "leader" : "follower");
     
     //sleep(20); // useful for debugging
   }
 }
 
-void _init_sink() {
-  ilibSink sink;
-  ilib_rawchan_start_sink(ILIB_GROUP_SIBLINGS, _rank, _rank, &sink);
-  
-  FOR_ALL_OTHER_RANKS(sender_rank) {
-    ilib_rawchan_add_sink_sender(ILIB_GROUP_SIBLINGS, sender_rank, _rank, &sink);
-  }
-  ilib_rawchan_finish_sink(&sink);
-}
-
-void _open_channels() {
-  FOR_ALL_RANKS(rank) {
-    if (rank == _rank) {
-      ilib_rawchan_open_receiver(rank, receive_port);
-    }
-    else {
-      ilib_rawchan_open_sender(rank, rank);  
-    }
-  }
-}
 
 
-void actors_init_channels() {
-  _init_sink();
-  _open_channels();
+actor_id_t actors_id() {
+  return _local_id;
 }
 
-actor_id_t actors_rank() {
-  return _rank;
+bool actors_is_local(actor_id_t id) { return id == _local_id; }
+bool actors_is_remote(actor_id_t id) { return id != _local_id && id != ACTOR_OMNI; }
+
+
+bool actors_msgbuffer_holds_data() {
+    return !syncedqueue_is_empty(&_globals->queues[_local_id]);
 }
+
+int32_t actors_msgbuffer_read_atom() {
+    int32_t data;
+    syncedqueue_dequeue(&_globals->queues[_local_id], &data, 1);
+    return data;
+}
+
+void actors_msgbuffer_read_msg(void** buffer, size_t* size) {
+    int32_t msg_length; // msg length in bytes, but queue calculates in int32_t's
+    syncedqueue_dequeue(&_globals->queues[_local_id], &msg_length, 1);
+    
+    int32_t real_msg_length = ceil((double)msg_length / (double) sizeof(int32_t));
+    
+    *buffer = malloc(real_msg_length * sizeof(int32_t)); // to avoid overflow
+    
+    syncedqueue_dequeue(&_globals->queues[_local_id], (int32_t*)buffer, real_msg_length);
+    
+    *size = msg_length;
+}
+
+void actors_msgbuffer_send_atom(actor_id_t actor_id, int32_t value) {
+    syncedqueue_enqueue(&_globals->queues[actor_id], &value, 1);
+}
+
+void actors_msgbuffer_send_msg(actor_id_t actor_id, void* msg_buffer, size_t size) {
+    int32_t real_msg_length = ceil((double)size / (double) sizeof(int32_t));
+    
+    syncedqueue_enqueue_ex_with_header_valuet(&_globals->queues[actor_id], size, (int32_t*)msg_buffer, real_msg_length);
+}
+
+
