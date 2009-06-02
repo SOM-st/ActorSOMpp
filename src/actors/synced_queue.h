@@ -40,6 +40,7 @@ typedef struct syncedqueue {
 void syncedqueue_initialize(p_syncedqueue sq, int32_t* const buffer, size_t size);
 void syncedqueue_enqueue(p_syncedqueue sq, int32_t* const data, const size_t size);
 void syncedqueue_enqueue_ext(p_syncedqueue sq, int32_t* const data, const size_t size);
+void syncedqueue_enqueue_ex_with_header_valuet(p_syncedqueue sq, int32_t header, int32_t* const data, const size_t size);
 void syncedqueue_dequeue(p_syncedqueue sq, int32_t* const data, const size_t size);
 bool syncedqueue_is_initialized(p_syncedqueue sq);
 bool syncedqueue_is_empty(p_syncedqueue sq);

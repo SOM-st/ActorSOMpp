@@ -47,6 +47,25 @@ void _store(p_syncedqueue sq, int32_t* const data, const size_t size) {
   XADD((int32_t*)&sq->used_buffer, size);
 }
 
+void syncedqueue_enqueue_ex_with_header_valuet(p_syncedqueue sq, int32_t header, int32_t* const data, const size_t size) {
+  pthread_mutex_lock(&sq->lock);
+  
+  _store(sq, &header, 1);  // store header first
+  
+  size_t left = size;
+  int32_t* values = data;
+  
+  while (left > 32) {
+    _store(sq, values, 32);
+    values += 32;
+    left -= 32;
+  }
+  
+  _store(sq, values, left);
+  
+  pthread_mutex_unlock(&sq->lock);
+}
+
 void syncedqueue_enqueue_ext(p_syncedqueue sq, int32_t* const data, const size_t size) {
   pthread_mutex_lock(&sq->lock);
 
