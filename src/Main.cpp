@@ -50,7 +50,6 @@ int main(int argc, char** argv) {
     
     actors_init();
     actors_start(argc, argv);
-    actors_init_communication();
 
     Universe::Start(argc, argv);
 

@@ -42,6 +42,8 @@ public:
 	void Add(const T& ptr);
 	void AddIfAbsent(const T& ptr);
 	void AddAll(const ExtendedList<T>* list);
+    T Front();
+    void PopFront();
     void PushBack(const T& ptr);
 	void Clear();
 	int Size() const;
@@ -102,6 +104,11 @@ T ExtendedList<T>::Get(int index) {
 	return t; // FIXME
 }
 
+template<class T>
+T ExtendedList<T>::Front() {
+    return theList.front();
+}
+
 
 template <class T>
 int ExtendedList<T>::Size() const {
@@ -119,6 +126,10 @@ int ExtendedList<T>::IndexOf(const T& needle) {
 	return -1;
 }
 
+template<class T>
+void ExtendedList<T>::PopFront() {
+    theList.pop_front();
+}
 
 template < class T >
 void ExtendedList<T>::PushBack( const T& ptr ) {

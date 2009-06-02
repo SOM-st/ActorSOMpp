@@ -104,7 +104,7 @@ void  _System::PrintNewline(pVMObject /*object*/, pVMFrame /*frame*/) {
 void _System::Rank(pVMObject /*object*/, pVMFrame frame) {
     frame->Pop();
     
-    frame->Push((pVMObject)_UNIVERSE->NewInteger(actors_rank()));
+    frame->Push((pVMObject)_UNIVERSE->NewInteger(actors_id()));
 }
 
 void  _System::Time(pVMObject /*object*/, pVMFrame frame) {
