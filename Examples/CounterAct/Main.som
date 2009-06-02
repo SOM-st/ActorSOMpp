@@ -1,0 +1,26 @@
+Main = (
+
+    "The 'run' method is called when initializing the system"
+    run = (
+      | counter actor inc1 inc2 |
+      
+      counter := Counter new.
+      
+      
+      actor := Actor new.  "This should start a new actor, or in the SeeSomActors case, initialize an available actor for being used."
+      
+      actor claim: counter. " transfer an object to this actor, local references have to be changed to remote references --> object table"
+      
+      
+      inc1 := Incrementor new: counter.
+      inc2 := Incrementor new: counter.
+      
+      actor claim: inc2.
+      
+      inc1 async_run.
+      inc2 async_run.
+      
+      'Counter Value: ' print.
+      (counter value) println
+    )
+)

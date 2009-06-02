@@ -1,0 +1,28 @@
+Counter = (
+
+    | value |
+    
+    value = (
+        ^value
+    )
+    
+    value: val = (
+      value := val
+    )
+    
+    inc = (
+      value := value + 1.
+    )
+    
+    -----
+    
+    "Allocation"
+    new              = ( ^self new: 0 )
+    new: value = (
+        | newCounter |
+        newCounter := super new.
+        newCounter value: value.
+        ^newCounter
+    )
+
+)

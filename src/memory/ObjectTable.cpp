@@ -25,12 +25,12 @@ VMObject* ObjectTable::operator[](Index index) const {
 }
 
 bool ObjectTable::IsLocal(Index index) const {
-    return (objectTable[index.value].actor == actors_rank()
+    return (objectTable[index.value].actor == actors_id()
             || objectTable[index.value].actor == ACTOR_OMNI);
 }
 
 bool ObjectTable::IsRemote(Index index) const {
-    return (objectTable[index.value].actor != actors_rank()
+    return (objectTable[index.value].actor != actors_id()
             && objectTable[index.value].actor != ACTOR_OMNI);
 }
 

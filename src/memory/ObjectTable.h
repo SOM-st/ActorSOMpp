@@ -57,7 +57,7 @@ private:
     typedef struct Entry {
         Entry(VMObject* object) {
             content.object = object;
-            actor = actors_rank();
+            actor = actors_id();
         }        
         Entry(VMObject* object, actor_id_t actor_id) {
             content.object = object;

@@ -16,7 +16,7 @@
 		0A044B380FD32F07009B284F /* Interpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Interpreter.cpp; sourceTree = "<group>"; };
 		0A044B3A0FD32F07009B284F /* synced_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synced_queue.cpp; sourceTree = "<group>"; };
 		0A044B3B0FD32F07009B284F /* synced_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = synced_queue.h; sourceTree = "<group>"; };
-		0A044B3D0FD32F13009B284F /* actors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actors.h; sourceTree = "<group>"; };
+		0A044B3D0FD32F13009B284F /* actors.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = actors.h; sourceTree = "<group>"; tabWidth = 4; };
 		0AA9E7720FD46E18001F2C47 /* Array.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Array.som; sourceTree = "<group>"; };
 		0AA9E7730FD46E18001F2C47 /* BigInteger.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BigInteger.som; sourceTree = "<group>"; };
 		0AA9E7740FD46E18001F2C47 /* Block.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Block.som; sourceTree = "<group>"; };
@@ -90,6 +90,13 @@
 		0AA9E7CD0FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
 		0AA9E7CF0FD47034001F2C47 /* Counter.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Counter.som; sourceTree = "<group>"; };
 		0AA9E7D00FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
+		0AA9E84F0FD48076001F2C47 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9E8500FD48076001F2C47 /* Message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Message.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9E8850FD488D2001F2C47 /* GlobalObjectId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalObjectId.h; sourceTree = "<group>"; };
+		0AA9E88B0FD51435001F2C47 /* ActorMessaging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActorMessaging.h; sourceTree = "<group>"; };
+		0AA9E88C0FD51435001F2C47 /* ActorMessaging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorMessaging.cpp; sourceTree = "<group>"; };
+		0AA9E88D0FD51A78001F2C47 /* msg_buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msg_buffer.h; sourceTree = "<group>"; };
+		0AA9E88E0FD51A78001F2C47 /* msg_buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msg_buffer.cpp; sourceTree = "<group>"; };
 		349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMPointer.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20870FAC73020009EE70 /* VMPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointer.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20880FAC73020009EE70 /* VMPointerConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointerConverter.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
@@ -209,6 +216,13 @@
 				0A044B380FD32F07009B284F /* Interpreter.cpp */,
 				0A044B3A0FD32F07009B284F /* synced_queue.cpp */,
 				0A044B3B0FD32F07009B284F /* synced_queue.h */,
+				0AA9E84F0FD48076001F2C47 /* Message.h */,
+				0AA9E8500FD48076001F2C47 /* Message.cpp */,
+				0AA9E8850FD488D2001F2C47 /* GlobalObjectId.h */,
+				0AA9E88B0FD51435001F2C47 /* ActorMessaging.h */,
+				0AA9E88C0FD51435001F2C47 /* ActorMessaging.cpp */,
+				0AA9E88D0FD51A78001F2C47 /* msg_buffer.h */,
+				0AA9E88E0FD51A78001F2C47 /* msg_buffer.cpp */,
 			);
 			path = actors;
 			sourceTree = "<group>";

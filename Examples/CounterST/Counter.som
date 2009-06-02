@@ -1,0 +1,32 @@
+Counter = (
+
+    | value |
+    
+    value = (
+        ^value
+    )
+    
+    value: val = (
+      value := val
+    )
+    
+    inc = (
+      self lock.
+      
+        value := value + 1.
+      
+      self unlock
+    )
+    
+    -----
+    
+    "Allocation"
+    new              = ( ^self new: 0 )
+    new: value = (
+        | newCounter |
+        newCounter := super new.
+        newCounter value: value.
+        ^newCounter
+    )
+
+)

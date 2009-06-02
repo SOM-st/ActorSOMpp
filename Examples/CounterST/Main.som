@@ -1,0 +1,20 @@
+Main = (
+
+    "The 'run' method is called when initializing the system"
+    run = (
+      | sndThread counter |
+      
+      counter := Counter new.
+      
+      sndThread := [ counter inc ] spawn.
+      
+      " first thread == main thread "
+      
+      counter inc.
+      
+      sndThread join.
+      
+      'Counter Value: ' print.
+      (counter value) println
+    )
+)

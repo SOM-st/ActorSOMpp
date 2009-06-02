@@ -1,0 +1,18 @@
+Incrementor = (
+
+    | counter |
+    
+    run = (
+      counter async_inc.
+    )
+
+    -----
+
+    new: counter = (
+        | newIncrementor |
+        newIncrementor := super new.
+        newIncrementor counter: counter.
+        ^newIncrementor
+    )
+
+)

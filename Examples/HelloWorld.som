@@ -1,0 +1,15 @@
+HelloWorld = (
+
+    "The 'run' method is called when initializing the system"
+    run = (
+      (system rank = 0) ifTrue: [
+        'Hello World and see some actors:' println.
+        'Master: ' print.
+        system rank println.
+      ] ifFalse: [
+        'Follower: ' print.
+        system rank println.
+      ]
+    )
+    
+)
