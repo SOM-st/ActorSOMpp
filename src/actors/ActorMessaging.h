@@ -15,9 +15,9 @@
 class ActorMessaging {
 public:
  
-  bool HasIncommingMessages();
-  Message* ReceiveMessage();
-  void SendMessage(Message* msg, actor_id_t actorId);
+    static bool HasIncommingMessages();
+    static Message* ReceiveMessage();
+    static void SendMessage(Message* msg, actor_id_t actorId);
   
 private:
 
