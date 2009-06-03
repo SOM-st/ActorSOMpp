@@ -21,7 +21,7 @@
 #include "../actors/actors.h"
 
 //macro to access the object table
-#define _OBJECT_TABLE ObjectTable::getObjectTable()
+#define _OBJECT_TABLE ObjectTable::GetObjectTable()
 
 class VMObject;
 
@@ -38,7 +38,7 @@ public:
     } Index;
     
     // Singleton accessor
-    static ObjectTable& getObjectTable() {
+    static ObjectTable& GetObjectTable() {
         if (!theObjectTable) {
             theObjectTable = new ObjectTable();
         }
@@ -57,17 +57,17 @@ private:
     typedef struct Entry {
         Entry(VMObject* object) {
             content.object = object;
-            actor = actors_id();
+            //actor = actors_id();
         }        
-        Entry(VMObject* object, actor_id_t actor_id) {
+        /*Entry(VMObject* object, actor_id_t actor_id) {
             content.object = object;
             actor = actor_id;
-        }
+        }*/
         union {
             VMObject* object;
             Index     index;
         } content;
-        actor_id_t actor;
+        //actor_id_t actor; moved to VMPointer
     } Entry;
     
     // The singleton instance.
@@ -99,10 +99,11 @@ private:
     Index AddObject(VMObject* object);
     
     // Add remote object to table
-    Index AddRemoteObject(VMObject* object, actor_id_t actor);
+    //Index AddRemoteObject(VMObject* object, actor_id_t actor);
     
     // Mark object as omnipresent
-    void MarkOmnipresent(Index index);
+    //void MarkOmnipresent(Index index);
+    //TODO figure out whether we need this, omnipresents sounds like useful optimization...
     
     // Remove object from table
     void RemoveObject(Index index);
@@ -111,10 +112,10 @@ private:
     bool Contains(VMObject* object);
     
     // Check whether object is local or omnipresent
-    bool IsLocal(Index index) const;
+    //bool IsLocal(Index index) const;
 
     // Check whether object is remote
-    bool IsRemote(Index index) const;
+    //bool IsRemote(Index index) const;
 
 };
 

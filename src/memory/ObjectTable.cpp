@@ -24,15 +24,15 @@ VMObject* ObjectTable::operator[](Index index) const {
     return objectTable[index.value].content.object;
 }
 
-bool ObjectTable::IsLocal(Index index) const {
+/*bool ObjectTable::IsLocal(Index index) const {
     return (objectTable[index.value].actor == actors_id()
             || objectTable[index.value].actor == ACTOR_OMNI);
-}
+}*/
 
-bool ObjectTable::IsRemote(Index index) const {
+/*bool ObjectTable::IsRemote(Index index) const {
     return (objectTable[index.value].actor != actors_id()
             && objectTable[index.value].actor != ACTOR_OMNI);
-}
+}*/
 
 
 ObjectTable::Index ObjectTable::AddObject(VMObject* object) {
@@ -66,16 +66,17 @@ ObjectTable::Index ObjectTable::AddObject(VMObject* object) {
 }
 
 // Add remote object to table
-ObjectTable::Index ObjectTable::AddRemoteObject(VMObject* object, actor_id_t actor) {
-#warning not implemented
+/* ObjectTable::Index ObjectTable::AddRemoteObject(GlobalObjectId id) {
+// should remote objects become part of this object table?
+    // its rather in efficient to find them in the table, and a point object is created anyway
     Index idx;
     return idx;
-}
-
+} */
+ 
 // Mark object as omnipresent
-void ObjectTable::MarkOmnipresent(Index index) {
+/* void ObjectTable::MarkOmnipresent(Index index) {
 #warning not implemented
-}
+}*/
 
 void ObjectTable::RemoveObject(Index index) {
     if (index.value >= size) {
