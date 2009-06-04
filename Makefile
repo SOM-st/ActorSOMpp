@@ -35,6 +35,7 @@ export LIB_DIR	:=$(ROOT_DIR)/lib
 export ST_DIR	=$(ROOT_DIR)/Smalltalk
 export EX_DIR	=$(ROOT_DIR)/Examples
 export TEST_DIR	=$(ROOT_DIR)/TestSuite
+export UNITTEST_DIR=$(ROOT_DIR)/test
 
 ifeq ($(OS),)
 # only Windows has OS predefined.
@@ -44,4 +45,6 @@ else
 endif
 
 #############
+include $(BUILD_DIR)/vars.make
 include $(BUILD_DIR)/$(UNAME).make
+include $(BUILD_DIR)/test.make
