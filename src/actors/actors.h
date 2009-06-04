@@ -31,7 +31,7 @@ bool actors_is_remote(actor_id_t id);
 
 bool    actors_msgbuffer_holds_data();
 int32_t actors_msgbuffer_read_atom();
-void*   actors_msgbuffer_read_msg();
+void    actors_msgbuffer_read_msg(void** buffer, size_t* size);
 
 void    actors_msgbuffer_send_atom(actor_id_t actor_id, int32_t value);
 void    actors_msgbuffer_send_msg(actor_id_t actor_id, void* msg_buffer, size_t size);

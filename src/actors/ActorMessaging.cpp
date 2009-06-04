@@ -17,7 +17,9 @@ bool ActorMessaging::HasIncommingMessages() {
 }
 
 Message* ActorMessaging::ReceiveMessage() {
-    void* buffer = actors_msgbuffer_read_msg();
+    void* buffer;
+    size_t size;
+    actors_msgbuffer_read_msg(&buffer, &size);
     
     GlobalObjectId* receiver = (GlobalObjectId*)buffer;
     

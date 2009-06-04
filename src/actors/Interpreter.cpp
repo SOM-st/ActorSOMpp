@@ -43,7 +43,7 @@ pVMFrame _process_next_message() {
     
     pVMMethod method = _get_method_process_incomming_msgs(msg);
     
-    pVMFrame frame = _UNIVERSE->NewFrame(NULL, method);
+    pVMFrame frame = _UNIVERSE->NewFrame(pVMFrame(), method);
     frame->Push(msg->GetReceiver());
     
     for (size_t i = 0; i < msg->GetNumberOfArguments(); i++) {
