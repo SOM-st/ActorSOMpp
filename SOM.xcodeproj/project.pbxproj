@@ -95,6 +95,11 @@
 		0AA9E88C0FD51435001F2C47 /* ActorMessaging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorMessaging.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		0AA9EE680FD702CF001F2C47 /* VMPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMPointer.cpp; sourceTree = "<group>"; };
 		0AA9EF2A0FD71DB3001F2C47 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		0AA9EFBF0FD91C57001F2C47 /* VMRemoteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMRemoteObject.h; sourceTree = "<group>"; };
+		0AA9EFC00FD91C57001F2C47 /* VMRemoteObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMRemoteObject.cpp; sourceTree = "<group>"; };
+		0AA9EFD40FD93783001F2C47 /* std_map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = std_map.cpp; sourceTree = "<group>"; };
+		0AA9EFE90FD938F1001F2C47 /* RemoteObjectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = RemoteObjectManager.h; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9EFEA0FD938F1001F2C47 /* RemoteObjectManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteObjectManager.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMPointer.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20870FAC73020009EE70 /* VMPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointer.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20880FAC73020009EE70 /* VMPointerConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointerConverter.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
@@ -217,6 +222,8 @@
 				0AA9E8850FD488D2001F2C47 /* GlobalObjectId.h */,
 				0AA9E88B0FD51435001F2C47 /* ActorMessaging.h */,
 				0AA9E88C0FD51435001F2C47 /* ActorMessaging.cpp */,
+				0AA9EFE90FD938F1001F2C47 /* RemoteObjectManager.h */,
+				0AA9EFEA0FD938F1001F2C47 /* RemoteObjectManager.cpp */,
 			);
 			path = actors;
 			sourceTree = "<group>";
@@ -369,6 +376,7 @@
 			children = (
 				0AA9EE680FD702CF001F2C47 /* VMPointer.cpp */,
 				0AA9EF2A0FD71DB3001F2C47 /* main.cpp */,
+				0AA9EFD40FD93783001F2C47 /* std_map.cpp */,
 			);
 			path = test;
 			sourceTree = "<group>";
@@ -562,6 +570,8 @@
 				3F5203560FA6624C00E75857 /* VMString.h */,
 				3F5203570FA6624C00E75857 /* VMSymbol.cpp */,
 				3F5203580FA6624C00E75857 /* VMSymbol.h */,
+				0AA9EFBF0FD91C57001F2C47 /* VMRemoteObject.h */,
+				0AA9EFC00FD91C57001F2C47 /* VMRemoteObject.cpp */,
 			);
 			path = vmobjects;
 			sourceTree = "<group>";
@@ -583,6 +593,20 @@
 			passBuildSettingsInEnvironment = 0;
 			productName = make;
 		};
+		0AA9EFFD0FD93C31001F2C47 /* make unittests */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION) $(DBG_FLAGS) unittests ";
+			buildConfigurationList = 0AA9EFFE0FD93C31001F2C47 /* Build configuration list for PBXLegacyTarget "make unittests" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = "make unittests";
+			passBuildSettingsInEnvironment = 0;
+			productName = make;
+		};
 /* End PBXLegacyTarget section */
 
 /* Begin PBXProject section */
@@ -597,6 +621,7 @@
 			projectRoot = "";
 			targets = (
 				0A044AC70FD31F57009B284F /* make */,
+				0AA9EFFD0FD93C31001F2C47 /* make unittests */,
 			);
 		};
 /* End PBXProject section */
@@ -614,6 +639,28 @@
 			name = Debug;
 		};
 		0A044AC90FD31F57009B284F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = make;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		0AA9EFFF0FD93C31001F2C47 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DBG_FLAGS = "DBG_FLAGS=\"-DDEBUG -g3\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "make unitttests";
+			};
+			name = Debug;
+		};
+		0AA9F0000FD93C31001F2C47 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -648,6 +695,15 @@
 			buildConfigurations = (
 				0A044AC80FD31F57009B284F /* Debug */,
 				0A044AC90FD31F57009B284F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0AA9EFFE0FD93C31001F2C47 /* Build configuration list for PBXLegacyTarget "make unittests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AA9EFFF0FD93C31001F2C47 /* Debug */,
+				0AA9F0000FD93C31001F2C47 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
