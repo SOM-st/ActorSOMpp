@@ -26,95 +26,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-CC		=ag++
-CFLAGS		=-Wextra -Wno-endif-labels -D__STDC_LIMIT_MACROS --c_compiler /opt/local/bin/g++ --keep_woven $(DBG_FLAGS) $(INCLUDES)
+CC		=g++
+CFLAGS		=-Wextra -Wno-endif-labels $(DBG_FLAGS) $(INCLUDES)
+#-D__STDC_LIMIT_MACROS --c_compiler /opt/local/bin/g++ --keep_woven 
 LDFLAGS		=$(LIBRARIES)
 
 SHAREDFLAGS	= -shared
 
 INSTALL		=install
 
-CSOM_LIBS	=
-CORE_LIBS	=-lm
+CSOM_LIBS	=-lpthread
+CORE_LIBS	=-lm -lpthread
 
 CSOM_NAME	=SOM++
 CORE_NAME	=SOMCore
 PRIMITIVESCORE_NAME  =PrimitiveCore
 SHARED_EXTENSION    =so
 
-############ global stuff -- overridden by ../Makefile
 
-ROOT_DIR	?= $(shell pwd)/..
-SRC_DIR		?= $(ROOT_DIR)/src
-BUILD_DIR   ?= $(ROOT_DIR)/build
-DEST_DIR	?= $(ROOT_DIR)/build.out
-
-ST_DIR		?= $(ROOT_DIR)/Smalltalk
-EX_DIR		?= $(ROOT_DIR)/Examples
-TEST_DIR	?= $(ROOT_DIR)/TestSuite
-
-############# "component" directories
-
-
-COMPILER_DIR 	= $(SRC_DIR)/compiler
-INTERPRETER_DIR = $(SRC_DIR)/interpreter
-MEMORY_DIR 		= $(SRC_DIR)/memory
-MISC_DIR 		= $(SRC_DIR)/misc
-VM_DIR 			= $(SRC_DIR)/vm
-VMOBJECTS_DIR 	= $(SRC_DIR)/vmobjects
-
-COMPILER_SRC	= $(wildcard $(COMPILER_DIR)/*.cpp)
-COMPILER_OBJ	= $(COMPILER_SRC:.cpp=.o)
-INTERPRETER_SRC	= $(wildcard $(INTERPRETER_DIR)/*.cpp)
-INTERPRETER_OBJ	= $(INTERPRETER_SRC:.cpp=.o)
-MEMORY_SRC		= $(wildcard $(MEMORY_DIR)/*.cpp)
-MEMORY_OBJ		= $(MEMORY_SRC:.cpp=.o)
-MISC_SRC		= $(wildcard $(MISC_DIR)/*.cpp)
-MISC_OBJ		= $(MISC_SRC:.cpp=.o)
-VM_SRC			= $(wildcard $(VM_DIR)/*.cpp)
-VM_OBJ			= $(VM_SRC:.cpp=.o)
-VMOBJECTS_SRC	= $(wildcard $(VMOBJECTS_DIR)/*.cpp)
-VMOBJECTS_OBJ	= $(VMOBJECTS_SRC:.cpp=.o)
-
-MAIN_SRC		= $(wildcard $(SRC_DIR)/*.cpp)
-#$(SRC_DIR)/Main.cpp
-MAIN_OBJ		= $(MAIN_SRC:.cpp=.o)
-#$(SRC_DIR)/main.o
-
-############# primitives loading
-
-PRIMITIVESCORE_DIR = $(SRC_DIR)/primitivesCore
-PRIMITIVESCORE_SRC = $(wildcard $(PRIMITIVESCORE_DIR)/*.cpp)
-PRIMITIVESCORE_OBJ = $(PRIMITIVESCORE_SRC:.cpp=.pic.o)
-
-############# primitives location etc.
-
-PRIMITIVES_DIR	= $(SRC_DIR)/primitives
-PRIMITIVES_SRC	= $(wildcard $(PRIMITIVES_DIR)/*.cpp)
-PRIMITIVES_OBJ	= $(PRIMITIVES_SRC:.cpp=.pic.o)
-
-############# include path
-
-INCLUDES		=-I$(SRC_DIR)
-LIBRARIES		=-L$(ROOT_DIR)
-
-##############
-############## Collections.
-
-CSOM_OBJ		=  $(MEMORY_OBJ) $(MISC_OBJ) $(VMOBJECTS_OBJ) \
-				$(COMPILER_OBJ) $(INTERPRETER_OBJ) $(VM_OBJ)
-
-OBJECTS			= $(CSOM_OBJ) $(PRIMITIVESCORE_OBJ) $(PRIMITIVES_OBJ) $(MAIN_OBJ)
-
-SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
-				$(MISC_SRC) $(VM_SRC) $(VMOBJECTS_SRC)  \
-				$(PRIMITIVES_SRC) $(PRIMITIVESCORE_SRC) $(MAIN_SRC)
-
-############# Things to clean
-
-CLEAN			= $(OBJECTS) \
-				$(DIST_DIR) $(DEST_DIR) CORE $(CSOM_NAME)
 ############# Tools
+
 
 #
 #
@@ -142,15 +73,31 @@ profiling : DBG_FLAGS=-g -pg
 profiling : LDFLAGS+=-pg
 profiling: all
 
+# pull in dependency info for *existing* .o files
+-include $(CSOM_OBJ:.o=.d)
 
 .cpp.pic.o:
 	$(CC) $(CFLAGS) -fPIC -c $< -o $*.pic.o
+	@$(CC) -MM $(CFLAGS) $< > $*.pic.d
+	@mv -f $*.pic.d $*.pic.d.tmp
+	@sed -e 's|.*:|$*.pic.o:|' < $*.pic.d.tmp > $*.pic.d
+	@sed -e 's/.*://' -e 's/\\$$//' < $*.pic.d.tmp | fmt -1 | \
+	  sed -e 's/^ *//' -e 's/$$/:/' >> $*.pic.d
+	@rm -f $*.pic.d.tmp
 
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $*.o
+	@$(CC) -MM $(CFLAGS) $< > $*.d
+	@$(CC) -MM $(CFLAGS) $< > $*.d
+	@mv -f $*.d $*.d.tmp
+	@sed -e 's|.*:|$*.o:|' < $*.d.tmp > $*.d
+	@sed -e 's/.*://' -e 's/\\$$//' < $*.d.tmp | fmt -1 | \
+	  sed -e 's/^ *//' -e 's/$$/:/' >> $*.d
+	@rm -f $*.d.tmp
 
 clean:
-	rm -Rf $(CLEAN)
+	rm -Rf $(CLEAN) $(CSOM_OBJ:.o=.d)
+	-rm -Rf $(UT_BUILD_DIR)
 
 
 
@@ -162,14 +109,14 @@ clean:
 
 $(CSOM_NAME): $(CSOM_NAME).$(SHARED_EXTENSION) $(MAIN_OBJ)
 	@echo Linking $(CSOM_NAME) loader
-	$(CC) $(LDFLAGS) \
-		-o $(CSOM_NAME) $(MAIN_OBJ) $(CSOM_NAME).$(SHARED_EXTENSION) -ldl
+	$(CC) $(LDFLAGS) -We,--rpath=. \
+		-o $(CSOM_NAME) $(MAIN_OBJ) $(CSOM_NAME).$(SHARED_EXTENSION) -ldl -lpthread -lrt
 	@echo loader done.
 
 $(CSOM_NAME).$(SHARED_EXTENSION): $(CSOM_OBJ)
 	@echo Linking $(CSOM_NAME) Dynamic Library
 	$(CC) $(LDFLAGS) $(SHAREDFLAGS) \
-		-o $(CSOM_NAME).$(SHARED_EXTENSION) $(CSOM_OBJ) $(CSOM_LIBS)
+		-o $(CSOM_NAME).$(SHARED_EXTENSION) $(CSOM_OBJ) $(CSOM_LIBS) -ldl -lpthread -lrt
 	@echo CSOM done.
 
 $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION): $(CSOM_NAME) $(PRIMITIVESCORE_OBJ)

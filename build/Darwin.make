@@ -45,7 +45,7 @@ CORE_NAME	=SOMCore
 PRIMITIVESCORE_NAME  =PrimitiveCore
 SHARED_EXTENSION    =dylib
 
-              
+
 ############# Tools
 
 #
