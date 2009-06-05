@@ -96,6 +96,10 @@ public:
     pVMObject Self() const {
         return self_pointer;
     }
+    
+    virtual bool IsRemote() {
+        return false;
+    }
 	
     /* Operators */
     

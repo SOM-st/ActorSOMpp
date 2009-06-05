@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "Universe.h"
 #include "Shell.h"
 
+#include "../actors/GlobalObjectId.h"
+
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMObject.h"
 #include "../vmobjects/VMMethod.h"
@@ -46,6 +48,7 @@ THE SOFTWARE.
 #include "../vmobjects/VMEvaluationPrimitive.h"
 #include "../vmobjects/Symboltable.h"
 #include "../vmobjects/VMPointerConverter.h"
+#include "../vmobjects/VMRemoteObject.h"
 
 #include "../interpreter/bytecodes.h"
 
@@ -107,6 +110,10 @@ void Universe::Start(int argc, char** argv) {
 
 
 void Universe::Quit(int err) {
+    if (actors_is_main_actor()) {
+        actors_shutdown();
+    }
+    
     if (theUniverse) delete(theUniverse);
 
     exit(err);
@@ -254,6 +261,11 @@ void Universe::initialize(int _argc, char** _argv) {
     this->SetGlobal(SymbolForChars("system"), systemObject);
     this->SetGlobal(SymbolForChars("System"), systemClass);
     this->SetGlobal(SymbolForChars("Block"), blockClass);
+    
+    if (!actors_is_main_actor()) {
+        interpreter->ProcessIncommingMessages();
+        return;
+    }
     
     pVMMethod bootstrapMethod = NewMethod(SymbolForChars("bootstrap"), 1, 0);
     bootstrapMethod->SetBytecode(0, BC_HALT);
@@ -513,6 +525,11 @@ void Universe::LoadSystemClass( pVMClass systemClass) {
         result->LoadPrimitives(classPath);
 }
 
+
+pVMRemoteObject Universe::NewRemoteObject(GlobalObjectId id) const {
+    VMRemoteObject* result = new (_HEAP) VMRemoteObject(id);
+    
+}
 
 pVMArray Universe::NewArray( int size) const {
     int additionalBytes = size*sizeof(pVMObject);

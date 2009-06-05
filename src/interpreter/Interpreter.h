@@ -52,11 +52,16 @@ public:
     pVMFrame GetFrame();
     pVMMethod GetMethod();
     pVMObject GetSelf();
+    
+    void Stop();
+    void ProcessIncommingMessages();
 private:
     pVMFrame frame;
     StdString uG;
     StdString dnu;
     StdString eB;
+    
+    bool stop;
 
     pVMFrame popFrame();
     void popFrameAndPushResult(pVMObject result);

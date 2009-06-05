@@ -1,11 +1,11 @@
 /*
- *  Message.cpp
+ *  VMRemoteObject.cpp
  *  SOM
  *
- *  Created by Stefan Marr on 01/06/09.
+ *  Created by Stefan Marr on 05/06/09.
  *  Copyright 2009 Vrije Universiteit Brussel. All rights reserved.
  *
  */
 
-#include "Message.h"
+#include "VMRemoteObject.h"
 

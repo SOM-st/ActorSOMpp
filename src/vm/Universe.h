@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include <map>
 #include <vector>
 
+#include "../actors/GlobalObjectId.h"
+
 #include "../misc/defs.h"
 #include "../misc/ExtendedList.h"
 
@@ -55,6 +57,7 @@ class VMInteger;
 //class VMProtoInteger;
 class VMMethod;
 class VMString;
+class VMRemoteObject;
 class VMBigInteger;
 class VMEvaluationPrimitive;
 class Symboltable;
@@ -118,6 +121,7 @@ public:
     pVMSymbol     SymbolForChars(const char*);
 
     //VMObject instanciation methods. These should probably be refactored to a new class
+    pVMRemoteObject NewRemoteObject(GlobalObjectId id) const;
     pVMArray      NewArray(int) const;
     pVMArray      NewArrayList(ExtendedList<pVMObject>& list) const;
     pVMArray      NewArrayFromArgv(const vector<StdString>&) const;

@@ -54,7 +54,7 @@ Interpreter::Interpreter() : frame() {
     uG = "unknownGlobal:";
     dnu = "doesNotUnderstand:arguments:";
     eB = "escapedBlock:";
-    
+    stop = false;
 }
 
 
@@ -384,3 +384,6 @@ void Interpreter::do_RETURN_NON_LOCAL(int) {
     this->popFrameAndPushResult(result);
 }
 
+void Interpreter::Stop() {
+    stop = true;
+}

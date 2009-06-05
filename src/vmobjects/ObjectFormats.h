@@ -42,7 +42,7 @@ THE SOFTWARE.
 #define pVMPrimitive VMPointer<VMPrimitive> 
 #define pVMString VMPointer<VMString> 
 #define pVMSymbol VMPointer<VMSymbol> 
-
+#define pVMRemoteObject VMPointer<VMRemoteObject>
 
 
 

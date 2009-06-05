@@ -67,7 +67,7 @@ private:
             VMObject* object;
             Index     index;
         } content;
-        //actor_id_t actor; moved to VMPointer
+        //actor_id_t actor; moved to VMRemoteObject
     } Entry;
     
     // The singleton instance.

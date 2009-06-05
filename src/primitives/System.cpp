@@ -107,6 +107,10 @@ void _System::Rank(pVMObject /*object*/, pVMFrame frame) {
     frame->Push((pVMObject)_UNIVERSE->NewInteger(actors_id()));
 }
 
+void _System::Stop(pVMObject /*object*/, pVMFrame frame) {
+    _UNIVERSE->GetInterpreter()->Stop();
+}
+
 void  _System::Time(pVMObject /*object*/, pVMFrame frame) {
     /*pVMObject self = */
     frame->Pop();
@@ -160,7 +164,11 @@ _System::_System(void) : PrimitiveContainer() {
 
     this->SetPrimitive("rank", 
         static_cast<PrimitiveRoutine*>(new 
-        Routine<_System>(this, &_System::Rank)));    
+        Routine<_System>(this, &_System::Rank)));
+
+    this->SetPrimitive("stop", 
+        static_cast<PrimitiveRoutine*>(new 
+        Routine<_System>(this, &_System::Stop)));
     
     this->SetPrimitive("time", 
         static_cast<PrimitiveRoutine*>(new 

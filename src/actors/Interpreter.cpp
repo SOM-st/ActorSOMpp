@@ -1,5 +1,5 @@
 /*
- *  Interpreter.c
+ *  Interpreter.cpp
  *  CSOM
  *
  *  Created by Stefan Marr on 28/05/09.
@@ -21,7 +21,7 @@ ExtendedList<pVMObject> activations;  // list of VMFrames representing co-routin
 
 
 
-pVMMethod _get_method_process_incomming_msgs(Message* msg) {
+pVMMethod _get_method_process_incomming_msgs(SomMessage* msg) {
     pVMMethod method = _UNIVERSE->NewMethod(_UNIVERSE->SymbolForChars("process_incomming_msgs"), 3, 1);
     method->SetNumberOfLocals(0);
     method->SetMaximumNumberOfStackElements(1 + msg->GetNumberOfArguments());
@@ -39,7 +39,7 @@ pVMMethod _get_method_process_incomming_msgs(Message* msg) {
 }
 
 pVMFrame _process_next_message() {
-    Message* msg = ActorMessaging::ReceiveMessage();
+    SomMessage* msg = ActorMessaging::ReceiveMessage();
     
     pVMMethod method = _get_method_process_incomming_msgs(msg);
     
@@ -55,7 +55,7 @@ pVMFrame _process_next_message() {
 }
 
 void Interpreter::do_YIELD(int) {
-    pVMFrame current_frame = _UNIVERSE->GetInterpreter()->GetFrame();
+    pVMFrame current_frame = GetFrame();
     activations.PushBack(current_frame);
     
     pVMFrame new_frame;
@@ -66,9 +66,26 @@ void Interpreter::do_YIELD(int) {
         new_frame = activations.Front();
     }
     
-    _UNIVERSE->GetInterpreter()->SetFrame(new_frame);
+    SetFrame(new_frame);
 }
 
 void Interpreter::do_SEND_ASYNC(int) {
 #warning not implemented
+}
+
+void Interpreter::ProcessIncommingMessages() {
+    while (ActorMessaging::HasIncommingMessages() || !stop) {
+        pVMFrame frame = _process_next_message();
+        pVMFrame new_frame;
+        // receive message and construct frame/co-routine
+        if (ActorMessaging::HasIncommingMessages()) {
+            new_frame = _process_next_message();
+        } else {
+            new_frame = activations.Front();
+        }
+        
+        SetFrame(new_frame);
+        
+        Start();
+    }
 }

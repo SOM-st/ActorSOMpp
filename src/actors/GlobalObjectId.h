@@ -16,6 +16,14 @@
 typedef struct GlobalObjectId {
   ObjectTable::Index  index;
   actor_id_t          actor_id;
+  
+  inline int operator<(const GlobalObjectId o) const {
+    if (actor_id < o.actor_id) 
+      return true;
+    
+    return actor_id == o.actor_id && index.value < o.index.value;
+  }
+  
 } GlobalObjectId;
 
 #endif

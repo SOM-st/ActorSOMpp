@@ -10,14 +10,14 @@
 #ifndef _ACTOR_MESSAGING_H_
 #define _ACTOR_MESSAGING_H_
 
-#include "Message.h"
+#include "messages.h"
 
 class ActorMessaging {
 public:
  
     static bool HasIncommingMessages();
-    static Message* ReceiveMessage();
-    static void SendMessage(Message* msg, actor_id_t actorId);
+    static SomMessage* ReceiveMessage();
+    static void SendMessage(SomMessage* msg, actor_id_t actorId);
   
 private:
 

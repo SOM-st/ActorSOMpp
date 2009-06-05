@@ -23,8 +23,10 @@ typedef uint8_t actor_id_t;
 
 void actors_init();
 void actors_start(int argc, char** argv);
+void actors_shutdown();
 
 actor_id_t actors_id();
+bool actors_is_main_actor();
 bool actors_is_local(actor_id_t id);
 bool actors_is_remote(actor_id_t id);
 

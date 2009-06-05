@@ -1,12 +1,9 @@
 /*
- *  actors.c
+ *  actors.cpp
  *  CSOM
  *
  *  Created by Stefan Marr on 26/05/09.
  *  Copyright 2009 Vrije Universiteit Brussel. All rights reserved.
- *
- *  REM: in my implementation of the ilib, almost every thing is identified by
- *       the rank only, so no special mapping facilities necessary so far
  *
  */
 
@@ -42,6 +39,9 @@ actor_id_t  _local_id;
 bool        _main_actor;
 pid_t       _parent_pid;
 pid_t       _pid;
+
+pid_t       _actor_processes[NUMBER_OF_ACTORS];
+
 // pointer to global information
 p_actor_globals _globals = NULL;
 
@@ -51,7 +51,7 @@ static actor_id_t _main_id = 0;
 
 #define SHARED_MEM_ID "/actor_comm_space_I"
 
-void _unit() {
+void _uninit() {
     if (_main_actor) {
         pthread_mutex_destroy(&_globals->global_lock);
     }
@@ -61,6 +61,12 @@ void _unit() {
     if (_main_actor) {
         shm_unlink(SHARED_MEM_ID);
     }
+}
+
+void _unit_main() {
+    pthread_mutex_destroy(&_globals->global_lock);
+    munmap(_globals, sizeof(actor_globals));
+    shm_unlink(SHARED_MEM_ID);
 }
 
 void _init_global_data_structures() {
@@ -141,7 +147,7 @@ void _init_process_local_data() {
 
     pthread_mutex_unlock(&_globals->global_lock);
 
-    atexit(_unit);  // register clean up hook
+    atexit(_uninit);  // register clean up hook
 }
 
 void actors_init() {
@@ -191,6 +197,8 @@ void actors_init() {
 }
 
 void _go_parallel(char** argv) {
+    _actor_processes[0] = _pid;
+    
     for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
         pid_t pid = fork();
 
@@ -199,11 +207,11 @@ void _go_parallel(char** argv) {
             execv(argv[0], argv);
         } else if (pid > 0) {
             // master
-            // do not do anything here, just go on with the loop
+            _actor_processes[i] = pid;
         } else {
             // error
             // TODO: do it properly
-            perror("Error in ilib_proc_exec");
+            perror("Error in _go_parallel");
         }
     }
 }
@@ -228,10 +236,21 @@ void actors_start(int argc, char** argv) {
   }
 }
 
-
+void actors_shutdown() {
+    // send message to force shut down
+    
+    // wait for childs
+    for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
+        waitpid(_actor_processes[i], NULL, 0);
+    }
+}
 
 actor_id_t actors_id() {
-  return _local_id;
+    return _local_id;
+}
+
+bool actors_is_main_actor() {
+    return _local_id == 0;
 }
 
 bool actors_is_local(actor_id_t id) { return id == _local_id; }
