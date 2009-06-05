@@ -88,8 +88,6 @@
 		0AA9E7CD0FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
 		0AA9E7CF0FD47034001F2C47 /* Counter.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Counter.som; sourceTree = "<group>"; };
 		0AA9E7D00FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
-		0AA9E84F0FD48076001F2C47 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; tabWidth = 4; };
-		0AA9E8500FD48076001F2C47 /* Message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Message.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		0AA9E8850FD488D2001F2C47 /* GlobalObjectId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalObjectId.h; sourceTree = "<group>"; };
 		0AA9E88B0FD51435001F2C47 /* ActorMessaging.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = ActorMessaging.h; sourceTree = "<group>"; tabWidth = 4; };
 		0AA9E88C0FD51435001F2C47 /* ActorMessaging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorMessaging.cpp; sourceTree = "<group>"; tabWidth = 4; };
@@ -100,6 +98,8 @@
 		0AA9EFD40FD93783001F2C47 /* std_map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = std_map.cpp; sourceTree = "<group>"; };
 		0AA9EFE90FD938F1001F2C47 /* RemoteObjectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = RemoteObjectManager.h; sourceTree = "<group>"; tabWidth = 4; };
 		0AA9EFEA0FD938F1001F2C47 /* RemoteObjectManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteObjectManager.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9F0D20FD9A77E001F2C47 /* messages.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = messages.h; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9F0E80FD9BC93001F2C47 /* messages.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = messages.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMPointer.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20870FAC73020009EE70 /* VMPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointer.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20880FAC73020009EE70 /* VMPointerConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointerConverter.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
@@ -217,13 +217,13 @@
 				0A044B380FD32F07009B284F /* Interpreter.cpp */,
 				0A044B3A0FD32F07009B284F /* synced_queue.cpp */,
 				0A044B3B0FD32F07009B284F /* synced_queue.h */,
-				0AA9E84F0FD48076001F2C47 /* Message.h */,
-				0AA9E8500FD48076001F2C47 /* Message.cpp */,
 				0AA9E8850FD488D2001F2C47 /* GlobalObjectId.h */,
 				0AA9E88B0FD51435001F2C47 /* ActorMessaging.h */,
 				0AA9E88C0FD51435001F2C47 /* ActorMessaging.cpp */,
 				0AA9EFE90FD938F1001F2C47 /* RemoteObjectManager.h */,
 				0AA9EFEA0FD938F1001F2C47 /* RemoteObjectManager.cpp */,
+				0AA9F0D20FD9A77E001F2C47 /* messages.h */,
+				0AA9F0E80FD9BC93001F2C47 /* messages.cpp */,
 			);
 			path = actors;
 			sourceTree = "<group>";
