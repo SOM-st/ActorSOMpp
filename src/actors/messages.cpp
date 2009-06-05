@@ -18,7 +18,7 @@ Message* Message::Deserialize(void* buffer) {
     buffer = (void*)((intptr_t)buffer + sizeof(int32_t));
     
     switch (msgType) {
-        case EXIT_MSG:       return new ExitMsg(buffer);
+        case EXIT_MSG:       return new ExitMsg();
         case SOM_MSG:       return new SomMessage(buffer);
         default:
             warnx("Message::Deserialize: unexpected msgType\n");

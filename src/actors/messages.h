@@ -57,14 +57,14 @@ private:
 class EmptyMessage : public Message {
 public:
     EmptyMessage(Messages msgType) : Message(msgType) {}
-    EmptyMessage(void*) : Message(ABSTRACT_MSG) {}
+    EmptyMessage() : Message(ABSTRACT_MSG) {}
 };
 
 
 
 class ExitMsg : public EmptyMessage {
 public:
-    ExitMsg(void*) : EmptyMessage(EXIT_MSG) {};
+    ExitMsg() : EmptyMessage(EXIT_MSG) {};
     virtual void Process();
 };
 

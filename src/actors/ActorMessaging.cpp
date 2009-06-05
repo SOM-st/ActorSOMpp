@@ -31,8 +31,7 @@ SomMessage* ActorMessaging::ReceiveMessage() {
     return (SomMessage*)result;
 }
 
-void ActorMessaging::SendMessage(SomMessage* msg, actor_id_t actorId) {
-    size_t sig_len = strlen(msg->signature);
+void ActorMessaging::SendMessage(Message* msg, actor_id_t actorId) {
     size_t buffer_size = msg->GetSize();
   
     // this size alignment is for the syncedqueue implementation which uses int32_t as smallest units

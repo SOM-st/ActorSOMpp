@@ -17,7 +17,7 @@ public:
  
     static bool HasIncommingMessages();
     static SomMessage* ReceiveMessage();
-    static void SendMessage(SomMessage* msg, actor_id_t actorId);
+    static void SendMessage(Message* msg, actor_id_t actorId);
   
 private:
 

@@ -23,6 +23,8 @@
 #include "../vmobjects/ObjectFormats.h"
 #include "../vmobjects/VMPointer.h"
 #include "synced_queue.h"
+#include "messages.h"
+#include "ActorMessaging.h"
 
 #define ACTOR_QUEUE_BUFFER_SIZE 256
 
@@ -238,6 +240,10 @@ void actors_start(int argc, char** argv) {
 
 void actors_shutdown() {
     // send message to force shut down
+    ExitMsg msg;
+    for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
+        ActorMessaging::SendMessage(&msg, i);
+    }
     
     // wait for childs
     for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
