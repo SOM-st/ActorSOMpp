@@ -92,7 +92,7 @@ public:
     // This actually sets the self_pointer according to the object table index
     void SetObjectTableIndex(ObjectTable::Index index);
     
-    // We have to use Self() instead of "this" (except for method calls)
+    // We have to use Self() instead of "this" in case we hand around pointers (except for method calls)
     pVMObject Self() const {
         return self_pointer;
     }

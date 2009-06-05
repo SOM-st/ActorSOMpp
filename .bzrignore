@@ -5,3 +5,4 @@
 CORE
 SOM++
 build/SOM.build
+build/tests

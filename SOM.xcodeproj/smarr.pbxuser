@@ -2150,9 +2150,9 @@
 	};
 	0AA9E84F0FD48076001F2C47 /* Message.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1357, 726}}";
-			sepNavSelRange = "{1406, 0}";
-			sepNavVisRange = "{136, 1270}";
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 686}}";
+			sepNavSelRange = "{1152, 0}";
+			sepNavVisRange = "{460, 946}";
 		};
 	};
 	0AA9E8500FD48076001F2C47 /* Message.cpp */ = {
@@ -11953,6 +11953,254 @@
 		vrLen = 359;
 		vrLoc = 0;
 	};
+	0AA9EF9F0FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0AA9EE680FD702CF001F2C47 /* VMPointer.cpp */;
+		name = "VMPointer.cpp: 17";
+		rLen = 0;
+		rLoc = 306;
+		rType = 0;
+		vrLen = 359;
+		vrLoc = 0;
+	};
+	0AA9EFA00FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203510FA6624C00E75857 /* VMObject.cpp */;
+		name = "VMObject.cpp: 134";
+		rLen = 0;
+		rLoc = 3647;
+		rType = 0;
+		vrLen = 488;
+		vrLoc = 2809;
+	};
+	0AA9EFA10FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203450FA6624C00E75857 /* VMEvaluationPrimitive.cpp */;
+		name = "VMEvaluationPrimitive.cpp: 44";
+		rLen = 3;
+		rLoc = 1727;
+		rType = 0;
+		vrLen = 829;
+		vrLoc = 1294;
+	};
+	0AA9EFA20FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203470FA6624C00E75857 /* VMFrame.cpp */;
+		name = "VMFrame.cpp: 45";
+		rLen = 3;
+		rLoc = 1840;
+		rType = 0;
+		vrLen = 1036;
+		vrLoc = 1364;
+	};
+	0AA9EFA30FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203410FA6624C00E75857 /* VMClass.cpp */;
+		name = "VMClass.cpp: 100";
+		rLen = 3;
+		rLoc = 3449;
+		rType = 0;
+		vrLen = 1091;
+		vrLoc = 2501;
+	};
+	0AA9EFA40FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203320FA6624C00E75857 /* Universe.cpp */;
+		name = "Universe.cpp: 701";
+		rLen = 21;
+		rLoc = 21621;
+		rType = 0;
+		vrLen = 752;
+		vrLoc = 21181;
+	};
+	0AA9EFA50FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203460FA6624C00E75857 /* VMEvaluationPrimitive.h */;
+		name = "VMEvaluationPrimitive.h: 38";
+		rLen = 11;
+		rLoc = 1437;
+		rType = 0;
+		vrLen = 653;
+		vrLoc = 1068;
+	};
+	0AA9EFA60FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203540FA6624C00E75857 /* VMPrimitive.h */;
+		name = "VMPrimitive.h: 39";
+		rLen = 11;
+		rLoc = 1427;
+		rType = 0;
+		vrLen = 788;
+		vrLoc = 1379;
+	};
+	0AA9EFA70FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F52034E0FA6624C00E75857 /* VMInvokable.h */;
+		name = "VMInvokable.h: 38";
+		rLen = 8;
+		rLoc = 1428;
+		rType = 0;
+		vrLen = 584;
+		vrLoc = 1295;
+	};
+	0AA9EFA80FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203520FA6624C00E75857 /* VMObject.h */;
+		name = "VMObject.h: 63";
+		rLen = 17;
+		rLoc = 2259;
+		rType = 0;
+		vrLen = 612;
+		vrLoc = 4544;
+	};
+	0AA9EFA90FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: no matching function for call to 'VMPointer<VMObject>::VMPointer(GlobalObjectId&)'";
+		fRef = 0AA9E84F0FD48076001F2C47 /* Message.h */;
+		rLen = 1;
+		rLoc = 34;
+		rType = 1;
+	};
+	0AA9EFAA0FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0AA9EE680FD702CF001F2C47 /* VMPointer.cpp */;
+		name = "VMPointer.cpp: 17";
+		rLen = 0;
+		rLoc = 306;
+		rType = 0;
+		vrLen = 359;
+		vrLoc = 0;
+	};
+	0AA9EFAB0FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203520FA6624C00E75857 /* VMObject.h */;
+		name = "VMObject.h: 46";
+		rLen = 6;
+		rLoc = 1454;
+		rType = 0;
+		vrLen = 533;
+		vrLoc = 4630;
+	};
+	0AA9EFAC0FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203510FA6624C00E75857 /* VMObject.cpp */;
+		name = "VMObject.cpp: 134";
+		rLen = 0;
+		rLoc = 3647;
+		rType = 0;
+		vrLen = 488;
+		vrLoc = 2809;
+	};
+	0AA9EFAD0FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203470FA6624C00E75857 /* VMFrame.cpp */;
+		name = "VMFrame.cpp: 45";
+		rLen = 3;
+		rLoc = 1840;
+		rType = 0;
+		vrLen = 1036;
+		vrLoc = 1364;
+	};
+	0AA9EFAE0FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203450FA6624C00E75857 /* VMEvaluationPrimitive.cpp */;
+		name = "VMEvaluationPrimitive.cpp: 44";
+		rLen = 3;
+		rLoc = 1727;
+		rType = 0;
+		vrLen = 829;
+		vrLoc = 1294;
+	};
+	0AA9EFAF0FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203470FA6624C00E75857 /* VMFrame.cpp */;
+		name = "VMFrame.cpp: 45";
+		rLen = 3;
+		rLoc = 1840;
+		rType = 0;
+		vrLen = 1036;
+		vrLoc = 1364;
+	};
+	0AA9EFB00FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203410FA6624C00E75857 /* VMClass.cpp */;
+		name = "VMClass.cpp: 100";
+		rLen = 3;
+		rLoc = 3449;
+		rType = 0;
+		vrLen = 1091;
+		vrLoc = 2501;
+	};
+	0AA9EFB10FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203320FA6624C00E75857 /* Universe.cpp */;
+		name = "Universe.cpp: 701";
+		rLen = 21;
+		rLoc = 21621;
+		rType = 0;
+		vrLen = 752;
+		vrLoc = 21181;
+	};
+	0AA9EFB20FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203460FA6624C00E75857 /* VMEvaluationPrimitive.h */;
+		name = "VMEvaluationPrimitive.h: 38";
+		rLen = 11;
+		rLoc = 1437;
+		rType = 0;
+		vrLen = 653;
+		vrLoc = 1068;
+	};
+	0AA9EFB30FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203540FA6624C00E75857 /* VMPrimitive.h */;
+		name = "VMPrimitive.h: 39";
+		rLen = 11;
+		rLoc = 1427;
+		rType = 0;
+		vrLen = 788;
+		vrLoc = 1379;
+	};
+	0AA9EFB40FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F52034E0FA6624C00E75857 /* VMInvokable.h */;
+		name = "VMInvokable.h: 38";
+		rLen = 8;
+		rLoc = 1428;
+		rType = 0;
+		vrLen = 584;
+		vrLoc = 1295;
+	};
+	0AA9EFB50FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3F5203520FA6624C00E75857 /* VMObject.h */;
+		name = "VMObject.h: 63";
+		rLen = 17;
+		rLoc = 2259;
+		rType = 0;
+		vrLen = 612;
+		vrLoc = 4544;
+	};
+	0AA9EFB60FD91A24001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0AA9E84F0FD48076001F2C47 /* Message.h */;
+		name = "Message.h: 36";
+		rLen = 0;
+		rLoc = 1152;
+		rType = 0;
+		vrLen = 822;
+		vrLoc = 540;
+	};
+	0AA9EFBA0FD91A7E001F2C47 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0AA9E84F0FD48076001F2C47 /* Message.h */;
+		name = "Message.h: 36";
+		rLen = 0;
+		rLoc = 1152;
+		rType = 0;
+		vrLen = 946;
+		vrLoc = 460;
+	};
 	349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1171, 672}}";
@@ -13198,6 +13446,31 @@
 			0AA9EF9A0FD90880001F2C47 /* PBXTextBookmark */ = 0AA9EF9A0FD90880001F2C47 /* PBXTextBookmark */;
 			0AA9EF9B0FD90895001F2C47 /* PBXTextBookmark */ = 0AA9EF9B0FD90895001F2C47 /* PBXTextBookmark */;
 			0AA9EF9C0FD908F2001F2C47 /* PBXTextBookmark */ = 0AA9EF9C0FD908F2001F2C47 /* PBXTextBookmark */;
+			0AA9EF9F0FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EF9F0FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA00FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA00FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA10FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA10FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA20FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA20FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA30FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA30FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA40FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA40FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA50FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA50FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA60FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA60FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA70FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA70FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA80FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA80FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFA90FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFA90FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFAA0FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFAA0FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFAB0FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFAB0FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFAC0FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFAC0FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFAD0FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFAD0FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFAE0FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFAE0FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFAF0FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFAF0FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFB00FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFB00FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFB10FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFB10FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFB20FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFB20FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFB30FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFB30FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFB40FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFB40FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFB50FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFB50FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFB60FD91A24001F2C47 /* PBXTextBookmark */ = 0AA9EFB60FD91A24001F2C47 /* PBXTextBookmark */;
+			0AA9EFBA0FD91A7E001F2C47 /* PBXTextBookmark */ = 0AA9EFBA0FD91A7E001F2C47 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3F7679570FA6689200E00AE8 /* Source Control */;
 		userBuildSettings = {
@@ -13387,9 +13660,9 @@
 	};
 	3F5203320FA6624C00E75857 /* Universe.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {748, 9996}}";
-			sepNavSelRange = "{2050, 21}";
-			sepNavVisRange = "{1745, 446}";
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 10276}}";
+			sepNavSelRange = "{21621, 21}";
+			sepNavVisRange = "{21181, 752}";
 		};
 	};
 	3F5203330FA6624C00E75857 /* Universe.h */ = {
@@ -13436,16 +13709,30 @@
 	};
 	3F5203410FA6624C00E75857 /* VMClass.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1357, 5586}}";
-			sepNavSelRange = "{5389, 0}";
-			sepNavVisRange = "{4735, 1377}";
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 5586}}";
+			sepNavSelRange = "{3449, 3}";
+			sepNavVisRange = "{2501, 1091}";
+		};
+	};
+	3F5203450FA6624C00E75857 /* VMEvaluationPrimitive.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 1386}}";
+			sepNavSelRange = "{1727, 3}";
+			sepNavVisRange = "{1294, 829}";
+		};
+	};
+	3F5203460FA6624C00E75857 /* VMEvaluationPrimitive.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 714}}";
+			sepNavSelRange = "{1437, 11}";
+			sepNavVisRange = "{1068, 653}";
 		};
 	};
 	3F5203470FA6624C00E75857 /* VMFrame.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1357, 3402}}";
-			sepNavSelRange = "{1975, 41}";
-			sepNavVisRange = "{1206, 1598}";
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 3164}}";
+			sepNavSelRange = "{1840, 3}";
+			sepNavVisRange = "{1364, 1036}";
 		};
 	};
 	3F5203480FA6624C00E75857 /* VMFrame.h */ = {
@@ -13469,6 +13756,13 @@
 			sepNavVisRange = "{1135, 667}";
 		};
 	};
+	3F52034E0FA6624C00E75857 /* VMInvokable.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 798}}";
+			sepNavSelRange = "{1428, 8}";
+			sepNavVisRange = "{1295, 584}";
+		};
+	};
 	3F52034F0FA6624C00E75857 /* VMMethod.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {777, 2702}}";
@@ -13485,23 +13779,23 @@
 	};
 	3F5203510FA6624C00E75857 /* VMObject.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1171, 2184}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1379, 2142}}";
 			sepNavSelRange = "{3647, 0}";
-			sepNavVisRange = "{3412, 735}";
+			sepNavVisRange = "{3438, 706}";
 		};
 	};
 	3F5203520FA6624C00E75857 /* VMObject.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1352, 2114}}";
-			sepNavSelRange = "{1454, 6}";
-			sepNavVisRange = "{1241, 1036}";
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 2114}}";
+			sepNavSelRange = "{2259, 17}";
+			sepNavVisRange = "{4544, 612}";
 		};
 	};
 	3F5203540FA6624C00E75857 /* VMPrimitive.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {777, 1036}}";
-			sepNavSelRange = "{1853, 0}";
-			sepNavVisRange = "{1512, 667}";
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 1064}}";
+			sepNavSelRange = "{1427, 11}";
+			sepNavVisRange = "{1379, 788}";
 		};
 	};
 	3F5203550FA6624C00E75857 /* VMString.cpp */ = {

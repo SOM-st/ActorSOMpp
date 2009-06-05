@@ -391,7 +391,7 @@ pVMClass Universe::GetBlockClassWithArgs( int numberOfArguments) {
     pVMSymbol name = SymbolFor(blockName);
 
     if (HasGlobal(name))
-        return (pVMClass)GetGlobal(name);
+        return pVMClass(GetGlobal(name));
 
     pVMClass result = LoadClassBasic(name, pVMClass());
 
