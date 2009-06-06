@@ -1,0 +1,41 @@
+Actor = (
+
+    | id |
+    
+    id = ( ^id )
+    id: value = ( id := value )
+    
+    "claim: obj = primitive"
+    
+
+    ----------------------------------
+    
+    | actors |
+    
+    initialize = (
+        | actor |
+        actors isNil ifTrue: [
+            actors := Array new: self numberOfActors.
+            actors doIndexes: [ :i |
+                actor := super new.
+                actors at: i put: actor.
+                actor id: i - 1.
+            ]
+        ]
+    )
+    
+    new = ( self error: 'Actors cannot be created dynamically' )
+    
+    main = (
+        ^self getById: 0.
+    )
+    
+    getById: id = (
+        self initialize.
+        ^actors at: id + 1.
+    )
+    
+    id = primitive "Id of the actor this code is executed on"
+    numberOfActors = primitive "Number of actors in this system"
+    
+)

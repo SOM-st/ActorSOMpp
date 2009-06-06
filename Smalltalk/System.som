@@ -82,7 +82,6 @@ System = (
     time = primitive
     
     "Actors"
-    rank = primitive
     stop = primitive  "stops the actor if queue of incomming messages runs empty"
     objectTableSize = primitive
     

@@ -49,7 +49,6 @@ public:
     void Exit_(pVMObject object, pVMFrame frame);
     void PrintString_(pVMObject object, pVMFrame frame);
     void PrintNewline(pVMObject object, pVMFrame frame);
-    void Rank(pVMObject object, pVMFrame frame);
     void Stop(pVMObject object, pVMFrame frame);
     void Time(pVMObject object, pVMFrame frame);
     

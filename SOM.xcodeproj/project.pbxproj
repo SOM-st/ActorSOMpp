@@ -83,9 +83,9 @@
 		0AA9E7B90FD46E33001F2C47 /* Terminal.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Terminal.som; sourceTree = "<group>"; };
 		0AA9E7BB0FD46E33001F2C47 /* StringTest.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = StringTest.som; sourceTree = "<group>"; };
 		0AA9E7C90FD47034001F2C47 /* HelloWorld.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HelloWorld.som; sourceTree = "<group>"; };
-		0AA9E7CB0FD47034001F2C47 /* Counter.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Counter.som; sourceTree = "<group>"; };
-		0AA9E7CC0FD47034001F2C47 /* Incrementor */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Incrementor; sourceTree = "<group>"; };
-		0AA9E7CD0FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
+		0AA9E7CB0FD47034001F2C47 /* Counter.som */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = text; path = Counter.som; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9E7CC0FD47034001F2C47 /* Incrementor.som */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = text; path = Incrementor.som; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9E7CD0FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; tabWidth = 4; };
 		0AA9E7CF0FD47034001F2C47 /* Counter.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Counter.som; sourceTree = "<group>"; };
 		0AA9E7D00FD47034001F2C47 /* Main.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Main.som; sourceTree = "<group>"; };
 		0AA9E8850FD488D2001F2C47 /* GlobalObjectId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalObjectId.h; sourceTree = "<group>"; };
@@ -100,6 +100,10 @@
 		0AA9EFEA0FD938F1001F2C47 /* RemoteObjectManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteObjectManager.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		0AA9F0D20FD9A77E001F2C47 /* messages.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = messages.h; sourceTree = "<group>"; tabWidth = 4; };
 		0AA9F0E80FD9BC93001F2C47 /* messages.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = messages.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9F17D0FDA6271001F2C47 /* Actor.som */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = text; path = Actor.som; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9F17E0FDABF77001F2C47 /* MainWOOM.som */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = text; path = MainWOOM.som; sourceTree = "<group>"; tabWidth = 4; };
+		0AA9F1D20FDACAE6001F2C47 /* Actor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Actor.h; sourceTree = "<group>"; };
+		0AA9F1D30FDACAE6001F2C47 /* Actor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Actor.cpp; sourceTree = "<group>"; };
 		349F277B0FC5B3FF00BD0A41 /* VMPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VMPointer.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20870FAC73020009EE70 /* VMPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointer.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		34FB20880FAC73020009EE70 /* VMPointerConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = VMPointerConverter.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
@@ -231,6 +235,7 @@
 		0AA9E7710FD46E18001F2C47 /* Smalltalk */ = {
 			isa = PBXGroup;
 			children = (
+				0AA9F17D0FDA6271001F2C47 /* Actor.som */,
 				0AA9E7720FD46E18001F2C47 /* Array.som */,
 				0AA9E7730FD46E18001F2C47 /* BigInteger.som */,
 				0AA9E7740FD46E18001F2C47 /* Block.som */,
@@ -356,8 +361,9 @@
 			isa = PBXGroup;
 			children = (
 				0AA9E7CB0FD47034001F2C47 /* Counter.som */,
-				0AA9E7CC0FD47034001F2C47 /* Incrementor */,
+				0AA9E7CC0FD47034001F2C47 /* Incrementor.som */,
 				0AA9E7CD0FD47034001F2C47 /* Main.som */,
+				0AA9F17E0FDABF77001F2C47 /* MainWOOM.som */,
 			);
 			path = CounterAct;
 			sourceTree = "<group>";
@@ -478,6 +484,8 @@
 		3F5203110FA6624C00E75857 /* primitives */ = {
 			isa = PBXGroup;
 			children = (
+				0AA9F1D20FDACAE6001F2C47 /* Actor.h */,
+				0AA9F1D30FDACAE6001F2C47 /* Actor.cpp */,
 				3F5203120FA6624C00E75857 /* Array.cpp */,
 				3F5203130FA6624C00E75857 /* Array.h */,
 				3F5203140FA6624C00E75857 /* BigInteger.cpp */,

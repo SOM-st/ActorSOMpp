@@ -1,0 +1,30 @@
+"This is an experiment to see whether this counter example can work without 
+ explicit object migration"
+MainWOOM = (
+
+    " The 'run' method is called when initializing 
+      the system on the leading actor
+    "
+    run = (
+        | counter inc |
+
+        counter := Actor main receive. "wait to receive a object reference"
+
+        inc := Incrementor new: counter.
+        inc @run.  " Asynchrounous message send"
+
+        'Counter Value: ' print.
+        (counter value) println "Synchronuse message send to a remote object"
+    )
+    
+    runOnFollower = (
+        | counter inc |
+        
+        counter := Counter new.
+        
+        Actor main send: counter.
+        
+        inc := Incrementor new: counter.
+        inc @run.
+    )
+)

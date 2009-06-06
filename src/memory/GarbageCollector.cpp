@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMPointer.h"
 
+#include "../actors/actors.h"
+
 GarbageCollector::GarbageCollector(Heap* h) {
 	heap = h;
     numCollections = 0;
@@ -57,6 +59,8 @@ GarbageCollector::~GarbageCollector() {
 
 
 void GarbageCollector::Collect() {
+    cerr << "[A:" << actors_id() << "] Start GCollect" << endl;
+    
     ++numCollections;
 	numLive = 0;
 	spcLive = 0;

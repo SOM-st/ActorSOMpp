@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include <vmobjects/PrimitiveRoutine.h>
 
+#include "Actor.h"
 #include "Array.h"
 #include "BigInteger.h"
 #include "Block.h"
@@ -60,6 +61,9 @@ extern "C" void setup() {
 #endif
         //Initialize loader
         loader = new PrimitiveLoader();
+        loader->AddPrimitiveObject("Actor", 
+            static_cast<PrimitiveContainer*>(new _Actor()));
+        
         loader->AddPrimitiveObject("Array", 
             static_cast<PrimitiveContainer*>(new _Array()));
 
