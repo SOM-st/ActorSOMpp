@@ -56,10 +56,12 @@ public:
 	void EmitPOPLOCAL(MethodGenerationContext* mgenc, int idx, int ctx);
 	void EmitPOPARGUMENT(MethodGenerationContext* mgenc, int idx, int ctx);
 	void EmitPOPFIELD(MethodGenerationContext* mgenc, pVMSymbol field);
-	void EmitSEND(MethodGenerationContext* mgenc, pVMSymbol msg);
+    void EmitSEND(MethodGenerationContext* mgenc, pVMSymbol msg);
+    void EmitSENDASYNC(MethodGenerationContext* mgenc, pVMSymbol msg);
 	void EmitSUPERSEND(MethodGenerationContext* mgenc, pVMSymbol msg);
 	void EmitRETURNLOCAL(MethodGenerationContext* mgenc);
 	void EmitRETURNNONLOCAL(MethodGenerationContext* mgenc);
+    void EmitYIELD(MethodGenerationContext* mgenc);
 };
 
 #endif

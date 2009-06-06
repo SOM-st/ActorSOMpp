@@ -215,18 +215,16 @@ void Disassembler::DumpMethod(pVMMethod method, const char* indent) {
                 DebugPrint("(index: %d) field: %s\n", BC_1, name->GetChars());
                 break;
             }
-            case BC_SEND: {
+            case BC_SEND:
+            case BC_SEND_ASYNC:
+            case BC_SUPER_SEND: {
                 pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
                 
                 DebugPrint("(index: %d) signature: %s\n", BC_1,
                     name->GetChars());
                 break;
             }
-            case BC_SUPER_SEND: {
-                pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
-                
-                DebugPrint("(index: %d) signature: %s\n", BC_1,
-                    name->GetChars());
+            case BC_YIELD: {
                 break;
             }
             default:

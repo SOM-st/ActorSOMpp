@@ -64,10 +64,10 @@ private:
 	void        binaryPattern(MethodGenerationContext* mgenc);
 	void        keywordPattern(MethodGenerationContext* mgenc);
 	void        methodBlock(MethodGenerationContext* mgenc);
-	pVMSymbol   unarySelector(void);
-	pVMSymbol   binarySelector(void);
+	pVMSymbol   unarySelector(bool* asyncModifier = NULL);
+	pVMSymbol   binarySelector(bool* asyncModifier = NULL);
 	StdString     identifier(void);
-	StdString     keyword(void);
+	StdString     keyword(bool* asyncModifier = NULL);
 	StdString     argument(void);
 	void        blockContents(MethodGenerationContext* mgenc);
 	void        locals(MethodGenerationContext* mgenc);

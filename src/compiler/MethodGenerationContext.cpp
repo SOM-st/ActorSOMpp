@@ -131,6 +131,7 @@ uint8_t MethodGenerationContext::ComputeStackDepth() {
             case BC_POP_ARGUMENT     : depth--; i += 3; break;
             case BC_POP_FIELD        : depth--; i += 2; break;
             case BC_SEND             :
+            case BC_SEND_ASYNC       :
             case BC_SUPER_SEND       : {
                 // these are special: they need to look at the number of
                 // arguments (extractable from the signature)
@@ -144,6 +145,7 @@ uint8_t MethodGenerationContext::ComputeStackDepth() {
             }
             case BC_RETURN_LOCAL     :
             case BC_RETURN_NON_LOCAL :          i++;    break;
+            case BC_YIELD            :          i++;    break;
             default                  :
                 cout << "Illegal bytecode: " << bytecode[i];
                 _UNIVERSE->Quit(1);

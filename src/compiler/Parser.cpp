@@ -333,14 +333,28 @@ void Parser::methodBlock(MethodGenerationContext* mgenc){
     expect(EndTerm);
 }
 
+StdString _processAsyncModifier(StdString identifier, bool* asyncModifier) {
+    if (asyncModifier) {
+        size_t pos = identifier.find("@");
+        if (pos == 0 && pos != StdString::npos) {
+            *asyncModifier = true;
+            return identifier.substr(1);
+        } else {
+            *asyncModifier = false;
+        }
+    }
+    
+    // else
+    return identifier;
+}
 
-pVMSymbol Parser::unarySelector(void) {
-    return _UNIVERSE->SymbolFor(identifier());
+pVMSymbol Parser::unarySelector(bool* asyncModifier) {
+    return _UNIVERSE->SymbolFor(_processAsyncModifier(identifier(), asyncModifier));
 }
 
 
-pVMSymbol Parser::binarySelector(void) {
-    StdString s(text);
+pVMSymbol Parser::binarySelector(bool* asyncModifier) {
+    StdString s(_processAsyncModifier(text, asyncModifier));
     
     if(accept(Or))
         ;
@@ -364,7 +378,7 @@ pVMSymbol Parser::binarySelector(void) {
 
 StdString Parser::identifier(void) {
     StdString s(text);
-    if(accept(Primitive))
+    if (accept(Primitive))
         ; // text is set
     else
         expect(Identifier);
@@ -373,8 +387,8 @@ StdString Parser::identifier(void) {
 }
 
 
-StdString Parser::keyword(void) {
-    StdString s(text);
+StdString Parser::keyword(bool* asyncModifier) {
+    StdString s(_processAsyncModifier(text, asyncModifier));
     expect(Keyword);
     
     return s;
@@ -571,29 +585,56 @@ void Parser::messages(MethodGenerationContext* mgenc, bool super) {
 
 
 void Parser::unaryMessage(MethodGenerationContext* mgenc, bool super) {
-    pVMSymbol msg = unarySelector();
+    bool async;
+    pVMSymbol msg = unarySelector(&async);
 	mgenc->AddLiteralIfAbsent((pVMObject)msg);
     
-    if(super) bcGen->EmitSUPERSEND(mgenc, msg);
-    else bcGen->EmitSEND(mgenc, msg);
-	
+    if (super && async) {
+        fprintf(stderr, "Error: unexpected async modifier on super send in line %d.", 
+                lexer->GetCurrentLineNumber());
+    }
+    
+    if (super) bcGen->EmitSUPERSEND(mgenc, msg);
+    else {
+        if (async) {
+            bcGen->EmitSENDASYNC(mgenc, msg);
+        }
+        else {
+            bcGen->EmitSEND(mgenc, msg);
+        }
+    }
 }
 
 
 void Parser::binaryMessage(MethodGenerationContext* mgenc, bool super) {
-    pVMSymbol msg = binarySelector();
+    bool async;
+    pVMSymbol msg = binarySelector(&async);
 	mgenc->AddLiteralIfAbsent((pVMObject)msg);
     
     
     bool tmp_bool = false;
     binaryOperand(mgenc, &tmp_bool);
     
-    if(super)
-        bcGen->EmitSUPERSEND(mgenc, msg);
-    else
-        bcGen->EmitSEND(mgenc, msg);
-	
+    if (super && async) {
+        fprintf(stderr, "Error: unexpected async modifier on super send in line %d.", 
+                lexer->GetCurrentLineNumber());
+    }
+    
+    if (super) bcGen->EmitSUPERSEND(mgenc, msg);
+    else {
+        if (async) {
+            bcGen->EmitSENDASYNC(mgenc, msg);
+        }
+        else {
+            bcGen->EmitSEND(mgenc, msg);
+        }
+    }
 }
+
+
+
+
+
 
 
 void Parser::binaryOperand(MethodGenerationContext* mgenc, bool* super) {
@@ -606,8 +647,14 @@ void Parser::binaryOperand(MethodGenerationContext* mgenc, bool* super) {
 
 void Parser::keywordMessage(MethodGenerationContext* mgenc, bool super) {
     StdString kw;
+    bool first = true;
+    bool async;
     do {
-        kw.append(keyword());
+        if (first)
+            kw.append(keyword(&async));
+        else
+            kw.append(keyword());
+        
         formula(mgenc);
     } while(sym == Keyword);
     
@@ -616,9 +663,20 @@ void Parser::keywordMessage(MethodGenerationContext* mgenc, bool super) {
 	mgenc->AddLiteralIfAbsent((pVMObject)msg);
     
     
-    if(super) bcGen->EmitSUPERSEND(mgenc, msg);
-    else bcGen->EmitSEND(mgenc, msg);
-	
+    if (super && async) {
+        fprintf(stderr, "Error: unexpected async modifier on super send in line %d.", 
+                lexer->GetCurrentLineNumber());
+    }
+    
+    if (super) bcGen->EmitSUPERSEND(mgenc, msg);
+    else {
+        if (async) {
+            bcGen->EmitSENDASYNC(mgenc, msg);
+        }
+        else {
+            bcGen->EmitSEND(mgenc, msg);
+        }
+    }	
 }
 
 

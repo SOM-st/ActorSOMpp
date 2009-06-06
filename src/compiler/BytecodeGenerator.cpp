@@ -126,6 +126,12 @@ void BytecodeGenerator::EmitSEND(
 }
 
 
+void BytecodeGenerator::EmitSENDASYNC(
+                MethodGenerationContext* mgenc, pVMSymbol msg ) {
+    EMIT2(BC_SEND_ASYNC, mgenc->FindLiteralIndex((pVMObject)msg));
+}
+
+
 void BytecodeGenerator::EmitSUPERSEND(
                 MethodGenerationContext* mgenc, pVMSymbol msg ) {
     EMIT2(BC_SUPER_SEND, mgenc->FindLiteralIndex((pVMObject)msg));
