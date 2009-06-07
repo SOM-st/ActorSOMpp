@@ -7,11 +7,18 @@ MainWOOM = (
     "
     run = (
         | counter inc |
-
-        counter := Actor main receive. "wait to receive a object reference"
+        
+        counter := Actor receive. "wait to receive a object reference"
+        
+        '[A:0] Counter received' println.
 
         inc := Incrementor new: counter.
-        inc @run.  " Asynchrounous message send"
+        
+        '[A:0] Local Incrementor created' println.
+        
+        inc ASYNC_run.  " Asynchrounous message send"
+        
+        yield.
 
         'Counter Value: ' print.
         (counter value) println "Synchronuse message send to a remote object"
@@ -24,7 +31,13 @@ MainWOOM = (
         
         Actor main send: counter.
         
+        '[A:n] Counter send' println.
+        
         inc := Incrementor new: counter.
-        inc @run.
+        
+
+        '[A:n] Local Incrementor created' println.
+        
+        inc ASYNC_run.
     )
 )

@@ -15,4 +15,6 @@ class _Actor : public PrimitiveContainer
     _Actor();
     void Id(pVMObject, pVMFrame frame);
     void NumberOfActors(pVMObject, pVMFrame frame);
+    void Receive(pVMObject, pVMFrame frame);
+    void Send_toActor_(pVMObject, pVMFrame frame);
   };

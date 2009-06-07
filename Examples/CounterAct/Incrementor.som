@@ -2,9 +2,14 @@ Incrementor = (
 
     | counter |
     
+    counter: value = ( counter := value )
+    
     run = (
-      counter async_inc.
+      'Incrementor run()' println.
+      counter ASYNC_inc.
     )
+    
+    
 
     -----
 

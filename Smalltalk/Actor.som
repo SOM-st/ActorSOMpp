@@ -7,6 +7,10 @@ Actor = (
     
     "claim: obj = primitive"
     
+    "Send a reference of this object to the actor"
+    send: obj = (
+        Actor send: obj toActor: id
+    )
 
     ----------------------------------
     
@@ -30,12 +34,25 @@ Actor = (
         ^self getById: 0.
     )
     
+    isMain = (
+        ^self id = 0
+    )
+    
     getById: id = (
         self initialize.
         ^actors at: id + 1.
     )
     
-    id = primitive "Id of the actor this code is executed on"
-    numberOfActors = primitive "Number of actors in this system"
+    "Id of the actor this code is executed on"
+    id = primitive
     
+    "Number of actors in this system"
+    numberOfActors = primitive
+    
+    "Receive an object reference
+     no further quantification, it will be just the first"
+    receive = primitive
+    
+    "Send a object reference"
+    send: obj toActor: actorId = primitive
 )
