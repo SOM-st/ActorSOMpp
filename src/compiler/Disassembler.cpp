@@ -436,19 +436,26 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
                 DebugPrint("\n");    
                 indentc++; ikind='>'; // visual
             }
-                break;
-        }            
+            break;
+        }
+        case BC_SEND_ASYNC: {
+            pVMSymbol sel = (pVMSymbol)(method->GetConstant(bc_idx));
+            
+            DebugPrint("(index: %d) signature: %s ()", BC_1,
+                       sel->GetChars());            
+            break;
+        }
         case BC_RETURN_LOCAL:
         case BC_RETURN_NON_LOCAL: {
             DebugPrint(")\n");
             indentc--; ikind='<'; //visual
             break;
         }
+        case BC_YIELD:
+            DebugPrint("<continue here later>\n");
+            break;
         default:
             DebugPrint("<incorrect bytecode>\n");
             break;
     }
 }
-
-// EOF: diassembler.c
-
