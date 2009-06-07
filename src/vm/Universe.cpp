@@ -262,11 +262,6 @@ void Universe::initialize(int _argc, char** _argv) {
     this->SetGlobal(SymbolForChars("System"), systemClass);
     this->SetGlobal(SymbolForChars("Block"), blockClass);
     
-    if (!actors_is_main_actor()) {
-        interpreter->ProcessIncommingMessages();
-        return;
-    }
-    
     pVMMethod bootstrapMethod = NewMethod(SymbolForChars("bootstrap"), 1, 0);
     bootstrapMethod->SetBytecode(0, BC_HALT);
     bootstrapMethod->SetNumberOfLocals(0);
@@ -299,6 +294,11 @@ void Universe::initialize(int _argc, char** _argv) {
     if(!(trace>0)) dumpBytecodes = 2 - trace;
 
     interpreter->Start();
+    
+    if (!actors_is_main_actor()) {
+        interpreter->ProcessIncommingMessages();
+        return;
+    }
 }
 
 
@@ -528,7 +528,7 @@ void Universe::LoadSystemClass( pVMClass systemClass) {
 
 pVMRemoteObject Universe::NewRemoteObject(GlobalObjectId id) const {
     VMRemoteObject* result = new (_HEAP) VMRemoteObject(id);
-    
+    return pVMRemoteObject(result);
 }
 
 pVMArray Universe::NewArray( int size) const {

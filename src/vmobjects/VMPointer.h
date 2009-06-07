@@ -97,6 +97,10 @@ public:
     inline T& operator*() const {
         return *((T*) _OBJECT_TABLE[index.index]);
     };
+    
+    inline ObjectTable::Index GetIndex() {
+        return index.index;
+    }
 
     //member access operator
     inline T* operator ->() {
@@ -154,9 +158,9 @@ public:
         index.index.value = 0;
     }
     
-    inline bool IsLocalObject() {
-        
-    }
+    //inline bool IsLocalObject() {
+    //
+    //}
 
 protected:
     // We need this because object table indexes are unsigned

@@ -42,9 +42,15 @@ System = (
          otherwise, #run is sent."
         application := (self resolve: (arguments at: 1) asSymbol) new.
         
-        (arguments length > 1) && (application class hasMethod: #run:)
+        Actor isMain ifTrue: [
+          (arguments length > 1) && (application class hasMethod: #run:)
             ifTrue:  [ application run: arguments ]
             ifFalse: [ application run ]
+        ] ifFalse: [
+          (arguments length > 1) && (application class hasMethod: #runOnFollower:)
+            ifTrue:  [ application runOnFollower: arguments ]
+            ifFalse: [ application runOnFollower ]
+        ]
     )
     
     "Loading and resolving"
