@@ -11,13 +11,31 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <vector>
 
 bool ActorMessaging::HasIncommingMessages() {
     return actors_msgbuffer_holds_data();
 }
 
-Message* _receiveMessage(Messages msgType) {
-    Message* result;
+Message* ActorMessaging::CheckTempQueue(Messages msgType) {
+    std::vector<Message*>::iterator it;
+    
+    for (it = tempQueue.begin(); it < tempQueue.end(); it++) {
+        if ((*it)->GetType() == msgType) {
+            Message* result = *it;
+            tempQueue.erase(it);
+            return result;
+        }
+    }
+    return NULL;
+}
+
+Message* ActorMessaging::ReceiveMessage(Messages msgType) {
+    Message* result = CheckTempQueue(msgType);
+    if (result != NULL) {
+        return result;
+    }
+    
     do {
         void* buffer;
         size_t size;
@@ -25,8 +43,9 @@ Message* _receiveMessage(Messages msgType) {
         
         result = Message::Deserialize(buffer);
         result->Process();
-        
-#warning possibly lossing messages here, should be stored in a queue for later processing
+        if (result->GetType() != msgType && result->ShouldBeQueued()) {
+            tempQueue.push_back(result);
+        }
         
         free(buffer);        
     } while (result->GetType() != msgType);
@@ -35,11 +54,11 @@ Message* _receiveMessage(Messages msgType) {
 }
 
 SomMessage* ActorMessaging::ReceiveSomMessage() { 
-    return (SomMessage*)_receiveMessage(SOM_MSG);
+    return (SomMessage*)ReceiveMessage(SOM_MSG);
 }
 
 pVMObject ActorMessaging::ReceiveObjectReference() {
-    ObjRefMessage* msg = (ObjRefMessage*)_receiveMessage(OBJ_REF_MSG);
+    ObjRefMessage* msg = (ObjRefMessage*)ReceiveMessage(OBJ_REF_MSG);
     pVMObject obj = msg->GetObject();
     delete msg;
     return obj;

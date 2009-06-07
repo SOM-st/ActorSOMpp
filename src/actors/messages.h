@@ -44,6 +44,7 @@ public:
     }
     
     virtual void Process() = 0;
+    virtual bool ShouldBeQueued() = 0;
     
     Messages GetType() { return msgType; }
     
@@ -67,6 +68,7 @@ class ExitMsg : public EmptyMessage {
 public:
     ExitMsg() : EmptyMessage(EXIT_MSG) {};
     virtual void Process();
+    virtual bool ShouldBeQueued();
 };
 
 
@@ -93,6 +95,7 @@ public:
     }
     
     virtual void Process() {}
+    virtual bool ShouldBeQueued() { return true; }
     
     virtual size_t GetSize() {
         return Message::GetSize() + sizeof(GlobalObjectId);
@@ -180,6 +183,7 @@ public:
   }
     
   virtual void Process();
+  virtual bool ShouldBeQueued() { return true; }
   
 private:
   GlobalObjectId receiver;
@@ -187,8 +191,6 @@ private:
   size_t sig_len;
   size_t number_of_arguments;
   GlobalObjectId* arguments;
-  
-//  friend class ActorMessaging;
 };
 
 #endif

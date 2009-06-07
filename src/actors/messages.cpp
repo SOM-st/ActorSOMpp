@@ -32,5 +32,9 @@ void ExitMsg::Process() {
     _UNIVERSE->GetInterpreter()->Stop();
 }
 
+bool ExitMsg::ShouldBeQueued() {
+    return false;
+}
+
 
 void SomMessage::Process() {}

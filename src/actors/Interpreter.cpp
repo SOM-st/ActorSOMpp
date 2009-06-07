@@ -36,7 +36,7 @@ pVMMethod _get_method_process_incomming_msgs(SomMessage* msg) {
     pVMSymbol sig = _UNIVERSE->SymbolForChars(msg->GetSignature());
     method->SetIndexableField(0, sig);
 
-    method->SetHolder(systemClass);
+    //method->SetHolder(systemClass); //hope this will work without holder
     
     return method;
 }
@@ -78,7 +78,7 @@ void _send_async_message(pVMObject receiver, pVMSymbol signature, size_t numOfAr
     GlobalObjectId receiverId = RemoteObjectManager::GetGlobalId(receiver);
     GlobalObjectId argumentIds[numOfArgs - 1];
     
-    for (size_t i = 0; i < numOfArgs - 1; i++) {
+    for (int i = numOfArgs - 2; i >= 0 ; i--) {
         argumentIds[i] = RemoteObjectManager::GetGlobalId(arguments->Pop());
         // have to be push on the remote frame in the correct order
         // (starting from last element)
@@ -117,4 +117,5 @@ void Interpreter::ProcessIncommingMessages() {
         
         Start();
     }
+    DebugLog("Completed ProcessIncommingMessages\n");
 }

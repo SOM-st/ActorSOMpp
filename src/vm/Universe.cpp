@@ -295,10 +295,7 @@ void Universe::initialize(int _argc, char** _argv) {
 
     interpreter->Start();
     
-    if (!actors_is_main_actor()) {
-        interpreter->ProcessIncommingMessages();
-        return;
-    }
+    interpreter->ProcessIncommingMessages();
 }
 
 

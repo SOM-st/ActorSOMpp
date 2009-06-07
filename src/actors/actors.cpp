@@ -200,7 +200,7 @@ void actors_init() {
 
 void _go_parallel(char** argv) {
     _actor_processes[0] = _pid;
-    
+
     for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
         pid_t pid = fork();
 
@@ -234,8 +234,8 @@ void actors_start(int argc, char** argv) {
         printf("MyActorId: %d MyPID: %d Status: %s\n", _local_id, getpid(),
                (_main_actor) ? "leader" : "follower");
 
-    //sleep(20); // useful for debugging
-  }
+        sleep(20); // useful for debugging
+    }
 }
 
 void actors_shutdown() {
@@ -244,7 +244,7 @@ void actors_shutdown() {
     for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
         ActorMessaging::SendMessage(&msg, i);
     }
-    
+
     // wait for childs
     for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
         waitpid(_actor_processes[i], NULL, 0);

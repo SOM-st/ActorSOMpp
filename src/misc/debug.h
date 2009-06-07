@@ -98,10 +98,8 @@ static inline void DebugDump(const char* fmt, ...) {
 
 
 static inline void DebugTrace(const char* fmt, ...) {
-    if (actors_is_main_actor()) {
-        DebugPrefix("TRACE:"); 
-        DebugPass(fmt);
-    }
+    DebugPrefix("TRACE:"); 
+    DebugPass(fmt);
 }
 
 
