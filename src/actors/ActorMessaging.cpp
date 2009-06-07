@@ -16,19 +16,39 @@ bool ActorMessaging::HasIncommingMessages() {
     return actors_msgbuffer_holds_data();
 }
 
-SomMessage* ActorMessaging::ReceiveMessage() {
-    void* buffer;
-    size_t size;
-    actors_msgbuffer_read_msg(&buffer, &size);
-    
+Message* _receiveMessage(Messages msgType) {
     Message* result;
     do {
+        void* buffer;
+        size_t size;
+        actors_msgbuffer_read_msg(&buffer, &size);
+        
         result = Message::Deserialize(buffer);
         result->Process();
-        free(buffer);
-    } while (result->GetType() != SOM_MSG);
+        
+#warning possibly lossing messages here, should be stored in a queue for later processing
+        
+        free(buffer);        
+    } while (result->GetType() != msgType);
     
-    return (SomMessage*)result;
+    return result;
+}
+
+SomMessage* ActorMessaging::ReceiveSomMessage() { 
+    return (SomMessage*)_receiveMessage(SOM_MSG);
+}
+
+pVMObject ActorMessaging::ReceiveObjectReference() {
+    ObjRefMessage* msg = (ObjRefMessage*)_receiveMessage(OBJ_REF_MSG);
+    pVMObject obj = msg->GetObject();
+    delete msg;
+    return obj;
+}
+
+void ActorMessaging::SendObjectReference(pVMObject obj, actor_id_t actorId) {
+    cout << "[A:" << dec << actors_id() << "] SendObjectReference to " << actorId << endl;
+    ObjRefMessage msg(RemoteObjectManager::GetGlobalId(obj));
+    SendMessage(&msg, actorId);
 }
 
 void ActorMessaging::SendMessage(Message* msg, actor_id_t actorId) {

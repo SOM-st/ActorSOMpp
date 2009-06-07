@@ -35,6 +35,8 @@ THE SOFTWARE.
 
 #include "../vm/Universe.h"
 
+#include "../misc/debug.h"
+
 #include <iostream>
 #include <cctype>
 #include <sstream>
@@ -99,8 +101,10 @@ bool Parser::acceptOneOf(Symbol* ss) {
 bool Parser::expect(Symbol s) {
     if(accept(s))
         return true;
-    fprintf(stderr, "Error: unexpected symbol in line %d. Expected %s, but found %s", 
-            lexer->GetCurrentLineNumber(), symnames[s], symnames[sym]);
+    
+    DebugError("unexpected symbol in line %d. Expected %s, but found %s", 
+               lexer->GetCurrentLineNumber(), symnames[s], symnames[sym]);
+
     if(_PRINTABLE_SYM)
         fprintf(stderr, " (%s)", text.c_str());
 	fprintf(stderr, ": %s\n", lexer->GetRawBuffer().c_str());
@@ -111,7 +115,7 @@ bool Parser::expect(Symbol s) {
 bool Parser::expectOneOf(Symbol* ss) {
     if(acceptOneOf(ss))
         return true;
-    fprintf(stderr, "Error: unexpected symbol in line %d. Expected one of ",
+    DebugError("unexpected symbol in line %d. Expected one of ",
             lexer->GetCurrentLineNumber());
     while(*ss)
         fprintf(stderr, "%s, ", symnames[*ss++]);
@@ -335,10 +339,11 @@ void Parser::methodBlock(MethodGenerationContext* mgenc){
 
 StdString _processAsyncModifier(StdString identifier, bool* asyncModifier) {
     if (asyncModifier) {
-        size_t pos = identifier.find("@");
+        size_t pos = identifier.find("ASYNC_");
         if (pos == 0 && pos != StdString::npos) {
+//            cout << "Identifier: " << identifier << endl;
             *asyncModifier = true;
-            return identifier.substr(1);
+            return identifier.substr(6);
         } else {
             *asyncModifier = false;
         }
@@ -349,12 +354,16 @@ StdString _processAsyncModifier(StdString identifier, bool* asyncModifier) {
 }
 
 pVMSymbol Parser::unarySelector(bool* asyncModifier) {
-    return _UNIVERSE->SymbolFor(_processAsyncModifier(identifier(), asyncModifier));
+    StdString s(_processAsyncModifier(identifier(), asyncModifier));
+//  cout << "Parser:" << s << endl;
+    return _UNIVERSE->SymbolFor(s);
 }
 
 
 pVMSymbol Parser::binarySelector(bool* asyncModifier) {
     StdString s(_processAsyncModifier(text, asyncModifier));
+    
+//    cout << "Parser:" << s << endl;
     
     if(accept(Or))
         ;
@@ -438,7 +447,16 @@ void Parser::blockBody(MethodGenerationContext* mgenc, bool seen_period) {
 		mgenc->SetFinished();
     } else {
         expression(mgenc);
-        if(accept(Period)) {
+        if (accept(Yield)) {
+            if (accept(Exit)) {
+                result(mgenc);
+            } else /* if (accept(Period))*/ {
+                blockBody(mgenc, true);
+            } /*else {
+                DebugError("Unexpected problem with parsing yield. TODO: Handles this, or give meaning ful error msg. Found: %s ", text.c_str());
+            }*/
+        }
+        else if(accept(Period)) {
             bcGen->EmitPOP(mgenc);
             blockBody(mgenc, true);
         }
@@ -516,12 +534,15 @@ void Parser::primary(MethodGenerationContext* mgenc, bool* super) {
     switch(sym) {
         case Identifier: {
             StdString v = variable();
-			if(v == "super") { 
+			if (v == "super") { 
                 *super = true;
                 // sends to super push self as the receiver
                 v = StdString("self");
-            }
-            
+            } else if (v == "yield") {
+                bcGen->EmitYIELD(mgenc);
+                sym = Yield;
+                return;
+            }            
             genPushVariable(mgenc, v);
             break;
         }
@@ -590,7 +611,7 @@ void Parser::unaryMessage(MethodGenerationContext* mgenc, bool super) {
 	mgenc->AddLiteralIfAbsent((pVMObject)msg);
     
     if (super && async) {
-        fprintf(stderr, "Error: unexpected async modifier on super send in line %d.", 
+        DebugError("unexpected async modifier on super send in line %d.", 
                 lexer->GetCurrentLineNumber());
     }
     
@@ -616,7 +637,7 @@ void Parser::binaryMessage(MethodGenerationContext* mgenc, bool super) {
     binaryOperand(mgenc, &tmp_bool);
     
     if (super && async) {
-        fprintf(stderr, "Error: unexpected async modifier on super send in line %d.", 
+        DebugError("unexpected async modifier on super send in line %d.", 
                 lexer->GetCurrentLineNumber());
     }
     
@@ -664,7 +685,7 @@ void Parser::keywordMessage(MethodGenerationContext* mgenc, bool super) {
     
     
     if (super && async) {
-        fprintf(stderr, "Error: unexpected async modifier on super send in line %d.", 
+        DebugError("unexpected async modifier on super send in line %d.", 
                 lexer->GetCurrentLineNumber());
     }
     

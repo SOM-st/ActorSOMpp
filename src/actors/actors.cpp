@@ -281,7 +281,7 @@ void actors_msgbuffer_read_msg(void** buffer, size_t* size) {
 
     *buffer = malloc(real_msg_length * sizeof(int32_t)); // to avoid overflow
 
-    syncedqueue_dequeue(&_globals->queues[_local_id], (int32_t*)buffer, real_msg_length);
+    syncedqueue_dequeue(&_globals->queues[_local_id], (int32_t*)*buffer, real_msg_length);
 
     *size = msg_length;
 }

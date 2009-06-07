@@ -23,9 +23,10 @@
 enum Messages {
     ABSTRACT_MSG,
     
-    EXIT_MSG,
+    EXIT_MSG,  // ask an actor to stop after all incomming messages have been processed
     
-    SOM_MSG
+    OBJ_REF_MSG, // message contains a reference to an object
+    SOM_MSG // represents a message sent on language level which has to be send async to an actor
 };
 
 
@@ -70,6 +71,39 @@ public:
 
 
 
+class ObjRefMessage : public Message {
+public:
+    ObjRefMessage(GlobalObjectId obj) : Message(OBJ_REF_MSG), object(obj) {}
+    ObjRefMessage(void* buffer)
+    : Message(OBJ_REF_MSG), object(*(GlobalObjectId*)buffer) { }
+    
+    virtual void* Serialize(void* buffer) {
+        buffer = Message::Serialize(buffer);
+        GlobalObjectId* objectRef = (GlobalObjectId*)buffer;
+        *objectRef = this->object;
+        objectRef++;
+        return (void*)objectRef;
+    }
+    
+    pVMObject GetObject() {
+        // give GlobalObjectId to objecttable, 
+        // if its a local reference just return index,
+        // otherwise add it to the table an return new index
+        return pVMObject(RemoteObjectManager::GetObject(object));
+    }
+    
+    virtual void Process() {}
+    
+    virtual size_t GetSize() {
+        return Message::GetSize() + sizeof(GlobalObjectId);
+    }
+    
+private:
+    GlobalObjectId object;
+};
+
+
+
 class SomMessage : public Message {
 public:
   SomMessage(GlobalObjectId receiver, char* signature, size_t num_args, 
@@ -102,7 +136,9 @@ public:
   
   char* GetSignature() { return signature; }
   size_t GetNumberOfArguments() { return number_of_arguments; }
-  pVMObject GetReceiver() { // receiver is always local, because message was already defered to the right actor
+  pVMObject GetReceiver() { 
+      // receiver is always local, because message was already defered to the right actor
+#warning does that hold when object migration is allowed?
     return pVMObject(receiver.index);
   }
   
@@ -112,7 +148,8 @@ public:
   }
   
   virtual size_t GetSize() {
-    return    sizeof(GlobalObjectId)
+    return Message::GetSize()
+    + sizeof(GlobalObjectId)
     + sizeof(size_t) + sig_len + 1
     + sizeof(size_t)
     + sizeof(GlobalObjectId) * this->number_of_arguments;
@@ -139,7 +176,7 @@ public:
       arguments++;
     }        
 
-    return NULL;
+    return (void*)arguments;
   }
     
   virtual void Process();
@@ -151,7 +188,7 @@ private:
   size_t number_of_arguments;
   GlobalObjectId* arguments;
   
-  friend class ActorMessaging;
+//  friend class ActorMessaging;
 };
 
 #endif

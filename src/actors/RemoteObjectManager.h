@@ -17,23 +17,24 @@
 //#define _REMOTE_OBJECT_MANAGER RemoteObjectManager::GetRemoteObjectManager()
 
 class RemoteObjectManager  {
-public:
-    // Singleton accessor
-    /*static RemoteObjectManager& GetRemoteObjectManager() {
-        if (!theRemoteObjectManager) {
-            theRemoteObjectManager = new RemoteObjectManager();
-        }
-        return *theRemoteObjectManager;
-    }*/
-    
-    static VMObject* GetObject(GlobalObjectId id) {
+public:    
+    static pVMObject GetObject(GlobalObjectId id) {
         if (objectMap[id] == NULL) {
             objectMap[id] = _UNIVERSE->NewRemoteObject(id);
         }
         return objectMap[id];
     }
     
-    //static RemoteObjectManager* theRemoteObjectManager;
+    static GlobalObjectId GetGlobalId(pVMObject obj) {
+        if (obj->IsRemote()) {
+            return ((pVMRemoteObject)obj)->GetGlobalId();
+        }
+
+        GlobalObjectId id;
+        id.index = obj.GetIndex();
+        id.actor_id = actors_id();
+        return id;
+    }
     
 private:
     static std::map<GlobalObjectId, VMRemoteObject*> objectMap;

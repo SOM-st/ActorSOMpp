@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include <stdio.h>
 #include <stdarg.h>
 
+#include "../actors/actors.h"
 
 #define FprintfPass(f,x) \
     va_list ap; \
@@ -47,7 +48,7 @@ static inline void DebugPrint(const char* fmt, ...) {
 
 
 static inline void DebugPrefix(const char* prefix) {
-    DebugPrint("%-6s ", prefix);
+    DebugPrint("[A:%d]%-6s ", actors_id(), prefix);
 }
 
 
@@ -97,8 +98,10 @@ static inline void DebugDump(const char* fmt, ...) {
 
 
 static inline void DebugTrace(const char* fmt, ...) {
-    DebugPrefix("TRACE:"); 
-    DebugPass(fmt);
+    if (actors_is_main_actor()) {
+        DebugPrefix("TRACE:"); 
+        DebugPass(fmt);
+    }
 }
 
 

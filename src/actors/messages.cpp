@@ -20,6 +20,7 @@ Message* Message::Deserialize(void* buffer) {
     switch (msgType) {
         case EXIT_MSG:       return new ExitMsg();
         case SOM_MSG:       return new SomMessage(buffer);
+        case OBJ_REF_MSG:   return new ObjRefMessage(buffer);
         default:
             warnx("Message::Deserialize: unexpected msgType\n");
     }

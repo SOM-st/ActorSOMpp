@@ -12,6 +12,9 @@
 #include "../vm/Universe.h"
 #include "../vmobjects/VMMethod.h"
 #include "../vmobjects/VMFrame.h"
+#include "../vmobjects/VMSymbol.h"
+#include "../vmobjects/Signature.h"
+#include "../misc/debug.h"
 
 #include "ActorMessaging.h"
 
@@ -39,7 +42,7 @@ pVMMethod _get_method_process_incomming_msgs(SomMessage* msg) {
 }
 
 pVMFrame _process_next_message() {
-    SomMessage* msg = ActorMessaging::ReceiveMessage();
+    SomMessage* msg = ActorMessaging::ReceiveSomMessage();
     
     pVMMethod method = _get_method_process_incomming_msgs(msg);
     
@@ -69,8 +72,34 @@ void Interpreter::do_YIELD(int) {
     SetFrame(new_frame);
 }
 
-void Interpreter::do_SEND_ASYNC(int) {
-#warning not implemented
+void _send_async_message(pVMObject receiver, pVMSymbol signature, size_t numOfArgs, pVMFrame arguments) {
+#warning argument order of the method call could get messed up here, needs a test
+
+    GlobalObjectId receiverId = RemoteObjectManager::GetGlobalId(receiver);
+    GlobalObjectId argumentIds[numOfArgs - 1];
+    
+    for (size_t i = 0; i < numOfArgs - 1; i++) {
+        argumentIds[i] = RemoteObjectManager::GetGlobalId(arguments->Pop());
+        // have to be push on the remote frame in the correct order
+        // (starting from last element)
+    }
+    
+    SomMessage msg(receiverId,
+                   signature->GetChars(), numOfArgs - 1, (GlobalObjectId*)&argumentIds);
+    ActorMessaging::SendMessage(&msg, receiverId.actor_id);
+    
+}
+
+void Interpreter::do_SEND_ASYNC(int bytecodeIndex) {
+    DebugLog("do_SEND_ASYNC\n");
+    pVMMethod method = GetMethod();
+    
+    pVMSymbol signature = (pVMSymbol) method->GetConstant(bytecodeIndex);
+    
+    size_t numOfArgs = Signature::GetNumberOfArguments(signature);
+    pVMObject receiver = GetFrame()->GetStackElement(numOfArgs-1);
+    
+    _send_async_message(receiver, signature, numOfArgs, GetFrame());
 }
 
 void Interpreter::ProcessIncommingMessages() {

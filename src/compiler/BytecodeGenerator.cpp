@@ -139,12 +139,17 @@ void BytecodeGenerator::EmitSUPERSEND(
 
 
 void BytecodeGenerator::EmitRETURNLOCAL(
-                MethodGenerationContext* mgenc ) {
+                MethodGenerationContext* mgenc) {
     EMIT1(BC_RETURN_LOCAL);
 }
 
 
 void BytecodeGenerator::EmitRETURNNONLOCAL(
-                MethodGenerationContext* mgenc ) {
+                MethodGenerationContext* mgenc) {
     EMIT1(BC_RETURN_NON_LOCAL);
+}
+
+
+void BytecodeGenerator::EmitYIELD(MethodGenerationContext* mgenc) {
+    EMIT1(BC_YIELD);
 }

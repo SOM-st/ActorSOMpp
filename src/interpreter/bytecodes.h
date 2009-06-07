@@ -76,7 +76,7 @@ THE SOFTWARE.
     CALL_TEMPLATE(template, bc_RETURN_NON_LOCAL)
 
 // add bytecodes for actor VM
-#define bc_SEND_ASYNC       SEND_ASYNC,        16,  1, "SEND_ASYNC      "
+#define bc_SEND_ASYNC       SEND_ASYNC,        16,  2, "SEND_ASYNC      "
 #define bc_YIELD            YIELD,             17,  1, "YIELD           "
 
 // define set of actor bytecodes

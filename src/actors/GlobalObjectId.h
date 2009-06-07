@@ -14,6 +14,11 @@
 #include "../memory/ObjectTable.h"
 
 typedef struct GlobalObjectId {
+  // no migration support for now
+  // for migration it would be an idea to make it more to an global id
+  // add a time stamp and add an actor_id and index which is stable and based on
+  // creation and then use the curren index and actor_id for fast lookup which
+  // can be updated on migration
   ObjectTable::Index  index;
   actor_id_t          actor_id;
   
