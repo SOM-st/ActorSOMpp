@@ -73,6 +73,8 @@ void Disassembler::dispatch(pVMObject o) {
         DebugPrint("{Block Class object}");
     else if(o == _UNIVERSE->GetGlobal(_UNIVERSE->SymbolForChars("system")))
         DebugPrint("{System}");
+    else if(o->IsRemote())
+        DebugPrint("{RemoteReference}");
     else {
         pVMClass c = o->GetClass();
         if(c == stringClass) {
@@ -271,10 +273,15 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         case BC_DUP: {
             pVMObject o = frame->GetStackElement(0);
             if(o) {
-                pVMClass c = o->GetClass();
-                pVMSymbol cname = c->GetName();
+                if (o->IsRemote()) {
+                    DebugPrint("<to dup: ");
+                }
+                else {
+                    pVMClass c = o->GetClass();
+                    pVMSymbol cname = c->GetName();
                 
-                DebugPrint("<to dup: (%s) ", cname->GetChars());
+                    DebugPrint("<to dup: (%s) ", cname->GetChars());
+                }
                 //dispatch
                 dispatch(o);
             } else
@@ -285,11 +292,17 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         case BC_PUSH_LOCAL: {
             uint8_t bc1 = BC_1, bc2 = BC_2;
             pVMObject o = frame->GetLocal(bc1, bc2);
-            pVMClass c = o->GetClass();
-            pVMSymbol cname = c->GetName();
             
-            DebugPrint("local: %d, context: %d <(%s) ", 
-                        BC_1, BC_2, cname->GetChars());
+            if (o->IsRemote()) {
+                DebugPrint("local: %d, context: %d <", BC_1, BC_2);
+            }
+            else {
+                pVMClass c = o->GetClass();
+                pVMSymbol cname = c->GetName();
+                
+                DebugPrint("local: %d, context: %d <(%s) ", 
+                            BC_1, BC_2, cname->GetChars());
+            }
             //dispatch
             dispatch(o);
             DebugPrint(">\n");                        
@@ -300,10 +313,14 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             pVMObject o = frame->GetArgument(bc1, bc2);
             DebugPrint("argument: %d, context: %d", bc1, bc2);
             if(!(DynamicConvert<VMClass, VMObject>(cl)).IsNull()) {
-                pVMClass c = o->GetClass();
-                pVMSymbol cname = c->GetName();
-                
-                DebugPrint("<(%s) ", cname->GetChars());
+                if (o->IsRemote()) {
+                    DebugPrint("<");
+                } else {
+                    pVMClass c = o->GetClass();
+                    pVMSymbol cname = c->GetName();
+                    
+                    DebugPrint("<(%s) ", cname->GetChars());
+                }
                 //dispatch
                 dispatch(o);                
                 DebugPrint(">");                        
@@ -318,11 +335,18 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             int field_index = arg->GetFieldIndex(name);
            
             pVMObject o = arg->GetField(field_index);
-            pVMClass c = o->GetClass();
-            pVMSymbol cname = c->GetName();
             
-            DebugPrint("(index: %d) field: %s <(%s) ", BC_1,
+            if (o->IsRemote()) {
+                DebugPrint("(index: %d) field: %s <", BC_1,
+                           name->GetChars());
+            }
+            else {
+                pVMClass c = o->GetClass();
+                pVMSymbol cname = c->GetName();
+            
+                DebugPrint("(index: %d) field: %s <(%s) ", BC_1,
                         name->GetChars(), cname->GetChars());
+            }
             //dispatch
             dispatch(o);                
             DebugPrint(">\n");                        
@@ -368,11 +392,15 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         case BC_POP: {
             size_t sp = frame->GetStackPointer().GetEmbeddedInteger();
             pVMObject o = (*(pVMArray)frame)[sp];
-            pVMClass c = o->GetClass();
-            pVMSymbol cname = c->GetName();
-            
-            DebugPrint("popped <(%s) ", cname->GetChars());
-            //dispatch
+            if (o->IsRemote()) {
+                DebugPrint("popped <");
+            } else {
+                pVMClass c = o->GetClass();
+                pVMSymbol cname = c->GetName();
+                
+                DebugPrint("popped <(%s) ", cname->GetChars());
+            }
+
             dispatch(o);
             DebugPrint(">\n");                        
             break;            
@@ -380,12 +408,16 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
         case BC_POP_LOCAL: {
             size_t sp = frame->GetStackPointer().GetEmbeddedInteger();
             pVMObject o = (*(pVMArray)frame)[sp];
-            pVMClass c = o->GetClass();
-            pVMSymbol cname = c->GetName();
-            
-            DebugPrint("popped local: %d, context: %d <(%s) ", BC_1, BC_2,
-                        cname->GetChars());
-            //dispatch
+            if (o->IsRemote()) {
+                DebugPrint("popped local: %d, context: %d <", BC_1, BC_2);
+            } else {
+                pVMClass c = o->GetClass();
+                pVMSymbol cname = c->GetName();
+                
+                DebugPrint("popped local: %d, context: %d <(%s) ", BC_1, BC_2,
+                            cname->GetChars());
+            }
+
             dispatch(o);            
             DebugPrint(">\n");                        
             break;            
@@ -406,12 +438,18 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             size_t sp = frame->GetStackPointer().GetEmbeddedInteger();
             pVMObject o = (*(pVMArray)frame)[sp];
             pVMSymbol name = (pVMSymbol)(method->GetConstant(bc_idx));
-            pVMClass c = o->GetClass();
-            pVMSymbol cname = c->GetName();
-            
-            DebugPrint("(index: %d) field: %s <(%s) ",  BC_1,
-                        name->GetChars(),
-                        cname->GetChars());
+            if (o->IsRemote()) {
+                DebugPrint("(index: %d) field: %s <",  BC_1,
+                            name->GetChars());
+            } else {
+                pVMClass c = o->GetClass();
+                pVMSymbol cname = c->GetName();
+                
+                DebugPrint("(index: %d) field: %s <(%s) ",  BC_1,
+                           name->GetChars(),
+                           cname->GetChars());
+                
+            }
             dispatch(o);
             DebugPrint(">\n");                        
             break;
