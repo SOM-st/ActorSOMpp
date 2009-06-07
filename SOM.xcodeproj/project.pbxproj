@@ -224,10 +224,10 @@
 				0AA9E8850FD488D2001F2C47 /* GlobalObjectId.h */,
 				0AA9E88B0FD51435001F2C47 /* ActorMessaging.h */,
 				0AA9E88C0FD51435001F2C47 /* ActorMessaging.cpp */,
-				0AA9EFE90FD938F1001F2C47 /* RemoteObjectManager.h */,
-				0AA9EFEA0FD938F1001F2C47 /* RemoteObjectManager.cpp */,
 				0AA9F0D20FD9A77E001F2C47 /* messages.h */,
 				0AA9F0E80FD9BC93001F2C47 /* messages.cpp */,
+				0AA9EFE90FD938F1001F2C47 /* RemoteObjectManager.h */,
+				0AA9EFEA0FD938F1001F2C47 /* RemoteObjectManager.cpp */,
 			);
 			path = actors;
 			sourceTree = "<group>";
