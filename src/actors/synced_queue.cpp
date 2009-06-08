@@ -32,7 +32,7 @@ inline size_t _store_max(p_syncedqueue sq) {
 void _store(p_syncedqueue sq, int32_t* const data, const size_t size) {
   printf("[%d] _store(%p, %p, %d)\n", getpid(), sq, data, size);
   while (size > _store_max(sq)) {
-    usleep(5);
+    usleep(10);
   }
   printf("[%d] _store after sleep\n", getpid());
 
@@ -103,7 +103,7 @@ void syncedqueue_dequeue(p_syncedqueue sq, int32_t* const data, const size_t siz
   while (to_be_read > 0) {
     do_read = _read_max(sq);
     if (do_read == 0) {
-      usleep(5);
+      usleep(10);
     } else {
       if (do_read > to_be_read) {
         do_read = to_be_read;
