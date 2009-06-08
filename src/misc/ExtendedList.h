@@ -47,6 +47,7 @@ public:
     void PushBack(const T& ptr);
 	void Clear();
 	int Size() const;
+    bool Empty() const;
 	T Get(int index);
 	int IndexOf(const T& needle);
 
@@ -91,6 +92,12 @@ void ExtendedList<T>::AddIfAbsent(const T& ptr) {
 template <class T>
 void ExtendedList<T>::Clear() {
 	theList.clear();
+}
+
+
+template <class T>
+bool ExtendedList<T>::Empty() const {
+	return theList.empty();
 }
 
 
