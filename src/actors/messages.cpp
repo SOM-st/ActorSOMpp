@@ -18,9 +18,11 @@ Message* Message::Deserialize(void* buffer) {
     buffer = (void*)((intptr_t)buffer + sizeof(int32_t));
     
     switch (msgType) {
-        case EXIT_MSG:       return new ExitMsg();
-        case SOM_MSG:       return new SomMessage(buffer);
-        case OBJ_REF_MSG:   return new ObjRefMessage(buffer);
+        case EXIT_MSG:              return new ExitMsg();
+        case SOM_MSG:               return new SomMessage(buffer);
+        case SOM_MSG_WITH_RESULT:   return new SomMessageWithResult(buffer);
+        case OBJ_REF_MSG:           return new ObjRefMessage(buffer);
+        case OBJ_REF_RESULT_MSG:    return new ResultObjRefMessage(buffer);
         default:
             warnx("Message::Deserialize: unexpected msgType\n");
     }

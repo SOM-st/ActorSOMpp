@@ -19,6 +19,9 @@
 class RemoteObjectManager  {
 public:    
     static pVMObject GetObject(GlobalObjectId id) {
+        if (id.actor_id == actors_id() || id.index.is_iint)
+            return pVMObject(id.index);
+        
         if (objectMap[id] == NULL) {
             objectMap[id] = _UNIVERSE->NewRemoteObject(id);
         }

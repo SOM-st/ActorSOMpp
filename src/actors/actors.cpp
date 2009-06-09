@@ -20,6 +20,7 @@
 #include <math.h>
 
 #include "../misc/ExtendedList.h"
+#include "../misc/debug.h"
 #include "../vmobjects/ObjectFormats.h"
 #include "../vmobjects/VMPointer.h"
 #include "synced_queue.h"
@@ -231,11 +232,11 @@ void actors_start(int argc, char** argv) {
         _go_parallel(argv);
     }
     else {
-        printf("MyActorId: %d MyPID: %d Status: %s\n", _local_id, getpid(),
-               (_main_actor) ? "leader" : "follower");
-
-        sleep(20); // useful for debugging
+        //sleep(20); // useful for debugging
     }
+
+    DebugLog("PID: %d Status: %s\n", getpid(),
+             (_main_actor) ? "leader" : "follower");
 }
 
 void actors_shutdown() {
