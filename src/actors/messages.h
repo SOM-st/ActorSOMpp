@@ -56,7 +56,6 @@ public:
     }
     
     virtual void Process() = 0;
-    virtual bool ShouldBeQueued() = 0;
     
     Messages GetType() { return msgType; }
     
@@ -80,7 +79,6 @@ class ExitMsg : public EmptyMessage {
 public:
     ExitMsg() : EmptyMessage(EXIT_MSG) {};
     virtual void Process();
-    virtual bool ShouldBeQueued();
 };
 
 
@@ -112,8 +110,7 @@ public:
         return RemoteObjectManager::GetObject(object);
     }
     
-    virtual void Process() {}
-    virtual bool ShouldBeQueued() { return true; }
+    virtual void Process();
     
     virtual size_t GetSize() {
         return Message::GetSize() + sizeof(GlobalObjectId);
@@ -148,15 +145,7 @@ public:
         return (void*) ((intptr_t)buffer + sizeof(GlobalObjectId));
     }
     
-    /* Is probably never used because we are using the Process method to do our stuff
-     GlobalObjectId GetResultActivationId() {
-        return resultActivation;
-    }*/
-    
-    virtual void Process() {
-        Interpreter::HandleRemoteReturn(resultActivation, GetObject());
-    }
-    virtual bool ShouldBeQueued() { return false; }
+    virtual void Process();
     
     virtual size_t GetSize() {
         return ObjRefMessage::GetSize() + sizeof(GlobalObjectId);
@@ -259,7 +248,6 @@ public:
     }
 
     virtual void Process();
-    virtual bool ShouldBeQueued() { return true; }
   
 private:
     GlobalObjectId receiver;
@@ -303,8 +291,7 @@ public:
         return (void*)((intptr_t)resultActivation + sizeof(GlobalObjectId));
     }
     
-    virtual void Process() {}
-    virtual bool ShouldBeQueued() { return true; }
+    virtual void Process();
     
     pVMObject GetResultActivation() {
         return RemoteObjectManager::GetObject(resultActivation);

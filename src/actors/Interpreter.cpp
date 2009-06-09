@@ -29,6 +29,50 @@ ExtendedList<pVMFrame>          activations;
 // message send
 map<GlobalObjectId, pVMFrame>   activationsWaitingForResult;
 
+// list of incomming object references
+// used for simple communication/synchronization
+ExtendedList<pVMObject>         incommingObjReferences;
+ExtendedList<pVMFrame>          waitingForObjRef;
+
+/**
+ * Are there any activation which might become ready
+ * for execution in the future?
+ */
+bool _waitingActivationsAvailable() {
+    return !activations.Empty()
+        || !waitingForObjRef.Empty()
+        || !activationsWaitingForResult.empty();
+}
+
+
+void Interpreter::AddIncommingObjRef(pVMObject obj) {
+    incommingObjReferences.PushBack(obj);
+}
+
+void Interpreter::WaitForObjectReference() {
+    // is almost equal to do_YIELD
+    pVMFrame current_frame = GetFrame();
+    waitingForObjRef.PushBack(current_frame);
+    
+    // force interpreter to return from loop an take another activation
+    SetFrame(NULL);
+}
+
+bool _have_object_for_activation() {
+    return !incommingObjReferences.Empty() && !waitingForObjRef.Empty();
+}
+
+pVMFrame _prepareWaitingActForReactivation() {
+    pVMFrame frame = waitingForObjRef.FrontAndPop();
+    
+    frame->Push(incommingObjReferences.FrontAndPop());
+    
+    return frame;
+}
+
+
+
+
 void Interpreter::HandleRemoteReturn(GlobalObjectId waitingActivation,
                                      pVMObject result) {
     pVMFrame activation = activationsWaitingForResult[waitingActivation];
@@ -41,7 +85,6 @@ void Interpreter::HandleRemoteReturn(GlobalObjectId waitingActivation,
         int32_t const val = result.GetEmbeddedInteger();
         DebugLog("Returned Value: %d\n", val);
     }
-    
     
     activationsWaitingForResult.erase(waitingActivation);
     
@@ -89,19 +132,21 @@ pVMMethod _get_method_process_incomming_msgs(SomMessage* msg) {
     return method;
 }
 
-pVMFrame _process_next_message() {
-    SomMessage* msg = ActorMessaging::ReceiveSomMessage();
-
-    DebugLog("Received SomMessage: %s>>%s\n", 
-             msg->GetReceiver()->GetClass()->GetName()->GetChars(), 
-             msg->GetSignature());
+void Interpreter::ProcessMessage(SomMessage* msg) {
+    pVMMethod method = _get_method_process_incomming_msgs(msg);
     
-    pVMMethod method;
-    if (msg->GetType() == SOM_MSG_WITH_RESULT) {
-        method = _get_method_process_incomming_msgs((SomMessageWithResult*)msg);
-    } else {
-        method = _get_method_process_incomming_msgs(msg);
+    pVMFrame frame = _UNIVERSE->NewFrame(pVMFrame(), method);
+    frame->Push(msg->GetReceiver());
+    
+    for (size_t i = 0; i < msg->GetNumberOfArguments(); i++) {
+        frame->Push(msg->GetArgument(i));
     }
+
+    activations.PushBack(frame);
+}
+
+void Interpreter::ProcessMessage(SomMessageWithResult* msg) {
+    pVMMethod method = _get_method_process_incomming_msgs(msg);
     
     pVMFrame frame = _UNIVERSE->NewFrame(pVMFrame(), method);
     frame->Push(msg->GetReceiver());
@@ -110,22 +155,14 @@ pVMFrame _process_next_message() {
         frame->Push(msg->GetArgument(i));
     }
     
-    delete msg;
-    return frame;
+    activations.PushBack(frame);
 }
-
-
-/*
-void Interpreter::setNextActivation() {
-    pVMFrame new_frame = _wait_for_next_activation();
-    SetFrame(new_frame);
-}*/
 
 void Interpreter::do_YIELD(int) {
     pVMFrame current_frame = GetFrame();
     activations.PushBack(current_frame);
-
-    //setNextActivation(); refactored to ProcessIncommingMessages
+    
+    // force interpreter to return from loop an take another activation
     SetFrame(NULL);
 }
 
@@ -179,23 +216,22 @@ void Interpreter::do_SEND_ASYNC(int bytecodeIndex) {
     _send_async_message(receiver, signature, numOfArgs, GetFrame());
 }
 
-void Interpreter::ProcessIncommingMessages() {
-    while (ActorMessaging::HasIncommingMessages() || !stop) {
-        pVMFrame new_frame = NULL;
+void Interpreter::ProcessActivations() {
+    while (!stop || _waitingActivationsAvailable()) {
+        ActorMessaging::ReceiveAndProcessMessages();
         
-        // receive message and construct frame/co-routine
-        if (ActorMessaging::HasIncommingMessages()) {
-            new_frame = _process_next_message();
+        pVMFrame nextActivation = NULL;
+        if (_have_object_for_activation()) {
+            nextActivation = _prepareWaitingActForReactivation();
         } else if (!activations.Empty()) {
-            new_frame = activations.Front();
-            activations.PopFront();
+            nextActivation = activations.FrontAndPop();
         }
         
-        if (new_frame.IsNull()) {
+        if (nextActivation.IsNull()) {
             usleep(1000000);
             DebugLog("Waiting...");
         } else {
-            SetFrame(new_frame);
+            SetFrame(nextActivation);
             Start();
         }        
     }

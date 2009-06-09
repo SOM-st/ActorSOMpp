@@ -40,7 +40,10 @@ void _Actor::NumberOfActors(pVMObject /*object*/, pVMFrame frame) {
 void _Actor::Receive(pVMObject /*object*/, pVMFrame frame) {
   frame->Pop();
   
-  frame->Push(ActorMessaging::ReceiveObjectReference());
+  //frame->Push(ActorMessaging::ReceiveObjectReference());
+  
+  // just wait for the reference and let other coroutines go on
+  _UNIVERSE->GetInterpreter()->WaitForObjectReference();
 }
 
 void _Actor::Send_toActor_(pVMObject, pVMFrame frame) {

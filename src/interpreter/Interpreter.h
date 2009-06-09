@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "../vmobjects/VMPointer.h"
 
 #include "../actors/GlobalObjectId.h"
+//#include "../actors/messages.h"
 
 class VMMethod;
 class VMFrame;
@@ -44,11 +45,15 @@ class VMProtoObject;
 class VMSymbol;
 class VMClass;
 
+class SomMessage;
+class SomMessageWithResult;
+
 class Interpreter {
 public:
     Interpreter();
     ~Interpreter();
     void Start();
+    void ProcessActivations();
     pVMFrame PushNewFrame(pVMMethod method);
     void SetFrame(pVMFrame frame);
     pVMFrame GetFrame();
@@ -58,7 +63,13 @@ public:
     void Stop();
     void ProcessIncommingMessages();
     
+    void WaitForObjectReference();
+    
+    
+    static void AddIncommingObjRef(pVMObject obj);
     static void HandleRemoteReturn(GlobalObjectId waitingActivation, pVMObject result);
+    static void ProcessMessage(SomMessage* msg);
+    static void ProcessMessage(SomMessageWithResult* msg);
     
 private:
     pVMFrame frame;

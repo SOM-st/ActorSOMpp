@@ -295,7 +295,7 @@ void Universe::initialize(int _argc, char** _argv) {
 
     interpreter->Start();
     
-    interpreter->ProcessIncommingMessages();
+    interpreter->ProcessActivations();
 }
 
 

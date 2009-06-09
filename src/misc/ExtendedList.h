@@ -44,6 +44,7 @@ public:
 	void AddAll(const ExtendedList<T>* list);
     T Front();
     void PopFront();
+    T FrontAndPop();
     void PushBack(const T& ptr);
 	void Clear();
 	int Size() const;
@@ -116,6 +117,12 @@ T ExtendedList<T>::Front() {
     return theList.front();
 }
 
+template<class T>
+T ExtendedList<T>::FrontAndPop() {
+    T front = theList.front();
+    this->PopFront();
+    return front;
+}
 
 template <class T>
 int ExtendedList<T>::Size() const {

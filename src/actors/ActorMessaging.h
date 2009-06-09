@@ -16,19 +16,11 @@
 
 class ActorMessaging {
 public:
- 
-    static bool HasIncommingMessages();
-    static SomMessage*  ReceiveSomMessage();
-    static pVMObject    ReceiveObjectReference();
     
+    static void ReceiveAndProcessMessages();
     static void SendMessage(Message* msg, actor_id_t actorId);
     static void SendObjectReference(pVMObject obj, actor_id_t actorId);
-  
-private:
-    static Message* ReceiveMessage(Messages msgType);
-    static Message* CheckTempQueue(Messages msgType);
-    static std::vector<Message*> tempQueue;
-
+    
 };
 
 #endif

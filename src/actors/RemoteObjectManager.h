@@ -9,6 +9,8 @@
 
 #include <map>
 
+#include "../vm/Universe.h"
+
 #include "GlobalObjectId.h"
 
 #include "../vmobjects/VMRemoteObject.h"

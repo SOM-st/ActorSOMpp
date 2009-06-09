@@ -17,66 +17,21 @@
 #include "../misc/debug.h"
 
 
-std::vector<Message*> ActorMessaging::tempQueue;
-
-bool ActorMessaging::HasIncommingMessages() {
+void ActorMessaging::ReceiveAndProcessMessages() {
     while (actors_msgbuffer_holds_data()) {
-        ReceiveMessage(ANY_MESSAGE);
-    }
-    
-    return !tempQueue.empty();
-}
-
-Message* ActorMessaging::CheckTempQueue(Messages msgType) {
-    std::vector<Message*>::iterator it;
-    
-    for (it = tempQueue.begin(); it < tempQueue.end(); it++) {
-        if ((*it)->GetType() & msgType) {
-            Message* result = *it;
-            tempQueue.erase(it);
-            return result;
-        }
-    }
-    return NULL;
-}
-
-Message* ActorMessaging::ReceiveMessage(Messages msgType) {
-    Message* result = CheckTempQueue(msgType);
-    if (result != NULL) {
-        return result;
-    }
-    
-    do {
         void* buffer;
         size_t size;
         actors_msgbuffer_read_msg(&buffer, &size);
         
-        result = Message::Deserialize(buffer);
+        Message* msg = Message::Deserialize(buffer);
 #ifdef DEBUG
-        DebugLog("ActorMessaging received msg: %s\n", typeid(*result).name());
+        DebugLog("ActorMessaging received msg: %s\n", typeid(*msg).name());
 #endif  
-        result->Process();
-        if (result->GetType() != msgType && result->ShouldBeQueued()) {
-            DebugLog("Message is temporary postponed\n");
-            tempQueue.push_back(result);
-        }
+        msg->Process();
         
-        free(buffer);        
-    } while ((result->GetType() & msgType) == 0);
-    DebugLog("Message will be handled now.\n");
-    
-    return result;
-}
-
-SomMessage* ActorMessaging::ReceiveSomMessage() { 
-    return (SomMessage*)ReceiveMessage(SOM_MSG | SOM_MSG_WITH_RESULT);
-}
-
-pVMObject ActorMessaging::ReceiveObjectReference() {
-    ObjRefMessage* msg = (ObjRefMessage*)ReceiveMessage(OBJ_REF_MSG);
-    pVMObject obj = msg->GetObject();
-    delete msg;
-    return obj;
+        free(buffer);
+        delete msg;
+    }
 }
 
 void ActorMessaging::SendObjectReference(pVMObject obj, actor_id_t actorId) {
@@ -85,7 +40,7 @@ void ActorMessaging::SendObjectReference(pVMObject obj, actor_id_t actorId) {
 }
 
 void ActorMessaging::SendMessage(Message* msg, actor_id_t actorId) {
-    DebugLog("Send Msg: %d to %d\n", msg->GetType(), actorId);
+    DebugLog("Send Msg: %s to %d\n", typeid(*msg).name(), actorId);
     size_t buffer_size = msg->GetSize();
   
     // this size alignment is for the syncedqueue implementation which uses int32_t as smallest units

@@ -13,6 +13,11 @@
 
 #include "../vm/Universe.h"
 
+#include "../vmobjects/VMClass.h"
+#include "../vmobjects/VMSymbol.h"
+
+#include "../misc/debug.h"
+
 Message* Message::Deserialize(void* buffer) {
     Messages msgType = (Messages)*(int32_t*)buffer;
     buffer = (void*)((intptr_t)buffer + sizeof(int32_t));
@@ -34,9 +39,25 @@ void ExitMsg::Process() {
     _UNIVERSE->GetInterpreter()->Stop();
 }
 
-bool ExitMsg::ShouldBeQueued() {
-    return false;
+void ObjRefMessage::Process() {
+    Interpreter::AddIncommingObjRef(GetObject());
 }
 
+void ResultObjRefMessage::Process() {
+    Interpreter::HandleRemoteReturn(resultActivation, GetObject());
+}
 
-void SomMessage::Process() {}
+void SomMessage::Process() {
+    DebugLog("Process SomMessage: %s>>%s\n", 
+             GetReceiver()->GetClass()->GetName()->GetChars(), 
+             GetSignature());
+    
+    Interpreter::ProcessMessage(this);
+}
+void SomMessageWithResult::Process() {
+    DebugLog("Process SomMessageWithResult: %s>>%s\n", 
+             GetReceiver()->GetClass()->GetName()->GetChars(), 
+             GetSignature());
+    
+    Interpreter::ProcessMessage(this);
+}
