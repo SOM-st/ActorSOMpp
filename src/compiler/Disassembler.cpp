@@ -464,15 +464,19 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             pVMObject elem = _UNIVERSE->GetInterpreter()->GetFrame()->
                                    GetStackElement(
                                        Signature::GetNumberOfArguments(sel)-1);
-            pVMClass elemClass = elem->GetClass();
-            pVMInvokable inv =  DynamicConvert<VMInvokable, VMObject>(
+            if (elem->IsRemote()) {
+                DebugPrint("!Remote)\n");
+            } else {
+                pVMClass elemClass = elem->GetClass();
+                pVMInvokable inv =  DynamicConvert<VMInvokable, VMObject>(
                                             elemClass->LookupInvokable(sel));
             
-            if(!inv.IsNull() && inv->IsPrimitive()) 
-                DebugPrint("*)\n");
-            else {
-                DebugPrint("\n");    
-                indentc++; ikind='>'; // visual
+                if(!inv.IsNull() && inv->IsPrimitive()) 
+                    DebugPrint("*)\n");
+                else {
+                    DebugPrint("\n");    
+                    indentc++; ikind='>'; // visual
+                }
             }
             break;
         }
@@ -484,7 +488,8 @@ void Disassembler::DumpBytecode(pVMFrame frame, pVMMethod method, int bc_idx) {
             break;
         }
         case BC_RETURN_LOCAL:
-        case BC_RETURN_NON_LOCAL: {
+        case BC_RETURN_NON_LOCAL:
+        case BC_RETURN_REMOTE: {
             DebugPrint(")\n");
             indentc--; ikind='<'; //visual
             break;
