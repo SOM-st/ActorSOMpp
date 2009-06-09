@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "../vmobjects/ObjectFormats.h"
 #include "../vmobjects/VMPointer.h"
 
+#include "../actors/GlobalObjectId.h"
+
 class VMMethod;
 class VMFrame;
 class VMMethod;
@@ -55,6 +57,9 @@ public:
     
     void Stop();
     void ProcessIncommingMessages();
+    
+    static void HandleRemoteReturn(GlobalObjectId waitingActivation, pVMObject result);
+    
 private:
     pVMFrame frame;
     StdString uG;
@@ -66,6 +71,9 @@ private:
     pVMFrame popFrame();
     void popFrameAndPushResult(pVMObject result);
     void send(pVMSymbol signature, pVMClass receiverClass);
+    void sendSyncMessage(pVMObject receiver, pVMSymbol signature, 
+                         size_t numOfArgs, pVMFrame currentFrame);
+    void setNextActivation();
     
     void do_DUP(int bytecodeIndex);
     void do_PUSH_LOCAL(int bytecodeIndex);
@@ -85,6 +93,7 @@ private:
 
     void do_SEND_ASYNC(int bytecodeIndex);
     void do_YIELD(int bytecodeIndex);
+    void do_RETURN_REMOTE(int bytecodeIndex);
 
 };
 

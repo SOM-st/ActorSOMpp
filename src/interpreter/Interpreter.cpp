@@ -64,7 +64,7 @@ Interpreter::~Interpreter() {
 
 
 void Interpreter::Start() {
-    while (true) {
+    while (!GetFrame().IsNull()) {
         int bytecodeIndex = _FRAME->GetBytecodeIndex();
 
         pVMMethod method = this->GetMethod();
@@ -320,8 +320,12 @@ void Interpreter::do_SEND( int bytecodeIndex ) {
     int numOfArgs = Signature::GetNumberOfArguments(signature);
 
     pVMObject receiver = _FRAME->GetStackElement(numOfArgs-1);
-
-    this->send(signature, receiver->GetClass());
+    
+    if (receiver->IsRemote()) {
+        sendSyncMessage(receiver, signature, numOfArgs, GetFrame());
+    } else {
+        this->send(signature, receiver->GetClass());
+    }
 }
 
 

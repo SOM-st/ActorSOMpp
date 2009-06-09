@@ -78,11 +78,13 @@ THE SOFTWARE.
 // add bytecodes for actor VM
 #define bc_SEND_ASYNC       SEND_ASYNC,        16,  2, "SEND_ASYNC      "
 #define bc_YIELD            YIELD,             17,  1, "YIELD           "
+#define bc_RETURN_REMOTE    RETURN_REMOTE,     18,  2, "RETURN_REMOTE   "
 
 // define set of actor bytecodes
 #define ACTOR_BYTECODES(template) \
     CALL_TEMPLATE(template, bc_SEND_ASYNC     ) \
-    CALL_TEMPLATE(template, bc_YIELD          )
+    CALL_TEMPLATE(template, bc_YIELD          ) \
+    CALL_TEMPLATE(template, bc_RETURN_REMOTE  )
 
 
 // define set of all bytecodes to be used
