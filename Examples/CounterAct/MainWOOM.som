@@ -10,18 +10,21 @@ MainWOOM = (
         
         counter := Actor receive. "wait to receive a object reference"
         
-        '[A:0] Counter received' println.
+        '[' print. Actor id print. ']' print.
+        'Counter received' println.
 
         inc := Incrementor new: counter.
         
-        '[A:0] Local Incrementor created' println.
+        '[' print. Actor id print. ']' print.
+        'Local Incrementor created' println.
         
-        inc ASYNC_run.  " Asynchrounous message send"
+        inc ASYNC_run.  "Asynchrounous message send"
         
         yield.
 
+        '[' print. Actor id print. ']' print.
         'Counter Value: ' print.
-        (counter value) println "Synchronuse message send to a remote object"
+        (counter value) println. "Synchronuse message send to a remote object"
     )
     
     runOnFollower = (
@@ -31,12 +34,13 @@ MainWOOM = (
         
         Actor main send: counter.
         
-        '[A:n] Counter send' println.
+        '[' print. Actor id print. ']' print.
+        'Counter send' println.
         
         inc := Incrementor new: counter.
         
-
-        '[A:n] Local Incrementor created' println.
+        '[' print. Actor id print. ']' print.
+        'Local Incrementor created' println.
         
         inc ASYNC_run.
     )

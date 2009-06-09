@@ -5,7 +5,8 @@ Incrementor = (
     counter: value = ( counter := value )
     
     run = (
-      'Incrementor run()' println.
+      '[' print. Actor id print. ']' print.
+      'Incrementor>>run' println.
       counter ASYNC_inc.
     )
     

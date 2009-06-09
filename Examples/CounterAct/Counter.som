@@ -10,8 +10,11 @@ Counter = (
       value := val
     )
     
-    inc = (
+    inc = ( 
       value := value + 1.
+      '[' print. Actor id print. ']' print.
+     'Counter>>inc, new value = ' print.
+      value println.
     )
     
     -----
