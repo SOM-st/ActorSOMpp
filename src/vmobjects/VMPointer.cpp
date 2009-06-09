@@ -42,3 +42,4 @@ int32_t VMPointer<T>::GetEmbeddedInteger() const {
 
 template void VMPointer<VMInteger>::SetEmbeddedInteger(int32_t val);
 template int32_t VMPointer<VMInteger>::GetEmbeddedInteger() const;
+template int32_t VMPointer<VMObject>::GetEmbeddedInteger() const;
