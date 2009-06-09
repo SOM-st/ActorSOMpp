@@ -46,9 +46,12 @@ THE SOFTWARE.
 
 int main(int argc, char** argv) {
 
-    cout << "This is SOM++.\n" << endl;
-    
     actors_init();
+    
+    if (actors_is_main_actor())
+        cout << "This is SOM++.\n" << endl;
+    
+
     actors_start(argc, argv);
 
     Universe::Start(argc, argv);
