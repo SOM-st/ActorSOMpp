@@ -20,11 +20,13 @@ MainWOOM = (
         
         inc ASYNC_run.  "Asynchrounous message send"
         
-        yield.
+        yield. "Shouldn't be necessary anymore"
 
         '[' print. Actor id print. ']' print.
         'Counter Value: ' print.
         (counter value) println. "Synchronuse message send to a remote object"
+        
+        system exit.
     )
     
     runOnFollower = (

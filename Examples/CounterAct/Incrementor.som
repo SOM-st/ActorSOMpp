@@ -9,8 +9,6 @@ Incrementor = (
       'Incrementor>>run' println.
       counter ASYNC_inc.
     )
-    
-    
 
     -----
 
