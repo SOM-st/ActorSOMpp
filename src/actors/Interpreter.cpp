@@ -23,6 +23,7 @@
 #include <typeinfo>
 
 // co-routine support
+#warning add these structures to the GC root set
 // list of VMFrames representing co-routine activations, ready for execution
 ExtendedList<pVMFrame>          activations;
 // list of VMFrames/co-routines, waiting for the result of a syncronous remote

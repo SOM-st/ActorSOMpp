@@ -240,6 +240,7 @@ void actors_start(int argc, char** argv) {
 }
 
 void actors_shutdown() {
+#warning this function only works correctly if called on the main actor
     // send message to force shut down
     ExitMsg msg;
     for (size_t i = 1; i < NUMBER_OF_ACTORS; i++) {
