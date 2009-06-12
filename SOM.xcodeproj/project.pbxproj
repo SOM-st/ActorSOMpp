@@ -15,6 +15,7 @@
 		0A044B3A0FD32F07009B284F /* synced_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synced_queue.cpp; sourceTree = "<group>"; };
 		0A044B3B0FD32F07009B284F /* synced_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = synced_queue.h; sourceTree = "<group>"; };
 		0A044B3D0FD32F13009B284F /* actors.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = actors.h; sourceTree = "<group>"; tabWidth = 4; };
+		0A504B880FE06E7E00F3A3FE /* ParamTest.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ParamTest.som; sourceTree = "<group>"; };
 		0AA9E7720FD46E18001F2C47 /* Array.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Array.som; sourceTree = "<group>"; };
 		0AA9E7730FD46E18001F2C47 /* BigInteger.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BigInteger.som; sourceTree = "<group>"; };
 		0AA9E7740FD46E18001F2C47 /* Block.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Block.som; sourceTree = "<group>"; };
@@ -364,6 +365,7 @@
 				0AA9E7CC0FD47034001F2C47 /* Incrementor.som */,
 				0AA9E7CD0FD47034001F2C47 /* Main.som */,
 				0AA9F17E0FDABF77001F2C47 /* MainWOOM.som */,
+				0A504B880FE06E7E00F3A3FE /* ParamTest.som */,
 			);
 			path = CounterAct;
 			sourceTree = "<group>";
@@ -484,8 +486,8 @@
 		3F5203110FA6624C00E75857 /* primitives */ = {
 			isa = PBXGroup;
 			children = (
-				0AA9F1D20FDACAE6001F2C47 /* Actor.h */,
 				0AA9F1D30FDACAE6001F2C47 /* Actor.cpp */,
+				0AA9F1D20FDACAE6001F2C47 /* Actor.h */,
 				3F5203120FA6624C00E75857 /* Array.cpp */,
 				3F5203130FA6624C00E75857 /* Array.h */,
 				3F5203140FA6624C00E75857 /* BigInteger.cpp */,
