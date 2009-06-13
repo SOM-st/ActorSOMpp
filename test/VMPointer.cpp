@@ -3,19 +3,6 @@
 #include "../src/vmobjects/VMObject.h"
 #include <stdio.h>
 
-TEST(TestCase, Name) {
-  EXPECT_EQ(1, 1);
-  
-  
-}
-
-
-TEST(ActorId, Create) {
-  //VMObject O1(0);
-  //VMPointer<VMObject> pO1(O1);
-  
-  printf("Size: %d", sizeof(VMPointer<VMObject>));
-  
-  EXPECT_EQ(8, sizeof(VMPointer<VMObject>));
-  
+TEST(VMPointer, Size) {
+  EXPECT_EQ(4, sizeof(VMPointer<VMObject>));
 }

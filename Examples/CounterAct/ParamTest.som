@@ -1,0 +1,50 @@
+"This is an experiment to see whether this counter example can work without 
+ explicit object migration"
+ParamTest = (
+
+    " The 'run' method is called when initializing 
+      the system on the leading actor
+    "
+    run = (
+        | a b |
+        
+        Actor main send: 1.
+        Actor receive.
+        
+        a := 21//5.
+        a println.
+        b := Actor receive.
+        
+        '[' print. Actor id print. ']' print.
+        'b received: ' print.
+        b println.
+        
+        a := a + b.
+        
+        a println.
+        
+        Actor main send: 'Das ist ein Test String'.
+        Actor main send: 4294967295.
+        Actor main send: #testSymbol.
+        
+        Actor receive println.
+        Actor receive println.
+        Actor receive println.
+                
+        system exit.
+    )
+    
+    runOnFollower = (
+        | b |
+        
+        b := (11 / 10).
+        
+        b class name println.
+        
+        Actor main send: b.
+        '[' print. Actor id print. ']' print.
+        'b send, value: ' print.
+        b println.
+        
+    )
+)
