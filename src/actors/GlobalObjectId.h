@@ -12,6 +12,7 @@
 
 #include "actors.h"
 #include "../memory/ObjectTable.h"
+#include "../vmobjects/ObjectFormats.h"
 
 typedef struct GlobalObjectId {
   // no migration support for now
@@ -27,6 +28,34 @@ typedef struct GlobalObjectId {
       return true;
     
     return actor_id == o.actor_id && index.value < o.index.value;
+  }
+  
+  static size_t GetDirectSerializedSize() {
+    return sizeof(GlobalObjectId);
+  }
+  
+  size_t GetSerializedSize() {
+    return sizeof(ImmutableTypes) + sizeof(GlobalObjectId);
+  }
+  
+  void* SerializeDirect(void* buffer) {
+    *(GlobalObjectId*)buffer = *this;
+    
+    return (void*)((intptr_t)buffer + sizeof(GlobalObjectId));
+  }
+  
+  void* Serialize(void* buffer) {
+    *(ImmutableTypes*)buffer = GlobalObjectIdTag;
+    buffer = (void*)((intptr_t)buffer + sizeof(ImmutableTypes));
+    
+    buffer = SerializeDirect(buffer);
+    
+    return buffer;
+  }
+  
+  static void* Deserialize(void* buffer, GlobalObjectId& id) {
+    id = *(GlobalObjectId*)buffer;
+    return (void*)((intptr_t)buffer + sizeof(GlobalObjectId));
   }
   
 } GlobalObjectId;

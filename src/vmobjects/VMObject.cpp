@@ -25,6 +25,7 @@ THE SOFTWARE.
   */
 
 #include "../memory/ObjectTable.h"
+#include "../actors/RemoteObjectManager.h"
 
 #include "VMObject.h"
 #include "VMClass.h"
@@ -154,4 +155,15 @@ void VMObject::MarkReferences() {
         o->MarkReferences();
     }
 
+}
+
+void* VMObject::Serialize(void* buffer) {
+    *(ImmutableTypes*)buffer = GetSerializationTag();
+    buffer = (void*)((intptr_t)buffer + sizeof(ImmutableTypes));
+    
+    if (!IsImmutable()) {
+        buffer = RemoteObjectManager::GetGlobalId(Self()).SerializeDirect(buffer);
+    }
+    
+    return buffer;
 }

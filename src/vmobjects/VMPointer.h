@@ -10,8 +10,10 @@
 
 #include "../memory/ObjectTable.h"
 
-class VMInteger;
+class VMInteger; 
 extern VMInteger* integerProxy;
+
+void VMPointerSetValueOnProxy(int32_t value);
 
 template<class T>
 class VMPointer {
@@ -102,11 +104,15 @@ public:
         return index.index;
     }
 
+    //void SetValueOnProxy() const;
+    
     //member access operator
     inline T* operator ->() {
         if (!index.index.is_iint) {
             return (T*) _OBJECT_TABLE[index.index];
         }
+#warning this hack becomes even more evil...
+        VMPointerSetValueOnProxy(index.iint.value);
         return (T*) integerProxy;
     };
     
@@ -115,6 +121,8 @@ public:
         if (!index.index.is_iint) {
             return (T*) _OBJECT_TABLE[index.index];
         }
+#warning this hack becomes even more evil...
+        VMPointerSetValueOnProxy(index.iint.value);
         return (T*) integerProxy;
     };
     

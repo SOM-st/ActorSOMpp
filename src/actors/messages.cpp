@@ -50,14 +50,14 @@ void ResultObjRefMessage::Process() {
 void SomMessage::Process() {
     DebugLog("Process SomMessage: %s>>%s\n", 
              GetReceiver()->GetClass()->GetName()->GetChars(), 
-             GetSignature());
+             GetSignature()->GetChars());
     
     Interpreter::ProcessMessage(this);
 }
 void SomMessageWithResult::Process() {
     DebugLog("Process SomMessageWithResult: %s>>%s\n", 
              GetReceiver()->GetClass()->GetName()->GetChars(), 
-             GetSignature());
+             GetSignature()->GetChars());
     
     Interpreter::ProcessMessage(this);
 }

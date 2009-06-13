@@ -555,8 +555,9 @@ pVMObject Universe::NewObjectFromBuffer(void*& buffer) {
             char* value;
             size_t len;
             buffer = VMString::Deserialize(buffer, len, value);
-            return NewSymbol(value);
+            return SymbolForChars(value);
         }
+        case NotImmutable:
         case GlobalObjectIdTag: {
             GlobalObjectId id;
             buffer = VMRemoteObject::Deserialize(buffer, id);

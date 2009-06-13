@@ -17,6 +17,9 @@
 #define MAX_IINT    1073741823
 #define MIN_IINT   -1073741824 
 
+void VMPointerSetValueOnProxy(int32_t value) {
+    integerProxy->SetEmbeddedInteger(value);
+};
 
 template<class T>
 void VMPointer<T>::SetEmbeddedInteger(int32_t val) {
@@ -43,3 +46,5 @@ int32_t VMPointer<T>::GetEmbeddedInteger() const {
 template void VMPointer<VMInteger>::SetEmbeddedInteger(int32_t val);
 template int32_t VMPointer<VMInteger>::GetEmbeddedInteger() const;
 template int32_t VMPointer<VMObject>::GetEmbeddedInteger() const;
+//template void VMPointer<VMObject>::SetValueOnProxy() const;
+//template void VMPointer<VMInteger>::SetValueOnProxy() const;

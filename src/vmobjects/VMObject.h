@@ -133,19 +133,25 @@ public:
         return false;
     }
     
+    virtual actor_id_t GetHomeId() {
+        return actors_id();
+    }
+    
     virtual ImmutableTypes GetSerializationTag() {
         return NotImmutable;
     }
     
     virtual size_t GetSerializedSize() {
-        return sizeof(ImmutableTypes);
+        size_t size = sizeof(ImmutableTypes);
+        
+        if (!IsImmutable()) {
+            size += GlobalObjectId::GetDirectSerializedSize();
+        }
+        
+        return size;
     }
     
-    virtual void* Serialize(void* buffer) {
-        *(ImmutableTypes*)buffer = GetSerializationTag();
-        
-        return (void*)((intptr_t)buffer + sizeof(ImmutableTypes));
-    }
+    virtual void* Serialize(void* buffer);
     
     static void* Deserialize(void* buffer, ImmutableTypes& typeTag) {
         typeTag = *(ImmutableTypes*)buffer;

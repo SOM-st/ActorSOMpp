@@ -104,8 +104,7 @@ pVMMethod _get_method_process_incomming_msgs(SomMessageWithResult* msg) {
     method->SetBytecode(3, 1);
     method->SetBytecode(4, BC_HALT);
     
-    pVMSymbol sig = _UNIVERSE->SymbolForChars(msg->GetSignature());
-    method->SetIndexableField(0, sig);
+    method->SetIndexableField(0, msg->GetSignature());
     method->SetIndexableField(1, msg->GetResultActivation());
     
     
@@ -124,8 +123,7 @@ pVMMethod _get_method_process_incomming_msgs(SomMessage* msg) {
     method->SetBytecode(1, 0);  // index for constant, are going to set constant 0 to the symbol
     method->SetBytecode(2, BC_HALT);
     
-    pVMSymbol sig = _UNIVERSE->SymbolForChars(msg->GetSignature());
-    method->SetIndexableField(0, sig);
+    method->SetIndexableField(0, msg->GetSignature());
 
 #warning hope this will work without holder
     //method->SetHolder(systemClass); 
@@ -171,16 +169,15 @@ void _send_async_message(pVMObject receiver, pVMSymbol signature,
                          size_t numOfArgs, pVMFrame arguments) {
 #warning argument order of the method call could get messed up here, needs a test
 
-    GlobalObjectId receiverId = RemoteObjectManager::GetGlobalId(receiver);
-    GlobalObjectId argumentIds[numOfArgs - 1];
+    pVMObject args[numOfArgs - 1];
     
     for (int i = numOfArgs - 2; i >= 0 ; i--) {
-        argumentIds[i] = RemoteObjectManager::GetGlobalId(arguments->Pop());
+        args[i] = arguments->Pop();
     }
     
-    SomMessage msg(receiverId, signature->GetChars(), numOfArgs - 1,
-                   (GlobalObjectId*)&argumentIds);
-    ActorMessaging::SendMessage(&msg, receiverId.actor_id);
+    SomMessage msg(receiver, signature, numOfArgs - 1,
+                   (pVMObject*)&args);
+    ActorMessaging::SendMessage(&msg, receiver->GetHomeId());
     
 }
 
@@ -190,16 +187,15 @@ void Interpreter::sendSyncMessage(pVMObject receiver, pVMSymbol signature,
     GlobalObjectId activation = RemoteObjectManager::GetGlobalId(currentFrame);
     activationsWaitingForResult[activation] = currentFrame;
     
-    GlobalObjectId receiverId = RemoteObjectManager::GetGlobalId(receiver);
-    GlobalObjectId argumentIds[numOfArgs - 1];
+    pVMObject args[numOfArgs - 1];
 
     for (int i = numOfArgs - 2; i >= 0 ; i--) {
-        argumentIds[i] = RemoteObjectManager::GetGlobalId(currentFrame->Pop());
+        args[i] = currentFrame->Pop();
     }
     
-    SomMessageWithResult msg(receiverId, signature->GetChars(), numOfArgs - 1,
-                             (GlobalObjectId*)&argumentIds, activation);
-    ActorMessaging::SendMessage(&msg, receiverId.actor_id);
+    SomMessageWithResult msg(receiver, signature, numOfArgs - 1,
+                             (pVMObject*)&args, currentFrame);
+    ActorMessaging::SendMessage(&msg, receiver->GetHomeId());
     
     //setNextActivation(); refactored to ProcessIncommingMessages
     SetFrame(NULL);
@@ -247,7 +243,7 @@ void Interpreter::do_RETURN_REMOTE(int bytecodeIndex) {
     pVMObject result = GetFrame()->Pop();
 
     GlobalObjectId resultActId = RemoteObjectManager::GetGlobalId(resultActivation);
-    ResultObjRefMessage msg(RemoteObjectManager::GetGlobalId(result), 
+    ResultObjRefMessage msg(result, 
                             resultActId);
     ActorMessaging::SendMessage(&msg, resultActId.actor_id);
 }

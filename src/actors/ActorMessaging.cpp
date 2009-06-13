@@ -35,7 +35,7 @@ void ActorMessaging::ReceiveAndProcessMessages() {
 }
 
 void ActorMessaging::SendObjectReference(pVMObject obj, actor_id_t actorId) {
-    ObjRefMessage msg(RemoteObjectManager::GetGlobalId(obj));
+    ObjRefMessage msg(obj);
     SendMessage(&msg, actorId);
 }
 

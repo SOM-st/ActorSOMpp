@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 #include "../vmobjects/VMObject.h"
+#include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/ObjectFormats.h"
 #include "../memory/ObjectTable.h"
 
@@ -85,46 +86,46 @@ public:
 
 class ObjRefMessage : public Message {
 public:
-    ObjRefMessage(GlobalObjectId obj) : Message(OBJ_REF_MSG), object(obj) {}
-    ObjRefMessage(Messages msgType, GlobalObjectId obj) : object(obj), Message(msgType) {}
+    ObjRefMessage(pVMObject obj) : Message(OBJ_REF_MSG), object(obj) {}
+    ObjRefMessage(Messages msgType, pVMObject obj) : object(obj), Message(msgType) {}
     ObjRefMessage(void* buffer) : Message(OBJ_REF_MSG) { Deserialize(buffer); }
     ObjRefMessage(Messages msgType) : Message(msgType) {}
     
     virtual void* Serialize(void* buffer) {
         buffer = Message::Serialize(buffer);
-        GlobalObjectId* objectRef = (GlobalObjectId*)buffer;
-        *objectRef = this->object;
-        objectRef++;
-        return (void*)objectRef;
-    }
-    
-    virtual void* Deserialize(void* buffer) {
-        object = *(GlobalObjectId*)buffer;
-        return (void*) ((intptr_t)buffer + sizeof(GlobalObjectId));
+        buffer = object->Serialize(buffer);
+        return buffer;
     }
     
     pVMObject GetObject() {
         // give GlobalObjectId to objecttable, 
         // if its a local reference just return index,
         // otherwise add it to the table an return new index
-        return RemoteObjectManager::GetObject(object);
+        return object;
     }
     
     virtual void Process();
     
     virtual size_t GetSize() {
-        return Message::GetSize() + sizeof(GlobalObjectId);
+        return Message::GetSize() + object->GetSerializedSize();
+    }
+    
+protected:
+    
+    virtual void* Deserialize(void* buffer) {
+        object = _UNIVERSE->NewObjectFromBuffer(buffer);
+        return buffer;
     }
     
 private:
-    GlobalObjectId object;
+    pVMObject object;
 };
 
 
 
 class ResultObjRefMessage : public ObjRefMessage {
 public:
-    ResultObjRefMessage(GlobalObjectId result, GlobalObjectId activation)
+    ResultObjRefMessage(pVMObject result, GlobalObjectId activation)
     : ObjRefMessage(OBJ_REF_RESULT_MSG, result), resultActivation(activation) {}
     
     ResultObjRefMessage(void* buffer) : ObjRefMessage(OBJ_REF_MSG) { 
@@ -133,22 +134,22 @@ public:
     
     virtual void* Serialize(void* buffer) {
         buffer = ObjRefMessage::Serialize(buffer);
-        GlobalObjectId* resultAct = (GlobalObjectId*)buffer;
-        *resultAct = resultActivation;
-        resultAct++;
-        return (void*)resultAct;
-    }
-    
-    virtual void* Deserialize(void* buffer) {
-        buffer = ObjRefMessage::Deserialize(buffer);
-        resultActivation = *(GlobalObjectId*)buffer;
-        return (void*) ((intptr_t)buffer + sizeof(GlobalObjectId));
+        buffer = resultActivation.SerializeDirect(buffer);
+        return buffer;
     }
     
     virtual void Process();
     
     virtual size_t GetSize() {
-        return ObjRefMessage::GetSize() + sizeof(GlobalObjectId);
+        return ObjRefMessage::GetSize() + resultActivation.GetDirectSerializedSize();
+    }
+
+protected:
+    
+    virtual void* Deserialize(void* buffer) {
+        buffer = ObjRefMessage::Deserialize(buffer);
+        buffer = GlobalObjectId::Deserialize(buffer, resultActivation);
+        return buffer;
     }
     
 private:
@@ -159,18 +160,16 @@ private:
 
 class SomMessage : public Message {
 public:
-    SomMessage(Messages msgType, GlobalObjectId receiver, char* signature,
-               size_t num_args, GlobalObjectId* arguments)
+    SomMessage(Messages msgType, pVMObject receiver, pVMSymbol signature,
+               size_t num_args, pVMObject* arguments)
     : Message(msgType), receiver(receiver), signature(signature), 
       number_of_arguments(num_args), arguments(arguments) {
-        sig_len = strlen(signature);
     }  
     
-    SomMessage(GlobalObjectId receiver, char* signature, size_t num_args, 
-               GlobalObjectId* arguments)
+    SomMessage(pVMObject receiver, pVMSymbol signature, size_t num_args, 
+               pVMObject* arguments)
     : Message(SOM_MSG), receiver(receiver), signature(signature), 
       number_of_arguments(num_args), arguments(arguments) {
-        sig_len = strlen(signature);
     }
   
     SomMessage(void* buffer) : Message(SOM_MSG) {
@@ -179,88 +178,82 @@ public:
     
     SomMessage(Messages msgType) : Message(msgType) {}
 
-    #warning missing deconstructor and memory leaks for signature and arguments array
-    virtual void* Deserialize(void* buffer) {
-        GlobalObjectId* receiver = (GlobalObjectId*)buffer;
-        
-        size_t* signature_len = (size_t*)((intptr_t)buffer + sizeof(GlobalObjectId));
-        
-        char* signature = (char*)((intptr_t)signature_len + sizeof(size_t));
-        
-        size_t* num_args = (size_t*)((intptr_t)signature + *signature_len + 1);
-        
-        GlobalObjectId* arguments = (GlobalObjectId*)((intptr_t)num_args + sizeof(size_t));
-        
-        
-        this->receiver = *receiver;
-        this->signature = strdup(signature);
-        this->sig_len = *signature_len;
-        this->number_of_arguments = *num_args;
-        this->arguments = (GlobalObjectId*)malloc(sizeof(GlobalObjectId) * *num_args);
-        memcpy(this->arguments, arguments, sizeof(GlobalObjectId) * *num_args);
-
-        return (void*)((intptr_t)arguments + sizeof(GlobalObjectId) * *num_args);
-    }
+    #warning missing deconstructor and memory leaks arguments array
     
-    char* GetSignature() { return signature; }
+    pVMSymbol GetSignature() { return signature; }
     size_t GetNumberOfArguments() { return number_of_arguments; }
     pVMObject GetReceiver() { 
-      // receiver is always local, because message was already defered to the right actor
-    #warning does that hold when object migration is allowed?
-        return pVMObject(receiver.index);
+        return receiver;
     }
   
     pVMObject GetArgument(size_t i) {
-        // give GlobalObjectId to objecttable, if its a local reference just return index, otherwise add it to the table an return new index
-        return pVMObject(RemoteObjectManager::GetObject(arguments[i]));
+        return arguments[i];
     }
   
     virtual size_t GetSize() {
+        // get all sizes of the arguments
+        size_t argLen = 0;
+        for (size_t i = 0; i < number_of_arguments; i++) {
+            argLen += arguments[i]->GetSerializedSize();
+        }
+        
+        
         return Message::GetSize()
-              + sizeof(GlobalObjectId)
-              + sizeof(size_t) + sig_len + 1
+              + receiver->GetSerializedSize()
+              + signature->GetSerializedSize()
               + sizeof(size_t)
-              + sizeof(GlobalObjectId) * this->number_of_arguments;
+              + argLen;
     }
   
     virtual void* Serialize(void* buffer) {
         buffer = Message::Serialize(buffer);
-        GlobalObjectId* receiver = (GlobalObjectId*)buffer;
-        *receiver = this->receiver;
+        buffer = receiver->Serialize(buffer);
+        buffer = signature->Serialize(buffer);
 
-        size_t* signature_len = (size_t*)((intptr_t)buffer + sizeof(GlobalObjectId));
-        *signature_len = sig_len;
-
-        char* signature = (char*)((intptr_t)signature_len + sizeof(size_t));
-        strncpy(signature, this->signature, sig_len + 1);
-
-        size_t* num_args = (size_t*)((intptr_t)signature + sig_len + 1);
+        size_t* num_args = (size_t*)buffer;
         *num_args = this->number_of_arguments;
+        buffer = (void*)((intptr_t)num_args + sizeof(size_t));
+            
+        for (size_t i = 0; i < number_of_arguments; i++) {
+            buffer = arguments[i]->Serialize(buffer);
+        }
 
-        GlobalObjectId* arguments = (GlobalObjectId*)((intptr_t)num_args + sizeof(size_t));
-
-        for (size_t i = 0; i < this->number_of_arguments; i++) {
-            *arguments = this->arguments[i];
-            arguments++;
-        }        
-
-        return (void*)arguments;
+        return buffer;
     }
 
     virtual void Process();
   
+protected:
+    
+    virtual void* Deserialize(void* buffer) {
+        receiver = _UNIVERSE->NewObjectFromBuffer(buffer);
+        signature = _UNIVERSE->NewObjectFromBuffer(buffer);
+        
+        size_t* num_args = (size_t*)buffer;
+        number_of_arguments = *num_args;
+        buffer = (void*)((intptr_t)buffer + sizeof(number_of_arguments));
+        
+        arguments = (pVMObject*)malloc(sizeof(pVMObject) * number_of_arguments);
+        
+        for (size_t i = 0; i < number_of_arguments; i++) {
+            arguments[i] = _UNIVERSE->NewObjectFromBuffer(buffer);
+        }
+                
+        return buffer;
+    }
+    
+
 private:
-    GlobalObjectId receiver;
-    char* signature; // message signature to be send to reviever object in remote actor
-    size_t sig_len;
+    pVMObject receiver;
+    pVMSymbol signature;
     size_t number_of_arguments;
-    GlobalObjectId* arguments;
+    pVMObject* arguments;
 };
 
 class SomMessageWithResult : public SomMessage {
 public:
-    SomMessageWithResult(GlobalObjectId receiver, char* signature, size_t num_args, 
-               GlobalObjectId* arguments, GlobalObjectId resultActivation)
+    SomMessageWithResult(pVMObject receiver, pVMSymbol signature, size_t num_args, 
+               pVMObject* arguments, pVMFrame resultActivation)
     : SomMessage(SOM_MSG_WITH_RESULT, receiver, signature, num_args, arguments),
       resultActivation(resultActivation) {}
     
@@ -268,37 +261,36 @@ public:
         Deserialize(buffer);
     }
     
-#warning missing deconstructor and memory leaks for signature and arguments array
-    virtual void* Deserialize(void* buffer) {
-        buffer = SomMessage::Deserialize(buffer);
-        GlobalObjectId* resultActivation = (GlobalObjectId*)buffer;
-        
-        this->resultActivation = *resultActivation;
-        return (void*)(resultActivation + 1);
-    }
-    
+#warning missing deconstructor and memory leaks for arguments array    
     
     virtual size_t GetSize() {
         return SomMessage::GetSize()
-              + sizeof(GlobalObjectId);
+              + resultActivation->GetSerializedSize();
     }
     
     virtual void* Serialize(void* buffer) {
         buffer = SomMessage::Serialize(buffer);
-        GlobalObjectId* resultActivation = (GlobalObjectId*)buffer;
-        *resultActivation = this->resultActivation;
-        
-        return (void*)((intptr_t)resultActivation + sizeof(GlobalObjectId));
+        buffer = resultActivation->Serialize(buffer);
+        return buffer;
     }
     
     virtual void Process();
     
     pVMObject GetResultActivation() {
-        return RemoteObjectManager::GetObject(resultActivation);
+        return resultActivation;
     }
     
+protected:
+    
+    virtual void* Deserialize(void* buffer) {
+        buffer = SomMessage::Deserialize(buffer);
+        resultActivation = _UNIVERSE->NewObjectFromBuffer(buffer);
+        return buffer;
+    }
+    
+    
 private:
-    GlobalObjectId resultActivation;
+    pVMObject resultActivation;
 };
 
 #endif

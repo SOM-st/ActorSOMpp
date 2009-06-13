@@ -15,9 +15,6 @@
 
 #include "../vmobjects/VMRemoteObject.h"
 
-//macro to access the object table
-//#define _REMOTE_OBJECT_MANAGER RemoteObjectManager::GetRemoteObjectManager()
-
 class RemoteObjectManager  {
 public:    
     static pVMObject GetObject(GlobalObjectId id) {

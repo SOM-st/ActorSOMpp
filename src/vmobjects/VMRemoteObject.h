@@ -29,6 +29,11 @@ public:
     return true;
   }
   
+  virtual actor_id_t GetHomeId() {
+    return globalId.actor_id;
+  }
+  
+  
 /*  inline bool operator==(VMRemoteObject o) const{
     return globalId.actor_id == o.globalId.actor_id && globalId.index.value == o.globalId.index.value;
   };*/
