@@ -124,13 +124,37 @@ public:
 
 	}
 
-	 void operator delete( void* self, Heap* heap) {
+	void operator delete( void* self, Heap* heap) {
 		 heap->Destroy((VMObject*)self); 
 
-	 } 
+	} 
 
-	
+	virtual bool IsImmutable() {
+        return false;
+    }
+    
+    virtual ImmutableTypes GetSerializationTag() {
+        return NotImmutable;
+    }
+    
+    virtual size_t GetSerializedSize() {
+        return sizeof(ImmutableTypes);
+    }
+    
+    virtual void* Serialize(void* buffer) {
+        *(ImmutableTypes*)buffer = GetSerializationTag();
+        
+        return (void*)((intptr_t)buffer + sizeof(ImmutableTypes));
+    }
+    
+    static void* Deserialize(void* buffer, ImmutableTypes& typeTag) {
+        typeTag = *(ImmutableTypes*)buffer;
+        
+        return (void*)((intptr_t)buffer + sizeof(ImmutableTypes));
+    }
+    
 protected:
+    
     int GetAdditionalSpaceConsumption() const;
     //VMObject essentials
 	int32_t     hash;

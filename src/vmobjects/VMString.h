@@ -28,6 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
+#include <string.h>
 
 #include "VMObject.h"
 
@@ -40,8 +41,44 @@ public:
 	StdString GetStdString() const;
     int         GetStringLength() const;
 
+    virtual bool IsImmutable() {
+        return true;
+    }
+    
+    virtual ImmutableTypes GetSerializationTag() {
+        return StringTag;
+    }
+    
+    
+    virtual size_t GetSerializedSize() {
+        return VMObject::GetSerializedSize()
+        + sizeof(size_t)
+        + strlen(chars) + 1;
+    }
+    
+    virtual void* Serialize(void* buffer) {
+        size_t len = strlen(chars);
+        
+        buffer = VMObject::Serialize(buffer);
+        
+        *(size_t*)buffer = len;
+        
+        char* serialized_chars = (char*)((intptr_t)buffer + sizeof(size_t));
+        strncpy(serialized_chars, chars, len + 1);
+        
+        return (void*)((intptr_t)serialized_chars + len + 1);
+    }
+    
+    static void* Deserialize(void* buffer, size_t& length, char*& str) {
+        length = *(size_t*)buffer;
+        
+        str = (char*)((intptr_t)buffer + sizeof(size_t));
+        
+        return (void*)((intptr_t)str + length + 1);
+    }
     
 protected:
+    
     //this could be replaced by the CHARS macro in VMString.cpp
     //in order to decrease the object size
 	char* chars; 

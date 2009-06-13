@@ -142,6 +142,8 @@ public:
     pVMEvaluationPrimitive NewEvaluationPrimitive(int numberOfArguments) const;
     
     pVMInteger    NewIntegerVMObject(int32_t value) const;
+    
+    pVMObject     NewObjectFromBuffer(void*& buffer);
 
     void          InitializeSystemClass(pVMClass, pVMClass, const char*);
 

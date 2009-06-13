@@ -33,6 +33,9 @@ THE SOFTWARE.
 #include "Shell.h"
 
 #include "../actors/GlobalObjectId.h"
+#include "../actors/RemoteObjectManager.h"
+
+#include "../misc/debug.h"
 
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMObject.h"
@@ -520,6 +523,49 @@ void Universe::LoadSystemClass( pVMClass systemClass) {
 
     if (result->HasPrimitives() || result->GetClass()->HasPrimitives())
         result->LoadPrimitives(classPath);
+}
+
+pVMObject Universe::NewObjectFromBuffer(void*& buffer) {
+    ImmutableTypes typeTag;
+    buffer = VMObject::Deserialize(buffer, typeTag);
+    
+    switch (typeTag) {
+        case BigIntegerTag: {
+            int64_t value;
+            buffer = VMBigInteger::Deserialize(buffer, value);
+            return NewBigInteger(value);
+        }
+        case DoubleTag: {
+            double value;
+            buffer = VMDouble::Deserialize(buffer, value);
+            return NewDouble(value);
+        }
+        case IntegerTag: {
+            int32_t value;
+            buffer = VMInteger::Deserialize(buffer, value);
+            return NewInteger(value);
+        }
+        case StringTag: {
+            char* value;
+            size_t len;
+            buffer = VMString::Deserialize(buffer, len, value);
+            return NewString(value);
+        }
+        case SymbolTag: {
+            char* value;
+            size_t len;
+            buffer = VMString::Deserialize(buffer, len, value);
+            return NewSymbol(value);
+        }
+        case GlobalObjectIdTag: {
+            GlobalObjectId id;
+            buffer = VMRemoteObject::Deserialize(buffer, id);
+            return RemoteObjectManager::GetObject(id);
+        }
+        default:
+            DebugWarn("Unsupported Type Tag.\n");
+            break;
+    }
 }
 
 

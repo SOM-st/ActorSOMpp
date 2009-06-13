@@ -7,6 +7,9 @@
  *
  */
 
+#ifndef _VMREMOTE_OBJECT_H_
+#define _VMREMOTE_OBJECT_H_
+
 #include "../actors/GlobalObjectId.h"
 
 #include "VMObject.h"
@@ -30,8 +33,39 @@ public:
     return globalId.actor_id == o.globalId.actor_id && globalId.index.value == o.globalId.index.value;
   };*/
   
+  virtual bool IsImmutable() {
+    return true;
+  }
+  
+  virtual ImmutableTypes GetSerializationTag() {
+    return GlobalObjectIdTag;
+  }
+  
+  
+  virtual size_t GetSerializedSize() {
+    return VMObject::GetSerializedSize()
+    + sizeof(GlobalObjectId);
+  }
+  
+  virtual void* Serialize(void* buffer) {
+    buffer = VMObject::Serialize(buffer);
+    
+    *(GlobalObjectId*)buffer = globalId;
+    
+    return (void*)((intptr_t)buffer + sizeof(GlobalObjectId));
+  }
+  
+  static void* Deserialize(void* buffer, GlobalObjectId& id) {
+    id = *(GlobalObjectId*)buffer;
+    
+    return (void*)((intptr_t)buffer + sizeof(GlobalObjectId));
+  }
+  
+  
 private:
   GlobalObjectId globalId;
   
   static const int VMRemoteObjectNumberOfFields = 0;
 };
+
+#endif

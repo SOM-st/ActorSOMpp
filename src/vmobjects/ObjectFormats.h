@@ -44,7 +44,16 @@ THE SOFTWARE.
 #define pVMSymbol VMPointer<VMSymbol> 
 #define pVMRemoteObject VMPointer<VMRemoteObject>
 
-
+typedef enum ImmutableTypes {
+    NotImmutable,
+    
+    BigIntegerTag,
+    DoubleTag,
+    IntegerTag,
+    StringTag,
+    SymbolTag,
+    GlobalObjectIdTag
+} ImmutableTypes;
 
 
 #endif OBJECTFORMATS_H_

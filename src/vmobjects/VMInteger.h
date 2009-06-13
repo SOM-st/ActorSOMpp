@@ -41,6 +41,34 @@ public:
     
     inline void            SetEmbeddedInteger(int32_t);
     inline int32_t         GetEmbeddedInteger() const;
+    
+    virtual bool IsImmutable() {
+        return true;
+    }
+    
+    virtual ImmutableTypes GetSerializationTag() {
+        return IntegerTag;
+    }
+    
+    virtual size_t GetSerializedSize() {
+        return VMObject::GetSerializedSize()
+        + sizeof(int32_t);
+    }
+    
+    virtual void* Serialize(void* buffer) {
+        buffer = VMObject::Serialize(buffer);
+        
+        *(int32_t*)buffer = embeddedInteger;
+        
+        return (void*)((intptr_t)buffer + sizeof(int32_t));
+    }
+    
+    static void* Deserialize(void* buffer, int32_t& value) {
+        value = *(int32_t*)buffer;
+        
+        return (void*)((intptr_t)buffer + sizeof(int32_t));
+    }
+    
 private:
     int32_t embeddedInteger;
 

@@ -37,17 +37,45 @@ public:
     VMDouble();
     VMDouble(double);
     
-    inline void    SetEmbeddedDouble(double);
+    //inline void    SetEmbeddedDouble(double);
     inline double  GetEmbeddedDouble() const;
+    
+    virtual bool IsImmutable() {
+        return true;
+    }
+    
+    virtual ImmutableTypes GetSerializationTag() {
+        return DoubleTag;
+    }
+    
+    virtual size_t GetSerializedSize() {
+        return VMObject::GetSerializedSize()
+        + sizeof(double);
+    }
+    
+    virtual void* Serialize(void* buffer) {
+        buffer = VMObject::Serialize(buffer);
+        
+        *(double*)buffer = embeddedDouble;
+        
+        return (void*)((intptr_t)buffer + sizeof(double));
+    }
+    
+    static void* Deserialize(void* buffer, double& value) {
+        value = *(double*)buffer;
+        
+        return (void*)((intptr_t)buffer + sizeof(double));
+    }
+    
 private:
     double embeddedDouble;
 
     static const int VMDoubleNumberOfFields;
 };
 
-void VMDouble::SetEmbeddedDouble(double val) {
+/*void VMDouble::SetEmbeddedDouble(double val) {
     this->embeddedDouble = val;
-}
+}*/
 
 
 double VMDouble::GetEmbeddedDouble() const {
