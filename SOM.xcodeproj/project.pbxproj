@@ -16,6 +16,7 @@
 		0A044B3B0FD32F07009B284F /* synced_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = synced_queue.h; sourceTree = "<group>"; };
 		0A044B3D0FD32F13009B284F /* actors.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = actors.h; sourceTree = "<group>"; tabWidth = 4; };
 		0A504B880FE06E7E00F3A3FE /* ParamTest.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ParamTest.som; sourceTree = "<group>"; };
+		0A504F2F0FE4148100F3A3FE /* Serialization.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serialization.cpp; sourceTree = "<group>"; };
 		0AA9E7720FD46E18001F2C47 /* Array.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Array.som; sourceTree = "<group>"; };
 		0AA9E7730FD46E18001F2C47 /* BigInteger.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BigInteger.som; sourceTree = "<group>"; };
 		0AA9E7740FD46E18001F2C47 /* Block.som */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Block.som; sourceTree = "<group>"; };
@@ -385,6 +386,7 @@
 				0AA9EE680FD702CF001F2C47 /* VMPointer.cpp */,
 				0AA9EF2A0FD71DB3001F2C47 /* main.cpp */,
 				0AA9EFD40FD93783001F2C47 /* std_map.cpp */,
+				0A504F2F0FE4148100F3A3FE /* Serialization.cpp */,
 			);
 			path = test;
 			sourceTree = "<group>";
