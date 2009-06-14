@@ -41,6 +41,7 @@ THE SOFTWARE.
 #include "../vmobjects/VMPointer.h"
 
 #include "../actors/actors.h"
+#include "../actors/RemoteObjectManager.h"
 
 GarbageCollector::GarbageCollector(Heap* h) {
 	heap = h;
@@ -89,6 +90,11 @@ void GarbageCollector::Collect() {
                 curObject->SetGCField(0);
             } else {
                 //found trash
+                
+                // remove from remote object map
+                if (curObject->IsRemote()) {
+                    RemoteObjectManager::UnlinkRemoteObject(((VMRemoteObject*)curObject)->GetGlobalId());
+                }
                 
                 // remove object from object table
                 curObject->Self().unlink();

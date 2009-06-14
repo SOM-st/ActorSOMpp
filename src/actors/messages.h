@@ -35,6 +35,9 @@ typedef enum Messages {
     
     SOM_MSG_WITH_RESULT= 0x10,   // message send async to an actor and expects result
     
+    NEW_REF_MSG        = 0x1000, // message to notify an actor about a new reference to one of its objects  (id value choosen with some space, since this is a infrastructure msg)
+    UNLINK_REF_MSG     = 0x2000, // message to notify an actor, that an object is not referenced by this other actor anymore
+    
     ANY_MESSAGE        = -1      // should provide a all 1 bit pattern and satisfy any message type on a &
 } Messages;
 
@@ -57,7 +60,7 @@ public:
     }
     
     virtual void Process() = 0;
-    virtual void TrackObjectSends(actor_id_t actorId) = 0;
+    virtual void TrackObjectSends(actor_id_t receiver) = 0;
 
     Messages GetType() { return msgType; }
     
@@ -81,8 +84,63 @@ class ExitMsg : public EmptyMessage {
 public:
     ExitMsg() : EmptyMessage(EXIT_MSG) {};
     virtual void Process();
-    virtual void TrackObjectSends(actor_id_t actorId) {}
+    virtual void TrackObjectSends(actor_id_t receiver) {}
 };
+
+
+class NewRefNotificationMsg : public Message {
+public:
+    NewRefNotificationMsg(GlobalObjectId referencedObj, actor_id_t actorReceivingRef)
+        : Message(NEW_REF_MSG), referencedObj(referencedObj), actor(actorReceivingRef) {}
+    NewRefNotificationMsg(Messages msgType, GlobalObjectId referencedObj, actor_id_t actorReceivingRef)
+        : Message(msgType), referencedObj(referencedObj), actor(actorReceivingRef) {}
+    NewRefNotificationMsg(void* buffer) : Message(NEW_REF_MSG) { Deserialize(buffer); }
+    NewRefNotificationMsg(Messages msgType, void* buffer) : Message(msgType) { Deserialize(buffer); }
+        
+    virtual void* Serialize(void* buffer) {
+        buffer = Message::Serialize(buffer);
+        buffer = referencedObj.SerializeDirect(buffer);
+        *(actor_id_t*)buffer = actor;
+        
+        return (void*)((intptr_t)buffer + sizeof(actor_id_t));
+    }
+    
+    virtual void Process();
+    
+    // is no-op, since this is of course issued by exactly this virtual functions
+    virtual void TrackObjectSends(actor_id_t receiver) {}
+    
+    virtual size_t GetSize() {
+        return Message::GetSize()
+        + referencedObj.GetDirectSerializedSize()
+        + sizeof(actor_id_t);
+    }
+    
+protected:
+    
+    virtual void* Deserialize(void* buffer) {
+        buffer = GlobalObjectId::Deserialize(buffer, referencedObj);
+        
+        actor = *(actor_id_t*)buffer;
+        
+        return (void*)((intptr_t)buffer + sizeof(actor_id_t));
+    }
+
+protected:
+    GlobalObjectId referencedObj;
+    actor_id_t actor;
+};
+
+
+class UnlinkRefMsg : public NewRefNotificationMsg {
+public:
+    UnlinkRefMsg(GlobalObjectId referencedObj, actor_id_t actorReceivingRef)
+    : NewRefNotificationMsg(UNLINK_REF_MSG, referencedObj, actorReceivingRef) {}
+    UnlinkRefMsg(void* buffer) : NewRefNotificationMsg(UNLINK_REF_MSG, buffer) {}
+    
+    virtual void Process();
+};
+
 
 
 
@@ -100,16 +158,13 @@ public:
     }
     
     pVMObject GetObject() {
-        // give GlobalObjectId to objecttable, 
-        // if its a local reference just return index,
-        // otherwise add it to the table an return new index
         return object;
     }
     
     virtual void Process();
     
-    virtual void TrackObjectSends(actor_id_t actorId) {
-        RemoteObjectManager::TrackObjectSend(object, actorId);
+    virtual void TrackObjectSends(actor_id_t receiver) {
+        RemoteObjectManager::TrackObjectSend(object, receiver);
     }
 
     virtual size_t GetSize() {
@@ -146,9 +201,9 @@ public:
     
     virtual void Process();
     
-    virtual void TrackObjectSends(actor_id_t actorId) {
-        ObjRefMessage::TrackObjectSends(actorId);
-        RemoteObjectManager::TrackObjectSend(resultActivation, actorId);
+    virtual void TrackObjectSends(actor_id_t receiver) {
+        ObjRefMessage::TrackObjectSends(receiver);
+        RemoteObjectManager::TrackObjectSend(resultActivation, receiver);
     }    
     
     virtual size_t GetSize() {
@@ -232,13 +287,13 @@ public:
         return buffer;
     }
     
-    virtual void TrackObjectSends(actor_id_t actorId) {
+    virtual void TrackObjectSends(actor_id_t receivingActor) {
 
-        RemoteObjectManager::TrackObjectSend(receiver, actorId);   // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
-        RemoteObjectManager::TrackObjectSend(signature, actorId);  // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
+        RemoteObjectManager::TrackObjectSend(receiver, receivingActor);   // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
+        RemoteObjectManager::TrackObjectSend(signature, receivingActor);  // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
 
         for (size_t i = 0; i < number_of_arguments; i++) {
-            RemoteObjectManager::TrackObjectSend(arguments[i], actorId);
+            RemoteObjectManager::TrackObjectSend(arguments[i], receivingActor);
         }
     }    
 
@@ -297,9 +352,9 @@ public:
     
     virtual void Process();
     
-    virtual void TrackObjectSends(actor_id_t actorId) {
-        SomMessage::TrackObjectSends(actorId);
-        RemoteObjectManager::TrackObjectSend(resultActivation, actorId);   // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
+    virtual void TrackObjectSends(actor_id_t receivingActor) {
+        SomMessage::TrackObjectSends(receivingActor);
+        RemoteObjectManager::TrackObjectSend(resultActivation, receivingActor);   // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
     }   
     
     pVMObject GetResultActivation() {

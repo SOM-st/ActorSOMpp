@@ -42,9 +42,14 @@ public:
         return id;
     }
     
-    static void TrackObjectSend(pVMObject obj, actor_id_t actorId);
-    static void TrackObjectSend(GlobalObjectId id, actor_id_t actorId);
-       
+    static void TrackObjectSend(pVMObject obj, actor_id_t receivingActor);
+    static void TrackObjectSend(GlobalObjectId id, actor_id_t receivingActor);
+    static void NewExternalReference(ObjectTable::Index referencedObj,
+                                     actor_id_t referencingActor);
+    static void ObjectUnlinked(ObjectTable::Index unlinkedObj, actor_id_t actor); 
+    
+    static void UnlinkRemoteObject(GlobalObjectId unlinkedObj);
+    
 private:
     static std::map<GlobalObjectId, VMRemoteObject*> objectMap;
     

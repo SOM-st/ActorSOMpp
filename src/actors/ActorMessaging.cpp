@@ -39,6 +39,16 @@ void ActorMessaging::SendObjectReference(pVMObject obj, actor_id_t actorId) {
     SendMessage(&msg, actorId);
 }
 
+void ActorMessaging::NotifyOfNewReference(GlobalObjectId newlyReferencedObject, actor_id_t actorReceivingRef) {
+    NewRefNotificationMsg msg(newlyReferencedObject, actorReceivingRef);
+    SendMessage(&msg, newlyReferencedObject.actor_id);
+}
+
+void ActorMessaging::NotifyOfUnlink(GlobalObjectId unlinkedObject) {
+    UnlinkRefMsg msg(unlinkedObject, actors_id());
+    SendMessage(&msg, unlinkedObject.actor_id);
+}
+
 void ActorMessaging::SendMessage(Message* msg, actor_id_t actorId) {
     msg->TrackObjectSends(actorId);
     

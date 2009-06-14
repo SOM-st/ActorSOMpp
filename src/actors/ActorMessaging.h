@@ -22,14 +22,9 @@ public:
     static void SendMessage(Message* msg, actor_id_t actorId);
     static void SendObjectReference(pVMObject obj, actor_id_t actorId);
     
-protected:
-    friend class RemoteObjectManager;
-    
     // this one is not optimized, sends a lot to many messages, could combine them...
-    static void NotifyOfNewReference(pVMObject object, actor_id_t actorHoldingNewReference) {
-#warning not implemented
-    }
-    
+    static void NotifyOfNewReference(GlobalObjectId newlyReferencedObject, actor_id_t actorReceivingRef);
+    static void NotifyOfUnlink(GlobalObjectId unlinkedObject);
 };
 
 #endif

@@ -39,6 +39,14 @@ void ExitMsg::Process() {
     _UNIVERSE->GetInterpreter()->Stop();
 }
 
+void NewRefNotificationMsg::Process() {
+    RemoteObjectManager::NewExternalReference(referencedObj.index, actor);
+}
+
+void UnlinkRefMsg::Process() {
+    RemoteObjectManager::ObjectUnlinked(referencedObj.index, actor);
+}
+
 void ObjRefMessage::Process() {
     Interpreter::AddIncommingObjRef(GetObject());
 }

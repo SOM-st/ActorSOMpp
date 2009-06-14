@@ -165,10 +165,6 @@ public:
         _OBJECT_TABLE.RemoveObject(index.index);
         index.index.value = 0;
     }
-    
-    //inline bool IsLocalObject() {
-    //
-    //}
 
 protected:
     // We need this because object table indexes are unsigned
