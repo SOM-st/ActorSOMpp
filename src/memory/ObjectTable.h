@@ -32,9 +32,17 @@ public:
     template<class> friend class VMPointer;
     
     // We can only use 31 bits, which should be more than enough.
-    typedef struct {
+    typedef struct Index {
         unsigned long value: 31;
         bool is_iint: 1; // assumed to be zero
+        
+        inline bool operator<(Index o) const {
+            return value < o.value;
+        }
+        
+        /*inline bool operator==(Index o) const {
+            return value == o.value && is_iint == o.is_iint;
+        }*/
     } Index;
     
     // Singleton accessor
@@ -57,17 +65,11 @@ private:
     typedef struct Entry {
         Entry(VMObject* object) {
             content.object = object;
-            //actor = actors_id();
         }        
-        /*Entry(VMObject* object, actor_id_t actor_id) {
-            content.object = object;
-            actor = actor_id;
-        }*/
         union {
             VMObject* object;
             Index     index;
         } content;
-        //actor_id_t actor; moved to VMRemoteObject
     } Entry;
     
     // The singleton instance.

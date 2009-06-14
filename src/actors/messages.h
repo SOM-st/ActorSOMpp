@@ -57,7 +57,8 @@ public:
     }
     
     virtual void Process() = 0;
-    
+    virtual void TrackObjectSends(actor_id_t actorId) = 0;
+
     Messages GetType() { return msgType; }
     
     static Message* Deserialize(void* buffer);
@@ -80,6 +81,7 @@ class ExitMsg : public EmptyMessage {
 public:
     ExitMsg() : EmptyMessage(EXIT_MSG) {};
     virtual void Process();
+    virtual void TrackObjectSends(actor_id_t actorId) {}
 };
 
 
@@ -106,6 +108,10 @@ public:
     
     virtual void Process();
     
+    virtual void TrackObjectSends(actor_id_t actorId) {
+        RemoteObjectManager::TrackObjectSend(object, actorId);
+    }
+
     virtual size_t GetSize() {
         return Message::GetSize() + object->GetSerializedSize();
     }
@@ -139,6 +145,11 @@ public:
     }
     
     virtual void Process();
+    
+    virtual void TrackObjectSends(actor_id_t actorId) {
+        ObjRefMessage::TrackObjectSends(actorId);
+        RemoteObjectManager::TrackObjectSend(resultActivation, actorId);
+    }    
     
     virtual size_t GetSize() {
         return ObjRefMessage::GetSize() + resultActivation.GetDirectSerializedSize();
@@ -220,6 +231,16 @@ public:
 
         return buffer;
     }
+    
+    virtual void TrackObjectSends(actor_id_t actorId) {
+
+        RemoteObjectManager::TrackObjectSend(receiver, actorId);   // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
+        RemoteObjectManager::TrackObjectSend(signature, actorId);  // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
+
+        for (size_t i = 0; i < number_of_arguments; i++) {
+            RemoteObjectManager::TrackObjectSend(arguments[i], actorId);
+        }
+    }    
 
     virtual void Process();
   
@@ -275,6 +296,11 @@ public:
     }
     
     virtual void Process();
+    
+    virtual void TrackObjectSends(actor_id_t actorId) {
+        SomMessage::TrackObjectSends(actorId);
+        RemoteObjectManager::TrackObjectSend(resultActivation, actorId);   // is actually not necessary, but this an asumption I am not sure I should rely on here, who know what will change...
+    }   
     
     pVMObject GetResultActivation() {
         return resultActivation;

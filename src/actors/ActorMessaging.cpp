@@ -40,6 +40,8 @@ void ActorMessaging::SendObjectReference(pVMObject obj, actor_id_t actorId) {
 }
 
 void ActorMessaging::SendMessage(Message* msg, actor_id_t actorId) {
+    msg->TrackObjectSends(actorId);
+    
     DebugLog("Send Msg: %s to %d\n", typeid(*msg).name(), actorId);
     size_t buffer_size = msg->GetSize();
   

@@ -7,7 +7,11 @@
  *
  */
 
+#ifndef _REMOTE_OBJECT_MANAGER_H_
+#define _REMOTE_OBJECT_MANAGER_H_
+
 #include <map>
+#include <bitset>
 
 #include "../vm/Universe.h"
 
@@ -18,7 +22,7 @@
 class RemoteObjectManager  {
 public:    
     static pVMObject GetObject(GlobalObjectId id) {
-        if (id.actor_id == actors_id() || id.index.is_iint)
+        if (actors_is_local(id.actor_id) || id.index.is_iint)
             return pVMObject(id.index);
         
         if (objectMap[id] == NULL) {
@@ -38,6 +42,15 @@ public:
         return id;
     }
     
+    static void TrackObjectSend(pVMObject obj, actor_id_t actorId);
+    static void TrackObjectSend(GlobalObjectId id, actor_id_t actorId);
+       
 private:
     static std::map<GlobalObjectId, VMRemoteObject*> objectMap;
+    
+    typedef std::bitset<NUMBER_OF_ACTORS> ActorSet, *pActorSet;
+    
+    static std::map<ObjectTable::Index, pActorSet> externalReferences;
 };
+
+#endif
