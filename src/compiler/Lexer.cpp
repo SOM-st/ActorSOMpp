@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 
 #include <string.h>
+#include <stdio.h>
 
 #include "Lexer.h"
 

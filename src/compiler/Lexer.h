@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include <istream>
 #include <string>
+#include <cstdio>
 
 #include "../misc/defs.h"
 

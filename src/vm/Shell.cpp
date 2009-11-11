@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 
 #include <sstream>
+#include <cstdio>
 
 #include "Universe.h"
 #include "Shell.h"
